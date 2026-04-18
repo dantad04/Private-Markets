@@ -1,0 +1,156 @@
+{
+  "summary": {
+    "total_rows_emitted": 2835,
+    "total_rows_aggregate": 10,
+    "disclosure_completeness_counts": {
+      "aggregate_total": 10,
+      "fully_disclosed": 2677,
+      "ownership_only": 15,
+      "value_only": 133
+    },
+    "canonical_asset_class_counts": {
+      "cash": 85,
+      "fixed_income": 5,
+      "listed_equity": 2603,
+      "listed_infrastructure": 7,
+      "listed_property": 70,
+      "unlisted_equity": 25,
+      "unlisted_infrastructure": 24,
+      "unlisted_property": 16
+    }
+  },
+  "golden_rows": [
+    {
+      "source_row_number": 2,
+      "raw_csv": "31/12/2025,High Growth,Cash,,JPMorgan Chase & Co,,2673.734504,5.7e-07,,AED,",
+      "expected": {
+        "canonical_asset_class_code": "cash",
+        "source_asset_class_raw": "Cash",
+        "is_aggregate": false,
+        "raw_name": "JPMorgan Chase & Co",
+        "value_aud": "2673.734504",
+        "weighting_pct": "5.7E-7",
+        "currency_raw": "AED",
+        "disclosure_completeness": "value_only"
+      }
+    },
+    {
+      "source_row_number": 86,
+      "raw_csv": "31/12/2025,High Growth,Cash Total,,,,107524966.588,0.02285724,,,",
+      "expected": {
+        "canonical_asset_class_code": "cash",
+        "source_asset_class_raw": "Cash Total",
+        "is_aggregate": true,
+        "raw_name": null,
+        "value_aud": "107524966.588",
+        "weighting_pct": "0.02285724",
+        "disclosure_completeness": "aggregate_total"
+      }
+    },
+    {
+      "source_row_number": 87,
+      "raw_csv": "31/12/2025,High Growth,Fixed Income,Externally Managed,Challenger Limited,,5065959.006,0.0010769,,,",
+      "expected": {
+        "canonical_asset_class_code": "fixed_income",
+        "source_asset_class_raw": "Fixed Income",
+        "source_subclass_raw": "Externally Managed",
+        "is_aggregate": false,
+        "raw_name": "Challenger Limited",
+        "value_aud": "5065959.006",
+        "weighting_pct": "0.0010769",
+        "disclosure_completeness": "value_only"
+      }
+    },
+    {
+      "source_row_number": 92,
+      "raw_csv": "31/12/2025,High Growth,Listed Equity,,360 Security Technology Inc,479.280349,1148.821386,2.4e-07,,,CNE100002RZ2",
+      "expected": {
+        "canonical_asset_class_code": "listed_equity",
+        "source_asset_class_raw": "Listed Equity",
+        "is_aggregate": false,
+        "raw_name": "360 Security Technology Inc",
+        "units": "479.280349",
+        "value_aud": "1148.821386",
+        "weighting_pct": "2.4E-7",
+        "security_identifier_value": "CNE100002RZ2",
+        "security_identifier_type": "ISIN",
+        "disclosure_completeness": "fully_disclosed"
+      }
+    },
+    {
+      "source_row_number": 2695,
+      "raw_csv": "31/12/2025,High Growth,Listed Infrastructure,,APA Group,379436.2606,3403543.258,0.00072351,,,AU000000APA1",
+      "expected": {
+        "canonical_asset_class_code": "listed_infrastructure",
+        "raw_name": "APA Group",
+        "units": "379436.2606",
+        "value_aud": "3403543.258",
+        "weighting_pct": "0.00072351",
+        "security_identifier_value": "AU000000APA1",
+        "security_identifier_type": "ISIN",
+        "disclosure_completeness": "fully_disclosed"
+      }
+    },
+    {
+      "source_row_number": 2792,
+      "raw_csv": "31/12/2025,High Growth,Unlisted Equity,Internally Managed,Assemble HoldCo 1 Pty Ltd,,,,40.40%,,",
+      "expected": {
+        "canonical_asset_class_code": "unlisted_equity",
+        "source_subclass_raw": "Internally Managed",
+        "is_aggregate": false,
+        "raw_name": "Assemble HoldCo 1 Pty Ltd",
+        "ownership_pct": "0.404",
+        "disclosure_completeness": "ownership_only"
+      }
+    },
+    {
+      "source_row_number": 2794,
+      "raw_csv": "31/12/2025,High Growth,Unlisted Equity,Internally Managed,Industry Super Holdings Pty Ltd,,,,16.90%,,",
+      "expected": {
+        "canonical_asset_class_code": "unlisted_equity",
+        "source_subclass_raw": "Internally Managed",
+        "is_aggregate": false,
+        "raw_name": "Industry Super Holdings Pty Ltd",
+        "ownership_pct": "0.169",
+        "disclosure_completeness": "ownership_only"
+      }
+    },
+    {
+      "source_row_number": 2772,
+      "raw_csv": "31/12/2025,High Growth,Unlisted Equity,Externally Managed,Ascendent Capital Partners Limited,,13277579.51,0.0028225,,,",
+      "expected": {
+        "canonical_asset_class_code": "unlisted_equity",
+        "source_subclass_raw": "Externally Managed",
+        "is_aggregate": false,
+        "raw_name": "Ascendent Capital Partners Limited",
+        "value_aud": "13277579.51",
+        "weighting_pct": "0.0028225",
+        "disclosure_completeness": "value_only"
+      }
+    },
+    {
+      "source_row_number": 2795,
+      "raw_csv": "31/12/2025,High Growth,Unlisted Equity External Total,,,,336191765.9,0.07146634,,,",
+      "expected": {
+        "canonical_asset_class_code": "unlisted_equity",
+        "is_aggregate": true,
+        "raw_name": null,
+        "value_aud": "336191765.9",
+        "weighting_pct": "0.07146634",
+        "disclosure_completeness": "aggregate_total"
+      }
+    },
+    {
+      "source_row_number": 2807,
+      "raw_csv": "31/12/2025,High Growth,Unlisted Infrastructure,Internally Managed,Generate Capital PBC,,,,1.38%,,",
+      "expected": {
+        "canonical_asset_class_code": "unlisted_infrastructure",
+        "source_subclass_raw": "Internally Managed",
+        "raw_name": "Generate Capital PBC",
+        "ownership_pct": "0.0138",
+        "disclosure_completeness": "ownership_only"
+      }
+    }
+  ]
+}
+
