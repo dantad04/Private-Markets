@@ -103,3 +103,36 @@ class TestHestaLoader(unittest.TestCase):
             self.assertIsNotNone(source_file.reporting_period_id)
             period = session.get(ReportingPeriod, source_file.reporting_period_id)
             self.assertEqual(date(2025, 12, 31), period.period_end_date)
+
+    def test_restated_file_supersedes_prior_current_version(self) -> None:
+        restated_path = Path(self.tempdir.name) / "hesta_restated.csv"
+        restated_path.write_bytes(FIXTURE_PATH.read_bytes() + b"\n")
+
+        with self.SessionLocal() as session:
+            first = ingest_hesta_local_file(
+                session,
+                fund_code="hesta",
+                fund_name="HESTA",
+                file_path=str(FIXTURE_PATH),
+            )
+            session.commit()
+
+        with self.SessionLocal() as session:
+            second = ingest_hesta_local_file(
+                session,
+                fund_code="hesta",
+                fund_name="HESTA",
+                file_path=str(restated_path),
+            )
+            session.commit()
+
+            first_source_file = session.get(SourceFile, first.source_file_id)
+            second_source_file = session.get(SourceFile, second.source_file_id)
+
+            self.assertFalse(first_source_file.is_current_version)
+            self.assertIsNone(first_source_file.supersedes_source_file_id)
+            self.assertTrue(second_source_file.is_current_version)
+            self.assertEqual(first_source_file.id, second_source_file.supersedes_source_file_id)
+            self.assertEqual(1, first_source_file.version_number)
+            self.assertEqual(2, second_source_file.version_number)
+            self.assertEqual(EXPECTED_TOTAL_ROWS * 2, session.query(Holding).count())

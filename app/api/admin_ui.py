@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 from datetime import date
-import math
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
-from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from adapters.hesta_errors import HestaAdapterError
 from app.api.admin import get_db_session
-from app.db.models import CanonicalAssetClass, Fund, Holding, ReportingPeriod, SourceFile
 from app.ingest.loader import LoaderError, ingest_hesta_local_file
+from app.read_models import get_source_file_detail, list_source_files
 
 
 router = APIRouter(prefix="/admin/ui", tags=["admin-ui"])
@@ -53,41 +51,13 @@ def source_files_list(
     flash: str | None = None,
     session: Session = Depends(get_db_session),
 ) -> HTMLResponse:
-    rows = session.execute(
-        select(
-            SourceFile.id,
-            Fund.code.label("fund_code"),
-            SourceFile.adapter_key,
-            SourceFile.schema_fingerprint,
-            SourceFile.ingest_status,
-            ReportingPeriod.period_end_date,
-            SourceFile.received_at,
-            SourceFile.encoding_replacement_count,
-            func.count(Holding.id).label("rows_loaded"),
-        )
-        .join(Fund, Fund.id == SourceFile.fund_id)
-        .outerjoin(ReportingPeriod, ReportingPeriod.id == SourceFile.reporting_period_id)
-        .outerjoin(Holding, Holding.source_file_id == SourceFile.id)
-        .group_by(
-            SourceFile.id,
-            Fund.code,
-            SourceFile.adapter_key,
-            SourceFile.schema_fingerprint,
-            SourceFile.ingest_status,
-            ReportingPeriod.period_end_date,
-            SourceFile.received_at,
-            SourceFile.encoding_replacement_count,
-        )
-        .order_by(SourceFile.received_at.desc(), SourceFile.id.desc())
-    ).all()
-
     return _render(
         request,
         "source_files_list.html",
         {
             "page_title": "Source Files",
             "flash": flash,
-            "source_files": rows,
+            "source_files": list_source_files(session),
         },
     )
 
@@ -100,48 +70,15 @@ def source_file_detail(
     size: int = Query(50, ge=1, le=200),
     session: Session = Depends(get_db_session),
 ) -> HTMLResponse:
-    source_file = session.get(SourceFile, source_file_id)
-    if source_file is None:
+    detail = get_source_file_detail(session, source_file_id=source_file_id, page=page, size=size)
+    if detail is None:
         raise HTTPException(status_code=404, detail="Source file not found")
-
-    fund = session.get(Fund, source_file.fund_id)
-    reporting_period = None
-    if source_file.reporting_period_id is not None:
-        reporting_period = session.get(ReportingPeriod, source_file.reporting_period_id)
-
-    disclosure_counts = session.execute(
-        select(Holding.disclosure_completeness, func.count(Holding.id))
-        .where(Holding.source_file_id == source_file_id)
-        .group_by(Holding.disclosure_completeness)
-        .order_by(Holding.disclosure_completeness)
-    ).all()
-
-    canonical_asset_class_counts = session.execute(
-        select(CanonicalAssetClass.code, func.count(Holding.id))
-        .join(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
-        .where(Holding.source_file_id == source_file_id)
-        .group_by(CanonicalAssetClass.code)
-        .order_by(CanonicalAssetClass.code)
-    ).all()
-
-    total_rows = session.scalar(select(func.count(Holding.id)).where(Holding.source_file_id == source_file_id)) or 0
-    total_pages = max(1, math.ceil(total_rows / size))
-    offset = (page - 1) * size
-
-    holdings = session.execute(
-        select(Holding, CanonicalAssetClass.code)
-        .join(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
-        .where(Holding.source_file_id == source_file_id)
-        .order_by(Holding.source_row_number.asc(), Holding.id.asc())
-        .offset(offset)
-        .limit(size)
-    ).all()
 
     prev_url = None
     next_url = None
-    if page > 1:
+    if detail.page > 1:
         prev_url = str(request.url.include_query_params(page=page - 1, size=size))
-    if page < total_pages:
+    if detail.page < detail.total_pages:
         next_url = str(request.url.include_query_params(page=page + 1, size=size))
 
     # Raw payload display is restricted to this internal admin surface for provenance and ingest audit only.
@@ -152,16 +89,14 @@ def source_file_detail(
         "source_file_detail.html",
         {
             "page_title": f"Source File {source_file_id}",
-            "source_file": source_file,
-            "fund": fund,
-            "reporting_period": reporting_period,
-            "disclosure_counts": disclosure_counts,
-            "canonical_asset_class_counts": canonical_asset_class_counts,
-            "holdings": holdings,
-            "page": page,
-            "size": size,
-            "total_rows": total_rows,
-            "total_pages": total_pages,
+            "source_file": detail.source_file,
+            "disclosure_counts": detail.disclosure_counts,
+            "canonical_asset_class_counts": detail.canonical_asset_class_counts,
+            "holdings": detail.holdings,
+            "page": detail.page,
+            "size": detail.size,
+            "total_rows": detail.total_rows,
+            "total_pages": detail.total_pages,
             "prev_url": prev_url,
             "next_url": next_url,
         },

@@ -21,6 +21,11 @@ canonical_asset_classes = sa.table(
 )
 
 
+def _dialect_name() -> str:
+    bind = op.get_bind()
+    return "" if bind is None else bind.dialect.name
+
+
 def upgrade() -> None:
     op.create_table(
         "funds",
@@ -89,6 +94,18 @@ def upgrade() -> None:
     op.create_index("ix_source_files_checksum", "source_files", ["checksum"])
     op.create_index("ix_source_files_reporting_period_id", "source_files", ["reporting_period_id"])
     op.create_index("ix_source_files_investment_option_id", "source_files", ["investment_option_id"])
+    op.create_index(
+        "uq_source_files_active_slice",
+        "source_files",
+        ["fund_id", "investment_option_id", "reporting_period_id", "adapter_key"],
+        unique=True,
+        sqlite_where=sa.text(
+            "is_current_version = 1 AND investment_option_id IS NOT NULL AND reporting_period_id IS NOT NULL"
+        ),
+        postgresql_where=sa.text(
+            "is_current_version = true AND investment_option_id IS NOT NULL AND reporting_period_id IS NOT NULL"
+        ),
+    )
 
     op.create_table(
         "canonical_asset_classes",
@@ -180,8 +197,28 @@ def upgrade() -> None:
         ["reporting_period_id", "disclosure_completeness"],
     )
 
+    if _dialect_name() == "postgresql":
+        op.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm")
+        op.execute(
+            """
+            CREATE INDEX ix_holdings_raw_name_trgm
+            ON holdings
+            USING gin (lower(coalesce(raw_name, '')) gin_trgm_ops)
+            """
+        )
+        op.execute(
+            """
+            CREATE INDEX ix_holdings_address_trgm
+            ON holdings
+            USING gin (lower(coalesce(address, '')) gin_trgm_ops)
+            """
+        )
+
 
 def downgrade() -> None:
+    if _dialect_name() == "postgresql":
+        op.execute("DROP INDEX IF EXISTS ix_holdings_address_trgm")
+        op.execute("DROP INDEX IF EXISTS ix_holdings_raw_name_trgm")
     op.drop_index("ix_holdings_reporting_period_disclosure_nonaggregate", table_name="holdings")
     op.drop_index("ix_holdings_security_identifier", table_name="holdings")
     op.drop_index("ix_holdings_asset_class_reporting_period", table_name="holdings")
@@ -195,6 +232,7 @@ def downgrade() -> None:
     op.drop_table("holdings")
     op.drop_index("ix_canonical_asset_classes_code", table_name="canonical_asset_classes")
     op.drop_table("canonical_asset_classes")
+    op.drop_index("uq_source_files_active_slice", table_name="source_files")
     op.drop_index("ix_source_files_investment_option_id", table_name="source_files")
     op.drop_index("ix_source_files_reporting_period_id", table_name="source_files")
     op.drop_index("ix_source_files_checksum", table_name="source_files")

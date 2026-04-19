@@ -113,6 +113,17 @@ class TestHestaAdapterAgainstFixture(unittest.TestCase):
         self.assertEqual(1, len(result.holdings))
         self.assertEqual("name_only", result.holdings[0].disclosure_completeness)
 
+    def test_portfolio_posture_rows_are_skipped(self) -> None:
+        synthetic = (
+            "Effective Date,Option,Asset Class,Internal/External,Name/kind of investment item,Units,"
+            "Value (AUD),Weighting,% Ownership / Property Held,Currency,Security Identifier\n"
+            "31/12/2025,High Growth,Listed Equity,,360 Security Technology Inc,479.280349,1148.821386,2.4e-07,,,CNE100002RZ2\n"
+            "31/12/2025,High Growth,Derivatives By Kind,,Equity Futures,,12345,0.001,,AUD,\n"
+        ).encode("utf-8")
+        result = self.adapter.parse(make_metadata("synthetic-portfolio-posture"), synthetic)
+        self.assertEqual(1, len(result.holdings))
+        self.assertEqual("360 Security Technology Inc", result.holdings[0].raw_name)
+
 
 class TestHestaAdapterErrors(unittest.TestCase):
     def setUp(self) -> None:

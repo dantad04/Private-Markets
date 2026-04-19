@@ -4,22 +4,24 @@
 
 <div class="metadata-grid">
   <strong>source_file_id</strong><span>{{ source_file.id | e }}</span>
-  <strong>fund_code</strong><span>{{ (fund.code if fund else '') | e }}</span>
-  <strong>fund_name</strong><span>{{ (fund.name if fund else '') | e }}</span>
+  <strong>fund_code</strong><span>{{ source_file.fund_code | e }}</span>
+  <strong>fund_name</strong><span>{{ source_file.fund_name | e }}</span>
   <strong>adapter_key</strong><span>{{ source_file.adapter_key | e }}</span>
   <strong>source_url</strong><span>{{ source_file.source_url | e }}</span>
   <strong>checksum</strong><span>{{ source_file.checksum | e }}</span>
   <strong>ingest_status</strong><span>{{ source_file.ingest_status | e }}</span>
   <strong>schema_fingerprint</strong><span>{{ (source_file.schema_fingerprint or '') | e }}</span>
-  <strong>reporting_period</strong><span>{{ (reporting_period.period_end_date.isoformat() if reporting_period else '') | e }}</span>
+  <strong>reporting_period</strong><span>{{ (source_file.reporting_period_end_date.isoformat() if source_file.reporting_period_end_date else '') | e }}</span>
   <strong>publication_date</strong><span>{{ (source_file.publication_date.isoformat() if source_file.publication_date else '') | e }}</span>
   <strong>terms_snapshot_url</strong><span>{{ (source_file.terms_snapshot_url or '') | e }}</span>
   <strong>downloaded_at</strong><span>{{ source_file.downloaded_at | iso_utc | e }}</span>
   <strong>received_at</strong><span>{{ source_file.received_at | iso_utc | e }}</span>
   <strong>encoding_replacement_count</strong><span>{{ source_file.encoding_replacement_count | e }}</span>
   <strong>investment_option_id</strong><span>{{ (source_file.investment_option_id or '') | e }}</span>
+  <strong>investment_option_name</strong><span>{{ (source_file.investment_option_name or '') | e }}</span>
   <strong>version_number</strong><span>{{ source_file.version_number | e }}</span>
   <strong>is_current_version</strong><span>{{ source_file.is_current_version | e }}</span>
+  <strong>supersedes_source_file_id</strong><span>{{ (source_file.supersedes_source_file_id or '') | e }}</span>
 </div>
 
 <div class="counts">
@@ -75,7 +77,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for holding, canonical_asset_class_code in holdings %}
+    {% for holding in holdings %}
     <tr>
       <td>{{ holding.source_row_number | e }}</td>
       <td>
@@ -87,7 +89,7 @@
       </td>
       <td>{{ holding.source_asset_class_raw | e }}</td>
       <td>{{ (holding.source_subclass_raw or '') | e }}</td>
-      <td>{{ canonical_asset_class_code | e }}</td>
+      <td>{{ holding.canonical_asset_class_code | e }}</td>
       <td>{{ holding.disclosure_completeness | e }}</td>
       <td>{{ holding.is_aggregate | e }}</td>
       <td>{{ (holding.value_aud if holding.value_aud is not none else '') | e }}</td>

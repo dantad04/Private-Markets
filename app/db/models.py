@@ -92,6 +92,22 @@ class InvestmentOption(Base):
 
 class SourceFile(Base):
     __tablename__ = "source_files"
+    __table_args__ = (
+        Index(
+            "uq_source_files_active_slice",
+            "fund_id",
+            "investment_option_id",
+            "reporting_period_id",
+            "adapter_key",
+            unique=True,
+            sqlite_where=text(
+                "is_current_version = 1 AND investment_option_id IS NOT NULL AND reporting_period_id IS NOT NULL"
+            ),
+            postgresql_where=text(
+                "is_current_version = true AND investment_option_id IS NOT NULL AND reporting_period_id IS NOT NULL"
+            ),
+        ),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     fund_id: Mapped[int] = mapped_column(ForeignKey("funds.id"), index=True)

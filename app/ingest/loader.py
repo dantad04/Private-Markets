@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 import hashlib
 from pathlib import Path
@@ -36,6 +36,10 @@ class SourceFileNotFoundError(LoaderError):
 
 
 class CanonicalAssetClassMissingError(LoaderError):
+    pass
+
+
+class ActiveSourceFileConflictError(LoaderError):
     pass
 
 
@@ -162,6 +166,58 @@ def get_or_create_investment_option(
     return option
 
 
+def activate_source_file_version(
+    session: Session,
+    *,
+    source_file: SourceFile,
+    investment_option_id: int,
+    reporting_period_id: int,
+) -> None:
+    related_versions = session.scalars(
+        select(SourceFile)
+        .where(
+            SourceFile.fund_id == source_file.fund_id,
+            SourceFile.investment_option_id == investment_option_id,
+            SourceFile.reporting_period_id == reporting_period_id,
+            SourceFile.adapter_key == source_file.adapter_key,
+        )
+        .order_by(SourceFile.version_number.desc(), SourceFile.id.desc())
+    ).all()
+
+    active_versions = [row for row in related_versions if row.is_current_version and row.id != source_file.id]
+    if len(active_versions) > 1:
+        raise ActiveSourceFileConflictError(
+            "Multiple active source files exist for the same fund/option/reporting-period/adapter slice"
+        )
+
+    prior_versions = [row for row in related_versions if row.id != source_file.id]
+    max_prior_version_number = max((row.version_number for row in prior_versions), default=0)
+    source_file.is_current_version = True
+    source_file.superseded_at = None
+    source_file.supersession_reason = None
+
+    if not prior_versions:
+        source_file.version_number = 1
+        source_file.supersedes_source_file_id = None
+        return
+
+    active_prior = active_versions[0] if active_versions else None
+    if active_prior is None:
+        source_file.version_number = max_prior_version_number + 1
+        source_file.supersedes_source_file_id = None
+        return
+
+    source_file.is_current_version = False
+    active_prior.is_current_version = False
+    active_prior.superseded_at = datetime.now(UTC)
+    active_prior.supersession_reason = f"Superseded by source_file_id={source_file.id}"
+    session.flush()
+
+    source_file.version_number = active_prior.version_number + 1
+    source_file.supersedes_source_file_id = active_prior.id
+    source_file.is_current_version = True
+
+
 def load_adapter_parse_result(
     session: Session,
     metadata: SourceFileMetadata,
@@ -204,6 +260,13 @@ def load_adapter_parse_result(
         raise LoaderError(
             f"Registered source file option {source_file.investment_option_id!r} does not match parsed option {option.id!r}"
         )
+
+    activate_source_file_version(
+        session,
+        source_file=source_file,
+        investment_option_id=option.id,
+        reporting_period_id=reporting_period.id,
+    )
 
     source_file.schema_fingerprint = parse_result.schema_fingerprint
     source_file.encoding_replacement_count = int(parse_result.structural_metadata["encoding_replacement_count"])
@@ -309,7 +372,7 @@ def ingest_hesta_local_file(
         adapter_key="HestaPhdAdapter",
         source_url=str(file_path_obj),
         checksum=checksum,
-        received_at=received_at or datetime.utcnow(),
+        received_at=received_at or datetime.now(UTC),
         reporting_period_id=reporting_period_id,
         publication_date=publication_date,
     )
@@ -339,7 +402,7 @@ def ingest_aware_local_file(
         adapter_key="AwarePhdAdapter",
         source_url=str(file_path_obj),
         checksum=checksum,
-        received_at=received_at or datetime.utcnow(),
+        received_at=received_at or datetime.now(UTC),
         reporting_period_id=reporting_period_id,
         publication_date=publication_date,
         terms_snapshot_url=terms_snapshot_url,

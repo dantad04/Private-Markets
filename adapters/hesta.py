@@ -31,6 +31,13 @@ from adapters.hesta_normalisation import (
 
 class HestaPhdAdapter:
     adapter_key = "HestaPhdAdapter"
+    PORTFOLIO_POSTURE_ASSET_CLASSES = {
+        "derivatives",
+        "derivatives by kind",
+        "derivatives by assetclass",
+        "derivatives by asset class",
+        "derivatives by currency",
+    }
 
     def parse(
         self,
@@ -100,6 +107,9 @@ class HestaPhdAdapter:
             observed_asset_classes.add(asset_class_raw)
             if internal_external_raw:
                 observed_internal_external_values.add(internal_external_raw)
+
+            if self._is_portfolio_posture_row(asset_class_raw):
+                continue
 
             mapping = lookup_asset_class_mapping(asset_class_raw, internal_external_raw or None)
             if mapping is None:
@@ -256,3 +266,7 @@ class HestaPhdAdapter:
     def _sha256_of_row(row: list[str]) -> str:
         payload = json.dumps(row, ensure_ascii=False, separators=(",", ":"))
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+    @classmethod
+    def _is_portfolio_posture_row(cls, asset_class_raw: str) -> bool:
+        return asset_class_raw.strip().casefold() in cls.PORTFOLIO_POSTURE_ASSET_CLASSES

@@ -9,6 +9,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.api.admin import router as admin_router
 from app.api.admin_ui import router as admin_ui_router
+from app.api.entities import router as entities_router
 
 
 def _format_datetime_utc(value):
@@ -39,6 +40,7 @@ def create_app() -> FastAPI:
     app.state.templates = create_templates()
     app.include_router(admin_router)
     app.include_router(admin_ui_router)
+    app.include_router(entities_router)
     return app
 
 
