@@ -8,9 +8,10 @@ import unittest
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 
-from app.db.models import Base, Holding, ReportingPeriod, SourceFile
+from app.db.models import AdapterMappingVersion, Base, Holding, ReportingPeriod, SchemaReviewQueue, SourceFile, TaxonomyMapping
 from app.db.session import get_engine
 from app.ingest.loader import ingest_aware_local_file
+from app.ingest.governance import AWARE_MAPPING_VERSION_ID, SchemaDriftDetectedError
 
 
 FIXTURE_PATH = Path("tests/fixtures/aware_synthetic_table1_minimal.csv").resolve()
@@ -48,10 +49,13 @@ class TestAwareLoader(unittest.TestCase):
             self.assertEqual(0, source_file.encoding_replacement_count)
             self.assertEqual("https://example.com/aware/terms", source_file.terms_snapshot_url)
             self.assertEqual(datetime(2026, 4, 20, 10, 30, 0), source_file.downloaded_at)
+            self.assertEqual(AWARE_MAPPING_VERSION_ID, source_file.mapping_version_id)
 
             period = session.get(ReportingPeriod, first.reporting_period_id)
             self.assertEqual(date(2025, 12, 31), period.period_end_date)
             self.assertEqual(19, session.query(Holding).count())
+            self.assertIsNotNone(session.get(AdapterMappingVersion, AWARE_MAPPING_VERSION_ID))
+            self.assertGreater(session.query(TaxonomyMapping).count(), 0)
             self.assertEqual(
                 10,
                 session.query(Holding).filter(Holding.is_aggregate.is_(True)).count(),
@@ -95,3 +99,30 @@ class TestAwareLoader(unittest.TestCase):
                 select(Holding).where(Holding.source_row_number == 10, Holding.source_file_id == summary.source_file_id)
             )
             self.assertIn("\ufffd", property_row.raw_name)
+
+    def test_schema_drift_blocks_ingest_and_queues_review_item(self) -> None:
+        drifted_path = Path(self.tempdir.name) / "aware_drifted.csv"
+        drifted_text = FIXTURE_PATH.read_text(encoding="utf-8").replace(
+            " - ASSETS - 2025-12-31",
+            " - ASSETS UPDATED - 2025-12-31",
+            1,
+        )
+        drifted_path.write_text(drifted_text, encoding="utf-8")
+
+        with self.SessionLocal() as session:
+            with self.assertRaises(SchemaDriftDetectedError):
+                ingest_aware_local_file(
+                    session,
+                    fund_code="aware",
+                    fund_name="Aware Super",
+                    file_path=str(drifted_path),
+                )
+
+            review_item = session.query(SchemaReviewQueue).one()
+            self.assertEqual("schema_drift", review_item.review_reason)
+            self.assertEqual("AwarePhdAdapter", review_item.adapter_key)
+            self.assertIn("schema_fingerprint", review_item.drift_summary_json)
+
+            source_file = session.get(SourceFile, review_item.source_file_id)
+            self.assertEqual("review_required", source_file.ingest_status)
+            self.assertEqual(AWARE_MAPPING_VERSION_ID, source_file.mapping_version_id)

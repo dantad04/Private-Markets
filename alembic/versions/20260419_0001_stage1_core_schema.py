@@ -32,7 +32,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
         sa.Column("code", sa.String(length=64), nullable=False),
         sa.Column("name", sa.String(length=255), nullable=False),
-        sa.Column("apra_regulated_flag", sa.Boolean(), server_default=sa.text("1"), nullable=False),
+        sa.Column("apra_regulated_flag", sa.Boolean(), server_default=sa.text("true"), nullable=False),
         sa.Column("status", sa.String(length=32), server_default="active", nullable=False),
         sa.Column("source_system_notes", sa.Text(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
@@ -50,6 +50,45 @@ def upgrade() -> None:
     )
     op.create_index("ix_reporting_periods_period_end_date", "reporting_periods", ["period_end_date"], unique=True)
     op.create_index("ix_reporting_periods_label", "reporting_periods", ["label"], unique=True)
+
+    op.create_table(
+        "entities",
+        sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("entity_type", sa.String(length=32), nullable=False),
+        sa.Column("canonical_name", sa.String(length=255), nullable=False),
+        sa.Column("abn", sa.String(length=32), nullable=True),
+        sa.Column("country_code", sa.String(length=8), nullable=True),
+        sa.Column("is_australian_entity", sa.Boolean(), nullable=True),
+        sa.Column("confidence_tier", sa.String(length=32), nullable=True),
+        sa.Column("notes", sa.Text(), nullable=True),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+    )
+    op.create_index(
+        "uq_entities_abn_not_null",
+        "entities",
+        ["abn"],
+        unique=True,
+        sqlite_where=sa.text("abn IS NOT NULL"),
+        postgresql_where=sa.text("abn IS NOT NULL"),
+    )
+
+    op.create_table(
+        "adapter_mapping_versions",
+        sa.Column("id", sa.String(length=64), primary_key=True),
+        sa.Column("adapter_key", sa.String(length=128), nullable=False),
+        sa.Column("schema_fingerprint", sa.String(length=64), nullable=False),
+        sa.Column("structural_expectations_json", sa.JSON(), nullable=False),
+        sa.Column("notes", sa.Text(), nullable=True),
+        sa.Column("approved_by", sa.String(length=255), nullable=False),
+        sa.Column("approved_at", sa.DateTime(timezone=True), nullable=False),
+        sa.Column("effective_from_period_id", sa.Integer(), sa.ForeignKey("reporting_periods.id"), nullable=True),
+        sa.Column("effective_to_period_id", sa.Integer(), sa.ForeignKey("reporting_periods.id"), nullable=True),
+        sa.Column("is_active", sa.Boolean(), server_default=sa.text("true"), nullable=False),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+    )
+    op.create_index("ix_adapter_mapping_versions_adapter_key", "adapter_mapping_versions", ["adapter_key"])
 
     op.create_table(
         "investment_options",
@@ -79,7 +118,7 @@ def upgrade() -> None:
         sa.Column("publication_date", sa.Date(), nullable=True),
         sa.Column("version_number", sa.Integer(), server_default=sa.text("1"), nullable=False),
         sa.Column("supersedes_source_file_id", sa.Integer(), sa.ForeignKey("source_files.id"), nullable=True),
-        sa.Column("is_current_version", sa.Boolean(), server_default=sa.text("1"), nullable=False),
+        sa.Column("is_current_version", sa.Boolean(), server_default=sa.text("true"), nullable=False),
         sa.Column("superseded_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("supersession_reason", sa.Text(), nullable=True),
         sa.Column("terms_snapshot_url", sa.Text(), nullable=True),
@@ -141,7 +180,7 @@ def upgrade() -> None:
         sa.Column("source_fund_id", sa.Integer(), sa.ForeignKey("funds.id"), nullable=False),
         sa.Column("source_option_id", sa.Integer(), sa.ForeignKey("investment_options.id"), nullable=False),
         sa.Column("reporting_period_id", sa.Integer(), sa.ForeignKey("reporting_periods.id"), nullable=False),
-        sa.Column("entity_id", sa.Integer(), nullable=True),
+        sa.Column("entity_id", sa.Integer(), sa.ForeignKey("entities.id"), nullable=True),
         sa.Column("raw_name", sa.Text(), nullable=True),
         sa.Column("value_aud", sa.Numeric(24, 9), nullable=True),
         sa.Column("ownership_pct", sa.Numeric(18, 9), nullable=True),
@@ -161,8 +200,8 @@ def upgrade() -> None:
         sa.Column("source_row_number", sa.Integer(), nullable=False),
         sa.Column("raw_payload_json", sa.JSON(), nullable=False),
         sa.Column("ingested_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
-        sa.Column("manager_entity_id", sa.Integer(), nullable=True),
-        sa.Column("issuer_entity_id", sa.Integer(), nullable=True),
+        sa.Column("manager_entity_id", sa.Integer(), sa.ForeignKey("entities.id"), nullable=True),
+        sa.Column("issuer_entity_id", sa.Integer(), sa.ForeignKey("entities.id"), nullable=True),
         sa.Column("currency_raw", sa.String(length=32), nullable=True),
         sa.Column("classification_raw", sa.String(length=128), nullable=True),
         sa.Column("location_raw", sa.String(length=255), nullable=True),
@@ -197,6 +236,96 @@ def upgrade() -> None:
         ["reporting_period_id", "disclosure_completeness"],
     )
 
+    op.create_table(
+        "entity_aliases",
+        sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("entity_id", sa.Integer(), sa.ForeignKey("entities.id"), nullable=False),
+        sa.Column("alias", sa.String(length=255), nullable=False),
+        sa.Column("alias_normalized", sa.String(length=255), nullable=False),
+        sa.Column("source_system", sa.String(length=64), nullable=False),
+        sa.Column("source_file_id", sa.Integer(), sa.ForeignKey("source_files.id"), nullable=True),
+        sa.Column("is_preferred", sa.Boolean(), server_default=sa.text("false"), nullable=False),
+        sa.Column("match_confidence", sa.Numeric(6, 5), nullable=True),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+    )
+    op.create_index("ix_entity_aliases_entity_id", "entity_aliases", ["entity_id"])
+    op.create_index("ix_entity_aliases_alias_normalized", "entity_aliases", ["alias_normalized"])
+    op.create_index("ix_entity_aliases_source_file_id", "entity_aliases", ["source_file_id"])
+
+    op.create_table(
+        "entity_relationships",
+        sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("from_entity_id", sa.Integer(), sa.ForeignKey("entities.id"), nullable=False),
+        sa.Column("to_entity_id", sa.Integer(), sa.ForeignKey("entities.id"), nullable=False),
+        sa.Column("relationship_type", sa.String(length=64), nullable=False),
+        sa.Column("effective_from_period_id", sa.Integer(), sa.ForeignKey("reporting_periods.id"), nullable=True),
+        sa.Column("effective_to_period_id", sa.Integer(), sa.ForeignKey("reporting_periods.id"), nullable=True),
+        sa.Column("confidence_score", sa.Numeric(6, 5), nullable=True),
+        sa.Column("source", sa.String(length=255), nullable=False),
+        sa.Column("notes", sa.Text(), nullable=True),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+    )
+    op.create_index("ix_entity_relationships_from_entity_id", "entity_relationships", ["from_entity_id"])
+    op.create_index("ix_entity_relationships_to_entity_id", "entity_relationships", ["to_entity_id"])
+
+    op.create_table(
+        "holding_relationships",
+        sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("holding_id", sa.Integer(), sa.ForeignKey("holdings.id"), nullable=False),
+        sa.Column("related_entity_id", sa.Integer(), sa.ForeignKey("entities.id"), nullable=False),
+        sa.Column("relationship_role", sa.String(length=64), nullable=False),
+        sa.Column("confidence_score", sa.Numeric(6, 5), nullable=True),
+        sa.Column("source", sa.String(length=255), nullable=False),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+    )
+    op.create_index("ix_holding_relationships_holding_id", "holding_relationships", ["holding_id"])
+    op.create_index("ix_holding_relationships_related_entity_id", "holding_relationships", ["related_entity_id"])
+
+    op.create_table(
+        "taxonomy_mappings",
+        sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("adapter_key", sa.String(length=128), nullable=False),
+        sa.Column("mapping_version", sa.String(length=64), nullable=False),
+        sa.Column("source_asset_class_raw", sa.String(length=255), nullable=False),
+        sa.Column("source_filter_raw", sa.String(length=255), nullable=True),
+        sa.Column("source_sub_filter_raw", sa.String(length=255), nullable=True),
+        sa.Column("source_section_raw", sa.String(length=255), nullable=True),
+        sa.Column("canonical_asset_class_code", sa.String(length=64), nullable=False),
+        sa.Column("is_aggregate_default", sa.Boolean(), nullable=False),
+        sa.Column("disclosure_completeness_default", sa.String(length=32), nullable=True),
+        sa.Column("notes", sa.Text(), nullable=True),
+        sa.Column("approved_by", sa.String(length=255), nullable=False),
+        sa.Column("approved_at", sa.DateTime(timezone=True), nullable=False),
+        sa.Column("effective_from_period_id", sa.Integer(), sa.ForeignKey("reporting_periods.id"), nullable=True),
+        sa.Column("effective_to_period_id", sa.Integer(), sa.ForeignKey("reporting_periods.id"), nullable=True),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+    )
+    op.create_index("ix_taxonomy_mappings_adapter_key", "taxonomy_mappings", ["adapter_key"])
+    op.create_index("ix_taxonomy_mappings_mapping_version", "taxonomy_mappings", ["mapping_version"])
+
+    op.create_table(
+        "schema_review_queue",
+        sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("adapter_key", sa.String(length=128), nullable=False),
+        sa.Column("source_file_id", sa.Integer(), sa.ForeignKey("source_files.id"), nullable=True),
+        sa.Column("source_url", sa.Text(), nullable=False),
+        sa.Column("checksum", sa.String(length=64), nullable=False),
+        sa.Column("observed_schema_fingerprint", sa.String(length=64), nullable=True),
+        sa.Column("approved_mapping_version_id", sa.String(length=64), nullable=True),
+        sa.Column("review_reason", sa.String(length=64), nullable=False),
+        sa.Column("status", sa.String(length=32), server_default="open", nullable=False),
+        sa.Column("drift_summary_json", sa.JSON(), nullable=False),
+        sa.Column("sample_rows_json", sa.JSON(), nullable=False),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+    )
+    op.create_index("ix_schema_review_queue_adapter_key", "schema_review_queue", ["adapter_key"])
+    op.create_index("ix_schema_review_queue_source_file_id", "schema_review_queue", ["source_file_id"])
+
     if _dialect_name() == "postgresql":
         op.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm")
         op.execute(
@@ -213,12 +342,36 @@ def upgrade() -> None:
             USING gin (lower(coalesce(address, '')) gin_trgm_ops)
             """
         )
+        op.execute(
+            """
+            CREATE INDEX ix_entity_aliases_alias_normalized_trgm
+            ON entity_aliases
+            USING gin (lower(coalesce(alias_normalized, '')) gin_trgm_ops)
+            """
+        )
 
 
 def downgrade() -> None:
     if _dialect_name() == "postgresql":
+        op.execute("DROP INDEX IF EXISTS ix_entity_aliases_alias_normalized_trgm")
         op.execute("DROP INDEX IF EXISTS ix_holdings_address_trgm")
         op.execute("DROP INDEX IF EXISTS ix_holdings_raw_name_trgm")
+    op.drop_index("ix_schema_review_queue_source_file_id", table_name="schema_review_queue")
+    op.drop_index("ix_schema_review_queue_adapter_key", table_name="schema_review_queue")
+    op.drop_table("schema_review_queue")
+    op.drop_index("ix_taxonomy_mappings_mapping_version", table_name="taxonomy_mappings")
+    op.drop_index("ix_taxonomy_mappings_adapter_key", table_name="taxonomy_mappings")
+    op.drop_table("taxonomy_mappings")
+    op.drop_index("ix_holding_relationships_related_entity_id", table_name="holding_relationships")
+    op.drop_index("ix_holding_relationships_holding_id", table_name="holding_relationships")
+    op.drop_table("holding_relationships")
+    op.drop_index("ix_entity_relationships_to_entity_id", table_name="entity_relationships")
+    op.drop_index("ix_entity_relationships_from_entity_id", table_name="entity_relationships")
+    op.drop_table("entity_relationships")
+    op.drop_index("ix_entity_aliases_source_file_id", table_name="entity_aliases")
+    op.drop_index("ix_entity_aliases_alias_normalized", table_name="entity_aliases")
+    op.drop_index("ix_entity_aliases_entity_id", table_name="entity_aliases")
+    op.drop_table("entity_aliases")
     op.drop_index("ix_holdings_reporting_period_disclosure_nonaggregate", table_name="holdings")
     op.drop_index("ix_holdings_security_identifier", table_name="holdings")
     op.drop_index("ix_holdings_asset_class_reporting_period", table_name="holdings")
@@ -232,6 +385,8 @@ def downgrade() -> None:
     op.drop_table("holdings")
     op.drop_index("ix_canonical_asset_classes_code", table_name="canonical_asset_classes")
     op.drop_table("canonical_asset_classes")
+    op.drop_index("ix_adapter_mapping_versions_adapter_key", table_name="adapter_mapping_versions")
+    op.drop_table("adapter_mapping_versions")
     op.drop_index("uq_source_files_active_slice", table_name="source_files")
     op.drop_index("ix_source_files_investment_option_id", table_name="source_files")
     op.drop_index("ix_source_files_reporting_period_id", table_name="source_files")
@@ -240,6 +395,8 @@ def downgrade() -> None:
     op.drop_index("ix_source_files_fund_id", table_name="source_files")
     op.drop_table("source_files")
     op.drop_table("investment_options")
+    op.drop_index("uq_entities_abn_not_null", table_name="entities")
+    op.drop_table("entities")
     op.drop_index("ix_reporting_periods_label", table_name="reporting_periods")
     op.drop_index("ix_reporting_periods_period_end_date", table_name="reporting_periods")
     op.drop_table("reporting_periods")

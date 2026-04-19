@@ -11,6 +11,7 @@
   <strong>checksum</strong><span>{{ source_file.checksum | e }}</span>
   <strong>ingest_status</strong><span>{{ source_file.ingest_status | e }}</span>
   <strong>schema_fingerprint</strong><span>{{ (source_file.schema_fingerprint or '') | e }}</span>
+  <strong>mapping_version_id</strong><span>{{ (source_file.mapping_version_id or '') | e }}</span>
   <strong>reporting_period</strong><span>{{ (source_file.reporting_period_end_date.isoformat() if source_file.reporting_period_end_date else '') | e }}</span>
   <strong>publication_date</strong><span>{{ (source_file.publication_date.isoformat() if source_file.publication_date else '') | e }}</span>
   <strong>terms_snapshot_url</strong><span>{{ (source_file.terms_snapshot_url or '') | e }}</span>

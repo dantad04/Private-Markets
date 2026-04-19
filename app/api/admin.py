@@ -3,12 +3,14 @@ from __future__ import annotations
 from datetime import date, datetime
 from decimal import Decimal
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from adapters.aware_errors import AwareAdapterError
 from app.db.session import get_session
-from app.ingest.loader import LoadSummary, ingest_aware_local_file, ingest_hesta_local_file
+from app.ingest.loader import LoadSummary, LoaderError, ingest_aware_local_file, ingest_hesta_local_file
+from app.ingest.governance import SchemaDriftDetectedError, UnapprovedTaxonomyMappingError
 from app.read_models import (
     SourceFileDetailReadModel,
     SourceFileHoldingRow,
@@ -72,6 +74,7 @@ class SourceFileListItemResponse(BaseModel):
     fund_name: str
     adapter_key: str
     schema_fingerprint: str | None
+    mapping_version_id: str | None
     ingest_status: str
     period_end_date: date | None
     received_at: datetime
@@ -88,6 +91,7 @@ class SourceFileListItemResponse(BaseModel):
             fund_name=item.fund_name,
             adapter_key=item.adapter_key,
             schema_fingerprint=item.schema_fingerprint,
+            mapping_version_id=item.mapping_version_id,
             ingest_status=item.ingest_status,
             period_end_date=item.period_end_date,
             received_at=item.received_at,
@@ -110,6 +114,7 @@ class SourceFileSummaryResponse(BaseModel):
     checksum: str
     ingest_status: str
     schema_fingerprint: str | None
+    mapping_version_id: str | None
     reporting_period_id: int | None
     reporting_period_end_date: date | None
     publication_date: date | None
@@ -135,6 +140,7 @@ class SourceFileSummaryResponse(BaseModel):
             checksum=item.checksum,
             ingest_status=item.ingest_status,
             schema_fingerprint=item.schema_fingerprint,
+            mapping_version_id=item.mapping_version_id,
             reporting_period_id=item.reporting_period_id,
             reporting_period_end_date=item.reporting_period_end_date,
             publication_date=item.publication_date,
@@ -258,14 +264,21 @@ def ingest_aware_local_file_endpoint(
     payload: AdminAwareIngestRequest,
     session: Session = Depends(get_db_session),
 ) -> AdminIngestResponse:
-    summary = ingest_aware_local_file(
-        session,
-        fund_code=payload.fund_code,
-        fund_name=payload.fund_name,
-        file_path=payload.file_path,
-        publication_date=payload.publication_date,
-        reporting_period_id=payload.reporting_period_id,
-        terms_snapshot_url=payload.terms_snapshot_url,
-        downloaded_at=payload.downloaded_at,
-    )
+    try:
+        summary = ingest_aware_local_file(
+            session,
+            fund_code=payload.fund_code,
+            fund_name=payload.fund_name,
+            file_path=payload.file_path,
+            publication_date=payload.publication_date,
+            reporting_period_id=payload.reporting_period_id,
+            terms_snapshot_url=payload.terms_snapshot_url,
+            downloaded_at=payload.downloaded_at,
+        )
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    except (AwareAdapterError, LoaderError, OSError, ValueError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     return AdminIngestResponse.from_summary(summary)

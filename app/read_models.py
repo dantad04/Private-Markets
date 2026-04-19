@@ -19,6 +19,7 @@ class SourceFileListItem:
     fund_name: str
     adapter_key: str
     schema_fingerprint: str | None
+    mapping_version_id: str | None
     ingest_status: str
     period_end_date: date | None
     received_at: datetime
@@ -41,6 +42,7 @@ class SourceFileSummary:
     checksum: str
     ingest_status: str
     schema_fingerprint: str | None
+    mapping_version_id: str | None
     reporting_period_id: int | None
     reporting_period_end_date: date | None
     publication_date: date | None
@@ -125,6 +127,7 @@ def list_source_files(session: Session) -> list[SourceFileListItem]:
             Fund.name.label("fund_name"),
             SourceFile.adapter_key,
             SourceFile.schema_fingerprint,
+            SourceFile.mapping_version_id,
             SourceFile.ingest_status,
             ReportingPeriod.period_end_date,
             SourceFile.received_at,
@@ -142,6 +145,7 @@ def list_source_files(session: Session) -> list[SourceFileListItem]:
             Fund.name,
             SourceFile.adapter_key,
             SourceFile.schema_fingerprint,
+            SourceFile.mapping_version_id,
             SourceFile.ingest_status,
             ReportingPeriod.period_end_date,
             SourceFile.received_at,
@@ -158,6 +162,7 @@ def list_source_files(session: Session) -> list[SourceFileListItem]:
             fund_name=row.fund_name,
             adapter_key=row.adapter_key,
             schema_fingerprint=row.schema_fingerprint,
+            mapping_version_id=row.mapping_version_id,
             ingest_status=row.ingest_status,
             period_end_date=row.period_end_date,
             received_at=row.received_at,
@@ -190,6 +195,7 @@ def get_source_file_detail(
             SourceFile.checksum,
             SourceFile.ingest_status,
             SourceFile.schema_fingerprint,
+            SourceFile.mapping_version_id,
             SourceFile.reporting_period_id,
             ReportingPeriod.period_end_date.label("reporting_period_end_date"),
             SourceFile.publication_date,
@@ -221,6 +227,7 @@ def get_source_file_detail(
         checksum=source_file_row.checksum,
         ingest_status=source_file_row.ingest_status,
         schema_fingerprint=source_file_row.schema_fingerprint,
+        mapping_version_id=source_file_row.mapping_version_id,
         reporting_period_id=source_file_row.reporting_period_id,
         reporting_period_end_date=source_file_row.reporting_period_end_date,
         publication_date=source_file_row.publication_date,

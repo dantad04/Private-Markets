@@ -47,7 +47,7 @@ class Fund(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     code: Mapped[str] = mapped_column(String(64), unique=True, index=True)
     name: Mapped[str] = mapped_column(String(255))
-    apra_regulated_flag: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("1"))
+    apra_regulated_flag: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("true"))
     status: Mapped[str] = mapped_column(String(32), default="active", server_default="active")
     source_system_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -122,7 +122,7 @@ class SourceFile(Base):
     publication_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     version_number: Mapped[int] = mapped_column(Integer, default=1, server_default=text("1"))
     supersedes_source_file_id: Mapped[int | None] = mapped_column(ForeignKey("source_files.id"), nullable=True)
-    is_current_version: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("1"))
+    is_current_version: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("true"))
     superseded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     supersession_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
     terms_snapshot_url: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -150,6 +150,57 @@ class CanonicalAssetClass(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
+class Entity(Base):
+    __tablename__ = "entities"
+    __table_args__ = (
+        Index(
+            "uq_entities_abn_not_null",
+            "abn",
+            unique=True,
+            sqlite_where=text("abn IS NOT NULL"),
+            postgresql_where=text("abn IS NOT NULL"),
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    entity_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    canonical_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    abn: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    country_code: Mapped[str | None] = mapped_column(String(8), nullable=True)
+    is_australian_entity: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    confidence_tier: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class AdapterMappingVersion(Base):
+    __tablename__ = "adapter_mapping_versions"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    adapter_key: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
+    schema_fingerprint: Mapped[str] = mapped_column(String(64), nullable=False)
+    structural_expectations_json: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    approved_by: Mapped[str] = mapped_column(String(255), nullable=False)
+    approved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    effective_from_period_id: Mapped[int | None] = mapped_column(ForeignKey("reporting_periods.id"), nullable=True)
+    effective_to_period_id: Mapped[int | None] = mapped_column(ForeignKey("reporting_periods.id"), nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("true"), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
 class Holding(Base):
     __tablename__ = "holdings"
     __table_args__ = (
@@ -173,7 +224,7 @@ class Holding(Base):
     source_fund_id: Mapped[int] = mapped_column(ForeignKey("funds.id"), index=True)
     source_option_id: Mapped[int] = mapped_column(ForeignKey("investment_options.id"), index=True)
     reporting_period_id: Mapped[int] = mapped_column(ForeignKey("reporting_periods.id"), index=True)
-    entity_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    entity_id: Mapped[int | None] = mapped_column(ForeignKey("entities.id"), nullable=True)
     raw_name: Mapped[str | None] = mapped_column(Text, nullable=True)
     value_aud: Mapped[Decimal | None] = mapped_column(Numeric(24, 9), nullable=True)
     ownership_pct: Mapped[Decimal | None] = mapped_column(Numeric(18, 9), nullable=True)
@@ -194,10 +245,119 @@ class Holding(Base):
     # Internal admin provenance only; never surface raw source rows on external-facing APIs.
     raw_payload_json: Mapped[list[str]] = mapped_column(JSON, nullable=False)
     ingested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    manager_entity_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    issuer_entity_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    manager_entity_id: Mapped[int | None] = mapped_column(ForeignKey("entities.id"), nullable=True)
+    issuer_entity_id: Mapped[int | None] = mapped_column(ForeignKey("entities.id"), nullable=True)
     currency_raw: Mapped[str | None] = mapped_column(String(32), nullable=True)
     classification_raw: Mapped[str | None] = mapped_column(String(128), nullable=True)
     location_raw: Mapped[str | None] = mapped_column(String(255), nullable=True)
     parse_warning_flags: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
     metadata_attached_from_row_numbers: Mapped[list[int]] = mapped_column(JSON, nullable=False, default=list)
+
+
+class EntityAlias(Base):
+    __tablename__ = "entity_aliases"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    entity_id: Mapped[int] = mapped_column(ForeignKey("entities.id"), index=True, nullable=False)
+    alias: Mapped[str] = mapped_column(String(255), nullable=False)
+    alias_normalized: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
+    source_system: Mapped[str] = mapped_column(String(64), nullable=False)
+    source_file_id: Mapped[int | None] = mapped_column(ForeignKey("source_files.id"), nullable=True, index=True)
+    is_preferred: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
+    match_confidence: Mapped[Decimal | None] = mapped_column(Numeric(6, 5), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class EntityRelationship(Base):
+    __tablename__ = "entity_relationships"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    from_entity_id: Mapped[int] = mapped_column(ForeignKey("entities.id"), index=True, nullable=False)
+    to_entity_id: Mapped[int] = mapped_column(ForeignKey("entities.id"), index=True, nullable=False)
+    relationship_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    effective_from_period_id: Mapped[int | None] = mapped_column(ForeignKey("reporting_periods.id"), nullable=True)
+    effective_to_period_id: Mapped[int | None] = mapped_column(ForeignKey("reporting_periods.id"), nullable=True)
+    confidence_score: Mapped[Decimal | None] = mapped_column(Numeric(6, 5), nullable=True)
+    source: Mapped[str] = mapped_column(String(255), nullable=False)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class HoldingRelationship(Base):
+    __tablename__ = "holding_relationships"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    holding_id: Mapped[int] = mapped_column(ForeignKey("holdings.id"), index=True, nullable=False)
+    related_entity_id: Mapped[int] = mapped_column(ForeignKey("entities.id"), index=True, nullable=False)
+    relationship_role: Mapped[str] = mapped_column(String(64), nullable=False)
+    confidence_score: Mapped[Decimal | None] = mapped_column(Numeric(6, 5), nullable=True)
+    source: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class TaxonomyMapping(Base):
+    __tablename__ = "taxonomy_mappings"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    adapter_key: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
+    mapping_version: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
+    source_asset_class_raw: Mapped[str] = mapped_column(String(255), nullable=False)
+    source_filter_raw: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    source_sub_filter_raw: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    source_section_raw: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    canonical_asset_class_code: Mapped[str] = mapped_column(String(64), nullable=False)
+    is_aggregate_default: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    disclosure_completeness_default: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    approved_by: Mapped[str] = mapped_column(String(255), nullable=False)
+    approved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    effective_from_period_id: Mapped[int | None] = mapped_column(ForeignKey("reporting_periods.id"), nullable=True)
+    effective_to_period_id: Mapped[int | None] = mapped_column(ForeignKey("reporting_periods.id"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class SchemaReviewQueue(Base):
+    __tablename__ = "schema_review_queue"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    adapter_key: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
+    source_file_id: Mapped[int | None] = mapped_column(ForeignKey("source_files.id"), nullable=True, index=True)
+    source_url: Mapped[str] = mapped_column(Text, nullable=False)
+    checksum: Mapped[str] = mapped_column(String(64), nullable=False)
+    observed_schema_fingerprint: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    approved_mapping_version_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    review_reason: Mapped[str] = mapped_column(String(64), nullable=False)
+    status: Mapped[str] = mapped_column(String(32), default="open", server_default="open", nullable=False)
+    drift_summary_json: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False)
+    sample_rows_json: Mapped[list[list[str]]] = mapped_column(JSON, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )

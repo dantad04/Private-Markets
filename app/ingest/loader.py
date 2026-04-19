@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from adapters.aware import AwarePhdAdapter
+from adapters.aware_errors import AwareAdapterError
 from adapters.base import AdapterParseResult, SourceFileMetadata
 from adapters.hesta import HestaPhdAdapter
 from app.db.models import (
@@ -20,6 +21,13 @@ from app.db.models import (
     InvestmentOption,
     ReportingPeriod,
     SourceFile,
+)
+from app.ingest.governance import (
+    SchemaDriftDetectedError,
+    UnapprovedTaxonomyMappingError,
+    create_schema_review_queue_item,
+    enforce_approved_mapping,
+    ensure_approved_mapping_seeded,
 )
 
 
@@ -408,7 +416,41 @@ def ingest_aware_local_file(
         terms_snapshot_url=terms_snapshot_url,
         downloaded_at=downloaded_at,
     )
-    parse_result = AwarePhdAdapter().parse(metadata, raw_bytes)
+    source_file = session.get(SourceFile, metadata.source_file_id)
+    try:
+        ensure_approved_mapping_seeded(session, adapter_key="AwarePhdAdapter")
+        parse_result = AwarePhdAdapter().parse(metadata, raw_bytes)
+        enforce_approved_mapping(
+            session,
+            source_file=source_file,
+            parse_result=parse_result,
+            raw_bytes=raw_bytes,
+            source_section_raw="ASSETS",
+        )
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError):
+        session.flush()
+        raise
+    except AwareAdapterError as exc:
+        source_file.ingest_status = "review_required"
+        approved_mapping_version_id = None
+        try:
+            approved_mapping_version_id = ensure_approved_mapping_seeded(session, adapter_key="AwarePhdAdapter").id
+        except Exception:
+            approved_mapping_version_id = None
+        create_schema_review_queue_item(
+            session,
+            source_file=source_file,
+            approved_mapping_version_id=approved_mapping_version_id,
+            review_reason="adapter_parse_failure",
+            observed_schema_fingerprint=None,
+            drift_summary_json={
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+            },
+            raw_bytes=raw_bytes,
+        )
+        session.flush()
+        raise
     return load_adapter_parse_result(session, metadata, parse_result)
 
 
