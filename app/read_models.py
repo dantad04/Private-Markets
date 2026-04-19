@@ -57,6 +57,8 @@ class SourceFileSummary:
 
 @dataclass(frozen=True)
 class SourceFileHoldingRow:
+    source_option_code: str
+    source_option_name: str
     source_row_number: int
     raw_name: str | None
     source_asset_class_raw: str
@@ -267,6 +269,8 @@ def get_source_file_detail(
 
     holding_rows = session.execute(
         select(
+            InvestmentOption.source_option_code.label("source_option_code"),
+            InvestmentOption.source_option_name.label("source_option_name"),
             Holding.source_row_number,
             Holding.raw_name,
             Holding.source_asset_class_raw,
@@ -285,6 +289,7 @@ def get_source_file_detail(
             Holding.ingested_at,
         )
         .join(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
+        .join(InvestmentOption, InvestmentOption.id == Holding.source_option_id)
         .where(Holding.source_file_id == source_file_id)
         .order_by(Holding.source_row_number.asc(), Holding.id.asc())
         .offset(offset)
@@ -296,6 +301,8 @@ def get_source_file_detail(
         metadata_attached_from_row_numbers = list(row.metadata_attached_from_row_numbers or [])
         holdings.append(
             SourceFileHoldingRow(
+                source_option_code=row.source_option_code,
+                source_option_name=row.source_option_name,
                 source_row_number=row.source_row_number,
                 raw_name=row.raw_name,
                 source_asset_class_raw=row.source_asset_class_raw,

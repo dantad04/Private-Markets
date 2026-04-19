@@ -17,6 +17,8 @@ from adapters.aware_errors import AwareAdapterError
 from adapters.base import AdapterParseResult, SourceFileMetadata
 from adapters.hesta import HestaPhdAdapter
 from adapters.sunsuper_schema_errors import SunsuperSchemaAdapterError
+from adapters.unisuper import UniSuperPhdStateMachineAdapter
+from adapters.unisuper_errors import UniSuperAdapterError
 from app.db.models import (
     CANONICAL_ASSET_CLASS_SEED,
     CanonicalAssetClass,
@@ -63,7 +65,7 @@ class MissingReportingPeriodRegistrationError(LoaderError):
 class LoadSummary:
     source_file_id: int
     reporting_period_id: int
-    investment_option_id: int
+    investment_option_id: int | None
     rows_staged: int
     rows_inserted: int
     rows_skipped_existing: int
@@ -193,18 +195,21 @@ def activate_source_file_version(
     session: Session,
     *,
     source_file: SourceFile,
-    investment_option_id: int,
+    investment_option_id: int | None,
     reporting_period_id: int,
 ) -> None:
+    where_clauses = [
+        SourceFile.fund_id == source_file.fund_id,
+        SourceFile.reporting_period_id == reporting_period_id,
+        SourceFile.adapter_key == source_file.adapter_key,
+    ]
+    if investment_option_id is None:
+        where_clauses.append(SourceFile.investment_option_id.is_(None))
+    else:
+        where_clauses.append(SourceFile.investment_option_id == investment_option_id)
+
     related_versions = session.scalars(
-        select(SourceFile)
-        .where(
-            SourceFile.fund_id == source_file.fund_id,
-            SourceFile.investment_option_id == investment_option_id,
-            SourceFile.reporting_period_id == reporting_period_id,
-            SourceFile.adapter_key == source_file.adapter_key,
-        )
-        .order_by(SourceFile.version_number.desc(), SourceFile.id.desc())
+        select(SourceFile).where(*where_clauses).order_by(SourceFile.version_number.desc(), SourceFile.id.desc())
     ).all()
 
     active_versions = [row for row in related_versions if row.is_current_version and row.id != source_file.id]
@@ -270,26 +275,40 @@ def load_adapter_parse_result(
             )
 
     observed_options = parse_result.structural_metadata["observed_options"]
-    option_code = observed_options[0]
-    option_name = parse_result.holdings[0].source_option_name_raw if parse_result.holdings else option_code
-    option = get_or_create_investment_option(
-        session,
-        fund_id=source_file.fund_id,
-        source_option_code=option_code,
-        source_option_name=option_name,
-        reporting_period_date=reporting_period.period_end_date,
-    )
-    if source_file.investment_option_id is None:
-        source_file.investment_option_id = option.id
-    elif source_file.investment_option_id != option.id:
-        raise LoaderError(
-            f"Registered source file option {source_file.investment_option_id!r} does not match parsed option {option.id!r}"
+    option_names_by_code: dict[str, str] = {}
+    for record in parse_result.holdings:
+        option_names_by_code.setdefault(record.source_option_code, record.source_option_name_raw)
+
+    option_ids_by_code: dict[str, int] = {}
+    for option_code in observed_options:
+        option_name = option_names_by_code.get(option_code, option_code)
+        option = get_or_create_investment_option(
+            session,
+            fund_id=source_file.fund_id,
+            source_option_code=option_code,
+            source_option_name=option_name,
+            reporting_period_date=reporting_period.period_end_date,
         )
+        option_ids_by_code[option_code] = option.id
+
+    active_version_option_id: int | None
+    if len(observed_options) == 1:
+        option_id = option_ids_by_code[observed_options[0]]
+        if source_file.investment_option_id is None:
+            source_file.investment_option_id = option_id
+        elif source_file.investment_option_id != option_id:
+            raise LoaderError(
+                f"Registered source file option {source_file.investment_option_id!r} does not match parsed option {option_id!r}"
+            )
+        active_version_option_id = option_id
+    else:
+        source_file.investment_option_id = None
+        active_version_option_id = None
 
     activate_source_file_version(
         session,
         source_file=source_file,
-        investment_option_id=option.id,
+        investment_option_id=active_version_option_id,
         reporting_period_id=reporting_period.id,
     )
 
@@ -315,7 +334,7 @@ def load_adapter_parse_result(
             {
                 "source_file_id": source_file.id,
                 "source_fund_id": source_file.fund_id,
-                "source_option_id": option.id,
+                "source_option_id": option_ids_by_code[record.source_option_code],
                 "reporting_period_id": reporting_period.id,
                 "entity_id": None,
                 "raw_name": record.raw_name,
@@ -368,7 +387,7 @@ def load_adapter_parse_result(
     return LoadSummary(
         source_file_id=source_file.id,
         reporting_period_id=reporting_period.id,
-        investment_option_id=option.id,
+        investment_option_id=source_file.investment_option_id,
         rows_staged=len(staged_rows),
         rows_inserted=rows_inserted,
         rows_skipped_existing=rows_skipped_existing,
@@ -599,6 +618,88 @@ def ingest_art_sunsuper_local_file(
         approved_mapping_version_id = None
         try:
             approved_mapping_version_id = ensure_approved_mapping_seeded(session, adapter_key="ArtSunsuperPhdAdapter").id
+        except Exception:
+            approved_mapping_version_id = None
+        create_schema_review_queue_item(
+            session,
+            source_file=source_file,
+            approved_mapping_version_id=approved_mapping_version_id,
+            review_reason="adapter_parse_failure",
+            observed_schema_fingerprint=None,
+            drift_summary_json={
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+            },
+            raw_bytes=raw_bytes,
+        )
+        session.flush()
+        raise
+    return load_adapter_parse_result(session, metadata, parse_result)
+
+
+def ingest_unisuper_local_file(
+    session: Session,
+    *,
+    fund_code: str,
+    fund_name: str,
+    file_path: str,
+    publication_date: date | None = None,
+    reporting_period_id: int | None = None,
+    received_at: datetime | None = None,
+) -> LoadSummary:
+    file_path_obj = Path(file_path)
+    raw_bytes = file_path_obj.read_bytes()
+    checksum = hashlib.sha256(raw_bytes).hexdigest()
+    metadata = register_source_file(
+        session,
+        fund_code=fund_code,
+        fund_name=fund_name,
+        adapter_key="UniSuperPhdStateMachineAdapter",
+        source_url=str(file_path_obj),
+        checksum=checksum,
+        received_at=received_at or datetime.now(UTC),
+        reporting_period_id=reporting_period_id,
+        publication_date=publication_date,
+    )
+    if metadata.reporting_period_end_date is None:
+        raise MissingReportingPeriodRegistrationError(
+            f"Registered reporting period {reporting_period_id!r} does not exist"
+        )
+
+    source_file = session.get(SourceFile, metadata.source_file_id)
+    try:
+        ensure_approved_mapping_seeded(session, adapter_key="UniSuperPhdStateMachineAdapter")
+        parse_result = UniSuperPhdStateMachineAdapter().parse(metadata, raw_bytes)
+        approved_mapping_version_id = enforce_approved_mapping(
+            session,
+            source_file=source_file,
+            parse_result=parse_result,
+            raw_bytes=raw_bytes,
+            source_section_raw=None,
+        )
+        review_events = list(parse_result.structural_metadata.get("review_queue_events", []))
+        for event in review_events:
+            create_schema_review_queue_item(
+                session,
+                source_file=source_file,
+                approved_mapping_version_id=approved_mapping_version_id,
+                review_reason=str(event.get("review_reason", "adapter_review")),
+                observed_schema_fingerprint=parse_result.schema_fingerprint,
+                drift_summary_json=dict(event.get("details", {})),
+                raw_bytes=raw_bytes,
+            )
+        if review_events:
+            session.flush()
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError):
+        session.flush()
+        raise
+    except UniSuperAdapterError as exc:
+        source_file.ingest_status = "review_required"
+        approved_mapping_version_id = None
+        try:
+            approved_mapping_version_id = ensure_approved_mapping_seeded(
+                session, adapter_key="UniSuperPhdStateMachineAdapter"
+            ).id
         except Exception:
             approved_mapping_version_id = None
         create_schema_review_queue_item(

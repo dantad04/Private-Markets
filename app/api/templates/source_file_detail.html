@@ -62,6 +62,7 @@
 <table>
   <thead>
     <tr>
+      <th>option</th>
       <th>row #</th>
       <th>raw_name</th>
       <th>source_asset_class_raw</th>
@@ -80,6 +81,11 @@
   <tbody>
     {% for holding in holdings %}
     <tr>
+      <td>
+        {{ holding.source_option_name | e }}
+        <br>
+        <small>{{ holding.source_option_code | e }}</small>
+      </td>
       <td>{{ holding.source_row_number | e }}</td>
       <td>
         {{ (holding.raw_name or '') | e }}
@@ -112,7 +118,7 @@
     </tr>
     {% else %}
     <tr>
-      <td colspan="13">No holdings loaded for this source file.</td>
+      <td colspan="14">No holdings loaded for this source file.</td>
     </tr>
     {% endfor %}
   </tbody>
