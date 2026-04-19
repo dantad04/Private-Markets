@@ -1,0 +1,838 @@
+Option Code,Option Name,Asset Class,Filter,Sub-Filter,Name,Name Type,Currency,Issuer Type,Security Identifier,Units Held,Location,Address,% Ownership,$ Value,Weighting (%),Actual Currency Exposure (%),Actual Asset Allocation (%),Effect of Derivatives Exposure (%),Classification,Sort Order,Value Range,Geo Latitude,Geo Longitude
+ARSB,Socially Aware,Cash,,,Commonwealth Bank of Australia,Name of Institution,Australia Dollar,,,,,,,19583110.0,0.6,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Australia & New Zealand Banking Group Ltd,Name of Institution,Australia Dollar,,,,,,,9335137.0,0.28,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Royal Bank of Canada/Sydney,Name of Institution,Australia Dollar,,,,,,,2224333.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Australia & New Zealand Banking Group Ltd,Name of Institution,United States Dollar,,,,,,,1789334.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Barclays Bank PLC,Name of Institution,Australia Dollar,,,,,,,-8311.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,BNP Paribas SA,Name of Institution,Australia Dollar,,,,,,,282162.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,BRED Banque Populaire,Name of Institution,Sweden Krona,,,,,,,-52.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Citibank NA,Name of Institution,Australia Dollar,,,,,,,-308850.0,-0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Commonwealth Bank of Australia,Name of Institution,Euro Member Countries,,,,,,,10273.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Commonwealth Bank of Australia,Name of Institution,United Kingdom Pound,,,,,,,4098.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Commonwealth Bank of Australia,Name of Institution,United States Dollar,,,,,,,3656179.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Deutsche Bank AG,Name of Institution,Australia Dollar,,,,,,,-286289.0,-0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Goldman Sachs International,Name of Institution,Australia Dollar,,,,,,,-271534.0,-0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Hongkong and Shanghai Banking Corporation Ltd,Name of Institution,Australia Dollar,,,,,,,88892.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities LLC,Name of Institution,Australia Dollar,,,,,,,-34400.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities LLC,Name of Institution,United States Dollar,,,,,,,97092.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities PLC,Name of Institution,Australia Dollar,,,,,,,876586.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities PLC,Name of Institution,Canada Dollar,,,,,,,10358.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities PLC,Name of Institution,Euro Member Countries,,,,,,,483757.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities PLC,Name of Institution,Japan Yen,,,,,,,79313.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities PLC,Name of Institution,Korea (South) Won,,,,,,,257435.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities PLC,Name of Institution,United Kingdom Pound,,,,,,,171341.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JP Morgan Securities PLC,Name of Institution,United States Dollar,,,,,,,1550213.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Australia Dollar,,,,,,,6431707.0,0.2,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Brazil Real,,,,,,,139390.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Canada Dollar,,,,,,,930474.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,China Yuan Renminbi (offshore),,,,,,,829276.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Czech Republic Koruna,,,,,,,-34.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Denmark Krone,,,,,,,6129.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Euro Member Countries,,,,,,,1158333.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Hong Kong Dollar,,,,,,,994.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Hungary Forint,,,,,,,1.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,India Rupee,,,,,,,18850.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Israel Shekel,,,,,,,32211.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Japan Yen,,,,,,,1024945.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Korea (South) Won,,,,,,,26868.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Mexico Peso,,,,,,,516749.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,New Zealand Dollar,,,,,,,210.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Norway Krone,,,,,,,42511.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Poland Zloty,,,,,,,5757.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,South Africa Rand,,,,,,,33.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Sweden Krona,,,,,,,18675.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Switzerland Franc,,,,,,,283462.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Taiwan New Dollar,,,,,,,31158.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Turkey Lira,,,,,,,212.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,United Kingdom Pound,,,,,,,1596989.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,JPMorgan Chase Bank NA,Name of Institution,United States Dollar,,,,,,,6077702.0,0.19,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Mitsubishi UFJ Trust & Banking Corp/London,Name of Institution,Euro Member Countries,,,,,,,746.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Morgan Stanley & Co International PLC,Name of Institution,Australia Dollar,,,,,,,-198665.0,-0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,MUFG Bank Ltd/London,Name of Institution,Euro Member Countries,,,,,,,11234.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,MUFG Bank Ltd/London,Name of Institution,United States Dollar,,,,,,,244524.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,National Australia Bank Ltd,Name of Institution,Australia Dollar,,,,,,,1671450.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,National Australia Bank Ltd,Name of Institution,Euro Member Countries,,,,,,,22468.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Royal Bank of Canada,Name of Institution,Australia Dollar,,,,,,,17368.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Royal Bank of Canada,Name of Institution,United Kingdom Pound,,,,,,,1215.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Royal Bank of Canada,Name of Institution,United States Dollar,,,,,,,2132771.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Royal Bank of Canada/London,Name of Institution,Canada Dollar,,,,,,,9918.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Standard Chartered Bank,Name of Institution,Australia Dollar,,,,,,,-635.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Standard Chartered Bank,Name of Institution,United Kingdom Pound,,,,,,,4098.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Sumitomo Mitsui Banking Corp/Sydney,Name of Institution,Australia Dollar,,,,,,,46484.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Toronto-Dominion Bank/The,Name of Institution,Australia Dollar,,,,,,,-3135.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,UBS AG,Name of Institution,Australia Dollar,,,,,,,-4340.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Cash,,,Total,Total,,,,,,,,62718285.0,1.92,,,,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Asset Class,,Equity,Asset Class,,,,,,,,,,,68.09,0.37,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Asset Class,,Fixed Income,Asset Class,,,,,,,,,,,26.48,-1.44,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Asset Class,,Cash,Asset Class,,,,,,,,,,,3.53,1.62,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Asset Class,,Property,Asset Class,,,,,,,,,,,1.09,,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Asset Class,,Infrastructure,Asset Class,,,,,,,,,,,0.81,,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Asset Class,,Total,Total,,,,,,,,,,,100.0,0.55,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Currency,,AUD,Currency Exposure,,,,,,,,,,69.52,,35.12,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Currency,,USD,Currency Exposure,,,,,,,,,,20.44,,-18.1,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Currency,,Currencies of other developed markets,Currency Exposure,,,,,,,,,,8.09,,-11.9,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Currency,,Currencies of emerging markets,Currency Exposure,,,,,,,,,,1.96,,-4.56,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Currency,,Total,Total,,,,,,,,,,100.0,,0.55,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Kind,,Futures,Kind of Derivatives,,,,,,,,800222.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Kind,,Forwards,Kind of Derivatives,,,,,,,,17119537.0,0.52,,,,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Kind,,Swaps,Kind of Derivatives,,,,,,,,35749.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Derivatives,By Kind,,,Total,,,,,,,,17955508.0,0.55,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,1011778 BC ULC / New Red Finance Inc,Name of Issuer/Counterparty,,Corporate,,,,,,383073.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Abbvie Inc,Name of Issuer/Counterparty,,Corporate,,,,,,785970.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Abertis France SAS,Name of Issuer/Counterparty,,Corporate,,,,,,900658.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Abn Amro Bank Nv,Name of Issuer/Counterparty,,Corporate,,,,,,4193140.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,AerCap Ireland Capital DAC / AerCap Global Aviation Trust,Name of Issuer/Counterparty,,Corporate,,,,,,1890914.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Agilent Technologies Inc,Name of Issuer/Counterparty,,Corporate,,,,,,910561.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Aircastle Ltd / Aircastle Ireland DAC,Name of Issuer/Counterparty,,Corporate,,,,,,1594117.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Alcon Finance Corp,Name of Issuer/Counterparty,,Corporate,,,,,,1379983.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,American Express Co,Name of Issuer/Counterparty,,Corporate,,,,,,3228031.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,American International Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1797609.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,American Water Capital Corp,Name of Issuer/Counterparty,,Corporate,,,,,,1960385.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Amgen Inc,Name of Issuer/Counterparty,,Corporate,,,,,,3629219.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,AMP Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2504113.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Amphenol Corp,Name of Issuer/Counterparty,,Corporate,,,,,,454497.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Anheuser-Busch InBev Worldwide Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1886804.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Arthur J Gallagher & Co,Name of Issuer/Counterparty,,Corporate,,,,,,727375.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,At&T Inc,Name of Issuer/Counterparty,,Corporate,,,,,,3063053.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Athene Global Funding,Name of Issuer/Counterparty,,Corporate,,,,,,3753139.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Australia & New Zealand Banking Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,11557872.0,0.35,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Autozone Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1868790.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Banco De Sabadell Sa,Name of Issuer/Counterparty,,Corporate,,,,,,1272319.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Banco Santander SA,Name of Issuer/Counterparty,,Corporate,,,,,,2513133.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bank of America Corp,Name of Issuer/Counterparty,,Corporate,,,,,,3682910.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bank of Montreal,Name of Issuer/Counterparty,,Corporate,,,,,,330.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bank of Montreal/London,Name of Issuer/Counterparty,,Corporate,,,,,,673474.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bank of New York Mellon Corp/The,Name of Issuer/Counterparty,,Corporate,,,,,,339404.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bank of Nova Scotia/The,Name of Issuer/Counterparty,,Corporate,,,,,,275.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bank of Queensland Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2001394.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Banque Federative du Credit Mutuel SA,Name of Issuer/Counterparty,,Corporate,,,,,,3455680.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Barclays PLC,Name of Issuer/Counterparty,,Corporate,,,,,,3451597.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Becton Dickinson & Co,Name of Issuer/Counterparty,,Corporate,,,,,,586949.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bendigo & Adelaide Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,4219000.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Berry Global Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1934387.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,BPCE SA,Name of Issuer/Counterparty,,Corporate,,,,,,3079804.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bristol-Myers Squibb Co,Name of Issuer/Counterparty,,Corporate,,,,,,635805.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Brixmor Operating Partnership LP,Name of Issuer/Counterparty,,Corporate,,,,,,526693.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Broadcom Inc,Name of Issuer/Counterparty,,Corporate,,,,,,456924.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Brown & Brown Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1257870.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Caisse Nationale de Reassurance Mutuelle Agricole Groupama,Name of Issuer/Counterparty,,Corporate,,,,,,3206489.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Caixabank Sa,Name of Issuer/Counterparty,,Corporate,,,,,,1965570.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Canadian Imperial Bank of Commerce,Name of Issuer/Counterparty,,Corporate,,,,,,595197.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Canadian Imperial Bank of Commerce/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2011958.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Cardinal Health Inc,Name of Issuer/Counterparty,,Corporate,,,,,,271566.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Charter Communications Operating LLC / Charter Communications Operating Capital,Name of Issuer/Counterparty,,Corporate,,,,,,1851286.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Cisco Systems Inc,Name of Issuer/Counterparty,,Corporate,,,,,,262037.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Citigroup Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1752913.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Colonial SFL Socimi SA,Name of Issuer/Counterparty,,Corporate,,,,,,2558381.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Commerzbank AG,Name of Issuer/Counterparty,,Corporate,,,,,,1818122.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Commonwealth Bank of Australia,Name of Issuer/Counterparty,,Corporate,,,,,,11393002.0,0.35,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Cooperatieve Rabobank UA/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,8499603.0,0.26,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Cooperatieve Rabobank UA/NY,Name of Issuer/Counterparty,,Corporate,,,,,,376943.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Covivio Hotels SACA,Name of Issuer/Counterparty,,Corporate,,,,,,4471817.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Credit Agricole Corporate & Investment Bank SA/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2989616.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Credit Agricole Corporate and Investment Bank/London,Name of Issuer/Counterparty,,Corporate,,,,,,243431.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Credit Mutuel Arkea SA,Name of Issuer/Counterparty,,Corporate,,,,,,3044863.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,CRH America Finance Inc,Name of Issuer/Counterparty,,Corporate,,,,,,756778.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Crown Castle Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1263629.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,CVS Health Corp,Name of Issuer/Counterparty,,Corporate,,,,,,1344368.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,DBS Bank Ltd/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,1205428.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Dell International LLC / EMC Corp,Name of Issuer/Counterparty,,Corporate,,,,,,1298558.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Element Fleet Management Corp,Name of Issuer/Counterparty,,Corporate,,,,,,1777933.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,ERAC USA Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,1690644.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Eurogrid GmbH,Name of Issuer/Counterparty,,Corporate,,,,,,701925.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Extra Space Storage LP,Name of Issuer/Counterparty,,Corporate,,,,,,808271.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Federal Realty OP LP,Name of Issuer/Counterparty,,Corporate,,,,,,519668.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Federation des Caisses Desjardins du Quebec,Name of Issuer/Counterparty,,Corporate,,,,,,980246.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Fiserv Inc,Name of Issuer/Counterparty,,Corporate,,,,,,546042.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Ford Motor Credit Co LLC,Name of Issuer/Counterparty,,Corporate,,,,,,503550.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,General Motors Co,Name of Issuer/Counterparty,,Corporate,,,,,,394173.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,General Motors Financial Co Inc,Name of Issuer/Counterparty,,Corporate,,,,,,9177332.0,0.28,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Generali,Name of Issuer/Counterparty,,Corporate,,,,,,3207290.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Goldman Sachs Group Inc/The,Name of Issuer/Counterparty,,Corporate,,,,,,1416269.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Goldstory SAS,Name of Issuer/Counterparty,,Corporate,,,,,,2892418.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Guardian Life Global Funding,Name of Issuer/Counterparty,,Corporate,,,,,,432518.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Haleon Netherlands Capital BV,Name of Issuer/Counterparty,,Corporate,,,,,,874105.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,HCA Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1908250.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Healthpeak OP LLC,Name of Issuer/Counterparty,,Corporate,,,,,,839117.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Hewlett Packard Enterprise Co,Name of Issuer/Counterparty,,Corporate,,,,,,859836.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Home Depot Inc/The,Name of Issuer/Counterparty,,Corporate,,,,,,1578832.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Hongkong & Shanghai Banking Corp Ltd-The-/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,273327.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,HSBC Holdings PLC,Name of Issuer/Counterparty,,Corporate,,,,,,3602336.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Icon Investments Six DAC,Name of Issuer/Counterparty,,Corporate,,,,,,1871892.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,ING Bank Australia Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3912844.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,ING Bank NV/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2521792.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Ing Groep Nv,Name of Issuer/Counterparty,,Corporate,,,,,,3154623.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Intesa Sanpaolo Spa,Name of Issuer/Counterparty,,Corporate,,,,,,1021885.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Intuit Inc,Name of Issuer/Counterparty,,Corporate,,,,,,773436.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Invitation Homes Operating Partnership LP,Name of Issuer/Counterparty,,Corporate,,,,,,397422.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,IQVIA Inc,Name of Issuer/Counterparty,,Corporate,,,,,,995993.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,J M Smucker Co/The,Name of Issuer/Counterparty,,Corporate,,,,,,904264.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,JPMorgan Chase & Co,Name of Issuer/Counterparty,,Corporate,,,,,,3705140.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Lloyds Banking Group Plc,Name of Issuer/Counterparty,,Corporate,,,,,,880637.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Lowe's Cos Inc,Name of Issuer/Counterparty,,Corporate,,,,,,3034798.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Lumo Kodit Oyj,Name of Issuer/Counterparty,,Corporate,,,,,,1173406.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Mercedes-Benz International Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,3109824.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Micron Technology Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1379828.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Mitsubishi UFJ Trust & Banking Corp/London,Name of Issuer/Counterparty,,Corporate,,,,,,364496.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Mizuho Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,272.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Morgan Stanley,Name of Issuer/Counterparty,,Corporate,,,,,,3321884.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Motability Operations Group PLC,Name of Issuer/Counterparty,,Corporate,,,,,,386439.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,MUFG Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,303970.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,MUFG Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,271233.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,National Australia Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,12957267.0,0.4,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,National Australia Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,246217.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,National Bank Of Canada,Name of Issuer/Counterparty,,Corporate,,,,,,359581.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Nationwide Building Society,Name of Issuer/Counterparty,,Corporate,,,,,,941766.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,NatWest Group PLC,Name of Issuer/Counterparty,,Corporate,,,,,,3355430.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Netflix Inc,Name of Issuer/Counterparty,,Corporate,,,,,,598272.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Nn Group Nv,Name of Issuer/Counterparty,,Corporate,,,,,,3995148.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Nordea Bank Abp,Name of Issuer/Counterparty,,Corporate,,,,,,746.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Norfina Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2391107.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Oracle Corp,Name of Issuer/Counterparty,,Corporate,,,,,,747642.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Oversea-Chinese Banking Corp Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,5481825.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Pfizer Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1173374.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,PNC Financial Services Group Inc/The,Name of Issuer/Counterparty,,Corporate,,,,,,1935418.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Prudential Financial Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1576522.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Raiffeisen Bank International Ag,Name of Issuer/Counterparty,,Corporate,,,,,,3439055.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,RCI Banque SA,Name of Issuer/Counterparty,,Corporate,,,,,,5433300.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,RGA Global Funding,Name of Issuer/Counterparty,,Corporate,,,,,,1850326.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Rogers Communications Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1418108.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Royal Bank of Canada,Name of Issuer/Counterparty,,Corporate,,,,,,784923.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Royal Bank of Canada/London,Name of Issuer/Counterparty,,Corporate,,,,,,369379.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Royal Bank of Canada/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,10270556.0,0.31,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Royalty Pharma Plc,Name of Issuer/Counterparty,,Corporate,,,,,,1863983.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Scentre Group Trust 1 / Scentre Group Trust 2,Name of Issuer/Counterparty,,Corporate,,,,,,628134.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Skandinaviska Enskilda Banken AB,Name of Issuer/Counterparty,,Corporate,,,,,,741.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Smurfit Kappa Treasury ULC,Name of Issuer/Counterparty,,Corporate,,,,,,1723223.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Societe Generale SA,Name of Issuer/Counterparty,,Corporate,,,,,,8748227.0,0.27,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Standard Chartered Bank/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,4303518.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Standard Chartered Bank/Dubai,Name of Issuer/Counterparty,,Corporate,,,,,,369165.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,State Street Corp,Name of Issuer/Counterparty,,Corporate,,,,,,3191021.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Steel Dynamics Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1508381.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Sumitomo Mitsui Banking Corp/Brussels,Name of Issuer/Counterparty,,Corporate,,,,,,306254.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Sumitomo Mitsui Banking Corp/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,5404463.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Sydney Airport Finance Co Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3209175.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Sysco Corp,Name of Issuer/Counterparty,,Corporate,,,,,,713543.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Takeda Pharmaceutical Co Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1294302.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Telefonica Emisiones SA,Name of Issuer/Counterparty,,Corporate,,,,,,3353238.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Telstra Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1738894.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,T-Mobile USA Inc,Name of Issuer/Counterparty,,Corporate,,,,,,2498351.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Trane Technologies Financing Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,627115.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Transurban Finance Co Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,868627.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Triton Container International Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,706157.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Truist Financial Corp,Name of Issuer/Counterparty,,Corporate,,,,,,544436.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Tyco Electronics Group SA,Name of Issuer/Counterparty,,Corporate,,,,,,2084491.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,UBS AG/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,20409.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Udr Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1329460.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Unicredit Spa,Name of Issuer/Counterparty,,Corporate,,,,,,3727665.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,United Overseas Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2917473.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,United Parcel Service Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1724474.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Upjohn Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,578190.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Us Bancorp,Name of Issuer/Counterparty,,Corporate,,,,,,3256839.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Verisk Analytics Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1956781.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Vonovia SE,Name of Issuer/Counterparty,,Corporate,,,,,,2971773.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Westpac Banking Corp,Name of Issuer/Counterparty,,Corporate,,,,,,11808930.0,0.36,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,ZF Finance GmbH,Name of Issuer/Counterparty,,Corporate,,,,,,4037760.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Zimmer Biomet Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1095017.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Canada,Name of Issuer/Counterparty,,Government,,,,,,17373378.0,0.53,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Commonwealth of Australia,Name of Issuer/Counterparty,,Government,,,,,,5479955.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Federal Republic of Germany,Name of Issuer/Counterparty,,Government,,,,,,32428469.0,0.99,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,French Republic,Name of Issuer/Counterparty,,Government,,,,,,12038262.0,0.37,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Japan,Name of Issuer/Counterparty,,Government,,,,,,74201022.0,2.27,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Kingdom of Belgium,Name of Issuer/Counterparty,,Government,,,,,,228192.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Kingdom of Norway,Name of Issuer/Counterparty,,Government,,,,,,237108.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Kingdom of Spain,Name of Issuer/Counterparty,,Government,,,,,,8303652.0,0.25,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Kingdom of Sweden,Name of Issuer/Counterparty,,Government,,,,,,633877.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,NBN Co Ltd,Name of Issuer/Counterparty,,Government,,,,,,1082492.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,People's Republic of China,Name of Issuer/Counterparty,,Government,,,,,,74631141.0,2.28,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Portuguese Republic,Name of Issuer/Counterparty,,Government,,,,,,122848.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Republic of Austria,Name of Issuer/Counterparty,,Government,,,,,,915865.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Republic of Bulgaria,Name of Issuer/Counterparty,,Government,,,,,,6937161.0,0.21,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Republic of Italy,Name of Issuer/Counterparty,,Government,,,,,,20082016.0,0.61,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Swiss Confederation,Name of Issuer/Counterparty,,Government,,,,,,2211298.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,United Kingdom of Great Britain and Northern Ireland,Name of Issuer/Counterparty,,Government,,,,,,16917899.0,0.52,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,United Mexican States,Name of Issuer/Counterparty,,Government,,,,,,675125.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,United States of America,Name of Issuer/Counterparty,,Government,,,,,,163817936.0,5.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Federal Home Loan Mortgage Corp,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,685303.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Federal National Mortgage Association,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,61104104.0,1.87,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Government National Mortgage Association,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,14731050.0,0.45,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Pepper Prime 2025-1 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,1211560.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Pepper Residential Securities Trust No. 41,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,568266.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,PUMA-Series 2017-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,4400.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Adif Alta Velocidad,Name of Issuer/Counterparty,,Semi Government,,,,,,3745763.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Belfius Bank SA,Name of Issuer/Counterparty,,Semi Government,,,,,,1372587.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,BNG Bank NV,Name of Issuer/Counterparty,,Semi Government,,,,,,3675283.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Bpifrance SACA,Name of Issuer/Counterparty,,Semi Government,,,,,,1965828.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Cnp Assurances Sa,Name of Issuer/Counterparty,,Semi Government,,,,,,281783.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Export-Import Bank of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,121543.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Korea Development Bank/The,Name of Issuer/Counterparty,,Semi Government,,,,,,822777.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Kreditanstalt fuer Wiederaufbau,Name of Issuer/Counterparty,,Semi Government,,,,,,7012306.0,0.21,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,La Banque Postale SA,Name of Issuer/Counterparty,,Semi Government,,,,,,3399439.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Logicor Financing Sarl,Name of Issuer/Counterparty,,Semi Government,,,,,,615558.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,NBN Co Ltd,Name of Issuer/Counterparty,,Semi Government,,,,,,3222445.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,People's Republic of China,Name of Issuer/Counterparty,,Semi Government,,,,,,920046.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Queensland Treasury Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,3508960.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Regie Autonome des Transports Parisiens EPIC,Name of Issuer/Counterparty,,Semi Government,,,,,,1244765.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Republic of Chile,Name of Issuer/Counterparty,,Semi Government,,,,,,5227860.0,0.16,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Republic of Colombia,Name of Issuer/Counterparty,,Semi Government,,,,,,410084.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Republic of Indonesia,Name of Issuer/Counterparty,,Semi Government,,,,,,3832934.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,Republic of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,903298.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,UNEDIC ASSEO,Name of Issuer/Counterparty,,Semi Government,,,,,,2296710.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,United Mexican States,Name of Issuer/Counterparty,,Semi Government,,,,,,2079627.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,European Investment Bank,Name of Issuer/Counterparty,,Supranational,,,,,,41994.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,European Union,Name of Issuer/Counterparty,,Supranational,,,,,,8847887.0,0.27,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,All Assets,,International Bank for Reconstruction & Development,Name of Issuer/Counterparty,,Supranational,,,,,,846296.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Externally Managed,,AXA Investment Managers Ltd,Name of Fund Manager,,,,,,,,796263011.0,24.33,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Externally Managed,,IFM Investors,Name of Fund Manager,,,,,,,,54626.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,AMP Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2504113.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Australia & New Zealand Banking Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,11547714.0,0.35,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Bank of Montreal,Name of Issuer/Counterparty,,Corporate,,,,,,330.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Bank of Montreal/London,Name of Issuer/Counterparty,,Corporate,,,,,,673476.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Bank of Nova Scotia/The,Name of Issuer/Counterparty,,Corporate,,,,,,275.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Bank of Queensland Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2001394.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Bendigo & Adelaide Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,4219000.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Canadian Imperial Bank of Commerce,Name of Issuer/Counterparty,,Corporate,,,,,,275.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Canadian Imperial Bank of Commerce/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2011958.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Commonwealth Bank of Australia,Name of Issuer/Counterparty,,Corporate,,,,,,11383260.0,0.35,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Cooperatieve Rabobank UA/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,8498050.0,0.26,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Cooperatieve Rabobank UA/NY,Name of Issuer/Counterparty,,Corporate,,,,,,376944.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Credit Agricole Corporate & Investment Bank SA/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2988014.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Credit Agricole Corporate and Investment Bank/London,Name of Issuer/Counterparty,,Corporate,,,,,,243432.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,DBS Bank Ltd/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,1205109.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,European Investment Bank,Name of Issuer/Counterparty,,Supranational,,,,,,41994.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Export-Import Bank of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,121544.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Hongkong & Shanghai Banking Corp Ltd-The-/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,272881.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,ING Bank Australia Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3912844.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,ING Bank NV/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2521792.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,International Bank for Reconstruction & Development,Name of Issuer/Counterparty,,Supranational,,,,,,846296.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Korea Development Bank/The,Name of Issuer/Counterparty,,Semi Government,,,,,,822777.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Mitsubishi UFJ Trust & Banking Corp/London,Name of Issuer/Counterparty,,Corporate,,,,,,364496.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Mizuho Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,272.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,MUFG Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,303971.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,MUFG Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,270790.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,National Australia Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,12950864.0,0.4,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,National Australia Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,246218.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,NBN Co Ltd,Name of Issuer/Counterparty,,Government,,,,,,1082492.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,NBN Co Ltd,Name of Issuer/Counterparty,,Semi Government,,,,,,3220486.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Nordea Bank Abp,Name of Issuer/Counterparty,,Corporate,,,,,,746.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Norfina Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2389395.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Oversea-Chinese Banking Corp Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,5479506.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Pepper Prime 2025-1 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,1211560.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Pepper Residential Securities Trust No. 41,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,568266.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,PUMA-Series 2017-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,4400.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Royal Bank of Canada,Name of Issuer/Counterparty,,Corporate,,,,,,225784.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Royal Bank of Canada/London,Name of Issuer/Counterparty,,Corporate,,,,,,369380.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Royal Bank of Canada/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,10262798.0,0.31,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Skandinaviska Enskilda Banken AB,Name of Issuer/Counterparty,,Corporate,,,,,,741.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Standard Chartered Bank/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,4303073.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Standard Chartered Bank/Dubai,Name of Issuer/Counterparty,,Corporate,,,,,,369166.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Sumitomo Mitsui Banking Corp/Brussels,Name of Issuer/Counterparty,,Corporate,,,,,,306255.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Sumitomo Mitsui Banking Corp/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,5402907.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,UBS AG/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,20409.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,UNEDIC ASSEO,Name of Issuer/Counterparty,,Semi Government,,,,,,2246.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,United Overseas Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2916595.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,Westpac Banking Corp,Name of Issuer/Counterparty,,Corporate,,,,,,8879362.0,0.27,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Externally Managed,,,Total,,,,,,,,796317636.0,24.33,,,,,,,nan,nan
+ARSB,Socially Aware,Fixed Income,Internally Managed,,,Total,,,,,,,,117345648.0,3.59,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,3M Co,Name,,,2595708,6513,United States,,,1563691.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,A2 Milk Company Ltd,Name,,,BWSRTS7,17207,New Zealand,,,158479.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Abb Ltd,Name,,,7108899,15014,Switzerland,,,1682928.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Abbvie Inc,Name,,,B92SR70,12316,United States,,,4220115.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Abu Dhabi Commercial Bank PJSC,Name,,,6545464,184235,UAE,,,1075652.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Accenture Plc,Name,,,B4BNMY3,11823,United States,,,4756983.0,0.15,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Admiral Group Plc,Name,,,B02J639,16276,United Kingdom,,,1042628.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Adnoc Gas PLC,Name,,,BPJLW35,1564934,UAE,,,2268230.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Adnoc Logistics & Services Plc,Name,,,BRBN103,490352,UAE,,,1185202.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Adobe Inc,Name,,,2008154,5119,United States,,,2686548.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Advanced Micro Devices Inc,Name,,,2007849,3886,United States,,,1247983.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Advantest Corp,Name,,,6870490,8586,Japan,,,1612957.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Adyen Nv,Name,,,BZ1HM42,1026,Netherlands,,,2483747.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Aena Sme Sa,Name,,,BTMKJR0,57346,Spain,,,2405775.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Aercap Holdings Nv,Name,,,B1HHKD3,11782,Ireland,,,2539877.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Agnico Eagle Mines Ltd,Name,,,2009823,5656,Canada,,,1440236.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Aia Group Ltd,Name,,,B4TX8S1,89646,Hong Kong,,,1379982.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Alibaba Group Holding Ltd,Name,,,BK6YZP5,75309,China,,,2071908.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Alibaba Group Holding Ltd,Name,,,BP41ZD1,3669,China,,,806381.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Alimentation Couche-Tard Inc,Name,,,BL56KN2,12607,Canada,,,1033854.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Allstate Corp,Name,,,2019952,10723,United States,,,3347014.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Alnylam Pharmaceuticals Inc,Name,,,B00FWN1,3784,United States,,,2256175.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Alphabet Inc,Name,,,BYVY8G0,36248,United States,,,17013864.0,0.52,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Alphabet Inc,Name,,,BYY88Y7,62910,United States,,,29603760.0,0.9,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Als Ltd,Name,,,B86SZR5,12030,Australia,,,265132.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Amazon.Com Inc,Name,,,2000019,111050,United States,,,38438144.0,1.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ambev Sa,Name,,,BG804F6,324351,Brazil,,,1201388.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Amcor PLC,Name,,,6066608,15320,Australia,,,192262.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,American Express Co,Name,,,2026082,8378,United States,,,4647718.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,American International Group Inc,Name,,,2027342,14328,United States,,,1838079.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Amerisourcebergen Corp,Name,,,2795393,2445,United States,,,1238444.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ametek Inc,Name,,,2089212,6835,United States,,,2104209.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Amp Ltd,Name,,,6709958,60059,Australia,,,109307.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Amphenol Corp,Name,,,2145084,36672,United States,,,7431745.0,0.23,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ampol Ltd,Name,,,BM91201,221252,Australia,,,7064562.0,0.22,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Analog Devices Inc,Name,,,2032067,4533,United States,,,1843717.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ansell Ltd,Name,,,6286611,3420,Australia,,,119735.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Anta Sports Products Ltd,Name,,,B1YVKN8,84762,China,,,1315413.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,ANZ Group Holdings Ltd,Name,,,6065586,70752,Australia,,,2571130.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Apollo Global Management Inc,Name,,,BN44JF6,4638,United States,,,1006875.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Apple Inc,Name,,,2046251,112011,United States,,,45664280.0,1.4,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Applied Materials Inc,Name,,,2046552,16232,United States,,,6255299.0,0.19,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Applovin Corp,Name,,,BMV3LG4,5484,United States,,,5540829.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Aptiv Plc,Name,,,BTDN8H1,11448,Switzerland,,,1306297.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Arb Corporation Ltd,Name,,,BWV03W5,172604,Australia,,,5428399.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Arcelormittal Sa,Name,,,BYPBS67,20978,Luxembourg,,,1444211.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Argenx Se,Name,,,BDVLM39,1042,Netherlands,,,1314284.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Arista Networks Inc,Name,,,BL9XPM3,12418,United States,,,2440037.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Arthur J. Gallagher & Co.,Name,,,2359506,4103,United States,,,1592127.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Asics Corp,Name,,,6057378,26153,Japan,,,939536.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Asml Holding Nv,Name,,,B929F46,3891,Netherlands,,,6313657.0,0.19,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,AstraZeneca PLC,Name,,,0989529,30530,United Kingdom,,,8491821.0,0.26,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Asx Ltd,Name,,,6129222,239331,Australia,,,12311164.0,0.38,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,At&T Inc,Name,,,2831811,78772,United States,,,2934254.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Infrastructure,Listed,,Atlas Arteria Group,Name,,,BZ03TZ1,23059,Australia,,,112528.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Atlas Copco AB,Name,,,BLDBN41,50136,Sweden,,,1354216.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Atlassian Corp,Name,,,BQ1PC76,6192,United States,,,1505661.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Auckland International Airport Ltd,Name,,,BLRZSS8,2678357,New Zealand,,,19310956.0,0.59,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Aurizon Holdings Ltd,Name,,,B87CVM3,41521,Australia,,,151551.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Auto Trader Group Plc,Name,,,BVYVFW2,91933,United Kingdom,,,1087370.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Automatic Data Processing Inc,Name,,,2065308,4088,United States,,,1577060.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Aviva Plc,Name,,,BPQY8M8,201019,United Kingdom,,,2774966.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Axa Sa,Name,,,7088429,42925,France,,,3096553.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Axon Enterprise Inc,Name,,,BDT5S35,2217,United States,,,1887896.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bajaj Finance Ltd,Name,,,BTFGH15,61043,India,,,1005018.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Baker Hughes Co,Name,,,BDHLTQ5,50984,United States,,,3481749.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Banco Bilbao Vizcaya Argentaria Sa,Name,,,5501906,46858,Spain,,,1654630.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Banco Bpm Spa,Name,,,BYMD5K9,70318,Italy,,,1612431.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Banco Comercial Portugues SA,Name,,,BZCNN35,911226,Portugal,,,1438260.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Banco De Sabadell Sa,Name,,,B1X8QN2,193495,Spain,,,1146732.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank Hapoalim Bm,Name,,,6075808,60972,Israel,,,2066990.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank Leumi Le Israel Bm,Name,,,6076425,104635,Israel,,,3456131.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank Mandiri (Persero) Tbk Pt,Name,,,6651048,3559046,Indonesia,,,1632337.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank of America Corp,Name,,,2295677,81364,United States,,,6710696.0,0.21,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank Of Baroda Ltd,Name,,,BVF87C6,214182,India,,,1057403.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank Of Ireland Group Plc,Name,,,BD1RP61,55449,Ireland,,,1599116.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank Of New York Mellon Corp,Name,,,B1Z77F6,7092,United States,,,1234643.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank of Queensland Ltd,Name,,,6076243,15692,Australia,,,102470.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bank Of The Philippine Islands,Name,,,6074968,349839,Philippines,,,1035273.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bankinter Sa,Name,,,5474008,44786,Spain,,,1116496.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bayer AG,Name,,,5069211,24385,Germany,,,1589438.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bce Inc,Name,,,B188TH2,34125,Canada,,,1222273.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bendigo And Adelaide Bank Ltd,Name,,,6091280,13480,Australia,,,141811.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,BeOne Medicines Ltd,Name,,,BVDKGC7,47344,Switzerland,,,1635457.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bharti Airtel Ltd,Name,,,6442327,69320,India,,,2435273.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Biogen Inc,Name,,,2455965,6981,United States,,,1842379.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Block Inc,Name,,,BQD3643,969,United States,,,94835.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bluescope Steel Ltd,Name,,,6533232,1018392,Australia,,,24512701.0,0.75,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,BNP Paribas SA,Name,,,7309681,39474,France,,,5616629.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Booking Holdings Inc,Name,,,BDRXDB4,1260,United States,,,10115652.0,0.31,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Boston Scientific Corp,Name,,,2113434,21425,United States,,,3063493.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bouygues Sa,Name,,,4002121,25049,France,,,1956533.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Brambles Ltd,Name,,,AU000000BXB1,32317,Australia,,,742009.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Bristol-Myers Squibb Co,Name,,,2126335,50550,United States,,,4088859.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Broadcom Inc,Name,,,BDZ78H9,44535,United States,,,23114164.0,0.71,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Burlington Stores Inc,Name,,,BF311Y5,2654,United States,,,1149562.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cadence Design Systems Inc,Name,,,2302232,1703,United States,,,798318.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Caixabank Sa,Name,,,B283W97,257591,Spain,,,4738555.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Canadian Pacific Kansas City Ltd,Name,,,BMBQR09,13003,Canada,,,1437405.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Canara Bank,Name,,,BS5WYP9,618086,India,,,1597497.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Canon Inc,Name,,,6172323,26626,Japan,,,1180170.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Capital One Financial Corp,Name,,,2654461,6760,United States,,,2457020.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Capricorn Metals Ltd,Name,,,BDD98W2,10766,Australia,,,154810.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cardinal Health Inc,Name,,,2175672,8701,United States,,,2681247.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Carnival Corp,Name,,,2523044,32453,United States,,,1486257.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Carrefour Sa,Name,,,5641567,58731,France,,,1471910.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Carsales.Com Ltd,Name,,,BW0BGZ3,8976,Australia,,,276093.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cathay Financial Holding Co Ltd,Name,,,6425663,388360,Taiwan,,,1404954.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cbre Group Inc,Name,,,B6WVMH3,16179,United States,,,3901004.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cdw Corp,Name,,,BBM5MD6,4187,United States,,,855145.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Centene Corp,Name,,,2807061,26768,United States,,,1651781.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cf Industries Holdings Inc,Name,,,B0G4K50,24318,United States,,,2820330.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Challenger Ltd,Name,,,6726300,13126,Australia,,,123513.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Charles Schwab Corp,Name,,,2779397,18005,United States,,,2697543.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Charter Hall Group,Name,,,B15F6S6,11218,Australia,,,274291.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,China Hongqiao Group Ltd,Name,,,B44ZV94,150066,China,,,943112.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,China Tower Corp Ltd,Name,,,BTVMCY5,377331,China,,,840384.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Church & Dwight Co Inc,Name,,,2195841,6296,United States,,,791622.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cigna Group,Name,,,BHJ0775,9954,United States,,,4108323.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ck Asset Holdings Ltd,Name,,,BYZQ077,158337,Hong Kong,,,1199482.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cleanaway Waste Management Ltd,Name,,,BYQ8KW7,53136,Australia,,,137622.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cloudflare Inc,Name,,,BJXC5M2,13597,United States,,,4019729.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cme Group Inc,Name,,,2965839,14091,United States,,,5770466.0,0.18,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Coca Cola Hbc Ag,Name,,,B9895B7,13139,United Kingdom,,,1018181.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Coca-Cola Co,Name,,,2206657,84927,United States,,,8903434.0,0.27,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Cochlear Ltd,Name,,,6211798,72293,Australia,,,18843934.0,0.58,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Coles Group Ltd,Name,,,BYWR0T5,31829,Australia,,,682418.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Colgate-Palmolive Co,Name,,,2209106,16629,United States,,,1970443.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Comcast Corp,Name,,,2044545,55253,United States,,,2476607.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Commonwealth Bank of Australia,Name,,,6215035,499099,Australia,,,80140393.0,2.45,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Companhia De Saneamento Basico Do Estado De Sao Paulo Sabesp,Name,,,B1YCHL8,70601,Brazil,,,2577188.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Compass Group Plc,Name,,,BD6K457,75157,United Kingdom,,,3583648.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Computershare Ltd,Name,,,6180412,756852,Australia,,,25838938.0,0.79,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Constellation Software Inc,Name,,,B15C4L6,447,Canada,,,1613177.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Contemporary Amperex Technology Co Ltd,Name,,,BHQPSY7,18874,China,,,1487502.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Copart Inc,Name,,,2208073,14155,United States,,,831027.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Corebridge Financial Inc,Name,,,BMTX0G9,33602,United States,,,1520249.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Corpay Inc,Name,,,BMX5GK7,7798,United States,,,3518974.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Corporate Travel Management Ltd,Name,,,B3R1D52,396685,Australia,,,956011.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Costco Wholesale Corp,Name,,,2701271,4358,United States,,,5635337.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Crh Plc,Name,,,B01ZKD6,29731,Ireland,,,5564148.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,CSL Ltd,Name,,,6185495,123665,Australia,,,21350677.0,0.65,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,CTBC Financial Holding Co Ltd,Name,,,6527666,456894,Taiwan,,,1094656.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Daifuku Co Ltd,Name,,,6250025,37418,Japan,,,1764127.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Daiichi Sankyo Co Ltd,Name,,,B0J7D91,36552,Japan,,,1170763.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Daimler Truck Holding Ag,Name,,,BP6VLQ4,46925,Germany,,,3084242.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Daito Trust Construction Co Ltd,Name,,,6250508,33085,Japan,,,945158.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Danaher Corp,Name,,,2250870,5038,United States,,,1729623.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Datadog Inc,Name,,,BKT9Y49,7633,United States,,,1556646.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Dbs Group Holdings Ltd,Name,,,6175203,62413,Singapore,,,4101841.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Deckers Outdoor Corp,Name,,,2267278,8009,United States,,,1245103.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Delta Air Lines Inc,Name,,,B1W9D46,52394,United States,,,5452707.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Deutsche Boerse Ag,Name,,,7021963,5550,Germany,,,2186766.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Dexcom Inc,Name,,,B0796X4,12387,United States,,,1232882.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Dexus,Name,,,B033YN6,25511,Australia,,,176793.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Dollar General Corp,Name,,,B5B1S13,8240,United States,,,1640555.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Downer EDI Ltd,Name,,,6465573,15738,Australia,,,125116.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Dsv A/S,Name,,,B1WT5G2,2520,Denmark,,,959657.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Dyno Nobel Ltd,Name,,,BVBH523,39041,Australia,,,125322.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Eagers Automotive Ltd,Name,,,6296201,4689,Australia,,,115529.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ebara Corp,Name,,,6302700,28674,Japan,,,1010617.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ebay Inc,Name,,,2293819,13279,United States,,,1734433.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,EBOS Group Ltd,Name,,,BH36SD2,436121,New Zealand,,,10309891.0,0.32,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Eiffage Sa,Name,,,B13X013,5990,France,,,1291271.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Elevance Health Inc,Name,,,BSPHGL4,9670,United States,,,5083538.0,0.16,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Eli Lilly And Co,Name,,,2516152,2587,United States,,,4169092.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Elisa Oyj,Name,,,5701513,14825,Finland,,,985354.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Elite Material Co Ltd,Name,,,6316121,14967,Taiwan,,,1175075.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Embraer SA,Name,,,2611916,15383,Brazil,,,1484911.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,EMCOR Group Inc,Name,,,2474164,1683,United States,,,1543700.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Emerson Electric Co,Name,,,2313405,9253,United States,,,1841559.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Emirates Nbd Bank Pjsc,Name,,,B28PFX8,81791,UAE,,,930024.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Endeavour Group Ltd,Name,,,BNVS144,36207,Australia,,,132517.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Equatorial Energia Sa,Name,,,B128R96,267105,Brazil,,,2814192.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Erste Group Bank Ag,Name,,,5289837,7028,Austria,,,1273712.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Essilorluxottica Sa,Name,,,7212477,4127,France,,,1961756.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Eurofins Scientific Se,Name,,,BNDPYV1,8919,Luxembourg,,,980170.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Everest Re Group Ltd,Name,,,2556868,3136,Bermuda,,,1595876.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Evolution Mining Ltd,Name,,,B3X0F91,3312371,Australia,,,42000867.0,1.28,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Expedia Group Inc,Name,,,B748CK2,2797,United States,,,1188090.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Expeditors International Of Washington Inc,Name,,,2325507,3435,United States,,,767645.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,F&G Annuities & Life Inc,Name,,,BM9XCN0,703,United States,,,32507.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fair Isaac Corp,Name,,,2330299,947,United States,,,2400544.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fanuc Corp,Name,,,6356934,20166,Japan,,,1173802.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Far East Horizon Ltd,Name,,,B63DLB5,832650,China,,,1289779.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fidelity National Financial Inc,Name,,,BNBRDD4,11715,United States,,,959051.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fidelity National Information Services Inc,Name,,,2769796,14465,United States,,,1441583.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,First Abu Dhabi Bank Pjsc,Name,,,6624471,168991,UAE,,,1203296.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fiserv Inc,Name,,,2342034,24401,United States,,,2457796.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fisher & Paykel Healthcare Corporation Ltd,Name,,,6423968,807761,New Zealand,,,26373410.0,0.81,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fortescue Metals Group Ltd,Name,,,6086253,39430,Australia,,,867854.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fox Corp,Name,,,BJJMGL2,18329,United States,,,2008433.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Fresnillo Plc,Name,,,B2QPKJ1,28147,United Kingdom,,,1892816.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,General Motors Co,Name,,,B665KZ5,31672,United States,,,3862313.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Genesis Minerals Ltd,Name,,,B23G0X1,27084,Australia,,,196358.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Genmab A/S,Name,,,4595739,4656,Denmark,,,2225585.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,George Weston Ltd,Name,,,2956662,13688,Canada,,,1417930.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Gilead Sciences Inc,Name,,,2369174,27698,United States,,,5098079.0,0.16,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,GMR Airports Ltd,Name,,,B192HJ1,851707,India,,,1483124.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Goldman Sachs Group Inc,Name,,,2407966,993,United States,,,1309372.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Goodman Group,Name,,,B03FYZ4,48492,Australia,,,1502268.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Gpt Group,Name,,,6365866,45433,Australia,,,246247.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Great-West Lifeco Inc,Name,,,2384951,22527,Canada,,,1668192.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Grupo Financiero Banorte Sab De Cv,Name,,,2421041,112593,Mexico,,,1567709.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Haier Smart Home Co Ltd,Name,,,BLD4QD0,179922,China,,,841645.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Halliburton Co,Name,,,2405302,91133,United States,,,3862066.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Halma Plc,Name,,,0405207,25735,United Kingdom,,,1836502.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Hartford Financial Services Group Inc,Name,,,2476193,18181,United States,,,3757026.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Hca Healthcare Inc,Name,,,B4MGBG6,13700,United States,,,9591144.0,0.29,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,HDFC Bank Ltd,Name,,,BK1N461,83125,India,,,1374685.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Heico Corp,Name,,,2237561,10108,United States,,,3826437.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Heineken Nv,Name,,,7792559,22849,Netherlands,,,2806393.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Hengan International Group Company Ltd,Name,,,6136233,196937,China,,,1058592.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Hermes International Sca,Name,,,5253973,446,France,,,1666309.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Hologic Inc,Name,,,2433530,9542,United States,,,1065881.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Hon Hai Precision Industry Co Ltd,Name,,,6438564,129191,Taiwan,,,1421219.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Hong Kong Exchanges And Clearing Ltd,Name,,,6267359,16700,Hong Kong,,,1311458.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Howmet Aerospace Inc,Name,,,BKLJ8V2,23840,United States,,,7329625.0,0.22,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Hp Inc,Name,,,BYX4D52,43756,United States,,,1461932.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,HSBC Holdings PLC,Name,,,GB0005405286,168989,United Kingdom,,,4000954.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,HUB24 Ltd,Name,,,BD4T5X1,1940,Australia,,,186683.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Icici Bank Ltd,Name,,,BSZ2BY7,67278,India,,,1507409.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Idexx Laboratories Inc,Name,,,2459202,3503,United States,,,3553967.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,IGO Ltd,Name,,,6439567,16239,Australia,,,133163.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,IHI Corp,Name,,,6466985,39781,Japan,,,1048334.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Incyte Corp,Name,,,2471950,6342,United States,,,939364.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Indian Hotels Co Ltd/The,Name,,,B1FRT61,127652,India,,,1573607.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Indus Towers Ltd,Name,,,B92P9G4,122914,India,,,858752.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Infineon Technologies Ag,Name,,,5889505,16069,Germany,,,1067799.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ing Groep Nv,Name,,,BZ57390,113527,Netherlands,,,4800628.0,0.15,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Insmed Inc,Name,,,2614487,7881,United States,,,2056958.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Insulet Corp,Name,,,B1XGNW4,3402,United States,,,1449863.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Insurance Australia Group Ltd,Name,,,6271026,56095,Australia,,,447642.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Intact Financial Corp,Name,,,B04YJV1,4474,Canada,,,1398391.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Interactive Brokers Group Inc,Name,,,B1WT4X2,22520,United States,,,2171808.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,International Business Machines Corp,Name,,,2005973,3153,United States,,,1400698.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,International Consolidated Airlines Group Sa,Name,,,B5282K0,108834,Spain,,,910274.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Intuit Inc,Name,,,2459020,1226,United States,,,1217593.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Intuitive Surgical Inc,Name,,,2871301,5982,United States,,,5080686.0,0.16,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,IQVIA Holdings Inc,Name,,,BDR73G1,3554,United States,,,1201438.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Itau Unibanco Holding Sa,Name,,,B037HR3,273140,Brazil,,,2932341.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,James Hardie Industries Plc,Name,,,B60QWJ2,9284,Australia,,,286702.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Japan Airlines Co Ltd,Name,,,B8BRV46,39466,Japan,,,1096855.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Jb Hi-Fi Ltd,Name,,,6702623,213531,Australia,,,20545962.0,0.63,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Jde Peets Nv,Name,,,BMC4ZZ3,15481,Netherlands,,,868653.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Jiangsu Expressway Co Ltd,Name,,,6005504,464771,China,,,894544.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Johnson & Johnson,Name,,,2475833,14408,United States,,,4471347.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,JPMorgan Chase & Co,Name,,,2190385,26202,United States,,,12660768.0,0.39,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Kasikornbank PCL,Name,,,6888794,130766,Thailand,,,1210619.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Kb Financial Group Inc,Name,,,B3DF0Y6,18073,South Korea,,,2346105.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Keyence Corp,Name,,,6490995,3230,Japan,,,1751375.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Kinross Gold Corp,Name,,,B03Z841,99183,Canada,,,4194814.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Kla Corp,Name,,,2480138,927,United States,,,1689431.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Klepierre Sa,Name,,,7582556,34744,France,,,2064556.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Komatsu Ltd,Name,,,6496584,23081,Japan,,,1104087.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Koninklijke Ahold Delhaize Nv,Name,,,BD0Q398,16035,Netherlands,,,984778.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Koninklijke Kpn Nv,Name,,,5956078,150607,Netherlands,,,1054626.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Korea Investment Holdings Co Ltd,Name,,,6654586,6933,South Korea,,,1167005.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Kraft Heinz Co,Name,,,BYRY499,80572,United States,,,2930017.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Kuaishou Technology,Name,,,BLC90T0,133760,China,,,1648020.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Kweichow Moutai Co Ltd,Name,,,BP3R2F1,4018,China,,,1187293.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,L'air Liquide Societe Anonyme Pour L'etude Et L'exploitation Des Procedes George,Name,,,B1YXBJ7,4489,France,,,1266897.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lam Research Corp,Name,,,BSML4N7,20878,United States,,,5359492.0,0.16,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lasertec Corp,Name,,,6506267,5908,Japan,,,1675630.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Legrand Sa,Name,,,B11ZRK9,11985,France,,,2685932.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Lendlease Group,Name,,,6512004,15567,Australia,,,80948.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lennar Corp,Name,,,2511920,5653,United States,,,871434.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lg Corp,Name,,,6537030,12384,South Korea,,,1040362.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Life360 Inc,Name,,,BJMXQ67,235376,United States,,,7892152.0,0.24,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lifestyle Communities Ltd,Name,,,6137195,885496,Australia,,,4471755.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Linde Plc,Name,,,BNZHB81,6096,United Kingdom,,,3897579.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lloyds Banking Group Plc,Name,,,0870612,2085944,United Kingdom,,,4133342.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Loblaw Companies Ltd,Name,,,2521800,52696,Canada,,,3577144.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Loews Corp,Name,,,2523022,17017,United States,,,2687341.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,L'oreal Sa,Name,,,4057808,4614,France,,,2978938.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lowe's Companies Inc,Name,,,2536763,4870,United States,,,1761138.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lundin Mining Corp,Name,,,2866857,37089,Canada,,,1196955.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lynas Rare Earths Ltd,Name,,,6121176,1550761,Australia,,,19291469.0,0.59,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Lyondellbasell Industries Nv,Name,,,B3SPXZ3,27991,United States,,,1817519.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,M&G Plc,Name,,,BKFB1C6,335281,United Kingdom,,,1936831.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,M&T Bank Corp,Name,,,2340168,3339,United States,,,1008915.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Macquarie Group Ltd,Name,,,B28YTC2,222475,Australia,,,45206823.0,1.38,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Magnum Ice Cream Co NV/The,Name,,,BVZG4R4,7906,Netherlands,,,187767.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Marathon Petroleum Corp,Name,,,B3K3L40,18403,United States,,,4488176.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mastercard Inc,Name,,,B121557,10984,United States,,,9403540.0,0.29,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mccormick & Company Inc,Name,,,2550161,16098,United States,,,1644162.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mcdonald's Corp,Name,,,2550707,6434,United States,,,2948974.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Medibank Private Ltd,Name,,,BRTNNQ5,4025066,Australia,,,19280064.0,0.59,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Medtronic Plc,Name,,,BTN1Y11,11028,United States,,,1588656.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Megaport Ltd,Name,,,BZ5ZWZ3,401037,Australia,,,4880617.0,0.15,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Meituan,Name,,,BGJW376,91851,China,,,1828029.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mercadolibre Inc,Name,,,B23X1H3,849,United States,,,2565036.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mercedes Benz Group Ag,Name,,,5529027,15480,Germany,,,1637706.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Merck & Co Inc,Name,,,2778844,17169,United States,,,2710063.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Meta Platforms Inc,Name,,,B7TL820,27205,United States,,,26929098.0,0.82,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Metcash Ltd,Name,,,B0744W4,26074,Australia,,,86043.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Metlife Inc,Name,,,2573209,18068,United States,,,2138819.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Metro Inc,Name,,,2583952,13864,Canada,,,1498396.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mettler-Toledo International Inc,Name,,,2126249,1454,United States,,,3040275.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Micron Technology Inc,Name,,,2588184,4818,United States,,,2062034.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Microsoft Corp,Name,,,2588173,68552,United States,,,49716151.0,1.52,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mineral Resources Ltd,Name,,,B17ZL56,4172,Australia,,,226878.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Mirvac Group,Name,,,6161978,93591,Australia,,,191861.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mitsubishi Estate Co Ltd,Name,,,6596729,74757,Japan,,,2732806.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mitsubishi Ufj Financial Group Inc,Name,,,6335171,76412,Japan,,,1822466.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Moncler Spa,Name,,,BGLP232,15000,Italy,,,1450822.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Monster Beverage Corp,Name,,,BZ07BW4,39271,United States,,,4515099.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Morgan Stanley,Name,,,2262314,17758,United States,,,4727621.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Motorola Solutions Inc,Name,,,B5BKPQ4,7087,United States,,,4073975.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Mtu Aero Engines Ag,Name,,,B09DHL9,3922,Germany,,,2454319.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Natera Inc,Name,,,BYQRG48,3854,United States,,,1324160.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,National Australia Bank Ltd,Name,,,6624608,1681318,Australia,,,71136551.0,2.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,National Bank Of Canada,Name,,,2077303,6051,Canada,,,1142724.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,National Bank of Greece SA,Name,,,BG087C6,47569,Greece,,,1089114.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,NatWest Group PLC,Name,,,BM8PJY7,515430,United Kingdom,,,6776325.0,0.21,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Nestle Sa,Name,,,7123870,20827,Switzerland,,,3104112.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Netapp Inc,Name,,,2630643,7526,United States,,,1208630.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Netease Inc,Name,,,KYG6427A1022,36473,China,,,1507978.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Netflix Inc,Name,,,2857817,48502,United States,,,6819397.0,0.21,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Netwealth Group Ltd,Name,,,BF52PL1,3000,Australia,,,77018.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Newmont Corp,Name,,,BRDVMB3,2276,United States,,,341828.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Newmont Corporation,Name,,,2636607,23799,United States,,,3563582.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Next PLC,Name,,,3208986,12414,United Kingdom,,,3425409.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,NEXTDC Ltd,Name,,,B5LMKP4,1376407,Australia,,,17246383.0,0.53,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Nintendo Co Ltd,Name,,,6639550,16779,Japan,,,1700772.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Nippon Yusen KK,Name,,,6643960,31667,Japan,,,1538453.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Norsk Hydro Asa,Name,,,B11HK39,195711,Norway,,,2275292.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Northern Star Resources Ltd,Name,,,6717456,33930,Australia,,,906955.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Novartis Ag,Name,,,7103065,35514,Switzerland,,,7367503.0,0.23,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Novo Nordisk A/S,Name,,,BP6KMJ1,17010,Denmark,,,1304547.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,NU Holdings Ltd/Cayman Islands,Name,,,BN6NP19,173891,Brazil,,,4365194.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Nvidia Corp,Name,,,2379504,220099,United States,,,61555817.0,1.88,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Nxp Semiconductors Nv,Name,,,B505PN7,2952,Netherlands,,,960777.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Old Dominion Freight Line Inc,Name,,,2656423,5599,United States,,,1316411.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Omnicom Group Inc,Name,,,2279303,8234,United States,,,997109.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Oracle Corp,Name,,,2661568,7029,United States,,,2054491.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,O'reilly Automotive Inc,Name,,,B65LWX6,24798,United States,,,3391848.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Orica Ltd,Name,,,6458001,814929,Australia,,,19786478.0,0.6,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Otsuka Corp,Name,,,6267058,32928,Japan,,,1018153.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Paccar Inc,Name,,,2665861,8845,United States,,,1452497.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Palantir Technologies Inc,Name,,,BN78DQ4,6262,United States,,,1669096.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Palo Alto Networks Inc,Name,,,B87ZMX0,3210,United States,,,886699.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Parker-Hannifin Corp,Name,,,2671501,6346,United States,,,8364650.0,0.26,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Pdd Holdings Inc,Name,,,BYVW0F7,27867,China,,,4738520.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Pepsico Inc,Name,,,2681511,11282,United States,,,2428149.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Pernod Ricard Sa,Name,,,4682329,14687,France,,,1890820.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Perseus Mining Ltd,Name,,,B02FBC1,1934071,Australia,,,10985522.0,0.34,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Petronet Lng Ltd,Name,,,B00KT68,430368,India,,,2039966.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Pfizer Inc,Name,,,2684703,87044,United States,,,3250192.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Phoenix Group Holdings Plc,Name,,,BGXQNP2,147347,United Kingdom,,,2190374.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Pilbara Minerals Ltd,Name,,,B2368L5,8312937,Australia,,,35080595.0,1.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Pinnacle Investment Management Group Ltd,Name,,,BD0F7H1,4375,Australia,,,75035.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Power Corporation Of Canada,Name,,,2697701,38772,Canada,,,3094276.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Power Finance Corporation Ltd,Name,,,B1S7225,147551,India,,,874924.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Power Grid Corporation Of India Ltd,Name,,,B233HS6,507826,India,,,2241900.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Premier Investments Ltd,Name,,,6699781,278167,Australia,,,3835920.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Principal Financial Group Inc,Name,,,2803014,15856,United States,,,2097383.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Pro Medicus Ltd,Name,,,6292782,1314,Australia,,,290117.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Procter & Gamble Co,Name,,,2704407,14433,United States,,,3101763.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Progressive Corp,Name,,,2705024,7496,United States,,,2559852.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Prologis Inc,Name,,,B44WZD7,10521,United States,,,2014144.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Promotora Y Operadora De Infraestructura Sab De Cv,Name,,,2393388,44755,Mexico,,,997932.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Prudential Financial Inc,Name,,,2819118,13761,United States,,,2329401.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Prudential PLC,Name,,,0709954,47452,United Kingdom,,,1095410.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Pultegroup Inc,Name,,,2708841,8184,United States,,,1439073.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Qantas Airways Ltd,Name,,,6710347,35888,Australia,,,372516.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Qbe Insurance Group Ltd,Name,,,6715740,1301926,Australia,,,25895317.0,0.79,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ramelius Resources Ltd,Name,,,6586872,45653,Australia,,,189918.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ramsay Health Care Ltd,Name,,,6041995,4489,Australia,,,154257.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Rea Group Ltd,Name,,,6198578,1191,Australia,,,218357.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Reckitt Benckiser Group Plc,Name,,,B24CGK7,15113,United Kingdom,,,1829597.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Recruit Holdings Co Ltd,Name,,,BQRRZ00,20639,Japan,,,1746879.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Reddit Inc,Name,,,BMVNLY2,8289,United States,,,2857466.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Reece Ltd,Name,,,6728801,846774,Australia,,,11346772.0,0.35,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Reliance Steel & Aluminum Co,Name,,,2729068,2228,United States,,,965031.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Reliance Worldwide Corporation Ltd,Name,,,BD1DM79,2138228,Australia,,,8253559.0,0.25,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Relx Plc,Name,,,B2B0DG9,14907,United Kingdom,,,908018.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Resmed Inc,Name,,,2732903,5674,United States,,,2049535.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Resmed Inc,Name,,,6221667,857666,United States,,,30824505.0,0.94,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Rexel Sa,Name,,,B1VP0K0,19676,France,,,1164023.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Rio Tinto Ltd,Name,,,6220103,8803,Australia,,,1292494.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Rio Tinto Plc,Name,,,0718875,387141,United Kingdom,,,46805363.0,1.43,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Rivian Automotive Inc,Name,,,BL98841,44794,United States,,,1323962.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Robinhood Markets Inc,Name,,,BP0TQN6,7692,United States,,,1304650.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Roblox Corp,Name,,,BMWBC20,15281,United States,,,1856787.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Roche Holding Ag,Name,,,7110388,11995,Switzerland,,,7451606.0,0.23,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Rocket Lab Corp,Name,,,BT6C8Z3,19099,United States,,,1997965.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Rollins Inc,Name,,,2747305,19227,United States,,,1730563.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sage Group Plc,Name,,,B8C3BL0,76145,United Kingdom,,,1663326.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Salesforce Inc,Name,,,2310525,6717,United States,,,2668418.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Samsara Inc,Name,,,BPK3058,31985,United States,,,1700331.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Samsung Biologics Co Ltd,Name,,,BYNJCV6,555,South Korea,,,978528.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Samsung Electronics Co Ltd,Name,,,6771720,74734,South Korea,,,9327892.0,0.29,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Samsung Fire & Marine Insurance Co Ltd,Name,,,6155250,2118,South Korea,,,1095918.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sandfire Resources Ltd,Name,,,6739739,1425994,Australia,,,25553815.0,0.78,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Scb X Pcl,Name,,,BPH0717,241839,Thailand,,,1600048.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Scentre Group,Name,,,BLZH0Z7,123711,Australia,,,519586.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Schneider Electric Se,Name,,,4834108,2134,France,,,882848.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sea Ltd,Name,,,BYWD7L4,14989,Singapore,,,2867483.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Seagate Technology Holdings Plc,Name,,,BKVD2N4,16558,Ireland,,,6838173.0,0.21,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Seek Ltd,Name,,,B0767Y3,8473,Australia,,,195884.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Servicenow Inc,Name,,,B80NXX8,20107,United States,,,4619079.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Shimadzu Corp,Name,,,6804369,36315,Japan,,,1448085.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Shin-Etsu Chemical Co Ltd,Name,,,6804585,23002,Japan,,,1072370.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Shinhan Financial Group Co Ltd,Name,,,6397502,32964,South Korea,,,2638828.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Shopify Inc,Name,,,BX865C7,17397,Canada,,,4206016.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Siemens Ag,Name,,,5727973,8182,Germany,,,3446309.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Siemens Energy Ag,Name,,,BMTVQK9,6570,Germany,,,1393113.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Siemens Healthineers Ag,Name,,,BD594Y4,16699,Germany,,,1321140.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sigma Healthcare Ltd,Name,,,BF13K02,136886,Australia,,,402446.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sika Ag,Name,,,BF2DSG3,3214,Switzerland,,,989185.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Singapore Airlines Ltd,Name,,,6811734,177716,Singapore,,,1326286.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Siteminder Ltd,Name,,,BLH35X6,1657774,Australia,,,10079268.0,0.31,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sk Hynix Inc,Name,,,6450267,3096,South Korea,,,2097995.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sk Square Co Ltd,Name,,,BMG3GS6,12159,South Korea,,,4657848.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Smc Corp,Name,,,6763965,1812,Japan,,,943998.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Smurfit Westrock PLC,Name,,,BRK49M5,39862,Ireland,,,2311538.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sonic Healthcare Ltd,Name,,,6821120,11722,Australia,,,265027.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sony Group Corp,Name,,,6821506,70897,Japan,,,2729392.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Spotify Technology Sa,Name,,,BFZ1K46,3212,Luxembourg,,,2797472.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,State Bank Of India,Name,,,BSQCB24,103463,India,,,1695493.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Steadfast Group Ltd,Name,,,BCT5FD7,2960823,Australia,,,15633145.0,0.48,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Steel Dynamics Inc,Name,,,2849472,11038,United States,,,2804794.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Steris Plc,Name,,,BFY8C75,6680,Ireland,,,2539611.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Stockland Corporation Ltd,Name,,,6850856,57451,Australia,,,329193.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Subaru Corp,Name,,,6356406,77199,Japan,,,2507445.0,0.08,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sumitomo Mitsui Financial Group Inc,Name,,,6563024,83029,Japan,,,4004265.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sun Life Financial Inc,Name,,,2566124,14858,Canada,,,1392660.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Sun Pharmaceutical Industries Ltd,Name,,,6582483,31353,India,,,899592.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Suncorp Group Ltd,Name,,,6585084,25684,Australia,,,453317.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Suzuki Motor Corp,Name,,,6865504,53015,Japan,,,1184062.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Svenska Handelsbanken Ab,Name,,,BXDZ9Q1,54115,Sweden,,,1182644.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Swire Pacific Ltd,Name,,,6867748,89409,Hong Kong,,,1080059.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Swisscom Ag,Name,,,5533976,1587,Switzerland,,,1728231.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Synchrony Financial,Name,,,BP96PS6,12487,United States,,,1562205.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Synopsys Inc,Name,,,2867719,1585,United States,,,1116416.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Taiwan Semiconductor Manufacturing Co Ltd,Name,,,2113382,58410,Taiwan,,,26617977.0,0.81,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Taiwan Semiconductor Manufacturing Co Ltd,Name,,,6889106,153611,Taiwan,,,11363508.0,0.35,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Technologyone Ltd,Name,,,6302410,7221,Australia,,,201905.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Techtronic Industries Co Ltd,Name,,,B0190C7,95711,Hong Kong,,,1657755.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Tele2 Ab,Name,,,B97C733,54857,Sweden,,,1379114.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Telefonica Brasil Sa,Name,,,B6XFBX3,77546,Brazil,,,702422.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Telix Pharmaceuticals Ltd,Name,,,BF7M092,6911,Australia,,,77402.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Telstra Group Ltd,Name,,,6087289,6973197,Australia,,,33959468.0,1.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Tencent Holdings Ltd,Name,,,BMMV2K8,100359,China,,,11581919.0,0.35,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Tesco Plc,Name,,,BLGZ986,261152,United Kingdom,,,2327176.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Tesla Inc,Name,,,B616C79,5911,United States,,,3986523.0,0.12,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Teva Pharmaceutical Industries Ltd,Name,,,2883878,39667,Israel,,,1856503.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Titan Company Ltd,Name,,,6139340,28618,India,,,1934498.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,T-Mobile US Inc,Name,,,B94Q9V0,5401,United States,,,1644416.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Tokio Marine Holdings Inc,Name,,,6513126,22766,Japan,,,1266959.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Toyota Motor Corp,Name,,,6900643,40569,Japan,,,1302551.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Tpg Telecom Ltd,Name,,,BMB2257,2320992,Australia,,,8796560.0,0.27,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Trade Desk Inc,Name,,,BD8FDD1,19526,United States,,,1111500.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Tradeweb Markets Inc,Name,,,BJXMVK2,9343,United States,,,1506782.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Trane Technologies Plc,Name,,,BK9ZQ96,3663,Ireland,,,2137888.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Infrastructure,Listed,,Transurban Group,Name,,,6200882,1861393,Australia,,,26450389.0,0.81,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Travelers Companies Inc,Name,,,2769503,9492,United States,,,4128897.0,0.13,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Treasury Wine Estates Ltd,Name,,,B61JC67,19015,Australia,,,99640.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Trip.Com Group Ltd,Name,,,BK1K3N2,17005,China,,,1833753.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Trip.Com Group Ltd,Name,,,BNYK8H9,15007,China,,,1601729.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Uber Technologies Inc,Name,,,BK6N347,18206,United States,,,2230762.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ubs Group Ag,Name,,,BRJL176,22941,Switzerland,,,1604908.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Ulta Beauty Inc,Name,,,B28TS42,2273,United States,,,2062615.0,0.06,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Unicredit Spa,Name,,,BYMXPS7,26163,Italy,,,3267815.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Unilever Plc,Name,,,BVZK7T9,35139,United Kingdom,,,3444231.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Union Pacific Corp,Name,,,2914734,4577,United States,,,1587627.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,United Airlines Holdings Inc,Name,,,B4QG225,20687,United States,,,3468885.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,United Overseas Bank Ltd,Name,,,6916781,52228,Singapore,,,2135225.0,0.07,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,United Parcel Service Inc,Name,,,2517382,9284,United States,,,1380882.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,United Rentals Inc,Name,,,2134781,836,United States,,,1014366.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Unitedhealth Group Inc,Name,,,2917766,13634,United States,,,6749004.0,0.21,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Us Bancorp,Name,,,2736035,13689,United States,,,1095405.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Valero Energy Corp,Name,,,2041364,14636,United States,,,3572997.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Veeva Systems Inc,Name,,,BFH3N85,8656,United States,,,2897546.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Verizon Communications Inc,Name,,,2090571,28911,United States,,,1765841.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Vertex Pharmaceuticals Inc,Name,,,2931034,2388,United States,,,1623796.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Vicinity Centres,Name,,,BY7QXS7,11018787,Australia,,,28208095.0,0.86,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Vinci Sa,Name,,,B1XH026,4997,France,,,1056621.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Visa Inc,Name,,,B2PZN04,10273,United States,,,5402792.0,0.17,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Vodafone Group Plc,Name,,,BH4HKS3,1457633,United Kingdom,,,2907147.0,0.09,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Volvo Ab,Name,,,B1QH830,33056,Sweden,,,1591096.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Walmart Inc,Name,,,2936921,27770,United States,,,4639457.0,0.14,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Walt Disney Co,Name,,,2270726,19113,United States,,,3260855.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Wells Fargo & Co,Name,,,2649100,23358,United States,,,3264593.0,0.1,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Wesfarmers Ltd,Name,,,6948836,595556,Australia,,,48293607.0,1.48,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Western Digital Corp,Name,,,2954699,6419,United States,,,1658135.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Westinghouse Air Brake Technologies Corp,Name,,,2955733,11668,United States,,,3734815.0,0.11,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Westpac Banking Corp,Name,,,6076146,1866940,Australia,,,72063870.0,2.2,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Wh Group Ltd,Name,,,BLLHKZ1,730636,Hong Kong,,,1220442.0,0.04,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Wisetech Global Ltd,Name,,,BZ8GX83,5021,Australia,,,343736.0,0.01,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Woolworths Group Ltd,Name,,,6981239,255949,Australia,,,7519775.0,0.23,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Worley Ltd,Name,,,6562474,11408,Australia,,,143402.0,0.0,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Xero Ltd,Name,,,B8P4LP4,200167,New Zealand,,,22823013.0,0.7,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Yandex Nv,Name,,,B5BSZB3,5622,Netherlands,,,705710.0,0.02,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Yangzijiang Shipbuilding Holdings Ltd,Name,,,B1VT035,389226,Singapore,,,1579473.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Yum China Holdings Inc,Name,,,BYW4289,23033,United States,,,1648937.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Yum! Brands Inc,Name,,,2098876,6580,United States,,,1492737.0,0.05,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Zomato Ltd,Name,,,BL6P210,215495,India,,,999704.0,0.03,,,,,,,nan,nan
+ARSB,Socially Aware,Equity,Listed,,Total,Total,,,,89225274,,,,2216177165.0,67.72,,,,,,,nan,nan
+ARSB,Socially Aware,Infrastructure,Listed,,Total,Total,,,,1884452,,,,26562917.0,0.81,,,,,,,nan,nan
+ARSB,Socially Aware,Property,Listed,,Total,Total,,,,11485025,,,,35607980.0,1.09,,,,,,,nan,nan

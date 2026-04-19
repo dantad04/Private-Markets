@@ -18,6 +18,7 @@ from app.ingest.loader import (
     LoaderError,
     ingest_art_qsuper_local_file,
     ingest_art_sunsuper_local_file,
+    ingest_australiansuper_local_file,
     ingest_aware_local_file,
     ingest_hesta_local_file,
     ingest_hostplus_local_file,
@@ -81,6 +82,14 @@ class AdminArtQsuperIngestRequest(BaseModel):
 class AdminArtSunsuperIngestRequest(BaseModel):
     file_path: str = Field(..., description="Absolute or workspace-local path to the source CSV")
     fund_code: str = Field(..., description="Stable fund code, e.g. 'art'")
+    fund_name: str = Field(..., description="Human-readable fund name")
+    publication_date: date | None = None
+    reporting_period_id: int | None = None
+
+
+class AdminAustralianSuperIngestRequest(BaseModel):
+    file_path: str = Field(..., description="Absolute or workspace-local path to the source CSV")
+    fund_code: str = Field(..., description="Stable fund code, e.g. 'australiansuper'")
     fund_name: str = Field(..., description="Human-readable fund name")
     publication_date: date | None = None
     reporting_period_id: int | None = None
@@ -365,6 +374,29 @@ def ingest_art_sunsuper_local_file_endpoint(
 ) -> AdminIngestResponse:
     try:
         summary = ingest_art_sunsuper_local_file(
+            session,
+            fund_code=payload.fund_code,
+            fund_name=payload.fund_name,
+            file_path=payload.file_path,
+            publication_date=payload.publication_date,
+            reporting_period_id=payload.reporting_period_id,
+        )
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    except (SunsuperSchemaAdapterError, LoaderError, OSError, ValueError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return AdminIngestResponse.from_summary(summary)
+
+
+@router.post("/ingest/local-file/australiansuper", response_model=AdminIngestResponse)
+def ingest_australiansuper_local_file_endpoint(
+    payload: AdminAustralianSuperIngestRequest,
+    session: Session = Depends(get_db_session),
+) -> AdminIngestResponse:
+    try:
+        summary = ingest_australiansuper_local_file(
             session,
             fund_code=payload.fund_code,
             fund_name=payload.fund_name,

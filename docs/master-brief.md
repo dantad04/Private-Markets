@@ -109,11 +109,11 @@ Contract with canonical layer:
 | `HestaPhdAdapter` | Flat row | `Hesta-High-Growth-super-assets*.csv` | **Stage 1** | Cleanest schema observed: 11 columns, single option per file, UK DD/MM/YYYY dates, clear `{class}` vs `{class} Total` subtotal pattern, weighting stored as decimal fraction (no conversion needed), UTF-8 clean. Chosen as Stage 1 anchor to minimise time to canonical-contract freeze. |
 | `AwarePhdAdapter` | Mini-state-machine | `Aware.csv`, `AwareProperty.csv` | Stage 2 | 14 columns, one option per file, four concatenated Schedule 8D tables, 17 embedded SUB TOTAL rows in Table 1, state-dependent name-column selection across 13 `(asset_class, internal/external)` combinations. ISO reporting date embedded in table-header string. Contains the private-company gold seam (RUMIN8, FSSSP, HARRISON AI, WESBEAM). |
 | `ArtQsuperPhdAdapter` | Flat row | `ART.csv` | Stage 2 | 16 columns, single option per file, textual date ("31 December 2025") in `AsAtDate` column, `n/a` as null sentinel. |
-| `SunsuperSchemaPhdAdapter` | Flat row with structured `Name Type` column | `Aus-Super.csv`, `AusSuperPHD.csv`, `Balanced_PHD__3_.csv` | Stage 2 | Shared 24-column lineage used by ART and AustralianSuper. Dates are derived from file registration (no row-level date column). Publishes same holdings in multiple filter views: metadata-attachment merging required. Carries geo-coordinates and `Classification` for ~80 property/infrastructure rows per option - signature-feature data source. Ownership stored as bare decimal (`0.18`, not `0.18%`). The parser does not branch on fund; `source_fund_id` comes from file registration metadata and a known-fund option-code registry is extended as new AustralianSuper codes are observed. |
+| `SunsuperSchemaPhdAdapter` | Flat row with structured `Name Type` column | `Aus-Super.csv`, `AusSuperPHD.csv`, `Balanced_PHD__3_.csv` | Stage 2 | Internal normalised 24-column contract currently exercised by the ART-Sunsuper narrow slice. Dates are derived from file registration (no row-level date column). Publishes same holdings in multiple filter views: metadata-attachment merging required. Carries geo-coordinates and `Classification` for property/infrastructure rows. ART-Sunsuper ownership in this slice is stored as a bare decimal already in canonical fraction form (`0.18` means 18%). Do not treat this internal contract as byte-compatible with real AustralianSuper CSVs. |
 | `UniSuperPhdStateMachineAdapter` | Full state machine | `UniSuper.csv` | Stage 2 | 5 columns, 16 investment options in one 26,890-row file, column headers re-emit mid-file, US MM/DD/YYYY date trap (`12/31/2025`), nine variants of scope-modifier strings must normalise. |
 | `HostPlusPhdStateMachineAdapter` | Full state machine (UniSuper-class, reused) | `Host-PlusHigh_Growth.csv` | Stage 2 (late) or Stage 3 | Single option per file but structurally UniSuper-class: section-header-driven, column-header re-emission, `Total` keyword for aggregates. Encoding corruption observed upstream (`non?associated`, `Table 2 �`). Reuse UniSuper state-machine class with per-fund config rather than duplicate. |
-| `AustralianSuper` via `SunsuperSchemaPhdAdapter` | Unverified in workspace | *none in workspace* | Deferred until sample is registered | AustralianSuper is expected to reuse the same 24-column schema family rather than requiring a distinct adapter class. Files labelled `Aus-Super*.csv` in the workspace are ART lineage records (option codes `ARST`, `AR1P`), not AustralianSuper. AustralianSuper option codes should be added to the known-fund registry as they are encountered. |
-| `CbusPhdAdapter` | Unverified | *none in workspace* | Deferred | Same status as AustralianSuper. |
+| `AustralianSuperPhdAdapter` | Thin fund-specific wrapper over the shared duplicate-view merge logic | `Stable PHD (1).csv`, `Conservative PHD (1).csv`, `Socially Aware PHD.csv`, `Member Direct PHD (1).csv` | Stage 2 narrow slice implemented | Real AustralianSuper files from the official site are now confirmed in the workspace, and a thin fund-specific adapter is in place. The approved loader/admin production slice is currently the official `Member Direct PHD (1).csv` family; broader AustralianSuper shapes (`Stable`, `Conservative Balanced`, `Socially Aware`) still require their own mapping approval before they can be promoted beyond parser-level coverage. Identity verification relies on source URL/domain/content signals rather than `AR**` option codes alone. |
+| `CbusPhdAdapter` | Unverified | *none in workspace* | Deferred | Cbus still has the earlier status AustralianSuper used to have: no real sample in the workspace yet. |
 
 ### Hesta as Stage 1 anchor: rationale and tradeoff
 
@@ -201,36 +201,40 @@ The Sunsuper schema publishes the same holding in multiple filter views within a
 
 If the grouping is ambiguous (e.g. two `$ Value`-bearing rows for the same entity under different asset classes), the ambiguity is logged and the rows are emitted separately. Do not silently merge across asset classes.
 
-### Known-fund registry for the Sunsuper schema
+### Fund identity for the shared 24-column family
 
-The shared 24-column adapter should maintain a small registry of known option-code families and their owning fund. This is not parser branching logic; it is a metadata aid for review, onboarding, and anomaly detection.
+Do **not** infer fund identity from `AR**` option codes. Real AustralianSuper files from the official site now use `ARST`, `ARYO`, `ARSB`, and `AR2O`, so `AR` is a shared-family marker at best, not an owning-fund rule.
 
-Initial registry:
+Primary identity signals:
 
-1. `AR**` option codes: Australian Retirement Trust / Sunsuper lineage.
-2. AustralianSuper codes: add as they are observed from registered files.
+1. Registered `source_fund_id` from file registration.
+2. Source URL / domain and branded path tokens (`australiansuper`, `australian-retirement-trust`, `sunsuper`, etc.).
+3. Content signals from observed option names and file variants.
+4. Review warnings when the declared fund and non-option-code signals disagree.
 
 Rules:
 
 1. `source_fund_id` is authoritative from file registration metadata, not inferred from option code at parse time.
-2. Option-code registry mismatches should raise a review warning, not silently rewrite the fund assignment.
-3. New option-code families should be appended to the registry only from observed files, not guessed in advance.
+2. `AR**` codes must never be used on their own to decide between ART-Sunsuper and AustralianSuper.
+3. Identity mismatches should raise a review warning, not silently rewrite the fund assignment.
+4. New option-code families should be appended only from observed files, not guessed in advance.
 
 ### Onboarding AustralianSuper and Cbus
 
 Process:
 
-1. Acquire a real AustralianSuper PHD file. Files currently labelled `Aus-Super*.csv` are ART lineage files and do not count.
-2. Register sample files for one reporting period.
-3. Build provisional schema fingerprint and raw-profile summary.
-4. Generate LLM-assisted draft mapping.
-5. Human approves or edits mapping.
-6. Implement concrete adapter if flat-row parsing is insufficient.
-7. Run dry-load into staging.
-8. Review canonical preview and disclosure completeness distribution.
-9. Promote adapter and mapping version to active.
+1. AustralianSuper real files are now confirmed locally; the earlier `Aus-Super = ART` assumption is retired.
+2. Run a bounded compatibility audit against 2 to 3 real AustralianSuper CSVs before any production onboarding.
+3. Implement a thin AustralianSuper wrapper over the shared duplicate-view merge logic, not a generic cross-fund importer.
+4. Add fund-identity verification that relies on source/domain/content signals rather than `AR**` option codes.
+5. Register one official-file slice for one reporting period and build a raw-profile summary.
+6. Generate LLM-assisted draft mapping.
+7. Human approves or edits mapping.
+8. Run dry-load into staging.
+9. Review canonical preview and disclosure completeness distribution.
+10. Promote the narrow slice to active loader/admin ingest, then stage additional AustralianSuper shapes separately.
 
-Discipline: AustralianSuper and Cbus do not enter production ingestion until real sample files exist and their mappings have been approved. AustralianSuper is expected to reuse `SunsuperSchemaPhdAdapter`, but its option-code family should only be added to the registry once observed in a registered file.
+Discipline: AustralianSuper now has a real thin-wrapper implementation, but only the approved `Member Direct` slice is in loader/admin production. Other AustralianSuper option shapes remain gated by mapping approval. Cbus remains deferred pending a real sample file.
 
 ### LLM-assisted mapping workflow, concretely
 
@@ -730,11 +734,12 @@ Verified parse rules for Stage 1 and Stage 2 adapters. Each adapter's normalisat
 | Hesta | UK `DD/MM/YYYY` | `Effective Date` column | empty string | raw float (scientific OK) | formatted `"16.90%"` -> strip % -> divide by 100 |
 | Aware | ISO `YYYY-MM-DD` in table-header suffix | Regex extract from Table 1 header row | `-`, empty | formatted `"$9,144,447"` -> strip `$,` -> parse | formatted `"4%"` -> strip % -> divide by 100 |
 | ART-QSuper | Textual `31 December 2025` | `AsAtDate` column | `n/a`, empty | formatted `"$339,726,831"` -> strip `$,` -> parse | formatted `"7%"` -> strip % -> divide by 100 |
-| Sunsuper schema | - (from file registration) | n/a | `nan`, `n/a`, empty | raw float | **bare decimal `0.18`** -> parse -> divide by 100 |
+| ART-Sunsuper narrow slice / internal shared-schema contract | - (from file registration) | n/a | `nan`, `n/a`, empty | raw float | **bare decimal `0.18` already in canonical fraction form** -> parse as-is |
+| AustralianSuper real 24-column variant | - (from file registration) | n/a | `nan`, blank-space, empty | raw float | numeric percentage points such as `1.09` -> divide by 100 |
 | UniSuper | US `MM/DD/YYYY` (trap) | `REPORTING DATE` row (structural) | empty | raw float | formatted `"29.00%"` -> strip % -> divide by 100 |
 | Host-Plus | - (from file registration / filename) | n/a | empty | formatted `"28,837,447"` -> strip `,` -> parse | formatted `"13.17%"` -> strip % -> divide by 100 |
 
-**The outlier is the Sunsuper schema.** Its `% Ownership` column stores percentages as bare decimal numbers pre-interpreted by Excel's cell format. Every other adapter strips `%` from formatted strings. ADR-09 holds (canonical storage is decimal fraction, always), but adapter-level parsing differs and must live in each adapter's normalisation config.
+**The 24-column family is not one uniform percentage format.** The ART-Sunsuper narrow slice uses bare decimals already in canonical fraction form, while the confirmed AustralianSuper files use numeric percentage points that still need divide-by-100 normalisation. ADR-09 holds (canonical storage is decimal fraction, always), but adapter-level parsing differs and must live in each adapter's normalisation config.
 
 ### Mapping structure
 
@@ -1033,7 +1038,7 @@ Deliverables:
 6. Approved taxonomy mapping tables.
 7. Schema-drift detection.
 8. Review workflow for mapping approval.
-9. AustralianSuper and Cbus onboarding once real sample files are acquired.
+9. AustralianSuper thin-wrapper onboarding for approved official slices, and Cbus onboarding once real sample files are acquired.
 
 In scope:
 
@@ -1053,7 +1058,7 @@ Risks:
 1. UniSuper complexity exposing schema gaps not caught by Hesta.
 2. Sunsuper-schema duplicate-view merging edge cases.
 3. Host-Plus encoding corruption fluctuation between periods.
-4. AustralianSuper/Cbus may require a schema change when real files arrive.
+4. AustralianSuper already proves the shared 24-column family is not byte-compatible across funds; Cbus may introduce a further schema change when real files arrive.
 
 Demo outcome:
 
@@ -1171,7 +1176,7 @@ Demo outcome:
 
 ## 14. Key risks
 
-1. PHD format variance is partly characterised and partly unknown; pending funds (AustralianSuper, Cbus) may break assumptions.
+1. PHD format variance is partly characterised and partly unknown; unapproved AustralianSuper shapes and still-unseen Cbus files may break assumptions.
 2. Entity resolution will have a persistent ambiguity floor.
 3. Semi-annual schema drift can silently corrupt data if not gated hard.
 4. Redistribution and terms-of-use review may constrain downstream product behaviour even if the data is public.
@@ -1280,7 +1285,7 @@ Demo outcome:
 2. Assumption: manual file registration workflow is acceptable before building crawlers. Recommendation: yes, for MVP.
 3. Assumption: exposure totals shown separately by disclosure completeness rather than rolled into one "total exposure" number. Recommendation: yes, non-negotiable.
 4. Assumption: entity pages prefer showing reviewed entities only, with unresolved rows clearly separated. Recommendation: yes.
-5. Assumption: AustralianSuper and Cbus stay out of architecture-critical assumptions until real samples are reviewed. Recommendation: yes. **Files labelled `Aus-Super*.csv` in the Stage 0 workspace are ART lineage files using the shared Sunsuper schema, not AustralianSuper. A real AustralianSuper PHD file is still required for registry confirmation.**
+5. Assumption: AustralianSuper and Cbus stay out of architecture-critical assumptions until real samples are reviewed. Recommendation: partly superseded. **AustralianSuper real files are now confirmed locally, they invalidate the old `AR** => ART` shortcut, and they now support a thin fund-specific adapter plus an approved `Member Direct` production slice. Broader AustralianSuper option shapes still stay out of production-ingest assumptions until their mappings are approved. Cbus still requires a real sample file.**
 6. Open question: should investment options be first-class navigation in the user-facing product at MVP, or mostly a filter within fund pages?
 7. Open question: should manager pages include named fund vehicles as a first-class section in v1, or only as related entities?
 8. Open question: what redistribution rights apply to republishing normalised holdings data and row-level extracts from super-fund sites?
@@ -1292,7 +1297,7 @@ Demo outcome:
 ## 5 highest-risk assumptions, ranked
 
 1. Entity resolution quality will be high enough to support trusted company and manager pages without overwhelming manual review.
-2. Pending funds such as AustralianSuper and Cbus will fit the adapter-plus-mapping model without requiring a materially different ingestion architecture. Increased uncertainty because no real sample file has been observed.
+2. Pending funds such as AustralianSuper and Cbus will fit the adapter-plus-mapping model without requiring a materially different ingestion architecture. AustralianSuper now has a working thin-wrapper implementation with one approved official slice; Cbus still carries higher uncertainty because no real sample file has been observed.
 3. Public redistribution of normalised holdings data and extracts will be legally and commercially acceptable.
 4. Users will accept explicit incompleteness labels instead of demanding a single blended exposure number.
 5. Semi-annual data cadence is frequent enough to produce weekly return behaviour when paired with change tracking and relationship discovery.

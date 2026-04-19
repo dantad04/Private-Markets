@@ -16,6 +16,7 @@ class SourceFileMetadata:
     checksum: str
     received_at: datetime
     reporting_period_end_date: date | None = None
+    fund_code: str | None = None
 
 
 @dataclass(frozen=True)

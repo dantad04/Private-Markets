@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 
 from adapters.art_qsuper import ArtQsuperPhdAdapter
 from adapters.art_sunsuper import ArtSunsuperPhdAdapter
+from adapters.australiansuper import AustralianSuperPhdAdapter
 from adapters.art_qsuper_errors import ArtQsuperAdapterError
 from adapters.aware import AwarePhdAdapter
 from adapters.aware_errors import AwareAdapterError
@@ -146,6 +147,7 @@ def register_source_file(
         checksum=existing.checksum,
         received_at=existing.received_at,
         reporting_period_end_date=reporting_period_end_date,
+        fund_code=fund.code,
     )
 
 
@@ -620,6 +622,93 @@ def ingest_art_sunsuper_local_file(
         approved_mapping_version_id = None
         try:
             approved_mapping_version_id = ensure_approved_mapping_seeded(session, adapter_key="ArtSunsuperPhdAdapter").id
+        except Exception:
+            approved_mapping_version_id = None
+        create_schema_review_queue_item(
+            session,
+            source_file=source_file,
+            approved_mapping_version_id=approved_mapping_version_id,
+            review_reason="adapter_parse_failure",
+            observed_schema_fingerprint=None,
+            drift_summary_json={
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+            },
+            raw_bytes=raw_bytes,
+        )
+        session.flush()
+        raise
+    return load_adapter_parse_result(session, metadata, parse_result)
+
+
+def ingest_australiansuper_local_file(
+    session: Session,
+    *,
+    fund_code: str,
+    fund_name: str,
+    file_path: str,
+    reporting_period_id: int | None,
+    publication_date: date | None = None,
+    received_at: datetime | None = None,
+) -> LoadSummary:
+    if reporting_period_id is None:
+        raise MissingReportingPeriodRegistrationError(
+            "AustralianSuper files require reporting_period_id because the row schema has no reporting date column"
+        )
+
+    file_path_obj = Path(file_path)
+    raw_bytes = file_path_obj.read_bytes()
+    checksum = hashlib.sha256(raw_bytes).hexdigest()
+    metadata = register_source_file(
+        session,
+        fund_code=fund_code,
+        fund_name=fund_name,
+        adapter_key="AustralianSuperPhdAdapter",
+        source_url=str(file_path_obj),
+        checksum=checksum,
+        received_at=received_at or datetime.now(UTC),
+        reporting_period_id=reporting_period_id,
+        publication_date=publication_date,
+    )
+    if metadata.reporting_period_end_date is None:
+        raise MissingReportingPeriodRegistrationError(
+            f"Registered reporting period {reporting_period_id!r} does not exist"
+        )
+
+    source_file = session.get(SourceFile, metadata.source_file_id)
+    try:
+        ensure_approved_mapping_seeded(session, adapter_key="AustralianSuperPhdAdapter")
+        parse_result = AustralianSuperPhdAdapter().parse(metadata, raw_bytes)
+        approved_mapping_version_id = enforce_approved_mapping(
+            session,
+            source_file=source_file,
+            parse_result=parse_result,
+            raw_bytes=raw_bytes,
+            source_section_raw=None,
+        )
+        review_events = list(parse_result.structural_metadata.get("review_queue_events", []))
+        for event in review_events:
+            create_schema_review_queue_item(
+                session,
+                source_file=source_file,
+                approved_mapping_version_id=approved_mapping_version_id,
+                review_reason=str(event.get("review_reason", "adapter_review")),
+                observed_schema_fingerprint=parse_result.schema_fingerprint,
+                drift_summary_json=dict(event.get("details", {})),
+                raw_bytes=raw_bytes,
+            )
+        if review_events:
+            session.flush()
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError):
+        session.flush()
+        raise
+    except SunsuperSchemaAdapterError as exc:
+        source_file.ingest_status = "review_required"
+        approved_mapping_version_id = None
+        try:
+            approved_mapping_version_id = ensure_approved_mapping_seeded(
+                session, adapter_key="AustralianSuperPhdAdapter"
+            ).id
         except Exception:
             approved_mapping_version_id = None
         create_schema_review_queue_item(

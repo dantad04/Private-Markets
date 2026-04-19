@@ -281,6 +281,18 @@
   "structural_metadata": {
     "ambiguous_duplicate_groups": [],
     "encoding_replacement_count": 0,
+    "fund_identity_assessment": {
+      "confidence": "high",
+      "declared_fund_code": "art",
+      "probable_fund_code": "art",
+      "reasons": [
+        "header matches the internal shared-schema contract used by the ART narrow slice",
+        "source path contains explicit ART/Sunsuper branding",
+        "option names include ART-branded products: 'art stable'"
+      ],
+      "schema_variant": "normalised_shared_contract",
+      "source_domain": null
+    },
     "known_option_family_owner": "Australian Retirement Trust / Sunsuper lineage",
     "merged_duplicate_groups": 1,
     "observed_asset_classes": [
@@ -360,6 +372,18 @@
       "value_only": 1
     },
     "encoding_replacement_count": 0,
+    "fund_identity_assessment": {
+      "confidence": "high",
+      "declared_fund_code": "art",
+      "probable_fund_code": "art",
+      "reasons": [
+        "header matches the internal shared-schema contract used by the ART narrow slice",
+        "source path contains explicit ART/Sunsuper branding",
+        "option names include ART-branded products: 'art stable'"
+      ],
+      "schema_variant": "normalised_shared_contract",
+      "source_domain": null
+    },
     "known_option_family_owner": "Australian Retirement Trust / Sunsuper lineage",
     "merged_duplicate_groups": 1,
     "observed_asset_classes": [

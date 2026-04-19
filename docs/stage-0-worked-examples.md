@@ -4,7 +4,7 @@ This document pressure-tests the Stage 0 schema and pipeline against concrete ro
 
 ## Important limitation
 
-The workspace does not contain the literal source CSV files. The examples below therefore use only facts explicitly verified in the audit and mark any unavailable source values as `pending exact sample` rather than guessing them.
+The workspace now contains a small number of literal source CSV files, including AustralianSuper real files added during the Stage 2 compatibility audit and thin-adapter implementation. The examples below still use only facts explicitly verified in the real files and mark any unavailable source values as `pending exact sample` rather than guessing them.
 
 That is not a minor caveat. Before Stage 1 schema freeze, this document should be updated with literal row snapshots for:
 

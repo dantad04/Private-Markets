@@ -22,7 +22,11 @@ from adapters.sunsuper_schema_mapping import (
     METADATA_ATTACHING_FILTERS,
     PORTFOLIO_POSTURE_FILTERS,
     lookup_asset_class_mapping,
-    lookup_option_family_owner,
+)
+from adapters.sunsuper_schema_identity import (
+    assess_shared_schema_fund_identity,
+    describe_probable_fund_owner,
+    validate_declared_fund_identity,
 )
 from adapters.sunsuper_schema_normalisation import (
     clean_cell,
@@ -196,76 +200,20 @@ class SunsuperSchemaPhdAdapter:
 
         if len(observed_option_codes) != 1:
             raise MultipleOptionsError(sorted(observed_option_codes))
-
-        option_code = next(iter(observed_option_codes))
-        option_family_owner = lookup_option_family_owner(option_code)
-        if option_family_owner is None:
-            warnings.append(f"Unknown option-code family for {option_code!r}")
-
-        merged_records, ambiguous_review_events = self._merge_duplicate_views(
+        return self._finalise_parse_result(
             source_file_metadata=source_file_metadata,
+            header=header,
             parsed_rows=parsed_rows,
-        )
-        if ambiguous_review_events:
-            warnings.append(
-                f"Ambiguous duplicate groups emitted separately: {len(ambiguous_review_events)}"
-            )
-
-        asset_class_counts = Counter(record.canonical_asset_class_code for record in merged_records)
-        completeness_counts = Counter(record.disclosure_completeness for record in merged_records)
-
-        structural_metadata = {
-            "observed_headers": header,
-            "observed_asset_classes": sorted(observed_asset_classes),
-            "observed_option_codes": sorted(observed_option_codes),
-            "observed_option_names": sorted(observed_option_names),
-            "observed_options": sorted(observed_option_codes),
-            "observed_reporting_dates": [source_file_metadata.reporting_period_end_date.isoformat()],
-            "observed_filters": sorted(observed_filters),
-            "observed_name_types": sorted(observed_name_types),
-            "known_option_family_owner": option_family_owner,
-            "total_rows_read": len(rows),
-            "total_rows_emitted": len(merged_records),
-            "total_rows_aggregate": 0,
-            "encoding_replacement_count": replacement_count,
-            "skipped_portfolio_posture_rows": skipped_portfolio_posture_rows,
-            "merged_duplicate_groups": sum(
-                1 for record in merged_records if record.metadata_attached_from_row_numbers
-            ),
-            "ambiguous_duplicate_groups": ambiguous_review_events,
-            "review_queue_events": [
-                {
-                    "review_reason": "ambiguous_duplicate_group",
-                    "details": event,
-                }
-                for event in ambiguous_review_events
-            ],
-        }
-        parse_statistics = {
-            **structural_metadata,
-            "canonical_asset_class_counts": dict(sorted(asset_class_counts.items())),
-            "disclosure_completeness_counts": dict(sorted(completeness_counts.items())),
-        }
-
-        schema_fingerprint = hashlib.sha256(
-            json.dumps(
-                {
-                    "header": header,
-                    "asset_classes": sorted(observed_asset_classes),
-                    "filters": sorted(observed_filters),
-                    "name_types": sorted(observed_name_types),
-                },
-                ensure_ascii=False,
-                separators=(",", ":"),
-            ).encode("utf-8")
-        ).hexdigest()
-
-        return AdapterParseResult(
-            holdings=merged_records,
-            structural_metadata=structural_metadata,
-            adapter_warnings=warnings,
-            parse_statistics=parse_statistics,
-            schema_fingerprint=schema_fingerprint,
+            aggregate_records=[],
+            observed_option_codes=observed_option_codes,
+            observed_option_names=observed_option_names,
+            observed_filters=observed_filters,
+            observed_name_types=observed_name_types,
+            observed_asset_classes=observed_asset_classes,
+            replacement_count=replacement_count,
+            skipped_portfolio_posture_rows=skipped_portfolio_posture_rows,
+            total_rows_read=len(rows),
+            warnings=warnings,
         )
 
     def _merge_duplicate_views(
@@ -349,7 +297,10 @@ class SunsuperSchemaPhdAdapter:
 
     @staticmethod
     def _is_precise_management_row(row: ParsedSourceRow) -> bool:
-        return row.value_aud is not None and row.filter_raw.casefold() in MANAGEMENT_STYLE_FILTERS
+        return (
+            row.filter_raw.casefold() in MANAGEMENT_STYLE_FILTERS
+            and (row.value_aud is not None or row.ownership_pct is not None)
+        )
 
     def _build_merged_record(
         self,
@@ -485,3 +436,133 @@ class SunsuperSchemaPhdAdapter:
         digest = hashlib.sha256()
         digest.update(json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
         return digest.hexdigest()
+
+    def _finalise_parse_result(
+        self,
+        *,
+        source_file_metadata: SourceFileMetadata,
+        header: list[str],
+        parsed_rows: list[ParsedSourceRow],
+        aggregate_records: list[SourceNormalisedHoldingRecord],
+        observed_option_codes: set[str],
+        observed_option_names: set[str],
+        observed_filters: set[str],
+        observed_name_types: set[str],
+        observed_asset_classes: set[str],
+        replacement_count: int,
+        skipped_portfolio_posture_rows: int,
+        total_rows_read: int,
+        warnings: list[str],
+    ) -> AdapterParseResult:
+        merged_records, ambiguous_review_events = self._merge_duplicate_views(
+            source_file_metadata=source_file_metadata,
+            parsed_rows=parsed_rows,
+        )
+        if ambiguous_review_events:
+            warnings.append(f"Ambiguous duplicate groups emitted separately: {len(ambiguous_review_events)}")
+
+        identity_assessment = assess_shared_schema_fund_identity(
+            source_url=source_file_metadata.source_url,
+            option_names=observed_option_names,
+            header=header,
+        )
+        identity_review_events: list[dict[str, object]] = []
+        declared_fund_code = self._declared_fund_code(source_file_metadata)
+        if declared_fund_code is not None:
+            for message in validate_declared_fund_identity(
+                declared_fund_code=declared_fund_code,
+                assessment=identity_assessment,
+            ):
+                warnings.append(message)
+                identity_review_events.append(
+                    {
+                        "review_reason": "fund_identity_verification",
+                        "details": {
+                            "message": message,
+                            "declared_fund_code": declared_fund_code,
+                            "probable_fund_code": identity_assessment.probable_fund_code,
+                            "confidence": identity_assessment.confidence,
+                            "schema_variant": identity_assessment.schema_variant,
+                            "reasons": list(identity_assessment.reasons),
+                        },
+                    }
+                )
+
+        emitted_records = sorted(
+            [*merged_records, *aggregate_records],
+            key=lambda record: record.source_row_number,
+        )
+        review_queue_events = [
+            {
+                "review_reason": "ambiguous_duplicate_group",
+                "details": event,
+            }
+            for event in ambiguous_review_events
+        ] + identity_review_events
+
+        asset_class_counts = Counter(record.canonical_asset_class_code for record in emitted_records)
+        completeness_counts = Counter(record.disclosure_completeness for record in emitted_records)
+
+        structural_metadata = {
+            "observed_headers": header,
+            "observed_asset_classes": sorted(observed_asset_classes),
+            "observed_option_codes": sorted(observed_option_codes),
+            "observed_option_names": sorted(observed_option_names),
+            "observed_options": sorted(observed_option_codes),
+            "observed_reporting_dates": [source_file_metadata.reporting_period_end_date.isoformat()],
+            "observed_filters": sorted(observed_filters),
+            "observed_name_types": sorted(observed_name_types),
+            "known_option_family_owner": describe_probable_fund_owner(identity_assessment.probable_fund_code),
+            "fund_identity_assessment": {
+                "declared_fund_code": declared_fund_code,
+                "probable_fund_code": identity_assessment.probable_fund_code,
+                "confidence": identity_assessment.confidence,
+                "schema_variant": identity_assessment.schema_variant,
+                "source_domain": identity_assessment.source_domain,
+                "reasons": list(identity_assessment.reasons),
+            },
+            "total_rows_read": total_rows_read,
+            "total_rows_emitted": len(emitted_records),
+            "total_rows_aggregate": sum(1 for record in emitted_records if record.is_aggregate),
+            "encoding_replacement_count": replacement_count,
+            "skipped_portfolio_posture_rows": skipped_portfolio_posture_rows,
+            "merged_duplicate_groups": sum(
+                1 for record in emitted_records if record.metadata_attached_from_row_numbers
+            ),
+            "ambiguous_duplicate_groups": ambiguous_review_events,
+            "review_queue_events": review_queue_events,
+        }
+        parse_statistics = {
+            **structural_metadata,
+            "canonical_asset_class_counts": dict(sorted(asset_class_counts.items())),
+            "disclosure_completeness_counts": dict(sorted(completeness_counts.items())),
+        }
+
+        schema_fingerprint = hashlib.sha256(
+            json.dumps(
+                {
+                    "header": header,
+                    "asset_classes": sorted(observed_asset_classes),
+                    "filters": sorted(observed_filters),
+                    "name_types": sorted(observed_name_types),
+                },
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+
+        return AdapterParseResult(
+            holdings=emitted_records,
+            structural_metadata=structural_metadata,
+            adapter_warnings=warnings,
+            parse_statistics=parse_statistics,
+            schema_fingerprint=schema_fingerprint,
+        )
+
+    @staticmethod
+    def _declared_fund_code(source_file_metadata: SourceFileMetadata) -> str | None:
+        if source_file_metadata.fund_code:
+            return source_file_metadata.fund_code
+        if isinstance(source_file_metadata.fund_id, str):
+            return source_file_metadata.fund_id
+        return None

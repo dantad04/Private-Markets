@@ -32,7 +32,8 @@ single fixture CSV. Breadth comes later.
 
 2. ART-Sunsuper-specific parsing:
    - 24-column source schema
-   - option codes of the `AR**` form
+   - observed option codes of the `AR**` form in this ART narrow slice
+   - `AR**` is **not** a valid cross-fund identity rule; confirmed AustralianSuper files also use `AR**` codes
    - dates derived from file registration (no row-level date column)
    - `nan`, `n/a`, and empty as null sentinels
    - ownership stored as bare decimal (`0.18` means 18%) — do not strip `%`,

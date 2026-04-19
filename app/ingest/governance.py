@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from adapters.base import AdapterParseResult
 from adapters.art_qsuper_mapping import EXPECTED_HEADER as ART_QSUPER_EXPECTED_HEADER
 from adapters.aware_mapping import EXPECTED_TABLE_1_HEADER
+from adapters.sunsuper_schema_identity import AUSTRALIANSUPER_REAL_HEADER
 from adapters.sunsuper_schema_mapping import EXPECTED_HEADER as SUNSUPER_SCHEMA_EXPECTED_HEADER
 from app.db.models import AdapterMappingVersion, SchemaReviewQueue, SourceFile, TaxonomyMapping
 
@@ -18,6 +19,7 @@ from app.db.models import AdapterMappingVersion, SchemaReviewQueue, SourceFile, 
 AWARE_MAPPING_VERSION_ID = "aware-stage2-v1"
 ART_QSUPER_MAPPING_VERSION_ID = "art-qsuper-stage2-v1"
 ART_SUNSUPER_MAPPING_VERSION_ID = "art-sunsuper-stage2-v1"
+AUSTRALIANSUPER_MAPPING_VERSION_ID = "australiansuper-stage2-v1"
 UNISUPER_MAPPING_VERSION_ID = "unisuper-stage2-v1"
 HOSTPLUS_MAPPING_VERSION_ID = "hostplus-stage2-v1"
 
@@ -418,6 +420,183 @@ ART_SUNSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
             False,
             "name_only",
             "Private-equity vehicle row",
+        ),
+    ),
+)
+
+
+AUSTRALIANSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint="c481c669d86f58bb9f7ed95eceb6a814872a91747b96b7aa17253cb7c324e2d6",
+    structural_expectations_json={
+        "observed_headers": AUSTRALIANSUPER_REAL_HEADER,
+        "observed_asset_classes": [
+            "Cash",
+            "Fixed Income",
+            "Listed Alternatives",
+            "Listed Equity",
+            "Listed Infrastructure",
+            "Listed Property",
+        ],
+        "observed_filters": [
+            "All Assets",
+            "Internally Managed",
+            "Listed",
+        ],
+        "observed_name_types": [
+            "Name",
+            "Name of Institution",
+            "Name of Issuer/Counterparty",
+            "Total",
+        ],
+    },
+    notes=(
+        "Approved Stage 2 AustralianSuper narrow slice using the real Member Direct file and a thin "
+        "fund-specific adapter. Broader AustralianSuper option shapes remain pending additional mapping approval."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 19, tzinfo=UTC),
+    taxonomy_rows=(
+        ApprovedTaxonomyMappingSeed(
+            "Listed Equity",
+            "Listed",
+            None,
+            None,
+            "listed_equity",
+            False,
+            None,
+            "Official AustralianSuper Member Direct listed-equity holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Property",
+            "Listed",
+            None,
+            None,
+            "listed_property",
+            False,
+            None,
+            "Official AustralianSuper Member Direct listed-property holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Alternatives",
+            "Listed",
+            None,
+            None,
+            "alternatives",
+            False,
+            None,
+            "Official AustralianSuper Member Direct listed-alternatives holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            "Listed",
+            None,
+            None,
+            "listed_infrastructure",
+            False,
+            None,
+            "Official AustralianSuper Member Direct listed-infrastructure holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "All Assets",
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "Official AustralianSuper Member Direct fixed-income issuer holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "Internally Managed",
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "Official AustralianSuper Member Direct internally managed fixed-income slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Cash",
+            "All Assets",
+            None,
+            None,
+            "cash",
+            False,
+            None,
+            "Official AustralianSuper Member Direct cash holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Alternatives",
+            "Listed",
+            None,
+            None,
+            "alternatives",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Member Direct listed-alternatives total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Cash",
+            "All Assets",
+            None,
+            None,
+            "cash",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Member Direct cash total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Equity",
+            "Listed",
+            None,
+            None,
+            "listed_equity",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Member Direct listed-equity total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "All Assets",
+            None,
+            None,
+            "fixed_income",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Member Direct fixed-income total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            "Listed",
+            None,
+            None,
+            "listed_infrastructure",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Member Direct listed-infrastructure total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Property",
+            "Listed",
+            None,
+            None,
+            "listed_property",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Member Direct listed-property total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "Internally Managed",
+            None,
+            None,
+            "fixed_income",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Member Direct internally managed fixed-income total",
         ),
     ),
 )
@@ -922,6 +1101,7 @@ APPROVED_MAPPING_SEEDS = {
     AWARE_APPROVED_MAPPING.adapter_key: AWARE_APPROVED_MAPPING,
     ART_QSUPER_APPROVED_MAPPING.adapter_key: ART_QSUPER_APPROVED_MAPPING,
     ART_SUNSUPER_APPROVED_MAPPING.adapter_key: ART_SUNSUPER_APPROVED_MAPPING,
+    AUSTRALIANSUPER_APPROVED_MAPPING.adapter_key: AUSTRALIANSUPER_APPROVED_MAPPING,
     UNISUPER_APPROVED_MAPPING.adapter_key: UNISUPER_APPROVED_MAPPING,
     HOSTPLUS_APPROVED_MAPPING.adapter_key: HOSTPLUS_APPROVED_MAPPING,
 }
