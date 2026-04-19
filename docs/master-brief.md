@@ -1,6 +1,8 @@
 # Master Brief (v2 - Stage 0 Complete)
 
-**Change log vs v1:** Five Stage 0 decisions locked in. Stage 1 sequencing switched from Aware to Hesta. Canonical schema adds `value_band_raw`. Portfolio-posture derivative tables dropped from Stage 1. Host-Plus encoding handled by `errors='replace'` with logging. Sunsuper-schema duplicate views merged via metadata attachment, not dual ingest. Adapter inventory expanded from 5 to 7 named adapters (Hesta and Host-Plus added; Sunsuper-schema generalised; Cbus deferred). Stage-roadmap re-ordered to reflect sequencing pivot.
+**Change log vs v1:** Five Stage 0 decisions locked in. Stage 1 sequencing switched from Aware to Hesta. Canonical schema adds `value_band_raw`. Portfolio-posture derivative tables dropped from Stage 1. Host-Plus encoding handled by `errors='replace'` with logging. Sunsuper-schema duplicate views merged via metadata attachment, not dual ingest. Adapter inventory expanded from 5 to 8 named adapters (Hesta, Host-Plus, and AustralianSuper added; AustralianSuper now has real-file confirmation, a completed compatibility audit, and a thin fund-specific adapter with narrow `Member Direct` production support; Cbus remains deferred). Stage-roadmap re-ordered to reflect sequencing pivot.
+
+**AustralianSuper correction:** Real AustralianSuper files are confirmed locally. The compatibility audit is complete. A thin fund-specific `AustralianSuperPhdAdapter` is implemented on the shared SunsuperSchema path. Approved production support is intentionally narrow (`Member Direct` only), while `Stable`, `Conservative Balanced`, and `Socially Aware` remain review-gated until their mappings are approved. `AR**` option codes are not a safe identity rule on their own. No generic shared-family adapter was introduced. Cbus remains deferred.
 
 ## 1. Product in one sentence
 
@@ -113,7 +115,7 @@ Contract with canonical layer:
 | `UniSuperPhdStateMachineAdapter` | Full state machine | `UniSuper.csv` | Stage 2 | 5 columns, 16 investment options in one 26,890-row file, column headers re-emit mid-file, US MM/DD/YYYY date trap (`12/31/2025`), nine variants of scope-modifier strings must normalise. |
 | `HostPlusPhdStateMachineAdapter` | Full state machine (UniSuper-class, reused) | `Host-PlusHigh_Growth.csv` | Stage 2 (late) or Stage 3 | Single option per file but structurally UniSuper-class: section-header-driven, column-header re-emission, `Total` keyword for aggregates. Encoding corruption observed upstream (`non?associated`, `Table 2 �`). Reuse UniSuper state-machine class with per-fund config rather than duplicate. |
 | `AustralianSuperPhdAdapter` | Thin fund-specific adapter on the shared SunsuperSchema path | `Stable PHD (1).csv`, `Conservative PHD (1).csv`, `Socially Aware PHD.csv`, `Member Direct PHD (1).csv` | Stage 2 narrow slice implemented | Real AustralianSuper files from the official site are now confirmed in the workspace, the compatibility audit is complete, and a thin fund-specific adapter is in place on the shared SunsuperSchema path. The approved loader/admin production slice is currently the official `Member Direct PHD (1).csv` family only; broader AustralianSuper shapes (`Stable`, `Conservative Balanced`, `Socially Aware`) can parse through the adapter but remain review-gated until their mappings are approved. Identity verification relies on source URL/domain/content signals rather than `AR**` option codes alone, and no generic shared-family adapter was introduced. |
-| `CbusPhdAdapter` | Unverified | *none in workspace* | Deferred | Cbus still has the earlier status AustralianSuper used to have: no real sample in the workspace yet. |
+| `CbusPhdAdapter` | Unverified | *none in workspace* | Deferred | Cbus remains the genuinely deferred case: no real sample is in the workspace yet. |
 
 ### Hesta as Stage 1 anchor: rationale and tradeoff
 
@@ -1182,7 +1184,7 @@ Demo outcome:
 
 ## 14. Key risks
 
-1. PHD format variance is partly characterised and partly unknown; unapproved AustralianSuper shapes and still-unseen Cbus files may break assumptions.
+1. PHD format variance is partly characterised and partly unknown; review-gated AustralianSuper shapes and still-unseen Cbus files may still expose additional schema variance.
 2. Entity resolution will have a persistent ambiguity floor.
 3. Semi-annual schema drift can silently corrupt data if not gated hard.
 4. Redistribution and terms-of-use review may constrain downstream product behaviour even if the data is public.
@@ -1291,19 +1293,18 @@ Demo outcome:
 2. Assumption: manual file registration workflow is acceptable before building crawlers. Recommendation: yes, for MVP.
 3. Assumption: exposure totals shown separately by disclosure completeness rather than rolled into one "total exposure" number. Recommendation: yes, non-negotiable.
 4. Assumption: entity pages prefer showing reviewed entities only, with unresolved rows clearly separated. Recommendation: yes.
-5. Assumption: AustralianSuper and Cbus stay out of architecture-critical assumptions until real samples are reviewed. Recommendation: partly superseded. **AustralianSuper real files are now confirmed locally, they invalidate the old `AR** => ART` shortcut, and they now support a thin fund-specific adapter plus an approved `Member Direct` production slice. Broader AustralianSuper option shapes still stay out of production-ingest assumptions until their mappings are approved. Cbus still requires a real sample file.**
-6. Open question: should investment options be first-class navigation in the user-facing product at MVP, or mostly a filter within fund pages?
-7. Open question: should manager pages include named fund vehicles as a first-class section in v1, or only as related entities?
-8. Open question: what redistribution rights apply to republishing normalised holdings data and row-level extracts from super-fund sites?
-9. Open question: what degree of manual research effort is acceptable for ASIC enrichment in Stage 5 if automated linkage is incomplete?
-10. Open question: should homepage "what changed this period" be fully algorithmic or lightly curated in the first polished release?
-11. Open question (Stage 4): precise UI treatment of cross-fund ownership disputes (the Industry Super Holdings case). The data-layer rule is settled - store raw disclosures per fund, never compute cross-fund totals silently. The visual treatment is a Stage 4 decision.
-12. Open question (Stage 3): handling the "per-option slice" interpretation of the Sunsuper-schema `% Ownership` column. Observed behaviour is that the same entity appears at dramatically different percentages across options of the same fund (Industry Super Holdings at 0.18% in ARST Stable vs 14.32% in ARBA Balanced), which suggests the column may express per-option allocation slice rather than fund-level cap-table ownership. Settle during Stage 3 entity-resolution design.
+5. Open question: should investment options be first-class navigation in the user-facing product at MVP, or mostly a filter within fund pages?
+6. Open question: should manager pages include named fund vehicles as a first-class section in v1, or only as related entities?
+7. Open question: what redistribution rights apply to republishing normalised holdings data and row-level extracts from super-fund sites?
+8. Open question: what degree of manual research effort is acceptable for ASIC enrichment in Stage 5 if automated linkage is incomplete?
+9. Open question: should homepage "what changed this period" be fully algorithmic or lightly curated in the first polished release?
+10. Open question (Stage 4): precise UI treatment of cross-fund ownership disputes (the Industry Super Holdings case). The data-layer rule is settled - store raw disclosures per fund, never compute cross-fund totals silently. The visual treatment is a Stage 4 decision.
+11. Open question (Stage 3): handling the "per-option slice" interpretation of the Sunsuper-schema `% Ownership` column. Observed behaviour is that the same entity appears at dramatically different percentages across options of the same fund (Industry Super Holdings at 0.18% in ARST Stable vs 14.32% in ARBA Balanced), which suggests the column may express per-option allocation slice rather than fund-level cap-table ownership. Settle during Stage 3 entity-resolution design.
 
 ## 5 highest-risk assumptions, ranked
 
 1. Entity resolution quality will be high enough to support trusted company and manager pages without overwhelming manual review.
-2. Pending funds such as AustralianSuper and Cbus will fit the adapter-plus-mapping model without requiring a materially different ingestion architecture. AustralianSuper now has a working thin-wrapper implementation with one approved official slice; Cbus still carries higher uncertainty because no real sample file has been observed.
+2. Review-gated expansions such as broader AustralianSuper shapes, plus still-unseen funds such as Cbus, will fit the adapter-plus-mapping model without requiring a materially different ingestion architecture. AustralianSuper already has a working thin-wrapper implementation with one approved official slice; Cbus still carries higher uncertainty because no real sample file has been observed.
 3. Public redistribution of normalised holdings data and extracts will be legally and commercially acceptable.
 4. Users will accept explicit incompleteness labels instead of demanding a single blended exposure number.
 5. Semi-annual data cadence is frequent enough to produce weekly return behaviour when paired with change tracking and relationship discovery.
