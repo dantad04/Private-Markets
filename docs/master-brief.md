@@ -232,7 +232,7 @@ Current position:
 5. The approved loader/admin production claim is narrow: official `Member Direct PHD (1).csv` only.
 6. `Stable`, `Conservative Balanced`, and `Socially Aware` can parse through the adapter, but they remain review-gated until their mappings are approved.
 7. No generic shared-family adapter was introduced.
-8. Cbus remains deferred pending a real sample file.
+8. Cbus remains the deferred onboarding case pending real Cbus sample files.
 
 Next staged work:
 
@@ -1046,7 +1046,7 @@ Deliverables:
 6. Approved taxonomy mapping tables.
 7. Schema-drift detection.
 8. Review workflow for mapping approval.
-9. AustralianSuper slice-by-slice mapping approval beyond `Member Direct`, and Cbus onboarding once real sample files are acquired.
+9. AustralianSuper broader-shape mapping approvals, plus Cbus onboarding once real Cbus sample files are acquired.
 
 In scope:
 
@@ -1066,7 +1066,7 @@ Risks:
 1. UniSuper complexity exposing schema gaps not caught by Hesta.
 2. Sunsuper-schema duplicate-view merging edge cases.
 3. Host-Plus encoding corruption fluctuation between periods.
-4. AustralianSuper already proves the shared 24-column family is not byte-compatible across funds; Cbus may introduce a further schema change when real files arrive.
+4. Broader AustralianSuper shapes and future Cbus files may still expose schema gaps or require a schema change.
 
 Demo outcome:
 
