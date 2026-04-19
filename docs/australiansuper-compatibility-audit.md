@@ -33,13 +33,19 @@ It does appear compatible with the same **underlying duplicate-view merge logic*
 once a thin fund-specific wrapper normalises the raw CSV into the internal shared
 contract.
 
-Recommended end-state for the next bounded step:
+Implementation outcome:
 
-1. A thin `AustralianSuperPhdAdapter` or closely related sibling adapter.
-2. Reuse the proven duplicate-view merge logic only after header/field
-   normalisation.
-3. Add identity verification based on source/domain/content signals, not
+1. A thin fund-specific `AustralianSuperPhdAdapter` has now been implemented on
+   the shared SunsuperSchema path.
+2. The implementation reuses the proven duplicate-view merge logic only after
+   AustralianSuper-specific header and field normalisation.
+3. Identity verification now depends on source/domain/content signals, not
    `AR**` prefixes.
+4. The approved production-ingest claim is narrow: `Member Direct PHD (1).csv`
+   only.
+5. `Stable`, `Conservative Balanced`, and `Socially Aware` can parse through
+   the adapter, but remain review-gated until their mappings are approved.
+6. No generic shared-family adapter was introduced.
 
 ## Real-file differences from the current ART-Sunsuper contract
 

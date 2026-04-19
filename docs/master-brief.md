@@ -112,7 +112,7 @@ Contract with canonical layer:
 | `SunsuperSchemaPhdAdapter` | Flat row with structured `Name Type` column | `Aus-Super.csv`, `AusSuperPHD.csv`, `Balanced_PHD__3_.csv` | Stage 2 | Internal normalised 24-column contract currently exercised by the ART-Sunsuper narrow slice. Dates are derived from file registration (no row-level date column). Publishes same holdings in multiple filter views: metadata-attachment merging required. Carries geo-coordinates and `Classification` for property/infrastructure rows. ART-Sunsuper ownership in this slice is stored as a bare decimal already in canonical fraction form (`0.18` means 18%). Do not treat this internal contract as byte-compatible with real AustralianSuper CSVs. |
 | `UniSuperPhdStateMachineAdapter` | Full state machine | `UniSuper.csv` | Stage 2 | 5 columns, 16 investment options in one 26,890-row file, column headers re-emit mid-file, US MM/DD/YYYY date trap (`12/31/2025`), nine variants of scope-modifier strings must normalise. |
 | `HostPlusPhdStateMachineAdapter` | Full state machine (UniSuper-class, reused) | `Host-PlusHigh_Growth.csv` | Stage 2 (late) or Stage 3 | Single option per file but structurally UniSuper-class: section-header-driven, column-header re-emission, `Total` keyword for aggregates. Encoding corruption observed upstream (`non?associated`, `Table 2 �`). Reuse UniSuper state-machine class with per-fund config rather than duplicate. |
-| `AustralianSuperPhdAdapter` | Thin fund-specific wrapper over the shared duplicate-view merge logic | `Stable PHD (1).csv`, `Conservative PHD (1).csv`, `Socially Aware PHD.csv`, `Member Direct PHD (1).csv` | Stage 2 narrow slice implemented | Real AustralianSuper files from the official site are now confirmed in the workspace, and a thin fund-specific adapter is in place. The approved loader/admin production slice is currently the official `Member Direct PHD (1).csv` family; broader AustralianSuper shapes (`Stable`, `Conservative Balanced`, `Socially Aware`) still require their own mapping approval before they can be promoted beyond parser-level coverage. Identity verification relies on source URL/domain/content signals rather than `AR**` option codes alone. |
+| `AustralianSuperPhdAdapter` | Thin fund-specific adapter on the shared SunsuperSchema path | `Stable PHD (1).csv`, `Conservative PHD (1).csv`, `Socially Aware PHD.csv`, `Member Direct PHD (1).csv` | Stage 2 narrow slice implemented | Real AustralianSuper files from the official site are now confirmed in the workspace, the compatibility audit is complete, and a thin fund-specific adapter is in place on the shared SunsuperSchema path. The approved loader/admin production slice is currently the official `Member Direct PHD (1).csv` family only; broader AustralianSuper shapes (`Stable`, `Conservative Balanced`, `Socially Aware`) can parse through the adapter but remain review-gated until their mappings are approved. Identity verification relies on source URL/domain/content signals rather than `AR**` option codes alone, and no generic shared-family adapter was introduced. |
 | `CbusPhdAdapter` | Unverified | *none in workspace* | Deferred | Cbus still has the earlier status AustralianSuper used to have: no real sample in the workspace yet. |
 
 ### Hesta as Stage 1 anchor: rationale and tradeoff
@@ -221,20 +221,26 @@ Rules:
 
 ### Onboarding AustralianSuper and Cbus
 
-Process:
+Current position:
 
-1. AustralianSuper real files are now confirmed locally; the earlier `Aus-Super = ART` assumption is retired.
-2. Run a bounded compatibility audit against 2 to 3 real AustralianSuper CSVs before any production onboarding.
-3. Implement a thin AustralianSuper wrapper over the shared duplicate-view merge logic, not a generic cross-fund importer.
-4. Add fund-identity verification that relies on source/domain/content signals rather than `AR**` option codes.
-5. Register one official-file slice for one reporting period and build a raw-profile summary.
-6. Generate LLM-assisted draft mapping.
-7. Human approves or edits mapping.
-8. Run dry-load into staging.
-9. Review canonical preview and disclosure completeness distribution.
-10. Promote the narrow slice to active loader/admin ingest, then stage additional AustralianSuper shapes separately.
+1. AustralianSuper real files are confirmed locally; the earlier `Aus-Super = ART` assumption is retired.
+2. The compatibility audit is complete.
+3. A thin fund-specific `AustralianSuperPhdAdapter` is implemented on the shared SunsuperSchema path.
+4. Identity verification relies on registered fund, source URL / domain, and content signals rather than `AR**` option codes.
+5. The approved loader/admin production claim is narrow: official `Member Direct PHD (1).csv` only.
+6. `Stable`, `Conservative Balanced`, and `Socially Aware` can parse through the adapter, but they remain review-gated until their mappings are approved.
+7. No generic shared-family adapter was introduced.
+8. Cbus remains deferred pending a real sample file.
 
-Discipline: AustralianSuper now has a real thin-wrapper implementation, but only the approved `Member Direct` slice is in loader/admin production. Other AustralianSuper option shapes remain gated by mapping approval. Cbus remains deferred pending a real sample file.
+Next staged work:
+
+1. Register additional official AustralianSuper slices one option family at a time.
+2. Build and review raw-profile summaries for each new slice.
+3. Generate LLM-assisted draft mappings.
+4. Human approves or edits mappings.
+5. Run dry-load into staging.
+6. Review canonical preview and disclosure completeness distribution.
+7. Promote each additional slice to active loader/admin ingest only after approval.
 
 ### LLM-assisted mapping workflow, concretely
 
@@ -1031,14 +1037,14 @@ Demo outcome:
 Deliverables:
 
 1. Aware adapter (with Table 1 / 2-4 separation; Tables 2-4 skipped per portfolio-posture rule).
-2. Sunsuper-schema adapter (including metadata-attachment merging for duplicate views across ART and AustralianSuper files as observed).
+2. Sunsuper-schema path for ART-Sunsuper, plus a thin AustralianSuper adapter that reuses only the proven shared duplicate-view merge logic.
 3. ART-QSuper adapter.
 4. UniSuper state-machine adapter.
 5. Host-Plus state-machine adapter (reusing UniSuper base class).
 6. Approved taxonomy mapping tables.
 7. Schema-drift detection.
 8. Review workflow for mapping approval.
-9. AustralianSuper thin-wrapper onboarding for approved official slices, and Cbus onboarding once real sample files are acquired.
+9. AustralianSuper slice-by-slice mapping approval beyond `Member Direct`, and Cbus onboarding once real sample files are acquired.
 
 In scope:
 
