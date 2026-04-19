@@ -9,6 +9,7 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from adapters.aware import AwarePhdAdapter
 from adapters.base import AdapterParseResult, SourceFileMetadata
 from adapters.hesta import HestaPhdAdapter
 from app.db.models import (
@@ -313,6 +314,38 @@ def ingest_hesta_local_file(
         publication_date=publication_date,
     )
     parse_result = HestaPhdAdapter().parse(metadata, raw_bytes)
+    return load_adapter_parse_result(session, metadata, parse_result)
+
+
+def ingest_aware_local_file(
+    session: Session,
+    *,
+    fund_code: str,
+    fund_name: str,
+    file_path: str,
+    publication_date: date | None = None,
+    reporting_period_id: int | None = None,
+    received_at: datetime | None = None,
+    terms_snapshot_url: str | None = None,
+    downloaded_at: datetime | None = None,
+) -> LoadSummary:
+    file_path_obj = Path(file_path)
+    raw_bytes = file_path_obj.read_bytes()
+    checksum = hashlib.sha256(raw_bytes).hexdigest()
+    metadata = register_source_file(
+        session,
+        fund_code=fund_code,
+        fund_name=fund_name,
+        adapter_key="AwarePhdAdapter",
+        source_url=str(file_path_obj),
+        checksum=checksum,
+        received_at=received_at or datetime.utcnow(),
+        reporting_period_id=reporting_period_id,
+        publication_date=publication_date,
+        terms_snapshot_url=terms_snapshot_url,
+        downloaded_at=downloaded_at,
+    )
+    parse_result = AwarePhdAdapter().parse(metadata, raw_bytes)
     return load_adapter_parse_result(session, metadata, parse_result)
 
 
