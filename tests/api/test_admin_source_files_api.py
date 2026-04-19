@@ -69,3 +69,8 @@ class TestAdminSourceFilesApi(unittest.TestCase):
         self.assertEqual("hesta", detail_payload["source_file"]["fund_code"])
         self.assertIn("ownership_only", detail_payload["disclosure_counts"])
         self.assertEqual("JPMorgan Chase & Co", detail_payload["holdings"][0]["raw_name"])
+        self.assertEqual(
+            detail_payload["holdings"][0]["source_row_number"],
+            detail_payload["holdings"][0]["raw_payload_json"][0]["source_row_number"],
+        )
+        self.assertIsInstance(detail_payload["holdings"][0]["raw_payload_json"][0]["payload"], list)

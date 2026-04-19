@@ -1,0 +1,12 @@
+AsAtDate,OptionName,AssetClass,InternalExternal,InvestmentName,SecurityIdentifier,Currency,UnitsHeld,MarketValueAud,WeightingPct,OwnershipPct,Address,Classification,Location,ValueBand,Notes
+31 December 2025,ART Balanced,Cash,n/a,AUSTRALIAN CASH ACCOUNT,n/a,AUD,n/a,"$12,345,678",0.5%,n/a,n/a,n/a,Australia,n/a,n/a
+31 December 2025,ART Balanced,Fixed Income,Externally Managed,ART CORE BOND FUND,n/a,n/a,n/a,"$25,000,000",1.2%,n/a,n/a,n/a,Global,n/a,n/a
+31 December 2025,ART Balanced,Listed Infrastructure,n/a,ATLAS ARTERIA GROUP,AU000000ALX3,AUD,"1,000,000","$4,250,000",0.2%,n/a,n/a,n/a,Australia,n/a,n/a
+31 December 2025,ART Balanced,Unlisted Equity,Internally Managed,Industry Super Holdings Pty Ltd,n/a,n/a,n/a,n/a,n/a,14.32%,n/a,n/a,Australia,n/a,n/a
+31 December 2025,ART Balanced,Unlisted Property,Internally Managed,Queen Street Logistics Trust,n/a,n/a,n/a,n/a,n/a,50.00%,"""Queen Street Estate"", 1 Wharf Road, Brisbane QLD 4000",Industrial,Australia,n/a,n/a
+31 December 2025,ART Balanced,Unlisted Equity,Externally Managed,Blackbird Ventures Growth I,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,Australia,"$100m-$500m",n/a
+31 December 2025,ART Balanced,Cash Total,n/a,n/a,n/a,n/a,n/a,"$12,345,678",0.5%,n/a,n/a,n/a,Australia,n/a,n/a
+31 December 2025,ART Balanced,Total Investment Items,n/a,n/a,n/a,n/a,n/a,"$41,595,678",2.4%,n/a,n/a,n/a,Global,n/a,n/a
+31 December 2025,ART Balanced,Derivatives By Kind,n/a,Equity Futures,n/a,n/a,n/a,"$1,000,000",0.1%,n/a,n/a,n/a,n/a,n/a,n/a
+31 December 2025,ART Balanced,Derivatives By AssetClass,n/a,Listed Equity,n/a,n/a,n/a,"$1,000,000",0.1%,n/a,n/a,n/a,n/a,n/a,n/a
+31 December 2025,ART Balanced,Derivatives By Currency,n/a,USD,n/a,USD,n/a,"$1,000,000",0.1%,n/a,n/a,n/a,United States,n/a,n/a

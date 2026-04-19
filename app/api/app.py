@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import io
+import json
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -22,6 +23,17 @@ def _format_datetime_utc(value):
 
 def _csv_row(value):
     row = value or []
+    if isinstance(row, list) and row and isinstance(row[0], dict):
+        rendered_rows = []
+        for entry in row:
+            source_row_number = entry.get("source_row_number", "?")
+            payload = entry.get("payload", [])
+            rendered_rows.append(f"row {source_row_number}: {_csv_row(payload)}")
+        return "\n".join(rendered_rows)
+    if isinstance(row, list) and row and isinstance(row[0], list):
+        return "\n".join(_csv_row(item) for item in row)
+    if not isinstance(row, list):
+        return json.dumps(row, ensure_ascii=False, indent=2)
     buffer = io.StringIO(newline="")
     writer = csv.writer(buffer, lineterminator="")
     writer.writerow(row)

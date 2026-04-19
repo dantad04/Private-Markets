@@ -7,9 +7,18 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from adapters.art_qsuper_errors import ArtQsuperAdapterError
 from adapters.aware_errors import AwareAdapterError
+from adapters.sunsuper_schema_errors import SunsuperSchemaAdapterError
 from app.db.session import get_session
-from app.ingest.loader import LoadSummary, LoaderError, ingest_aware_local_file, ingest_hesta_local_file
+from app.ingest.loader import (
+    LoadSummary,
+    LoaderError,
+    ingest_art_qsuper_local_file,
+    ingest_art_sunsuper_local_file,
+    ingest_aware_local_file,
+    ingest_hesta_local_file,
+)
 from app.ingest.governance import SchemaDriftDetectedError, UnapprovedTaxonomyMappingError
 from app.read_models import (
     SourceFileDetailReadModel,
@@ -55,6 +64,22 @@ class AdminAwareIngestRequest(BaseModel):
     reporting_period_id: int | None = None
     terms_snapshot_url: str | None = None
     downloaded_at: datetime | None = None
+
+
+class AdminArtQsuperIngestRequest(BaseModel):
+    file_path: str = Field(..., description="Absolute or workspace-local path to the source CSV")
+    fund_code: str = Field(..., description="Stable fund code, e.g. 'art'")
+    fund_name: str = Field(..., description="Human-readable fund name")
+    publication_date: date | None = None
+    reporting_period_id: int | None = None
+
+
+class AdminArtSunsuperIngestRequest(BaseModel):
+    file_path: str = Field(..., description="Absolute or workspace-local path to the source CSV")
+    fund_code: str = Field(..., description="Stable fund code, e.g. 'art'")
+    fund_name: str = Field(..., description="Human-readable fund name")
+    publication_date: date | None = None
+    reporting_period_id: int | None = None
 
 
 def _decimal_string(value: Decimal | None) -> str | None:
@@ -168,7 +193,8 @@ class SourceFileHoldingRowResponse(BaseModel):
     security_identifier_type: str | None
     security_identifier_value: str | None
     value_band_raw: str | None
-    raw_payload_json: list[str]
+    raw_payload_json: object
+    metadata_attached_from_row_numbers: list[int]
     ingested_at: datetime
 
     @classmethod
@@ -188,6 +214,7 @@ class SourceFileHoldingRowResponse(BaseModel):
             security_identifier_value=item.security_identifier_value,
             value_band_raw=item.value_band_raw,
             raw_payload_json=item.raw_payload_json,
+            metadata_attached_from_row_numbers=item.metadata_attached_from_row_numbers,
             ingested_at=item.ingested_at,
         )
 
@@ -279,6 +306,52 @@ def ingest_aware_local_file_endpoint(
         session.commit()
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     except (AwareAdapterError, LoaderError, OSError, ValueError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return AdminIngestResponse.from_summary(summary)
+
+
+@router.post("/ingest/local-file/art-qsuper", response_model=AdminIngestResponse)
+def ingest_art_qsuper_local_file_endpoint(
+    payload: AdminArtQsuperIngestRequest,
+    session: Session = Depends(get_db_session),
+) -> AdminIngestResponse:
+    try:
+        summary = ingest_art_qsuper_local_file(
+            session,
+            fund_code=payload.fund_code,
+            fund_name=payload.fund_name,
+            file_path=payload.file_path,
+            publication_date=payload.publication_date,
+            reporting_period_id=payload.reporting_period_id,
+        )
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    except (ArtQsuperAdapterError, LoaderError, OSError, ValueError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return AdminIngestResponse.from_summary(summary)
+
+
+@router.post("/ingest/local-file/art-sunsuper", response_model=AdminIngestResponse)
+def ingest_art_sunsuper_local_file_endpoint(
+    payload: AdminArtSunsuperIngestRequest,
+    session: Session = Depends(get_db_session),
+) -> AdminIngestResponse:
+    try:
+        summary = ingest_art_sunsuper_local_file(
+            session,
+            fund_code=payload.fund_code,
+            fund_name=payload.fund_name,
+            file_path=payload.file_path,
+            publication_date=payload.publication_date,
+            reporting_period_id=payload.reporting_period_id,
+        )
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    except (SunsuperSchemaAdapterError, LoaderError, OSError, ValueError) as exc:
         session.commit()
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     return AdminIngestResponse.from_summary(summary)

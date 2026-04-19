@@ -15,6 +15,7 @@ class SourceFileMetadata:
     source_url: str
     checksum: str
     received_at: datetime
+    reporting_period_end_date: date | None = None
 
 
 @dataclass(frozen=True)
@@ -45,7 +46,7 @@ class SourceNormalisedHoldingRecord:
     disclosure_completeness: str
     source_row_number: int
     source_row_hash: str
-    raw_payload_json: list[str]
+    raw_payload_json: list[str] | list[dict[str, Any]]
     parse_warning_flags: list[str] = field(default_factory=list)
     metadata_attached_from_row_numbers: list[int] = field(default_factory=list)
 
@@ -66,4 +67,3 @@ class BasePhdAdapter(Protocol):
         raw_bytes: bytes,
         approved_mapping_config: dict[str, Any] | None = None,
     ) -> AdapterParseResult: ...
-

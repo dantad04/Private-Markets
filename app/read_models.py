@@ -70,7 +70,8 @@ class SourceFileHoldingRow:
     security_identifier_type: str | None
     security_identifier_value: str | None
     value_band_raw: str | None
-    raw_payload_json: list[str]
+    raw_payload_json: list[dict[str, object]]
+    metadata_attached_from_row_numbers: list[int]
     ingested_at: datetime
 
 
@@ -280,6 +281,7 @@ def get_source_file_detail(
             Holding.security_identifier_value,
             Holding.value_band_raw,
             Holding.raw_payload_json,
+            Holding.metadata_attached_from_row_numbers,
             Holding.ingested_at,
         )
         .join(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
@@ -289,26 +291,33 @@ def get_source_file_detail(
         .limit(size)
     ).all()
 
-    holdings = [
-        SourceFileHoldingRow(
-            source_row_number=row.source_row_number,
-            raw_name=row.raw_name,
-            source_asset_class_raw=row.source_asset_class_raw,
-            source_subclass_raw=row.source_subclass_raw,
-            canonical_asset_class_code=row.canonical_asset_class_code,
-            disclosure_completeness=row.disclosure_completeness,
-            is_aggregate=row.is_aggregate,
-            value_aud=row.value_aud,
-            ownership_pct=row.ownership_pct,
-            currency_raw=row.currency_raw,
-            security_identifier_type=row.security_identifier_type,
-            security_identifier_value=row.security_identifier_value,
-            value_band_raw=row.value_band_raw,
-            raw_payload_json=row.raw_payload_json,
-            ingested_at=row.ingested_at,
+    holdings = []
+    for row in holding_rows:
+        metadata_attached_from_row_numbers = list(row.metadata_attached_from_row_numbers or [])
+        holdings.append(
+            SourceFileHoldingRow(
+                source_row_number=row.source_row_number,
+                raw_name=row.raw_name,
+                source_asset_class_raw=row.source_asset_class_raw,
+                source_subclass_raw=row.source_subclass_raw,
+                canonical_asset_class_code=row.canonical_asset_class_code,
+                disclosure_completeness=row.disclosure_completeness,
+                is_aggregate=row.is_aggregate,
+                value_aud=row.value_aud,
+                ownership_pct=row.ownership_pct,
+                currency_raw=row.currency_raw,
+                security_identifier_type=row.security_identifier_type,
+                security_identifier_value=row.security_identifier_value,
+                value_band_raw=row.value_band_raw,
+                raw_payload_json=_normalise_raw_payload_entries(
+                    row.raw_payload_json,
+                    source_row_number=row.source_row_number,
+                    metadata_attached_from_row_numbers=metadata_attached_from_row_numbers,
+                ),
+                metadata_attached_from_row_numbers=metadata_attached_from_row_numbers,
+                ingested_at=row.ingested_at,
+            )
         )
-        for row in holding_rows
-    ]
 
     return SourceFileDetailReadModel(
         source_file=source_file,
@@ -320,6 +329,53 @@ def get_source_file_detail(
         total_rows=total_rows,
         total_pages=total_pages,
     )
+
+
+def _normalise_raw_payload_entries(
+    raw_payload_json: object,
+    *,
+    source_row_number: int,
+    metadata_attached_from_row_numbers: list[int],
+) -> list[dict[str, object]]:
+    if raw_payload_json is None:
+        return []
+
+    if not isinstance(raw_payload_json, list):
+        return [_tagged_payload_entry(source_row_number, raw_payload_json)]
+
+    if not raw_payload_json:
+        return []
+
+    first_item = raw_payload_json[0]
+    if isinstance(first_item, dict):
+        return [
+            _tagged_payload_entry(
+                int(item.get("source_row_number", source_row_number)) if isinstance(item, dict) else source_row_number,
+                item.get("payload", []) if isinstance(item, dict) else item,
+            )
+            for item in raw_payload_json
+        ]
+
+    if isinstance(first_item, list):
+        source_row_numbers = [source_row_number, *metadata_attached_from_row_numbers]
+        entries: list[dict[str, object]] = []
+        for index, payload in enumerate(raw_payload_json):
+            tagged_row_number = source_row_numbers[index] if index < len(source_row_numbers) else source_row_number
+            entries.append(_tagged_payload_entry(tagged_row_number, payload))
+        return entries
+
+    return [_tagged_payload_entry(source_row_number, raw_payload_json)]
+
+
+def _tagged_payload_entry(source_row_number: int, payload: object) -> dict[str, object]:
+    if isinstance(payload, list):
+        normalised_payload: object = list(payload)
+    else:
+        normalised_payload = payload
+    return {
+        "source_row_number": source_row_number,
+        "payload": normalised_payload,
+    }
 
 
 def get_entity_detail_by_name(session: Session, *, name: str) -> EntityDetailReadModel | None:

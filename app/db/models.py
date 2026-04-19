@@ -243,7 +243,9 @@ class Holding(Base):
     source_row_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     source_row_number: Mapped[int] = mapped_column(Integer, nullable=False)
     # Internal admin provenance only; never surface raw source rows on external-facing APIs.
-    raw_payload_json: Mapped[list[str]] = mapped_column(JSON, nullable=False)
+    # Legacy adapters store a single source-row payload, while duplicate-view adapters can
+    # store an array of tagged source-row payload objects in the same JSON column.
+    raw_payload_json: Mapped[object] = mapped_column(JSON, nullable=False)
     ingested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     manager_entity_id: Mapped[int | None] = mapped_column(ForeignKey("entities.id"), nullable=True)
     issuer_entity_id: Mapped[int | None] = mapped_column(ForeignKey("entities.id"), nullable=True)

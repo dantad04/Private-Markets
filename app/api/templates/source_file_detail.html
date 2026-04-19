@@ -87,6 +87,10 @@
         <br>
         <small>value_band_raw={{ holding.value_band_raw | e }}</small>
         {% endif %}
+        {% if holding.metadata_attached_from_row_numbers %}
+        <br>
+        <small>metadata_attached_from_row_numbers={{ holding.metadata_attached_from_row_numbers | e }}</small>
+        {% endif %}
       </td>
       <td>{{ holding.source_asset_class_raw | e }}</td>
       <td>{{ (holding.source_subclass_raw or '') | e }}</td>

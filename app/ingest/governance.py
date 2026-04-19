@@ -9,11 +9,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from adapters.base import AdapterParseResult
+from adapters.art_qsuper_mapping import EXPECTED_HEADER as ART_QSUPER_EXPECTED_HEADER
 from adapters.aware_mapping import EXPECTED_TABLE_1_HEADER
+from adapters.sunsuper_schema_mapping import EXPECTED_HEADER as SUNSUPER_SCHEMA_EXPECTED_HEADER
 from app.db.models import AdapterMappingVersion, SchemaReviewQueue, SourceFile, TaxonomyMapping
 
 
 AWARE_MAPPING_VERSION_ID = "aware-stage2-v1"
+ART_QSUPER_MAPPING_VERSION_ID = "art-qsuper-stage2-v1"
+ART_SUNSUPER_MAPPING_VERSION_ID = "art-sunsuper-stage2-v1"
 
 
 class GovernanceError(Exception):
@@ -234,8 +238,193 @@ AWARE_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
+ART_QSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=ART_QSUPER_MAPPING_VERSION_ID,
+    adapter_key="ArtQsuperPhdAdapter",
+    schema_fingerprint="42b9680ea59e47dd5753d4859fac412aefce8d91a2e6f50bfebe93e0717d4e79",
+    structural_expectations_json={
+        "observed_headers": ART_QSUPER_EXPECTED_HEADER,
+        "observed_internal_external_values": ["Externally Managed", "Internally Managed"],
+        "observed_asset_classes": [
+            "Cash",
+            "Cash Total",
+            "Derivatives By AssetClass",
+            "Derivatives By Currency",
+            "Derivatives By Kind",
+            "Fixed Income",
+            "Listed Infrastructure",
+            "Total Investment Items",
+            "Unlisted Equity",
+            "Unlisted Property",
+        ],
+    },
+    notes="Approved Stage 2 ART-QSuper synthetic vertical-slice mapping.",
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 19, tzinfo=UTC),
+    taxonomy_rows=(
+        ApprovedTaxonomyMappingSeed("Cash", None, None, None, "cash", False, None, "Direct cash row"),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "Externally Managed",
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "Externally managed bond exposure",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            None,
+            None,
+            None,
+            "listed_infrastructure",
+            False,
+            None,
+            "Direct listed infrastructure row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            None,
+            "Internally managed private equity exposure",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            None,
+            "Externally managed private equity manager or vehicle row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Property",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_property",
+            False,
+            None,
+            "Internally managed private property exposure",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Cash Total",
+            None,
+            None,
+            None,
+            "cash",
+            True,
+            "aggregate_total",
+            "Aggregate subtotal row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Total Investment Items",
+            None,
+            None,
+            None,
+            "multi_asset_other",
+            True,
+            "aggregate_total",
+            "Whole-file aggregate total",
+        ),
+    ),
+)
+
+
+ART_SUNSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=ART_SUNSUPER_MAPPING_VERSION_ID,
+    adapter_key="ArtSunsuperPhdAdapter",
+    schema_fingerprint="212487dd7cc3263a5b3aa79f763c6f4f82a4a1b393751fb5cd7dbfc77e930ace",
+    structural_expectations_json={
+        "observed_headers": SUNSUPER_SCHEMA_EXPECTED_HEADER,
+        "observed_asset_classes": [
+            "Fixed Income",
+            "Listed Equity",
+            "Listed Infrastructure",
+            "Private Equity",
+        ],
+        "observed_filters": [
+            "All Assets",
+            "Derivatives",
+            "Externally Managed",
+            "Private Equity",
+        ],
+        "observed_name_types": [
+            "Asset",
+            "Corporate",
+            "Exposure",
+            "Fund Vehicle",
+            "Manager",
+        ],
+    },
+    notes="Approved Stage 2 narrow ART-Sunsuper synthetic slice using the shared Sunsuper schema.",
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 19, tzinfo=UTC),
+    taxonomy_rows=(
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "Externally Managed",
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "Manager-style value-bearing row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            "All Assets",
+            None,
+            None,
+            "listed_infrastructure",
+            False,
+            None,
+            "Direct all-assets row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            "Externally Managed",
+            None,
+            None,
+            "listed_infrastructure",
+            False,
+            None,
+            "Manager-style listed infrastructure row used for ambiguity review coverage",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Private Equity",
+            "All Assets",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            None,
+            "Ownership-only row on all-assets view",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Private Equity",
+            "Private Equity",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            "name_only",
+            "Private-equity vehicle row",
+        ),
+    ),
+)
+
+
 APPROVED_MAPPING_SEEDS = {
     AWARE_APPROVED_MAPPING.adapter_key: AWARE_APPROVED_MAPPING,
+    ART_QSUPER_APPROVED_MAPPING.adapter_key: ART_QSUPER_APPROVED_MAPPING,
+    ART_SUNSUPER_APPROVED_MAPPING.adapter_key: ART_SUNSUPER_APPROVED_MAPPING,
 }
 
 
@@ -388,6 +577,8 @@ def _build_structural_drift_summary(
         "observed_tables",
         "observed_internal_external_values",
         "observed_asset_classes",
+        "observed_filters",
+        "observed_name_types",
     ):
         if expected.get(key) != actual.get(key):
             summary[key] = {
@@ -408,6 +599,9 @@ def _build_taxonomy_validation_summary(
     rows = session.scalars(
         select(TaxonomyMapping).where(TaxonomyMapping.mapping_version == mapping_version_id)
     ).all()
+    # The taxonomy key is intentionally adapter-agnostic:
+    # raw class label + optional adapter-specific qualifier + section + aggregate flag.
+    # Aware uses section labels and management scope; ART-QSuper only uses the qualifier.
     mapping_lookup = {
         (
             row.source_asset_class_raw,

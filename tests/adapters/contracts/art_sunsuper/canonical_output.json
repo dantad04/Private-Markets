@@ -1,0 +1,430 @@
+{
+  "holdings": [
+    {
+      "source_file_id": "contract-fixture-art-sunsuper",
+      "source_fund_id": "art",
+      "source_option_code": "ARST",
+      "source_option_name_raw": "ART Stable",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Fixed Income",
+      "source_subclass_raw": "Externally Managed",
+      "canonical_asset_class_code": "fixed_income",
+      "is_aggregate": false,
+      "raw_name": "IFM Investors Pty Ltd",
+      "value_aud": "339726831",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.07",
+      "currency_raw": "AUD",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": "Level 15, 20 Bond Street, Sydney NSW 2000",
+      "geo_lat": "-33.8644",
+      "geo_lng": "151.2088",
+      "classification_raw": "Debt Manager",
+      "location_raw": "Australia",
+      "value_band_raw": "$100m to $300m",
+      "disclosure_completeness": "value_only",
+      "source_row_number": 2,
+      "source_row_hash": "93d93f17ccb111548ecb006ede055afa0c1685ad53409104d28e593c1e52eac0",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "ARST",
+            "ART Stable",
+            "Externally Managed",
+            "Fixed Income",
+            "Manager",
+            "IFM Investors Pty Ltd",
+            "n/a",
+            "AUD",
+            "n/a",
+            "339726831",
+            "n/a",
+            "0.07",
+            "n/a",
+            "n/a",
+            "n/a",
+            "n/a",
+            "n/a",
+            "n/a",
+            "Externally Managed",
+            "n/a",
+            "IFM Investors Pty Ltd",
+            "Australia",
+            "n/a",
+            "Management Slice"
+          ],
+          "source_row_number": 2
+        },
+        {
+          "payload": [
+            "ARST",
+            "ART Stable",
+            "All Assets",
+            "Fixed Income",
+            "Manager",
+            "IFM Investors Pty Ltd",
+            "n/a",
+            "AUD",
+            "n/a",
+            "n/a",
+            "n/a",
+            "n/a",
+            "$100m to $300m",
+            "Debt Manager",
+            "Level 15, 20 Bond Street, Sydney NSW 2000",
+            "Australia",
+            "-33.8644",
+            "151.2088",
+            "Externally Managed",
+            "n/a",
+            "IFM Investors Pty Ltd",
+            "Australia",
+            "n/a",
+            "All Assets Slice"
+          ],
+          "source_row_number": 3
+        }
+      ],
+      "parse_warning_flags": [
+        "metadata_attached"
+      ],
+      "metadata_attached_from_row_numbers": [
+        3
+      ]
+    },
+    {
+      "source_file_id": "contract-fixture-art-sunsuper",
+      "source_fund_id": "art",
+      "source_option_code": "ARST",
+      "source_option_name_raw": "ART Stable",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Listed Infrastructure",
+      "source_subclass_raw": "All Assets",
+      "canonical_asset_class_code": "listed_infrastructure",
+      "is_aggregate": false,
+      "raw_name": "Transurban Finance Company",
+      "value_aud": "25000000",
+      "ownership_pct": null,
+      "units": "100000",
+      "weighting_pct": "0.01",
+      "currency_raw": "AUD",
+      "security_identifier_value": "AU000000TCL6",
+      "security_identifier_type": "ISIN",
+      "address_raw": "Tower 5, 727 Collins Street, Docklands VIC 3008",
+      "geo_lat": "-37.814",
+      "geo_lng": "144.9465",
+      "classification_raw": "Toll Road",
+      "location_raw": "Australia",
+      "value_band_raw": null,
+      "disclosure_completeness": "fully_disclosed",
+      "source_row_number": 4,
+      "source_row_hash": "d2cc694389426a3d1564e951aaa97da38ea4361643ece867f7186280170d3273",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "ARST",
+            "ART Stable",
+            "All Assets",
+            "Listed Infrastructure",
+            "Asset",
+            "Transurban Finance Company",
+            "AU000000TCL6",
+            "AUD",
+            "100000",
+            "25000000",
+            "n/a",
+            "0.01",
+            "n/a",
+            "Toll Road",
+            "Tower 5, 727 Collins Street, Docklands VIC 3008",
+            "Australia",
+            "-37.8140",
+            "144.9465",
+            "Externally Managed",
+            "n/a",
+            "n/a",
+            "Australia",
+            "n/a",
+            "All Assets Slice"
+          ],
+          "source_row_number": 4
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-art-sunsuper",
+      "source_fund_id": "art",
+      "source_option_code": "ARST",
+      "source_option_name_raw": "ART Stable",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Private Equity",
+      "source_subclass_raw": "All Assets",
+      "canonical_asset_class_code": "unlisted_equity",
+      "is_aggregate": false,
+      "raw_name": "Industry Super Holdings Pty Ltd",
+      "value_aud": null,
+      "ownership_pct": "0.18",
+      "units": null,
+      "weighting_pct": null,
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": "Level 15, 130 Lonsdale Street, Melbourne VIC 3000",
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": "Australia",
+      "value_band_raw": null,
+      "disclosure_completeness": "ownership_only",
+      "source_row_number": 5,
+      "source_row_hash": "ae9441a79ac21375c26c1ca2b807538a3e5230b29db3cce411dfcbc9dbba26ec",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "ARST",
+            "ART Stable",
+            "All Assets",
+            "Private Equity",
+            "Corporate",
+            "Industry Super Holdings Pty Ltd",
+            "n/a",
+            "n/a",
+            "n/a",
+            "n/a",
+            "0.18",
+            "n/a",
+            "n/a",
+            "n/a",
+            "Level 15, 130 Lonsdale Street, Melbourne VIC 3000",
+            "Australia",
+            "n/a",
+            "n/a",
+            "Internally Managed",
+            "n/a",
+            "n/a",
+            "Australia",
+            "n/a",
+            "All Assets Slice"
+          ],
+          "source_row_number": 5
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-art-sunsuper",
+      "source_fund_id": "art",
+      "source_option_code": "ARST",
+      "source_option_name_raw": "ART Stable",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Private Equity",
+      "source_subclass_raw": "Private Equity",
+      "canonical_asset_class_code": "unlisted_equity",
+      "is_aggregate": false,
+      "raw_name": "Delphi Ventures VIII, L.P.",
+      "value_aud": null,
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": null,
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": "United States",
+      "value_band_raw": "$25m to $50m",
+      "disclosure_completeness": "name_only",
+      "source_row_number": 6,
+      "source_row_hash": "d07876115e820ce6240020974146b94b6b92b50c332e80ad0a19b6c21007e695",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "ARST",
+            "ART Stable",
+            "Private Equity",
+            "Private Equity",
+            "Fund Vehicle",
+            "Delphi Ventures VIII, L.P.",
+            "n/a",
+            "n/a",
+            "n/a",
+            "n/a",
+            "n/a",
+            "n/a",
+            "$25m to $50m",
+            "n/a",
+            "n/a",
+            "United States",
+            "n/a",
+            "n/a",
+            "Externally Managed",
+            "n/a",
+            "n/a",
+            "United States",
+            "n/a",
+            "Private Equity Slice"
+          ],
+          "source_row_number": 6
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    }
+  ],
+  "structural_metadata": {
+    "ambiguous_duplicate_groups": [],
+    "encoding_replacement_count": 0,
+    "known_option_family_owner": "Australian Retirement Trust / Sunsuper lineage",
+    "merged_duplicate_groups": 1,
+    "observed_asset_classes": [
+      "Fixed Income",
+      "Listed Equity",
+      "Listed Infrastructure",
+      "Private Equity"
+    ],
+    "observed_filters": [
+      "All Assets",
+      "Derivatives",
+      "Externally Managed",
+      "Private Equity"
+    ],
+    "observed_headers": [
+      "OptionCode",
+      "OptionName",
+      "Filter",
+      "AssetClass",
+      "NameType",
+      "Name",
+      "SecurityIdentifier",
+      "Currency",
+      "UnitsHeld",
+      "MarketValueAud",
+      "OwnershipPct",
+      "WeightingPct",
+      "ValueRange",
+      "Classification",
+      "Address",
+      "Location",
+      "GeoLat",
+      "GeoLng",
+      "CurrentManagementStyle",
+      "IssuerName",
+      "ManagerName",
+      "Country",
+      "Notes",
+      "SourceView"
+    ],
+    "observed_name_types": [
+      "Asset",
+      "Corporate",
+      "Exposure",
+      "Fund Vehicle",
+      "Manager"
+    ],
+    "observed_option_codes": [
+      "ARST"
+    ],
+    "observed_option_names": [
+      "ART Stable"
+    ],
+    "observed_options": [
+      "ARST"
+    ],
+    "observed_reporting_dates": [
+      "2025-12-31"
+    ],
+    "review_queue_events": [],
+    "skipped_portfolio_posture_rows": 1,
+    "total_rows_aggregate": 0,
+    "total_rows_emitted": 4,
+    "total_rows_read": 7
+  },
+  "parse_statistics": {
+    "ambiguous_duplicate_groups": [],
+    "canonical_asset_class_counts": {
+      "fixed_income": 1,
+      "listed_infrastructure": 1,
+      "unlisted_equity": 2
+    },
+    "disclosure_completeness_counts": {
+      "fully_disclosed": 1,
+      "name_only": 1,
+      "ownership_only": 1,
+      "value_only": 1
+    },
+    "encoding_replacement_count": 0,
+    "known_option_family_owner": "Australian Retirement Trust / Sunsuper lineage",
+    "merged_duplicate_groups": 1,
+    "observed_asset_classes": [
+      "Fixed Income",
+      "Listed Equity",
+      "Listed Infrastructure",
+      "Private Equity"
+    ],
+    "observed_filters": [
+      "All Assets",
+      "Derivatives",
+      "Externally Managed",
+      "Private Equity"
+    ],
+    "observed_headers": [
+      "OptionCode",
+      "OptionName",
+      "Filter",
+      "AssetClass",
+      "NameType",
+      "Name",
+      "SecurityIdentifier",
+      "Currency",
+      "UnitsHeld",
+      "MarketValueAud",
+      "OwnershipPct",
+      "WeightingPct",
+      "ValueRange",
+      "Classification",
+      "Address",
+      "Location",
+      "GeoLat",
+      "GeoLng",
+      "CurrentManagementStyle",
+      "IssuerName",
+      "ManagerName",
+      "Country",
+      "Notes",
+      "SourceView"
+    ],
+    "observed_name_types": [
+      "Asset",
+      "Corporate",
+      "Exposure",
+      "Fund Vehicle",
+      "Manager"
+    ],
+    "observed_option_codes": [
+      "ARST"
+    ],
+    "observed_option_names": [
+      "ART Stable"
+    ],
+    "observed_options": [
+      "ARST"
+    ],
+    "observed_reporting_dates": [
+      "2025-12-31"
+    ],
+    "review_queue_events": [],
+    "skipped_portfolio_posture_rows": 1,
+    "total_rows_aggregate": 0,
+    "total_rows_emitted": 4,
+    "total_rows_read": 7
+  },
+  "schema_fingerprint": "212487dd7cc3263a5b3aa79f763c6f4f82a4a1b393751fb5cd7dbfc77e930ace",
+  "adapter_warnings": []
+}

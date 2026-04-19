@@ -9,10 +9,14 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from adapters.art_qsuper import ArtQsuperPhdAdapter
+from adapters.art_sunsuper import ArtSunsuperPhdAdapter
+from adapters.art_qsuper_errors import ArtQsuperAdapterError
 from adapters.aware import AwarePhdAdapter
 from adapters.aware_errors import AwareAdapterError
 from adapters.base import AdapterParseResult, SourceFileMetadata
 from adapters.hesta import HestaPhdAdapter
+from adapters.sunsuper_schema_errors import SunsuperSchemaAdapterError
 from app.db.models import (
     CANONICAL_ASSET_CLASS_SEED,
     CanonicalAssetClass,
@@ -48,6 +52,10 @@ class CanonicalAssetClassMissingError(LoaderError):
 
 
 class ActiveSourceFileConflictError(LoaderError):
+    pass
+
+
+class MissingReportingPeriodRegistrationError(LoaderError):
     pass
 
 
@@ -119,6 +127,12 @@ def register_source_file(
         session.add(existing)
         session.flush()
 
+    reporting_period_end_date = None
+    if existing.reporting_period_id is not None:
+        reporting_period = session.get(ReportingPeriod, existing.reporting_period_id)
+        if reporting_period is not None:
+            reporting_period_end_date = reporting_period.period_end_date
+
     return SourceFileMetadata(
         source_file_id=existing.id,
         fund_id=fund.id,
@@ -127,6 +141,7 @@ def register_source_file(
         source_url=existing.source_url,
         checksum=existing.checksum,
         received_at=existing.received_at,
+        reporting_period_end_date=reporting_period_end_date,
     )
 
 
@@ -255,11 +270,13 @@ def load_adapter_parse_result(
             )
 
     observed_options = parse_result.structural_metadata["observed_options"]
+    option_code = observed_options[0]
+    option_name = parse_result.holdings[0].source_option_name_raw if parse_result.holdings else option_code
     option = get_or_create_investment_option(
         session,
         fund_id=source_file.fund_id,
-        source_option_code=observed_options[0],
-        source_option_name=observed_options[0],
+        source_option_code=option_code,
+        source_option_name=option_name,
         reporting_period_date=reporting_period.period_end_date,
     )
     if source_file.investment_option_id is None:
@@ -454,7 +471,156 @@ def ingest_aware_local_file(
     return load_adapter_parse_result(session, metadata, parse_result)
 
 
+def ingest_art_qsuper_local_file(
+    session: Session,
+    *,
+    fund_code: str,
+    fund_name: str,
+    file_path: str,
+    publication_date: date | None = None,
+    reporting_period_id: int | None = None,
+    received_at: datetime | None = None,
+) -> LoadSummary:
+    file_path_obj = Path(file_path)
+    raw_bytes = file_path_obj.read_bytes()
+    checksum = hashlib.sha256(raw_bytes).hexdigest()
+    metadata = register_source_file(
+        session,
+        fund_code=fund_code,
+        fund_name=fund_name,
+        adapter_key="ArtQsuperPhdAdapter",
+        source_url=str(file_path_obj),
+        checksum=checksum,
+        received_at=received_at or datetime.now(UTC),
+        reporting_period_id=reporting_period_id,
+        publication_date=publication_date,
+    )
+    source_file = session.get(SourceFile, metadata.source_file_id)
+    try:
+        ensure_approved_mapping_seeded(session, adapter_key="ArtQsuperPhdAdapter")
+        parse_result = ArtQsuperPhdAdapter().parse(metadata, raw_bytes)
+        enforce_approved_mapping(
+            session,
+            source_file=source_file,
+            parse_result=parse_result,
+            raw_bytes=raw_bytes,
+            source_section_raw=None,
+        )
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError):
+        session.flush()
+        raise
+    except ArtQsuperAdapterError as exc:
+        source_file.ingest_status = "review_required"
+        approved_mapping_version_id = None
+        try:
+            approved_mapping_version_id = ensure_approved_mapping_seeded(session, adapter_key="ArtQsuperPhdAdapter").id
+        except Exception:
+            approved_mapping_version_id = None
+        create_schema_review_queue_item(
+            session,
+            source_file=source_file,
+            approved_mapping_version_id=approved_mapping_version_id,
+            review_reason="adapter_parse_failure",
+            observed_schema_fingerprint=None,
+            drift_summary_json={
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+            },
+            raw_bytes=raw_bytes,
+        )
+        session.flush()
+        raise
+    return load_adapter_parse_result(session, metadata, parse_result)
+
+
+def ingest_art_sunsuper_local_file(
+    session: Session,
+    *,
+    fund_code: str,
+    fund_name: str,
+    file_path: str,
+    reporting_period_id: int | None,
+    publication_date: date | None = None,
+    received_at: datetime | None = None,
+) -> LoadSummary:
+    if reporting_period_id is None:
+        raise MissingReportingPeriodRegistrationError(
+            "Sunsuper-schema files require reporting_period_id because the row schema has no reporting date column"
+        )
+
+    file_path_obj = Path(file_path)
+    raw_bytes = file_path_obj.read_bytes()
+    checksum = hashlib.sha256(raw_bytes).hexdigest()
+    metadata = register_source_file(
+        session,
+        fund_code=fund_code,
+        fund_name=fund_name,
+        adapter_key="ArtSunsuperPhdAdapter",
+        source_url=str(file_path_obj),
+        checksum=checksum,
+        received_at=received_at or datetime.now(UTC),
+        reporting_period_id=reporting_period_id,
+        publication_date=publication_date,
+    )
+    if metadata.reporting_period_end_date is None:
+        raise MissingReportingPeriodRegistrationError(
+            f"Registered reporting period {reporting_period_id!r} does not exist"
+        )
+
+    source_file = session.get(SourceFile, metadata.source_file_id)
+    try:
+        ensure_approved_mapping_seeded(session, adapter_key="ArtSunsuperPhdAdapter")
+        parse_result = ArtSunsuperPhdAdapter().parse(metadata, raw_bytes)
+        approved_mapping_version_id = enforce_approved_mapping(
+            session,
+            source_file=source_file,
+            parse_result=parse_result,
+            raw_bytes=raw_bytes,
+            source_section_raw=None,
+        )
+        review_events = list(parse_result.structural_metadata.get("review_queue_events", []))
+        for event in review_events:
+            create_schema_review_queue_item(
+                session,
+                source_file=source_file,
+                approved_mapping_version_id=approved_mapping_version_id,
+                review_reason=str(event.get("review_reason", "adapter_review")),
+                observed_schema_fingerprint=parse_result.schema_fingerprint,
+                drift_summary_json=dict(event.get("details", {})),
+                raw_bytes=raw_bytes,
+            )
+        if review_events:
+            session.flush()
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError):
+        session.flush()
+        raise
+    except SunsuperSchemaAdapterError as exc:
+        source_file.ingest_status = "review_required"
+        approved_mapping_version_id = None
+        try:
+            approved_mapping_version_id = ensure_approved_mapping_seeded(session, adapter_key="ArtSunsuperPhdAdapter").id
+        except Exception:
+            approved_mapping_version_id = None
+        create_schema_review_queue_item(
+            session,
+            source_file=source_file,
+            approved_mapping_version_id=approved_mapping_version_id,
+            review_reason="adapter_parse_failure",
+            observed_schema_fingerprint=None,
+            drift_summary_json={
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+            },
+            raw_bytes=raw_bytes,
+        )
+        session.flush()
+        raise
+    return load_adapter_parse_result(session, metadata, parse_result)
+
+
 def _normalise_observed_date(observed_date: str) -> str:
     if "-" in observed_date:
         return observed_date
-    return datetime.strptime(observed_date, "%d/%m/%Y").date().isoformat()
+    if "/" in observed_date:
+        return datetime.strptime(observed_date, "%d/%m/%Y").date().isoformat()
+    return datetime.strptime(observed_date, "%d %B %Y").date().isoformat()
