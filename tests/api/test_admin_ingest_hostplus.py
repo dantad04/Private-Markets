@@ -1,0 +1,110 @@
+from __future__ import annotations
+
+from datetime import date
+from pathlib import Path
+import tempfile
+import unittest
+
+from fastapi.testclient import TestClient
+from sqlalchemy.orm import sessionmaker
+
+from app.api.admin import get_db_session
+from app.api.app import create_app
+from app.db.models import Base, ReportingPeriod, SourceFile
+from app.db.session import get_engine
+from app.ingest.governance import HOSTPLUS_MAPPING_VERSION_ID
+
+
+FIXTURE_PATH = Path("tests/fixtures/hostplus_real_extract.csv").resolve()
+
+
+class TestAdminHostPlusIngestEndpoint(unittest.TestCase):
+    def setUp(self) -> None:
+        self.tempdir = tempfile.TemporaryDirectory()
+        self.database_url = f"sqlite:///{Path(self.tempdir.name) / 'stage2_hostplus_api.db'}"
+        self.engine = get_engine(self.database_url)
+        Base.metadata.create_all(self.engine)
+        self.SessionLocal = sessionmaker(bind=self.engine, autoflush=False, autocommit=False, future=True)
+        self.app = create_app()
+
+        def override_get_db_session():
+            session = self.SessionLocal()
+            try:
+                yield session
+                session.commit()
+            except Exception:
+                session.rollback()
+                raise
+            finally:
+                session.close()
+
+        self.app.dependency_overrides[get_db_session] = override_get_db_session
+        self.client = TestClient(self.app)
+
+        with self.SessionLocal() as session:
+            period = ReportingPeriod(
+                period_end_date=date(2025, 12, 31),
+                disclosure_due_date=date(2026, 3, 31),
+                label="2025-12-31",
+                source_cycle="semi_annual",
+            )
+            session.add(period)
+            session.commit()
+            self.reporting_period_id = period.id
+
+    def tearDown(self) -> None:
+        self.app.dependency_overrides.clear()
+        self.engine.dispose()
+        self.tempdir.cleanup()
+
+    def test_admin_ingest_local_file_hostplus_endpoint(self) -> None:
+        response = self.client.post(
+            "/admin/ingest/local-file/hostplus",
+            json={
+                "file_path": str(FIXTURE_PATH),
+                "fund_code": "hostplus",
+                "fund_name": "Hostplus",
+                "reporting_period_id": self.reporting_period_id,
+            },
+        )
+        self.assertEqual(200, response.status_code)
+        payload = response.json()
+        self.assertEqual(3215, payload["rows_staged"])
+        self.assertEqual(3215, payload["rows_inserted"])
+        self.assertIsNotNone(payload["investment_option_id"])
+        self.assertEqual(
+            ["Decoded Host-Plus source using UTF-8 errors='replace'; replacement_count=3"],
+            payload["warnings"],
+        )
+
+        with self.SessionLocal() as session:
+            source_file = session.get(SourceFile, payload["source_file_id"])
+            self.assertEqual("HostPlusPhdStateMachineAdapter", source_file.adapter_key)
+            self.assertEqual(HOSTPLUS_MAPPING_VERSION_ID, source_file.mapping_version_id)
+            self.assertEqual(payload["investment_option_id"], source_file.investment_option_id)
+
+        listing = self.client.get("/admin/source-files")
+        self.assertEqual(200, listing.status_code)
+        self.assertEqual("HostPlusPhdStateMachineAdapter", listing.json()[0]["adapter_key"])
+        self.assertEqual(3215, listing.json()[0]["rows_loaded"])
+        self.assertEqual(3, listing.json()[0]["encoding_replacement_count"])
+
+        detail = self.client.get(f"/admin/source-files/{payload['source_file_id']}", params={"page": 1, "size": 200})
+        self.assertEqual(200, detail.status_code)
+        self.assertEqual("HC High Growth - Class A Option", detail.json()["holdings"][0]["source_option_name"])
+
+        admin_ui_detail = self.client.get(f"/admin/ui/source-files/{payload['source_file_id']}", params={"page": 1, "size": 200})
+        self.assertEqual(200, admin_ui_detail.status_code)
+        self.assertIn("HOSTPLUS_HC_HIGH_GROWTH_CLASS_A_OPTION", admin_ui_detail.text)
+
+        entity_detail = self.client.get("/entities/by-name", params={"name": "Citigroup Inc"})
+        self.assertEqual(200, entity_detail.status_code)
+        self.assertEqual(38, entity_detail.json()["observation_count"])
+        self.assertEqual(
+            {"HC High Growth - Class A Option"},
+            {row["option_name"] for row in entity_detail.json()["observations"]},
+        )
+        self.assertEqual(
+            {"AUD", "USD"},
+            {row["currency_raw"] for row in entity_detail.json()["observations"] if row["currency_raw"] in {"AUD", "USD"}},
+        )

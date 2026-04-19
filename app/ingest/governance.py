@@ -19,6 +19,7 @@ AWARE_MAPPING_VERSION_ID = "aware-stage2-v1"
 ART_QSUPER_MAPPING_VERSION_ID = "art-qsuper-stage2-v1"
 ART_SUNSUPER_MAPPING_VERSION_ID = "art-sunsuper-stage2-v1"
 UNISUPER_MAPPING_VERSION_ID = "unisuper-stage2-v1"
+HOSTPLUS_MAPPING_VERSION_ID = "hostplus-stage2-v1"
 
 
 class GovernanceError(Exception):
@@ -793,11 +794,136 @@ UNISUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
+HOSTPLUS_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=HOSTPLUS_MAPPING_VERSION_ID,
+    adapter_key="HostPlusPhdStateMachineAdapter",
+    schema_fingerprint="abd48bab0474bf5ada8c5e571b5215b5b3d55b97b881bfb8ba11eaa9dc68be59",
+    structural_expectations_json={
+        "observed_headers": [
+            [
+                "ASSET CLASS",
+                "",
+                "",
+                "ACTUAL ASSET ALLOCATION (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+                "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+            ],
+            [
+                "CURRENCY EXPOSURE",
+                "",
+                "",
+                "ACTUAL CURRENCY EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+                "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+            ],
+            ["KIND OF DERIVATIVE", "", "", "VALUE (AUD)", "WEIGHTING (%)"],
+            ["NAME OF FUND MANAGER", "", "", "VALUE (AUD)", "WEIGHTING (%)"],
+            ["NAME OF INSTITUTION", "CURRENCY", "", "VALUE (AUD)", "WEIGHTING (%)"],
+            ["NAME/KIND OF INVESTMENT ITEM", "", "% OWNERSHIP", "VALUE (AUD)", "WEIGHTING (%)"],
+            ["NAME/KIND OF INVESTMENT ITEM", "SECURITY IDENTIFIER", "UNITS HELD", "VALUE (AUD)", "WEIGHTING (%)"],
+        ],
+        "observed_section_labels": [
+            "CASH",
+            "HOSTPLUS",
+            "LISTED EQUITY",
+            "TABLE 1",
+            "TABLE 2",
+            "TABLE 3",
+            "TABLE 4",
+            "TOTAL INVESTMENT ITEMS",
+            "UNLISTED EQUITY",
+        ],
+        "observed_tables": [1, 2, 3, 4],
+        "observed_internal_external_values": ["Externally Managed", "Internally Managed"],
+        "observed_asset_classes": ["Cash", "Listed Equity", "Unlisted Equity"],
+    },
+    notes=(
+        "Approved Stage 2 Host-Plus mapping seeded from the real single-option file. "
+        "UTF-8 replacement baseline is 3 for the known em-dash corruption points."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 19, tzinfo=UTC),
+    taxonomy_rows=(
+        ApprovedTaxonomyMappingSeed("Cash", None, None, None, "cash", False, None, "Table 1 cash holding"),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Equity",
+            None,
+            None,
+            None,
+            "listed_equity",
+            False,
+            None,
+            "Table 1 listed security holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            None,
+            "Table 1 internally managed ownership holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            None,
+            "Table 1 externally managed fund-manager rollup",
+        ),
+        ApprovedTaxonomyMappingSeed("Cash", None, None, None, "cash", True, "aggregate_total", "Cash total row"),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Equity",
+            None,
+            None,
+            None,
+            "listed_equity",
+            True,
+            "aggregate_total",
+            "Listed equity total row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            True,
+            "aggregate_total",
+            "Internally managed unlisted equity total row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            True,
+            "aggregate_total",
+            "Externally managed unlisted equity total row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "TOTAL INVESTMENT ITEMS",
+            None,
+            None,
+            None,
+            "multi_asset_other",
+            True,
+            "aggregate_total",
+            "Whole-option aggregate total",
+        ),
+    ),
+)
+
+
 APPROVED_MAPPING_SEEDS = {
     AWARE_APPROVED_MAPPING.adapter_key: AWARE_APPROVED_MAPPING,
     ART_QSUPER_APPROVED_MAPPING.adapter_key: ART_QSUPER_APPROVED_MAPPING,
     ART_SUNSUPER_APPROVED_MAPPING.adapter_key: ART_SUNSUPER_APPROVED_MAPPING,
     UNISUPER_APPROVED_MAPPING.adapter_key: UNISUPER_APPROVED_MAPPING,
+    HOSTPLUS_APPROVED_MAPPING.adapter_key: HOSTPLUS_APPROVED_MAPPING,
 }
 
 

@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from adapters.art_qsuper_errors import ArtQsuperAdapterError
 from adapters.aware_errors import AwareAdapterError
+from adapters.hostplus_errors import HostPlusAdapterError
 from adapters.sunsuper_schema_errors import SunsuperSchemaAdapterError
 from adapters.unisuper_errors import UniSuperAdapterError
 from app.db.session import get_session
@@ -19,6 +20,7 @@ from app.ingest.loader import (
     ingest_art_sunsuper_local_file,
     ingest_aware_local_file,
     ingest_hesta_local_file,
+    ingest_hostplus_local_file,
     ingest_unisuper_local_file,
 )
 from app.ingest.governance import SchemaDriftDetectedError, UnapprovedTaxonomyMappingError
@@ -87,6 +89,14 @@ class AdminArtSunsuperIngestRequest(BaseModel):
 class AdminUniSuperIngestRequest(BaseModel):
     file_path: str = Field(..., description="Absolute or workspace-local path to the source CSV")
     fund_code: str = Field(..., description="Stable fund code, e.g. 'unisuper'")
+    fund_name: str = Field(..., description="Human-readable fund name")
+    publication_date: date | None = None
+    reporting_period_id: int | None = None
+
+
+class AdminHostPlusIngestRequest(BaseModel):
+    file_path: str = Field(..., description="Absolute or workspace-local path to the source CSV")
+    fund_code: str = Field(..., description="Stable fund code, e.g. 'hostplus'")
     fund_name: str = Field(..., description="Human-readable fund name")
     publication_date: date | None = None
     reporting_period_id: int | None = None
@@ -389,6 +399,29 @@ def ingest_unisuper_local_file_endpoint(
         session.commit()
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     except (UniSuperAdapterError, LoaderError, OSError, ValueError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return AdminIngestResponse.from_summary(summary)
+
+
+@router.post("/ingest/local-file/hostplus", response_model=AdminIngestResponse)
+def ingest_hostplus_local_file_endpoint(
+    payload: AdminHostPlusIngestRequest,
+    session: Session = Depends(get_db_session),
+) -> AdminIngestResponse:
+    try:
+        summary = ingest_hostplus_local_file(
+            session,
+            fund_code=payload.fund_code,
+            fund_name=payload.fund_name,
+            file_path=payload.file_path,
+            publication_date=payload.publication_date,
+            reporting_period_id=payload.reporting_period_id,
+        )
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError) as exc:
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    except (HostPlusAdapterError, LoaderError, OSError, ValueError) as exc:
         session.commit()
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     return AdminIngestResponse.from_summary(summary)
