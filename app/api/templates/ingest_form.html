@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ page_title | e }}</h1>
+<form method="post" action="{{ request.url_for('admin_ui_ingest_submit') | e }}">
+  <div class="field">
+    <label for="file_path">file_path</label><br>
+    <input id="file_path" name="file_path" type="text" value="{{ form_values.file_path | e }}" required>
+  </div>
+  <div class="field">
+    <label for="fund_code">fund_code</label><br>
+    <input id="fund_code" name="fund_code" type="text" value="{{ form_values.fund_code | e }}" required>
+  </div>
+  <div class="field">
+    <label for="fund_name">fund_name</label><br>
+    <input id="fund_name" name="fund_name" type="text" value="{{ form_values.fund_name | e }}" required>
+  </div>
+  <div class="field">
+    <label for="publication_date">publication_date</label><br>
+    <input id="publication_date" name="publication_date" type="date" value="{{ form_values.publication_date | e }}">
+  </div>
+  <div class="field">
+    <label for="reporting_period_id">reporting_period_id</label><br>
+    <input id="reporting_period_id" name="reporting_period_id" type="number" step="1" min="1" value="{{ form_values.reporting_period_id | e }}">
+  </div>
+  <button type="submit">Ingest file</button>
+</form>
+{% endblock %}

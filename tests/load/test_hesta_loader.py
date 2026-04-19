@@ -17,9 +17,7 @@ from app.ingest.loader import (
     load_adapter_parse_result,
     register_source_file,
 )
-
-
-FIXTURE_PATH = Path("tests/fixtures/hesta_high_growth_20251231.csv").resolve()
+from tests.hesta_fixture import EXPECTED_TOTAL_ROWS, FIXTURE_PATH
 
 
 class TestHestaLoader(unittest.TestCase):
@@ -43,8 +41,8 @@ class TestHestaLoader(unittest.TestCase):
                 file_path=str(FIXTURE_PATH),
             )
             session.commit()
-            self.assertEqual(2835, first.rows_staged)
-            self.assertEqual(2835, first.rows_inserted)
+            self.assertEqual(EXPECTED_TOTAL_ROWS, first.rows_staged)
+            self.assertEqual(EXPECTED_TOTAL_ROWS, first.rows_inserted)
             self.assertEqual(0, first.rows_skipped_existing)
 
         with self.SessionLocal() as session:
@@ -55,10 +53,10 @@ class TestHestaLoader(unittest.TestCase):
                 file_path=str(FIXTURE_PATH),
             )
             session.commit()
-            self.assertEqual(2835, second.rows_staged)
+            self.assertEqual(EXPECTED_TOTAL_ROWS, second.rows_staged)
             self.assertEqual(0, second.rows_inserted)
-            self.assertEqual(2835, second.rows_skipped_existing)
-            self.assertEqual(2835, session.query(Holding).count())
+            self.assertEqual(EXPECTED_TOTAL_ROWS, second.rows_skipped_existing)
+            self.assertEqual(EXPECTED_TOTAL_ROWS, session.query(Holding).count())
 
     def test_registered_period_must_match_parsed_period(self) -> None:
         with self.SessionLocal() as session:
@@ -105,4 +103,3 @@ class TestHestaLoader(unittest.TestCase):
             self.assertIsNotNone(source_file.reporting_period_id)
             period = session.get(ReportingPeriod, source_file.reporting_period_id)
             self.assertEqual(date(2025, 12, 31), period.period_end_date)
-

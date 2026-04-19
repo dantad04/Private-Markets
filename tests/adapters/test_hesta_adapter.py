@@ -5,7 +5,6 @@ from datetime import datetime
 from decimal import Decimal
 import io
 import json
-from pathlib import Path
 import unittest
 
 from adapters.base import SourceFileMetadata
@@ -19,10 +18,7 @@ from adapters.hesta_errors import (
     UnknownAssetClassError,
 )
 from adapters.hesta_normalisation import infer_identifier_type, parse_numeric, parse_percent, parse_uk_date
-
-
-FIXTURE_PATH = Path("tests/fixtures/hesta_high_growth_20251231.csv")
-EXPECTED_PATH = Path("tests/fixtures/hesta_expected_outputs.json")
+from tests.hesta_fixture import EXPECTED_PATH, FIXTURE_PATH, load_expected_outputs
 
 
 def make_metadata(source_file_id: str = "fixture-hesta") -> SourceFileMetadata:
@@ -39,10 +35,6 @@ def make_metadata(source_file_id: str = "fixture-hesta") -> SourceFileMetadata:
 
 def load_fixture_bytes() -> bytes:
     return FIXTURE_PATH.read_bytes()
-
-
-def load_expected_outputs() -> dict[str, object]:
-    return json.loads(EXPECTED_PATH.read_text(encoding="utf-8"))
 
 
 def mutate_fixture(mutator) -> bytes:
@@ -109,9 +101,7 @@ class TestHestaAdapterAgainstFixture(unittest.TestCase):
                 )
 
     def test_expected_warning_profile(self) -> None:
-        self.assertEqual(11, len(self.result.adapter_warnings))
-        for warning in self.result.adapter_warnings:
-            self.assertIn("negative value_aud", warning)
+        self.assertEqual(["row 3: negative value_aud"], self.result.adapter_warnings)
 
     def test_synthetic_name_only_branch(self) -> None:
         synthetic = (

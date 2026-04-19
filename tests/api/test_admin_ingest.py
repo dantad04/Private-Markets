@@ -11,9 +11,7 @@ from app.api.admin import get_db_session
 from app.api.app import create_app
 from app.db.models import Base, Holding
 from app.db.session import get_engine
-
-
-FIXTURE_PATH = Path("tests/fixtures/hesta_high_growth_20251231.csv").resolve()
+from tests.hesta_fixture import EXPECTED_TOTAL_ROWS, FIXTURE_PATH
 
 
 class TestAdminIngestEndpoint(unittest.TestCase):
@@ -55,8 +53,8 @@ class TestAdminIngestEndpoint(unittest.TestCase):
         )
         self.assertEqual(200, response.status_code)
         payload = response.json()
-        self.assertEqual(2835, payload["rows_staged"])
-        self.assertEqual(2835, payload["rows_inserted"])
+        self.assertEqual(EXPECTED_TOTAL_ROWS, payload["rows_staged"])
+        self.assertEqual(EXPECTED_TOTAL_ROWS, payload["rows_inserted"])
         self.assertEqual(0, payload["rows_skipped_existing"])
         with self.SessionLocal() as session:
-            self.assertEqual(2835, session.query(Holding).count())
+            self.assertEqual(EXPECTED_TOTAL_ROWS, session.query(Holding).count())

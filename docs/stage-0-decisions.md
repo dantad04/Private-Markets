@@ -163,3 +163,22 @@ Rejected:
 Rationale:
 
 Canonical storage should optimize for computation, not display. Decimal fractions avoid repeated interpretation bugs, align with most analytical tooling, and make cross-fund normalization unambiguous.
+
+## ADR-10: Frozen Hesta Adapter-Contract Artifact
+
+Chosen:
+
+1. Commit a full frozen `canonical_output.json` artifact for the Stage 1 synthetic Hesta fixture under `tests/adapters/contracts/hesta/`.
+2. Treat the artifact as the first-class adapter contract for Stage 1, alongside the existing readable golden-row tests.
+3. Cover every emitted row plus `structural_metadata`, `parse_statistics`, `schema_fingerprint`, and `adapter_warnings`.
+4. Regenerate the artifact only through `python3 -m scripts.regenerate_hesta_contract --confirm`.
+5. Require any pull request that changes `canonical_output.json` to say explicitly that the change is intentional and explain why.
+
+Rejected:
+
+1. Relying only on inline assertions and selected golden rows as the contract boundary.
+2. Auto-regenerating the artifact from tests, CI, or editor hooks.
+
+Rationale:
+
+The Hesta adapter is the Stage 1 contract-freeze point. A checked-in full-output artifact makes contract drift reviewable in pull requests and catches changes that narrow tests can miss, including field ordering, decimal rendering, warning text, and schema fingerprints. The fixture behind that artifact should be synthetic, not a committed copy of a raw source file. Regeneration must be a deliberate human act, not an automatic side effect, so the repo preserves a clear audit trail of when and why the contract moved.

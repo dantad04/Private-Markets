@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ page_title | e }}</h1>
+<table>
+  <thead>
+    <tr>
+      <th>source_file_id</th>
+      <th>fund_code</th>
+      <th>adapter_key</th>
+      <th>schema_fingerprint</th>
+      <th>ingest_status</th>
+      <th>reporting_period</th>
+      <th>received_at</th>
+      <th>encoding_replacement_count</th>
+      <th>rows_loaded</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in source_files %}
+    <tr>
+      <td><a href="{{ request.url_for('source_file_detail', source_file_id=row.id) | e }}">{{ row.id | e }}</a></td>
+      <td>{{ row.fund_code | e }}</td>
+      <td>{{ row.adapter_key | e }}</td>
+      <td>{{ (row.schema_fingerprint or '') | e }}</td>
+      <td>{{ row.ingest_status | e }}</td>
+      <td>{{ (row.period_end_date.isoformat() if row.period_end_date else '') | e }}</td>
+      <td>{{ row.received_at | iso_utc | e }}</td>
+      <td>{{ row.encoding_replacement_count | e }}</td>
+      <td>{{ row.rows_loaded | e }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="9">No source files registered.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

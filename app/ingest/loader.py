@@ -70,6 +70,8 @@ def register_source_file(
     received_at: datetime,
     reporting_period_id: int | None = None,
     publication_date: date | None = None,
+    terms_snapshot_url: str | None = None,
+    downloaded_at: datetime | None = None,
 ) -> SourceFileMetadata:
     fund = session.scalar(select(Fund).where(Fund.code == fund_code))
     if fund is None:
@@ -96,6 +98,8 @@ def register_source_file(
             publication_date=publication_date,
             version_number=1,
             is_current_version=True,
+            terms_snapshot_url=terms_snapshot_url,
+            downloaded_at=downloaded_at,
             encoding_replacement_count=0,
             received_at=received_at,
         )
@@ -316,4 +320,3 @@ def _normalise_observed_date(observed_date: str) -> str:
     if "-" in observed_date:
         return observed_date
     return datetime.strptime(observed_date, "%d/%m/%Y").date().isoformat()
-

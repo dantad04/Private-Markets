@@ -109,6 +109,8 @@ class SourceFile(Base):
     is_current_version: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("1"))
     superseded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     supersession_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    terms_snapshot_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    downloaded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     encoding_replacement_count: Mapped[int] = mapped_column(Integer, default=0, server_default=text("0"))
     received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -173,6 +175,7 @@ class Holding(Base):
     value_band_raw: Mapped[str | None] = mapped_column(String(128), nullable=True)
     source_row_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     source_row_number: Mapped[int] = mapped_column(Integer, nullable=False)
+    # Internal admin provenance only; never surface raw source rows on external-facing APIs.
     raw_payload_json: Mapped[list[str]] = mapped_column(JSON, nullable=False)
     ingested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     manager_entity_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -182,4 +185,3 @@ class Holding(Base):
     location_raw: Mapped[str | None] = mapped_column(String(255), nullable=True)
     parse_warning_flags: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
     metadata_attached_from_row_numbers: Mapped[list[int]] = mapped_column(JSON, nullable=False, default=list)
-

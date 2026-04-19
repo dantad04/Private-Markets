@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ page_title | e }}</h1>
+
+<div class="metadata-grid">
+  <strong>source_file_id</strong><span>{{ source_file.id | e }}</span>
+  <strong>fund_code</strong><span>{{ (fund.code if fund else '') | e }}</span>
+  <strong>fund_name</strong><span>{{ (fund.name if fund else '') | e }}</span>
+  <strong>adapter_key</strong><span>{{ source_file.adapter_key | e }}</span>
+  <strong>source_url</strong><span>{{ source_file.source_url | e }}</span>
+  <strong>checksum</strong><span>{{ source_file.checksum | e }}</span>
+  <strong>ingest_status</strong><span>{{ source_file.ingest_status | e }}</span>
+  <strong>schema_fingerprint</strong><span>{{ (source_file.schema_fingerprint or '') | e }}</span>
+  <strong>reporting_period</strong><span>{{ (reporting_period.period_end_date.isoformat() if reporting_period else '') | e }}</span>
+  <strong>publication_date</strong><span>{{ (source_file.publication_date.isoformat() if source_file.publication_date else '') | e }}</span>
+  <strong>terms_snapshot_url</strong><span>{{ (source_file.terms_snapshot_url or '') | e }}</span>
+  <strong>downloaded_at</strong><span>{{ source_file.downloaded_at | iso_utc | e }}</span>
+  <strong>received_at</strong><span>{{ source_file.received_at | iso_utc | e }}</span>
+  <strong>encoding_replacement_count</strong><span>{{ source_file.encoding_replacement_count | e }}</span>
+  <strong>investment_option_id</strong><span>{{ (source_file.investment_option_id or '') | e }}</span>
+  <strong>version_number</strong><span>{{ source_file.version_number | e }}</span>
+  <strong>is_current_version</strong><span>{{ source_file.is_current_version | e }}</span>
+</div>
+
+<div class="counts">
+  <div>
+    <strong>Counts by disclosure_completeness</strong>
+    <ul>
+      {% for key, count in disclosure_counts %}
+      <li>{{ key | e }}: {{ count | e }}</li>
+      {% else %}
+      <li>No holdings loaded.</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div>
+    <strong>Counts by canonical_asset_class</strong>
+    <ul>
+      {% for key, count in canonical_asset_class_counts %}
+      <li>{{ key | e }}: {{ count | e }}</li>
+      {% else %}
+      <li>No holdings loaded.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="pagination">
+  <strong>Page {{ page | e }} of {{ total_pages | e }}</strong>
+  <span> | total rows: {{ total_rows | e }}</span>
+  {% if prev_url %}
+  <span> | <a href="{{ prev_url | e }}">Prev</a></span>
+  {% endif %}
+  {% if next_url %}
+  <span> | <a href="{{ next_url | e }}">Next</a></span>
+  {% endif %}
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>row #</th>
+      <th>raw_name</th>
+      <th>source_asset_class_raw</th>
+      <th>source_subclass_raw</th>
+      <th>canonical_asset_class</th>
+      <th>disclosure_completeness</th>
+      <th>is_aggregate</th>
+      <th>value_aud</th>
+      <th>ownership_pct</th>
+      <th>currency_raw</th>
+      <th>security_identifier_type</th>
+      <th>security_identifier_value</th>
+      <th>raw payload</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for holding, canonical_asset_class_code in holdings %}
+    <tr>
+      <td>{{ holding.source_row_number | e }}</td>
+      <td>
+        {{ (holding.raw_name or '') | e }}
+        {% if holding.value_band_raw %}
+        <br>
+        <small>value_band_raw={{ holding.value_band_raw | e }}</small>
+        {% endif %}
+      </td>
+      <td>{{ holding.source_asset_class_raw | e }}</td>
+      <td>{{ (holding.source_subclass_raw or '') | e }}</td>
+      <td>{{ canonical_asset_class_code | e }}</td>
+      <td>{{ holding.disclosure_completeness | e }}</td>
+      <td>{{ holding.is_aggregate | e }}</td>
+      <td>{{ (holding.value_aud if holding.value_aud is not none else '') | e }}</td>
+      <td>{{ (holding.ownership_pct if holding.ownership_pct is not none else '') | e }}</td>
+      <td>{{ (holding.currency_raw or '') | e }}</td>
+      <td>{{ (holding.security_identifier_type or '') | e }}</td>
+      <td>{{ (holding.security_identifier_value or '') | e }}</td>
+      <td>
+        <details>
+          <summary>raw payload</summary>
+          <div><strong>ingested_at:</strong> {{ holding.ingested_at | iso_utc | e }}</div>
+          <pre>{{ holding.raw_payload_json | csv_row | e }}</pre>
+        </details>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="13">No holdings loaded for this source file.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

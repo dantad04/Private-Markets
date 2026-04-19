@@ -77,6 +77,8 @@ def upgrade() -> None:
         sa.Column("is_current_version", sa.Boolean(), server_default=sa.text("1"), nullable=False),
         sa.Column("superseded_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("supersession_reason", sa.Text(), nullable=True),
+        sa.Column("terms_snapshot_url", sa.Text(), nullable=True),
+        sa.Column("downloaded_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("encoding_replacement_count", sa.Integer(), server_default=sa.text("0"), nullable=False),
         sa.Column("received_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
