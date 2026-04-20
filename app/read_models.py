@@ -195,6 +195,155 @@ class CanonicalEntityDetailReadModel:
 
 
 @dataclass(frozen=True)
+class ManagerObservationReadModel:
+    raw_name: str
+    source_file_id: int
+    source_row_number: int
+    fund_code: str
+    fund_name: str
+    option_code: str
+    option_name: str
+    reporting_period_end_date: date
+    canonical_asset_class_code: str
+    source_asset_class_raw: str
+    source_subclass_raw: str | None
+    disclosure_completeness: str
+    value_aud: Decimal | None
+    ownership_pct: Decimal | None
+    value_band_raw: str | None
+    currency_raw: str | None
+    observation_kind: str
+
+
+@dataclass(frozen=True)
+class ManagerDetailReadModel:
+    entity_id: int
+    canonical_name: str
+    entity_type: str
+    abn: str | None
+    aliases: list[str]
+    matched_raw_names: list[str]
+    asset_classes: list[str]
+    relationships: list[EntityRelationshipReadModel]
+    observation_count: int
+    fund_count: int
+    latest_reporting_period: date | None
+    observations: list[ManagerObservationReadModel]
+
+
+@dataclass(frozen=True)
+class CompanyObservationReadModel:
+    raw_name: str
+    source_file_id: int
+    source_row_number: int
+    fund_code: str
+    fund_name: str
+    option_code: str
+    option_name: str
+    reporting_period_end_date: date
+    canonical_asset_class_code: str
+    source_asset_class_raw: str
+    source_subclass_raw: str | None
+    disclosure_completeness: str
+    value_aud: Decimal | None
+    ownership_pct: Decimal | None
+    value_band_raw: str | None
+    currency_raw: str | None
+
+
+@dataclass(frozen=True)
+class CompanyPeriodHistoryReadModel:
+    reporting_period_end_date: date
+    observation_count: int
+    fund_count: int
+
+
+@dataclass(frozen=True)
+class CompanyDetailReadModel:
+    entity_id: int
+    canonical_name: str
+    entity_type: str
+    abn: str | None
+    aliases: list[str]
+    matched_raw_names: list[str]
+    asset_classes: list[str]
+    relationships: list[EntityRelationshipReadModel]
+    observation_count: int
+    fund_count: int
+    latest_reporting_period: date | None
+    history_is_limited: bool
+    history_note: str | None
+    resolution_scope_note: str
+    period_history: list[CompanyPeriodHistoryReadModel]
+    observations: list[CompanyObservationReadModel]
+
+
+@dataclass(frozen=True)
+class FundAssetClassMixBucketReadModel:
+    disclosure_completeness: str
+    observation_count: int
+    precise_value_row_count: int
+    precise_value_aud_total: Decimal
+
+
+@dataclass(frozen=True)
+class FundAssetClassMixReadModel:
+    canonical_asset_class_code: str
+    by_disclosure_completeness: list[FundAssetClassMixBucketReadModel]
+
+
+@dataclass(frozen=True)
+class FundObservationSummaryReadModel:
+    raw_name: str
+    entity_id: int | None
+    entity_canonical_name: str | None
+    entity_type: str | None
+    source_file_id: int
+    source_row_number: int
+    reporting_period_end_date: date
+    canonical_asset_class_code: str
+    source_asset_class_raw: str
+    source_subclass_raw: str | None
+    classification_raw: str | None
+    disclosure_completeness: str
+    observation_kind: str
+    value_aud: Decimal | None
+    ownership_pct: Decimal | None
+    value_band_raw: str | None
+
+
+@dataclass(frozen=True)
+class FundInvestmentOptionReadModel:
+    option_id: int
+    option_code: str
+    option_name: str
+    reporting_period_end_date: date | None
+    observation_count: int
+    asset_class_mix: list[FundAssetClassMixReadModel]
+    top_direct_private_holdings: list[FundObservationSummaryReadModel]
+    manager_level_aggregate_exposures: list[FundObservationSummaryReadModel]
+    named_private_exposures: list[FundObservationSummaryReadModel]
+
+
+@dataclass(frozen=True)
+class FundChangeReadModel:
+    available: bool
+    current_reporting_period_end_date: date | None
+    prior_reporting_period_end_date: date | None
+    note: str | None
+
+
+@dataclass(frozen=True)
+class FundDetailReadModel:
+    fund_id: int
+    fund_code: str
+    fund_name: str
+    latest_reporting_period: date | None
+    investment_options: list[FundInvestmentOptionReadModel]
+    change_since_prior_reporting_period: FundChangeReadModel
+
+
+@dataclass(frozen=True)
 class EntityResolutionQueueListItem:
     id: int
     holding_id: int
@@ -1077,37 +1226,9 @@ def get_canonical_entity_detail(
     if entity is None:
         return None
 
-    alias_rows = session.scalars(
-        select(EntityAlias.alias).where(EntityAlias.entity_id == entity_id).order_by(EntityAlias.is_preferred.desc(), EntityAlias.alias.asc())
-    ).all()
-    aliases = list(dict.fromkeys([entity.canonical_name, *alias_rows]))
+    aliases = _get_entity_aliases(session, entity=entity)
     normalized_aliases = {normalise_name(alias) for alias in aliases}
-
-    relationship_rows = session.execute(
-        select(
-            EntityRelationship.id,
-            EntityRelationship.from_entity_id,
-            EntityRelationship.to_entity_id,
-            EntityRelationship.relationship_type,
-            EntityRelationship.source,
-            EntityRelationship.notes,
-        )
-        .where(
-            (EntityRelationship.from_entity_id == entity_id) | (EntityRelationship.to_entity_id == entity_id)
-        )
-        .order_by(EntityRelationship.id.asc())
-    ).all()
-    relationships = [
-        EntityRelationshipReadModel(
-            relationship_id=row.id,
-            from_entity_id=row.from_entity_id,
-            to_entity_id=row.to_entity_id,
-            relationship_type=row.relationship_type,
-            source=row.source,
-            notes=row.notes,
-        )
-        for row in relationship_rows
-    ]
+    relationships = _get_entity_relationships(session, entity_id=entity_id)
 
     holding_rows = _load_current_cross_adapter_rows(session)
     matched_rows = [
@@ -1141,6 +1262,471 @@ def get_canonical_entity_detail(
         aliases=aliases,
         relationships=relationships,
         observed_holdings_count_by_fund_period=observed_counts,
+    )
+
+
+def get_manager_detail(
+    session: Session,
+    *,
+    entity_id: int,
+) -> ManagerDetailReadModel | None:
+    entity = session.get(Entity, entity_id)
+    if entity is None or entity.entity_type != "manager":
+        return None
+
+    aliases = _get_entity_aliases(session, entity=entity)
+    normalized_aliases = {normalise_name(alias) for alias in aliases}
+    relationships = _get_entity_relationships(session, entity_id=entity_id)
+
+    rows = session.execute(
+        select(
+            Holding.raw_name,
+            Holding.entity_id,
+            Holding.manager_entity_id,
+            Holding.issuer_entity_id,
+            Holding.source_file_id,
+            Holding.source_row_number,
+            Holding.disclosure_completeness,
+            Holding.value_aud,
+            Holding.ownership_pct,
+            Holding.value_band_raw,
+            Holding.currency_raw,
+            Holding.source_asset_class_raw,
+            Holding.source_subclass_raw,
+            Holding.classification_raw,
+            CanonicalAssetClass.code.label("canonical_asset_class_code"),
+            Fund.code.label("fund_code"),
+            Fund.name.label("fund_name"),
+            InvestmentOption.source_option_code.label("option_code"),
+            InvestmentOption.source_option_name.label("option_name"),
+            ReportingPeriod.period_end_date.label("reporting_period_end_date"),
+        )
+        .join(Fund, Fund.id == Holding.source_fund_id)
+        .join(InvestmentOption, InvestmentOption.id == Holding.source_option_id)
+        .join(ReportingPeriod, ReportingPeriod.id == Holding.reporting_period_id)
+        .join(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
+        .join(SourceFile, SourceFile.id == Holding.source_file_id)
+        .where(
+            Holding.raw_name.is_not(None),
+            Holding.is_aggregate.is_(False),
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+        )
+        .order_by(
+            Fund.code.asc(),
+            InvestmentOption.source_option_name.asc(),
+            ReportingPeriod.period_end_date.desc(),
+            Holding.source_file_id.asc(),
+            Holding.source_row_number.asc(),
+        )
+    ).all()
+
+    observations: list[ManagerObservationReadModel] = []
+    for row in rows:
+        if row.raw_name is None:
+            continue
+        normalized_name = normalise_name(row.raw_name)
+        if row.entity_id != entity_id and normalized_name not in normalized_aliases:
+            continue
+        observations.append(
+            ManagerObservationReadModel(
+                raw_name=row.raw_name,
+                source_file_id=row.source_file_id,
+                source_row_number=row.source_row_number,
+                fund_code=row.fund_code,
+                fund_name=row.fund_name,
+                option_code=row.option_code,
+                option_name=row.option_name,
+                reporting_period_end_date=row.reporting_period_end_date,
+                canonical_asset_class_code=row.canonical_asset_class_code,
+                source_asset_class_raw=row.source_asset_class_raw,
+                source_subclass_raw=row.source_subclass_raw,
+                disclosure_completeness=row.disclosure_completeness,
+                value_aud=row.value_aud,
+                ownership_pct=row.ownership_pct,
+                value_band_raw=row.value_band_raw,
+                currency_raw=row.currency_raw,
+                observation_kind=_derive_manager_observation_kind(
+                    entity_id=entity_id,
+                    manager_entity_id=row.manager_entity_id,
+                    issuer_entity_id=row.issuer_entity_id,
+                    disclosure_completeness=row.disclosure_completeness,
+                    ownership_pct=row.ownership_pct,
+                    source_subclass_raw=row.source_subclass_raw,
+                    classification_raw=row.classification_raw,
+                ),
+            )
+        )
+
+    latest_reporting_period = max(
+        (observation.reporting_period_end_date for observation in observations),
+        default=None,
+    )
+    return ManagerDetailReadModel(
+        entity_id=entity.id,
+        canonical_name=entity.canonical_name,
+        entity_type=entity.entity_type,
+        abn=entity.abn,
+        aliases=aliases,
+        matched_raw_names=sorted({observation.raw_name for observation in observations}),
+        asset_classes=sorted({observation.canonical_asset_class_code for observation in observations}),
+        relationships=relationships,
+        observation_count=len(observations),
+        fund_count=len({observation.fund_code for observation in observations}),
+        latest_reporting_period=latest_reporting_period,
+        observations=observations,
+    )
+
+
+def get_company_detail(
+    session: Session,
+    *,
+    entity_id: int,
+) -> CompanyDetailReadModel | None:
+    entity = session.get(Entity, entity_id)
+    if entity is None or entity.entity_type != "company":
+        return None
+
+    aliases = _get_entity_aliases(session, entity=entity)
+    normalized_aliases = {normalise_name(alias) for alias in aliases}
+    relationships = _get_entity_relationships(session, entity_id=entity_id)
+
+    rows = session.execute(
+        select(
+            Holding.raw_name,
+            Holding.entity_id,
+            Holding.source_file_id,
+            Holding.source_row_number,
+            Holding.disclosure_completeness,
+            Holding.value_aud,
+            Holding.ownership_pct,
+            Holding.value_band_raw,
+            Holding.currency_raw,
+            Holding.source_asset_class_raw,
+            Holding.source_subclass_raw,
+            CanonicalAssetClass.code.label("canonical_asset_class_code"),
+            Fund.code.label("fund_code"),
+            Fund.name.label("fund_name"),
+            InvestmentOption.source_option_code.label("option_code"),
+            InvestmentOption.source_option_name.label("option_name"),
+            ReportingPeriod.period_end_date.label("reporting_period_end_date"),
+        )
+        .join(Fund, Fund.id == Holding.source_fund_id)
+        .join(InvestmentOption, InvestmentOption.id == Holding.source_option_id)
+        .join(ReportingPeriod, ReportingPeriod.id == Holding.reporting_period_id)
+        .join(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
+        .join(SourceFile, SourceFile.id == Holding.source_file_id)
+        .where(
+            Holding.raw_name.is_not(None),
+            Holding.is_aggregate.is_(False),
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+        )
+        .order_by(
+            Fund.code.asc(),
+            InvestmentOption.source_option_name.asc(),
+            ReportingPeriod.period_end_date.desc(),
+            Holding.source_file_id.asc(),
+            Holding.source_row_number.asc(),
+        )
+    ).all()
+
+    observations: list[CompanyObservationReadModel] = []
+    for row in rows:
+        if row.raw_name is None:
+            continue
+        normalized_name = normalise_name(row.raw_name)
+        if row.entity_id != entity_id and normalized_name not in normalized_aliases:
+            continue
+        observations.append(
+            CompanyObservationReadModel(
+                raw_name=row.raw_name,
+                source_file_id=row.source_file_id,
+                source_row_number=row.source_row_number,
+                fund_code=row.fund_code,
+                fund_name=row.fund_name,
+                option_code=row.option_code,
+                option_name=row.option_name,
+                reporting_period_end_date=row.reporting_period_end_date,
+                canonical_asset_class_code=row.canonical_asset_class_code,
+                source_asset_class_raw=row.source_asset_class_raw,
+                source_subclass_raw=row.source_subclass_raw,
+                disclosure_completeness=row.disclosure_completeness,
+                value_aud=row.value_aud,
+                ownership_pct=row.ownership_pct,
+                value_band_raw=row.value_band_raw,
+                currency_raw=row.currency_raw,
+            )
+        )
+
+    latest_reporting_period = max(
+        (observation.reporting_period_end_date for observation in observations),
+        default=None,
+    )
+
+    period_history_counts: dict[date, dict[str, object]] = {}
+    for observation in observations:
+        period_bucket = period_history_counts.setdefault(
+            observation.reporting_period_end_date,
+            {
+                "observation_count": 0,
+                "fund_codes": set(),
+            },
+        )
+        period_bucket["observation_count"] = int(period_bucket["observation_count"]) + 1
+        period_bucket["fund_codes"].add(observation.fund_code)
+
+    period_history = [
+        CompanyPeriodHistoryReadModel(
+            reporting_period_end_date=period_end_date,
+            observation_count=int(period_bucket["observation_count"]),
+            fund_count=len(period_bucket["fund_codes"]),
+        )
+        for period_end_date, period_bucket in sorted(period_history_counts.items(), reverse=True)
+    ]
+
+    history_is_limited = len(period_history) <= 1
+    history_note = (
+        "Only one reporting period is currently available for this canonical company detail slice."
+        if history_is_limited
+        else None
+    )
+
+    return CompanyDetailReadModel(
+        entity_id=entity.id,
+        canonical_name=entity.canonical_name,
+        entity_type=entity.entity_type,
+        abn=entity.abn,
+        aliases=aliases,
+        matched_raw_names=sorted({observation.raw_name for observation in observations}),
+        asset_classes=sorted({observation.canonical_asset_class_code for observation in observations}),
+        relationships=relationships,
+        observation_count=len(observations),
+        fund_count=len({observation.fund_code for observation in observations}),
+        latest_reporting_period=latest_reporting_period,
+        history_is_limited=history_is_limited,
+        history_note=history_note,
+        resolution_scope_note=(
+            "Only linked holdings and exact seeded aliases are included here; unresolved raw-name variants remain "
+            "outside the canonical company view until current stored truth supports linking them."
+        ),
+        period_history=period_history,
+        observations=observations,
+    )
+
+
+DISCLOSURE_COMPLETENESS_SORT_ORDER = {
+    "fully_disclosed": 0,
+    "value_only": 1,
+    "ownership_only": 2,
+    "name_only": 3,
+    "aggregate_total": 4,
+}
+
+PRIVATE_ASSET_CLASS_CODES = {
+    "private_debt",
+    "unlisted_equity",
+    "unlisted_infrastructure",
+    "unlisted_property",
+}
+
+
+def get_fund_detail(
+    session: Session,
+    *,
+    fund_code: str,
+) -> FundDetailReadModel | None:
+    lookup_code = fund_code.strip()
+    if lookup_code == "":
+        raise ValueError("fund_code must not be blank")
+
+    fund = session.scalar(select(Fund).where(func.lower(Fund.code) == lookup_code.casefold()))
+    if fund is None:
+        return None
+
+    option_rows = session.execute(
+        select(
+            InvestmentOption.id,
+            InvestmentOption.source_option_code,
+            InvestmentOption.source_option_name,
+        )
+        .where(InvestmentOption.fund_id == fund.id)
+        .order_by(InvestmentOption.source_option_name.asc(), InvestmentOption.id.asc())
+    ).all()
+
+    holding_rows = session.execute(
+        select(
+            Holding.raw_name,
+            Holding.entity_id,
+            Holding.source_file_id,
+            Holding.source_row_number,
+            Holding.disclosure_completeness,
+            Holding.value_aud,
+            Holding.ownership_pct,
+            Holding.value_band_raw,
+            Holding.source_asset_class_raw,
+            Holding.source_subclass_raw,
+            Holding.classification_raw,
+            CanonicalAssetClass.code.label("canonical_asset_class_code"),
+            Entity.canonical_name.label("entity_canonical_name"),
+            Entity.entity_type.label("entity_type"),
+            InvestmentOption.id.label("option_id"),
+            InvestmentOption.source_option_code.label("option_code"),
+            InvestmentOption.source_option_name.label("option_name"),
+            ReportingPeriod.period_end_date.label("reporting_period_end_date"),
+        )
+        .join(InvestmentOption, InvestmentOption.id == Holding.source_option_id)
+        .join(ReportingPeriod, ReportingPeriod.id == Holding.reporting_period_id)
+        .join(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
+        .join(SourceFile, SourceFile.id == Holding.source_file_id)
+        .outerjoin(Entity, Entity.id == Holding.entity_id)
+        .where(
+            Holding.source_fund_id == fund.id,
+            Holding.is_aggregate.is_(False),
+            Holding.raw_name.is_not(None),
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+        )
+        .order_by(
+            ReportingPeriod.period_end_date.desc(),
+            InvestmentOption.source_option_name.asc(),
+            Holding.source_row_number.asc(),
+        )
+    ).all()
+
+    observed_periods = sorted({row.reporting_period_end_date for row in holding_rows}, reverse=True)
+    latest_reporting_period = observed_periods[0] if observed_periods else None
+    prior_reporting_period = observed_periods[1] if len(observed_periods) > 1 else None
+    current_rows = (
+        [row for row in holding_rows if row.reporting_period_end_date == latest_reporting_period]
+        if latest_reporting_period is not None
+        else []
+    )
+
+    current_rows_by_option_id: dict[int, list[object]] = {}
+    for row in current_rows:
+        current_rows_by_option_id.setdefault(int(row.option_id), []).append(row)
+
+    investment_options: list[FundInvestmentOptionReadModel] = []
+    for option_row in option_rows:
+        option_specific_rows = current_rows_by_option_id.get(int(option_row.id), [])
+        asset_mix_buckets: dict[tuple[str, str], dict[str, object]] = {}
+        top_direct_private_holdings: list[FundObservationSummaryReadModel] = []
+        manager_level_aggregate_exposures: list[FundObservationSummaryReadModel] = []
+        named_private_exposures: list[FundObservationSummaryReadModel] = []
+
+        for row in option_specific_rows:
+            observation_kind = _derive_fund_observation_kind(
+                entity_type=row.entity_type,
+                disclosure_completeness=row.disclosure_completeness,
+                ownership_pct=row.ownership_pct,
+                source_subclass_raw=row.source_subclass_raw,
+                classification_raw=row.classification_raw,
+            )
+            summary = FundObservationSummaryReadModel(
+                raw_name=row.raw_name,
+                entity_id=row.entity_id,
+                entity_canonical_name=row.entity_canonical_name,
+                entity_type=row.entity_type,
+                source_file_id=row.source_file_id,
+                source_row_number=row.source_row_number,
+                reporting_period_end_date=row.reporting_period_end_date,
+                canonical_asset_class_code=row.canonical_asset_class_code,
+                source_asset_class_raw=row.source_asset_class_raw,
+                source_subclass_raw=row.source_subclass_raw,
+                classification_raw=row.classification_raw,
+                disclosure_completeness=row.disclosure_completeness,
+                observation_kind=observation_kind,
+                value_aud=row.value_aud,
+                ownership_pct=row.ownership_pct,
+                value_band_raw=row.value_band_raw,
+            )
+
+            bucket_key = (row.canonical_asset_class_code, row.disclosure_completeness)
+            bucket = asset_mix_buckets.setdefault(
+                bucket_key,
+                {
+                    "observation_count": 0,
+                    "precise_value_row_count": 0,
+                    "precise_value_aud_total": Decimal("0"),
+                },
+            )
+            bucket["observation_count"] = int(bucket["observation_count"]) + 1
+            if row.value_aud is not None:
+                bucket["precise_value_row_count"] = int(bucket["precise_value_row_count"]) + 1
+                bucket["precise_value_aud_total"] = Decimal(bucket["precise_value_aud_total"]) + row.value_aud
+
+            if summary.canonical_asset_class_code in PRIVATE_ASSET_CLASS_CODES:
+                if observation_kind == "direct_holding":
+                    top_direct_private_holdings.append(summary)
+                elif observation_kind == "unknown":
+                    named_private_exposures.append(summary)
+
+            if observation_kind == "manager_rollup":
+                manager_level_aggregate_exposures.append(summary)
+
+        mix_by_asset_class: dict[str, list[FundAssetClassMixBucketReadModel]] = {}
+        for (asset_class_code, disclosure_completeness), bucket in asset_mix_buckets.items():
+            mix_by_asset_class.setdefault(asset_class_code, []).append(
+                FundAssetClassMixBucketReadModel(
+                    disclosure_completeness=disclosure_completeness,
+                    observation_count=int(bucket["observation_count"]),
+                    precise_value_row_count=int(bucket["precise_value_row_count"]),
+                    precise_value_aud_total=Decimal(bucket["precise_value_aud_total"]),
+                )
+            )
+
+        investment_options.append(
+            FundInvestmentOptionReadModel(
+                option_id=int(option_row.id),
+                option_code=option_row.source_option_code,
+                option_name=option_row.source_option_name,
+                reporting_period_end_date=latest_reporting_period,
+                observation_count=len(option_specific_rows),
+                asset_class_mix=[
+                    FundAssetClassMixReadModel(
+                        canonical_asset_class_code=asset_class_code,
+                        by_disclosure_completeness=sorted(
+                            buckets,
+                            key=lambda item: DISCLOSURE_COMPLETENESS_SORT_ORDER.get(
+                                item.disclosure_completeness,
+                                999,
+                            ),
+                        ),
+                    )
+                    for asset_class_code, buckets in sorted(mix_by_asset_class.items(), key=lambda item: item[0])
+                ],
+                top_direct_private_holdings=sorted(
+                    top_direct_private_holdings,
+                    key=_fund_observation_sort_key,
+                )[:10],
+                manager_level_aggregate_exposures=sorted(
+                    manager_level_aggregate_exposures,
+                    key=_fund_observation_sort_key,
+                )[:10],
+                named_private_exposures=sorted(
+                    named_private_exposures,
+                    key=_fund_observation_sort_key,
+                )[:10],
+            )
+        )
+
+    return FundDetailReadModel(
+        fund_id=fund.id,
+        fund_code=fund.code,
+        fund_name=fund.name,
+        latest_reporting_period=latest_reporting_period,
+        investment_options=investment_options,
+        change_since_prior_reporting_period=FundChangeReadModel(
+            available=False,
+            current_reporting_period_end_date=latest_reporting_period,
+            prior_reporting_period_end_date=prior_reporting_period,
+            note=(
+                "Only one reporting period is currently available for this fund detail slice."
+                if prior_reporting_period is None
+                else "Change since prior reporting period is not yet exposed on the fund detail slice."
+            ),
+        ),
     )
 
 
@@ -1179,6 +1765,102 @@ def _load_current_cross_adapter_rows(session: Session):
             Holding.source_row_number.asc(),
         )
     ).all()
+
+
+def _get_entity_aliases(session: Session, *, entity: Entity) -> list[str]:
+    alias_rows = session.scalars(
+        select(EntityAlias.alias)
+        .where(EntityAlias.entity_id == entity.id)
+        .order_by(EntityAlias.is_preferred.desc(), EntityAlias.alias.asc())
+    ).all()
+    return list(dict.fromkeys([entity.canonical_name, *alias_rows]))
+
+
+def _get_entity_relationships(session: Session, *, entity_id: int) -> list[EntityRelationshipReadModel]:
+    relationship_rows = session.execute(
+        select(
+            EntityRelationship.id,
+            EntityRelationship.from_entity_id,
+            EntityRelationship.to_entity_id,
+            EntityRelationship.relationship_type,
+            EntityRelationship.source,
+            EntityRelationship.notes,
+        )
+        .where(
+            (EntityRelationship.from_entity_id == entity_id) | (EntityRelationship.to_entity_id == entity_id)
+        )
+        .order_by(EntityRelationship.id.asc())
+    ).all()
+    return [
+        EntityRelationshipReadModel(
+            relationship_id=row.id,
+            from_entity_id=row.from_entity_id,
+            to_entity_id=row.to_entity_id,
+            relationship_type=row.relationship_type,
+            source=row.source,
+            notes=row.notes,
+        )
+        for row in relationship_rows
+    ]
+
+
+def _derive_manager_observation_kind(
+    *,
+    entity_id: int,
+    manager_entity_id: int | None,
+    issuer_entity_id: int | None,
+    disclosure_completeness: str,
+    ownership_pct: Decimal | None,
+    source_subclass_raw: str | None,
+    classification_raw: str | None,
+) -> str:
+    if manager_entity_id == entity_id:
+        return "manager_rollup"
+    if issuer_entity_id == entity_id:
+        return "direct_holding"
+    if ownership_pct is not None or disclosure_completeness == "fully_disclosed":
+        return "direct_holding"
+    if source_subclass_raw is not None and normalise_name(source_subclass_raw) == "externally managed":
+        return "manager_rollup"
+    if classification_raw is not None and "manager" in classification_raw.casefold():
+        return "manager_rollup"
+    return "unknown"
+
+
+def _derive_fund_observation_kind(
+    *,
+    entity_type: str | None,
+    disclosure_completeness: str,
+    ownership_pct: Decimal | None,
+    source_subclass_raw: str | None,
+    classification_raw: str | None,
+) -> str:
+    if ownership_pct is not None or disclosure_completeness == "fully_disclosed":
+        return "direct_holding"
+    if entity_type == "manager":
+        return "manager_rollup"
+    if classification_raw is not None and "manager" in classification_raw.casefold():
+        return "manager_rollup"
+    if (
+        disclosure_completeness == "value_only"
+        and source_subclass_raw is not None
+        and normalise_name(source_subclass_raw) == "externally managed"
+    ):
+        return "manager_rollup"
+    return "unknown"
+
+
+def _fund_observation_sort_key(item: FundObservationSummaryReadModel) -> tuple[object, ...]:
+    value_rank = item.value_aud if item.value_aud is not None else Decimal("0")
+    ownership_rank = item.ownership_pct if item.ownership_pct is not None else Decimal("0")
+    return (
+        0 if item.value_aud is not None else 1,
+        -value_rank,
+        0 if item.ownership_pct is not None else 1,
+        -ownership_rank,
+        item.raw_name.casefold(),
+    )
+
 
 def _build_cross_adapter_holdings_read_model(
     *,

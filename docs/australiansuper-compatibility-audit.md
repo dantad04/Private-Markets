@@ -8,10 +8,9 @@ Implementation status update:
   compatible with the ART-Sunsuper adapter as-is.
 - The follow-on implementation now exists as a thin `AustralianSuperPhdAdapter`
   with explicit identity verification.
-- Approved loader/admin production support now covers the official
-  `Member Direct PHD (1).csv`, `Stable PHD (1).csv`, and
-  `Conservative PHD (1).csv` families. `Socially Aware` remains staged behind
-  additional mapping approval.
+- The approved loader/admin production slice is currently the official
+  `Member Direct PHD (1).csv` family. Broader AustralianSuper option shapes
+  remain staged behind additional mapping approval.
 
 ## Scope
 
@@ -42,13 +41,11 @@ Implementation outcome:
    AustralianSuper-specific header and field normalisation.
 3. Identity verification now depends on source/domain/content signals, not
    `AR**` prefixes.
-4. Approved production-ingest support now covers `Member Direct PHD (1).csv`,
-   `Stable PHD (1).csv`, and `Conservative PHD (1).csv`.
-5. `Socially Aware` can parse through the adapter, but remains review-gated
-   until its mapping is approved.
+4. The approved production-ingest claim is narrow: `Member Direct PHD (1).csv`
+   only.
+5. `Stable`, `Conservative Balanced`, and `Socially Aware` can parse through
+   the adapter, but remain review-gated until their mappings are approved.
 6. No generic shared-family adapter was introduced.
-7. The next bounded AustralianSuper decision is the dedicated `Socially Aware`
-   go / no-go note in `docs/australiansuper-socially-aware-audit.md`.
 
 ## Real-file differences from the current ART-Sunsuper contract
 
@@ -71,10 +68,7 @@ Implementation outcome:
    Real files use `Asset Class = Derivatives` together with `Filter = By Asset Class`,
    `By Currency`, and `By Kind`, rather than a single `Derivatives` filter token.
 5. Ownership semantics differ.
-   The ART narrow slice uses bare decimals already in canonical fraction form
-   (`0.18` means 18%). The AustralianSuper real files show numeric percentage
-   points such as `1.09` and `2.88`, which need divide-by-100 normalisation.
-6. Weighting appears to use numeric percentage points as well.
+   Ownership semantics differ. The ART narrow slice uses bare decimal percentage points, not already-normalised canonical fractions. For example, 0.18 should be interpreted as 0.18% and normalised by dividing by 100 for canonical storage. The AustralianSuper real files also use numeric percentage points, with observed values such as 1.09 and 2.88, so they likewise require divide-by-100 normalisation.
    Example: `Stable PHD (1).csv` row 2 has `Weighting (%) = 1.41`.
 7. Asset-class labelling is broader in the real files.
    Real rows use families such as `Equity`, `Infrastructure`, `Property`,

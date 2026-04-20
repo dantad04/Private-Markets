@@ -10,16 +10,23 @@ from sqlalchemy.orm import Session
 from app.api.admin import get_db_session
 from app.read_models import (
     CanonicalEntityDetailReadModel,
+    CompanyDetailReadModel,
+    CompanyObservationReadModel,
+    CompanyPeriodHistoryReadModel,
     CrossAdapterHoldingsReadModel,
     CrossAdapterObservationReadModel,
     EntityObservedHoldingsCountReadModel,
     EntityRelationshipReadModel,
     EntityDetailReadModel,
     EntityObservationReadModel,
+    get_company_detail,
     get_canonical_entity_detail,
     get_cross_adapter_holdings_by_entity_id,
     get_cross_adapter_holdings_by_name,
     get_entity_detail_by_name,
+    get_manager_detail,
+    ManagerDetailReadModel,
+    ManagerObservationReadModel,
 )
 
 
@@ -222,6 +229,174 @@ class CanonicalEntityDetailResponse(BaseModel):
         )
 
 
+class ManagerObservationResponse(BaseModel):
+    raw_name: str
+    source_file_id: int
+    source_row_number: int
+    fund_code: str
+    fund_name: str
+    option_code: str
+    option_name: str
+    reporting_period_end_date: date
+    canonical_asset_class_code: str
+    source_asset_class_raw: str
+    source_subclass_raw: str | None
+    disclosure_completeness: str
+    value_aud: str | None
+    ownership_pct: str | None
+    value_band_raw: str | None
+    currency_raw: str | None
+    observation_kind: str
+
+    @classmethod
+    def from_read_model(cls, item: ManagerObservationReadModel) -> "ManagerObservationResponse":
+        return cls(
+            raw_name=item.raw_name,
+            source_file_id=item.source_file_id,
+            source_row_number=item.source_row_number,
+            fund_code=item.fund_code,
+            fund_name=item.fund_name,
+            option_code=item.option_code,
+            option_name=item.option_name,
+            reporting_period_end_date=item.reporting_period_end_date,
+            canonical_asset_class_code=item.canonical_asset_class_code,
+            source_asset_class_raw=item.source_asset_class_raw,
+            source_subclass_raw=item.source_subclass_raw,
+            disclosure_completeness=item.disclosure_completeness,
+            value_aud=_decimal_string(item.value_aud),
+            ownership_pct=_decimal_string(item.ownership_pct),
+            value_band_raw=item.value_band_raw,
+            currency_raw=item.currency_raw,
+            observation_kind=item.observation_kind,
+        )
+
+
+class ManagerDetailResponse(BaseModel):
+    entity_id: int
+    canonical_name: str
+    entity_type: str
+    abn: str | None
+    aliases: list[str]
+    matched_raw_names: list[str]
+    asset_classes: list[str]
+    relationships: list[EntityRelationshipResponse]
+    observation_count: int
+    fund_count: int
+    latest_reporting_period: date | None
+    observations: list[ManagerObservationResponse]
+
+    @classmethod
+    def from_read_model(cls, item: ManagerDetailReadModel) -> "ManagerDetailResponse":
+        return cls(
+            entity_id=item.entity_id,
+            canonical_name=item.canonical_name,
+            entity_type=item.entity_type,
+            abn=item.abn,
+            aliases=item.aliases,
+            matched_raw_names=item.matched_raw_names,
+            asset_classes=item.asset_classes,
+            relationships=[EntityRelationshipResponse.from_read_model(row) for row in item.relationships],
+            observation_count=item.observation_count,
+            fund_count=item.fund_count,
+            latest_reporting_period=item.latest_reporting_period,
+            observations=[ManagerObservationResponse.from_read_model(row) for row in item.observations],
+        )
+
+
+class CompanyObservationResponse(BaseModel):
+    raw_name: str
+    source_file_id: int
+    source_row_number: int
+    fund_code: str
+    fund_name: str
+    option_code: str
+    option_name: str
+    reporting_period_end_date: date
+    canonical_asset_class_code: str
+    source_asset_class_raw: str
+    source_subclass_raw: str | None
+    disclosure_completeness: str
+    value_aud: str | None
+    ownership_pct: str | None
+    value_band_raw: str | None
+    currency_raw: str | None
+
+    @classmethod
+    def from_read_model(cls, item: CompanyObservationReadModel) -> "CompanyObservationResponse":
+        return cls(
+            raw_name=item.raw_name,
+            source_file_id=item.source_file_id,
+            source_row_number=item.source_row_number,
+            fund_code=item.fund_code,
+            fund_name=item.fund_name,
+            option_code=item.option_code,
+            option_name=item.option_name,
+            reporting_period_end_date=item.reporting_period_end_date,
+            canonical_asset_class_code=item.canonical_asset_class_code,
+            source_asset_class_raw=item.source_asset_class_raw,
+            source_subclass_raw=item.source_subclass_raw,
+            disclosure_completeness=item.disclosure_completeness,
+            value_aud=_decimal_string(item.value_aud),
+            ownership_pct=_decimal_string(item.ownership_pct),
+            value_band_raw=item.value_band_raw,
+            currency_raw=item.currency_raw,
+        )
+
+
+class CompanyPeriodHistoryResponse(BaseModel):
+    reporting_period_end_date: date
+    observation_count: int
+    fund_count: int
+
+    @classmethod
+    def from_read_model(cls, item: CompanyPeriodHistoryReadModel) -> "CompanyPeriodHistoryResponse":
+        return cls(
+            reporting_period_end_date=item.reporting_period_end_date,
+            observation_count=item.observation_count,
+            fund_count=item.fund_count,
+        )
+
+
+class CompanyDetailResponse(BaseModel):
+    entity_id: int
+    canonical_name: str
+    entity_type: str
+    abn: str | None
+    aliases: list[str]
+    matched_raw_names: list[str]
+    asset_classes: list[str]
+    relationships: list[EntityRelationshipResponse]
+    observation_count: int
+    fund_count: int
+    latest_reporting_period: date | None
+    history_is_limited: bool
+    history_note: str | None
+    resolution_scope_note: str
+    period_history: list[CompanyPeriodHistoryResponse]
+    observations: list[CompanyObservationResponse]
+
+    @classmethod
+    def from_read_model(cls, item: CompanyDetailReadModel) -> "CompanyDetailResponse":
+        return cls(
+            entity_id=item.entity_id,
+            canonical_name=item.canonical_name,
+            entity_type=item.entity_type,
+            abn=item.abn,
+            aliases=item.aliases,
+            matched_raw_names=item.matched_raw_names,
+            asset_classes=item.asset_classes,
+            relationships=[EntityRelationshipResponse.from_read_model(row) for row in item.relationships],
+            observation_count=item.observation_count,
+            fund_count=item.fund_count,
+            latest_reporting_period=item.latest_reporting_period,
+            history_is_limited=item.history_is_limited,
+            history_note=item.history_note,
+            resolution_scope_note=item.resolution_scope_note,
+            period_history=[CompanyPeriodHistoryResponse.from_read_model(row) for row in item.period_history],
+            observations=[CompanyObservationResponse.from_read_model(row) for row in item.observations],
+        )
+
+
 @router.get("/by-name", response_model=EntityDetailResponse)
 def entity_detail_by_name(
     name: str = Query(..., min_length=1, description="Case-insensitive exact raw holding name lookup"),
@@ -252,6 +427,28 @@ def cross_adapter_holdings_by_name(
     if detail is None:
         raise HTTPException(status_code=404, detail="Cross-adapter holdings not found")
     return CrossAdapterHoldingsResponse.from_read_model(detail)
+
+
+@router.get("/managers/{entity_id}", response_model=ManagerDetailResponse)
+def manager_detail(
+    entity_id: int,
+    session: Session = Depends(get_db_session),
+) -> ManagerDetailResponse:
+    detail = get_manager_detail(session, entity_id=entity_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Manager detail not found")
+    return ManagerDetailResponse.from_read_model(detail)
+
+
+@router.get("/companies/{entity_id}", response_model=CompanyDetailResponse)
+def company_detail(
+    entity_id: int,
+    session: Session = Depends(get_db_session),
+) -> CompanyDetailResponse:
+    detail = get_company_detail(session, entity_id=entity_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Company detail not found")
+    return CompanyDetailResponse.from_read_model(detail)
 
 
 @router.get("/{entity_id}", response_model=CanonicalEntityDetailResponse)

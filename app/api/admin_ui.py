@@ -11,8 +11,11 @@ from app.api.admin import get_db_session
 from app.entity_resolution.queue import apply_entity_resolution_queue_action
 from app.ingest.loader import LoaderError, ingest_hesta_local_file
 from app.read_models import (
+    get_company_detail,
     get_cross_adapter_holdings_by_name,
     get_entity_resolution_queue_detail,
+    get_fund_detail,
+    get_manager_detail,
     get_schema_review_queue_detail,
     get_source_file_detail,
     list_entity_resolution_queue_items,
@@ -135,6 +138,66 @@ def cross_adapter_lookup(
             "lookup_name": lookup_name,
             "detail": detail,
             "lookup_performed": bool(lookup_name),
+        },
+    )
+
+
+@router.get("/managers/{entity_id}", response_class=HTMLResponse, name="manager_detail_page")
+def manager_detail_page(
+    request: Request,
+    entity_id: int,
+    session: Session = Depends(get_db_session),
+) -> HTMLResponse:
+    detail = get_manager_detail(session, entity_id=entity_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Manager detail not found")
+
+    return _render(
+        request,
+        "manager_detail.html",
+        {
+            "page_title": f"Manager Detail {entity_id}",
+            "detail": detail,
+        },
+    )
+
+
+@router.get("/companies/{entity_id}", response_class=HTMLResponse, name="company_detail_page")
+def company_detail_page(
+    request: Request,
+    entity_id: int,
+    session: Session = Depends(get_db_session),
+) -> HTMLResponse:
+    detail = get_company_detail(session, entity_id=entity_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Company detail not found")
+
+    return _render(
+        request,
+        "company_detail.html",
+        {
+            "page_title": f"Company Detail {entity_id}",
+            "detail": detail,
+        },
+    )
+
+
+@router.get("/funds/{fund_code}", response_class=HTMLResponse, name="fund_detail_page")
+def fund_detail_page(
+    request: Request,
+    fund_code: str,
+    session: Session = Depends(get_db_session),
+) -> HTMLResponse:
+    detail = get_fund_detail(session, fund_code=fund_code)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Fund detail not found")
+
+    return _render(
+        request,
+        "fund_detail.html",
+        {
+            "page_title": f"Fund Detail {detail.fund_code}",
+            "detail": detail,
         },
     )
 

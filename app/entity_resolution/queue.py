@@ -13,6 +13,7 @@ def upsert_entity_resolution_queue_item(
     holding_id: int,
     candidate_entity_ids: list[int],
     evidence_json: dict[str, object],
+    top_candidate_score: Decimal = Decimal("1.0"),
 ) -> EntityResolutionQueue:
     candidate_ids = sorted({int(entity_id) for entity_id in candidate_entity_ids})
     queue_item = session.query(EntityResolutionQueue).filter(
@@ -23,14 +24,14 @@ def upsert_entity_resolution_queue_item(
         queue_item = EntityResolutionQueue(
             holding_id=holding_id,
             candidate_entity_ids=candidate_ids,
-            top_candidate_score=Decimal("1.0"),
+            top_candidate_score=top_candidate_score,
             evidence_json=evidence_json,
             status="open",
         )
         session.add(queue_item)
     else:
         queue_item.candidate_entity_ids = candidate_ids
-        queue_item.top_candidate_score = Decimal("1.0")
+        queue_item.top_candidate_score = top_candidate_score
         queue_item.evidence_json = evidence_json
         queue_item.notes = None
     session.flush()

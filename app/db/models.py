@@ -284,6 +284,22 @@ class EntityAlias(Base):
     )
 
 
+class EntityMatchOverride(Base):
+    __tablename__ = "entity_match_overrides"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    raw_name_normalized: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
+    entity_type_scope: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    source_fund_id: Mapped[int | None] = mapped_column(ForeignKey("funds.id"), index=True, nullable=True)
+    source_asset_class_scope: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    matched_entity_id: Mapped[int | None] = mapped_column(ForeignKey("entities.id"), nullable=True)
+    action: Mapped[str] = mapped_column(String(32), nullable=False)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    created_by: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
 class EntitySecurityIdentifier(Base):
     __tablename__ = "entity_security_identifiers"
     __table_args__ = (

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Company Detail</h1>
+
+<div class="metadata-grid">
+  <strong>entity_id</strong><span>{{ detail.entity_id | e }}</span>
+  <strong>canonical_name</strong><span>{{ detail.canonical_name | e }}</span>
+  <strong>entity_type</strong><span>{{ detail.entity_type | e }}</span>
+  <strong>abn</strong><span>{{ (detail.abn or '') | e }}</span>
+  <strong>fund_count</strong><span>{{ detail.fund_count | e }}</span>
+  <strong>observation_count</strong><span>{{ detail.observation_count | e }}</span>
+  <strong>latest_reporting_period</strong><span>{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else '') | e }}</span>
+  <strong>asset_classes</strong>
+  <span>
+    {% for asset_class in detail.asset_classes %}
+      <code>{{ asset_class | e }}</code>{% if not loop.last %}, {% endif %}
+    {% else %}
+      none
+    {% endfor %}
+  </span>
+</div>
+
+<p>
+  Aliases:
+  {% for alias in detail.aliases %}
+    <code>{{ alias | e }}</code>{% if not loop.last %}, {% endif %}
+  {% endfor %}
+</p>
+
+<p>
+  Matched raw names:
+  {% for raw_name in detail.matched_raw_names %}
+    <code>{{ raw_name | e }}</code>{% if not loop.last %}, {% endif %}
+  {% else %}
+    none
+  {% endfor %}
+</p>
+
+{% if detail.relationships %}
+<div class="counts">
+  <div>
+    <strong>Persisted relationships</strong>
+    <ul>
+      {% for relationship in detail.relationships %}
+      <li>
+        <code>{{ relationship.relationship_type | e }}</code>
+        from {{ relationship.from_entity_id | e }} to {{ relationship.to_entity_id | e }}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% else %}
+<p>No persisted relationships for this company in current stored truth.</p>
+{% endif %}
+
+<p>{{ detail.resolution_scope_note | e }}</p>
+<p>Per-fund disclosures are shown verbatim. No cross-fund ownership total is computed on this page.</p>
+
+<h2>History</h2>
+{% if detail.history_note %}
+<p>{{ detail.history_note | e }}</p>
+{% endif %}
+<table>
+  <thead>
+    <tr>
+      <th>Period</th>
+      <th>Observation Count</th>
+      <th>Fund Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in detail.period_history %}
+    <tr>
+      <td>{{ row.reporting_period_end_date.isoformat() }}</td>
+      <td>{{ row.observation_count | e }}</td>
+      <td>{{ row.fund_count | e }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="3">No current reporting-period history for this company.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Raw Name</th>
+      <th>Fund</th>
+      <th>Option</th>
+      <th>Period</th>
+      <th>Asset Class</th>
+      <th>Source Subclass</th>
+      <th>Disclosure</th>
+      <th>Value (AUD)</th>
+      <th>Ownership</th>
+      <th>Value Band</th>
+      <th>Source</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in detail.observations %}
+    <tr>
+      <td>{{ row.raw_name | e }}</td>
+      <td>{{ row.fund_name | e }} (<code>{{ row.fund_code | e }}</code>)</td>
+      <td>{{ row.option_name | e }} (<code>{{ row.option_code | e }}</code>)</td>
+      <td>{{ row.reporting_period_end_date.isoformat() }}</td>
+      <td><code>{{ row.canonical_asset_class_code | e }}</code><br>{{ row.source_asset_class_raw | e }}</td>
+      <td>{{ (row.source_subclass_raw or '') | e }}</td>
+      <td><code>{{ row.disclosure_completeness | e }}</code></td>
+      <td>{{ row.value_aud if row.value_aud is not none else "" }}</td>
+      <td>{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
+      <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
+      <td>file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="11">No current observations for this company.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

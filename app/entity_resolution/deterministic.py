@@ -6,6 +6,18 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.models import Entity, EntitySecurityIdentifier, Holding
+from app.entity_resolution.exact_name import (
+    EXACT_NAME_CONFIDENCE_SCORE,
+    build_exact_name_candidate_map,
+    resolve_exact_normalized_name_match,
+)
+from app.entity_resolution.overrides import (
+    FORCE_MATCH_ACTION,
+    FORCE_NEW_ENTITY_ACTION,
+    FORCE_NO_MATCH_ACTION,
+    REDIRECT_TO_PARENT_ACTION,
+    apply_entity_match_override,
+)
 from app.entity_resolution.queue import upsert_entity_resolution_queue_item
 
 
@@ -25,10 +37,22 @@ class DeterministicResolutionSummary:
     unresolved_security_identifier: int
     ambiguous_abn: int
     ambiguous_security_identifier: int
+    force_match_applications: int
+    force_no_match_suppressions: int
+    force_new_entity_creations: int
+    redirect_to_parent_applications: int
+    exact_name_auto_links: int
+    exact_name_ambiguities_queued: int
+    exact_name_candidates_rejected_due_to_scope_conflict: int
+    unresolved_rows_remaining: int
 
     @property
     def total_matches(self) -> int:
         return self.abn_matches + self.security_identifier_matches
+
+    @property
+    def deterministic_identifier_matches(self) -> int:
+        return self.total_matches
 
 
 def normalise_abn(value: str | None) -> str | None:
@@ -71,6 +95,7 @@ def resolve_entities_deterministically(
 ) -> DeterministicResolutionSummary:
     abn_candidates = _build_abn_candidate_map(session)
     security_identifier_candidates = _build_security_identifier_candidate_map(session)
+    exact_name_candidates = build_exact_name_candidate_map(session)
 
     holdings = session.scalars(
         select(Holding)
@@ -87,6 +112,14 @@ def resolve_entities_deterministically(
         "unresolved_security_identifier": 0,
         "ambiguous_abn": 0,
         "ambiguous_security_identifier": 0,
+        "force_match_applications": 0,
+        "force_no_match_suppressions": 0,
+        "force_new_entity_creations": 0,
+        "redirect_to_parent_applications": 0,
+        "exact_name_auto_links": 0,
+        "exact_name_ambiguities_queued": 0,
+        "exact_name_candidates_rejected_due_to_scope_conflict": 0,
+        "unresolved_rows_remaining": 0,
     }
 
     for holding in holdings:
@@ -95,6 +128,8 @@ def resolve_entities_deterministically(
             continue
 
         matched_entity_id = None
+        ambiguous_candidate_entity_ids: list[int] | None = None
+        ambiguous_evidence_json: dict[str, object] | None = None
         identifier_type = normalise_security_identifier_type(holding.security_identifier_type)
 
         if identifier_type == ABN_IDENTIFIER_TYPE:
@@ -106,17 +141,13 @@ def resolve_entities_deterministically(
                     summary["abn_matches"] += 1
                 elif len(abn_matches) > 1:
                     summary["ambiguous_abn"] += 1
-                    upsert_entity_resolution_queue_item(
-                        session,
-                        holding_id=holding.id,
-                        candidate_entity_ids=sorted(abn_matches),
-                        evidence_json={
-                            "ambiguity_kind": "abn",
-                            "identifier_type": ABN_IDENTIFIER_TYPE,
-                            "identifier_value": normalized_abn,
-                            "confidence_score": DETERMINISTIC_CONFIDENCE_SCORE,
-                        },
-                    )
+                    ambiguous_candidate_entity_ids = sorted(abn_matches)
+                    ambiguous_evidence_json = {
+                        "ambiguity_kind": "abn",
+                        "identifier_type": ABN_IDENTIFIER_TYPE,
+                        "identifier_value": normalized_abn,
+                        "confidence_score": DETERMINISTIC_CONFIDENCE_SCORE,
+                    }
                 else:
                     summary["unresolved_abn"] += 1
             elif holding.security_identifier_value:
@@ -134,17 +165,13 @@ def resolve_entities_deterministically(
                     summary["security_identifier_matches"] += 1
                 elif len(security_matches) > 1:
                     summary["ambiguous_security_identifier"] += 1
-                    upsert_entity_resolution_queue_item(
-                        session,
-                        holding_id=holding.id,
-                        candidate_entity_ids=sorted(security_matches),
-                        evidence_json={
-                            "ambiguity_kind": "security_identifier",
-                            "identifier_type": identifier_type,
-                            "identifier_value": normalized_identifier_value,
-                            "confidence_score": DETERMINISTIC_CONFIDENCE_SCORE,
-                        },
-                    )
+                    ambiguous_candidate_entity_ids = sorted(security_matches)
+                    ambiguous_evidence_json = {
+                        "ambiguity_kind": "security_identifier",
+                        "identifier_type": identifier_type,
+                        "identifier_value": normalized_identifier_value,
+                        "confidence_score": DETERMINISTIC_CONFIDENCE_SCORE,
+                    }
                 else:
                     summary["unresolved_security_identifier"] += 1
             elif holding.security_identifier_value:
@@ -152,6 +179,57 @@ def resolve_entities_deterministically(
 
         if matched_entity_id is not None:
             holding.entity_id = matched_entity_id
+            continue
+
+        applied_override = apply_entity_match_override(session, holding=holding)
+        if applied_override is not None:
+            if applied_override.action == FORCE_MATCH_ACTION:
+                summary["force_match_applications"] += 1
+            elif applied_override.action == FORCE_NO_MATCH_ACTION:
+                summary["force_no_match_suppressions"] += 1
+            elif applied_override.action == FORCE_NEW_ENTITY_ACTION:
+                if applied_override.created_new_entity:
+                    summary["force_new_entity_creations"] += 1
+                exact_name_candidates = build_exact_name_candidate_map(session)
+            elif applied_override.action == REDIRECT_TO_PARENT_ACTION:
+                summary["redirect_to_parent_applications"] += 1
+
+            if holding.entity_id is None:
+                summary["unresolved_rows_remaining"] += 1
+            continue
+
+        if ambiguous_candidate_entity_ids is None and ambiguous_evidence_json is None:
+            exact_name_resolution = resolve_exact_normalized_name_match(
+                holding=holding,
+                candidate_map=exact_name_candidates,
+            )
+            summary["exact_name_candidates_rejected_due_to_scope_conflict"] += len(
+                exact_name_resolution.rejected_candidate_entity_ids
+            )
+            if exact_name_resolution.matched_entity_id is not None:
+                holding.entity_id = exact_name_resolution.matched_entity_id
+                summary["exact_name_auto_links"] += 1
+                continue
+            if exact_name_resolution.ambiguous_candidate_entity_ids and exact_name_resolution.evidence_json is not None:
+                ambiguous_candidate_entity_ids = list(exact_name_resolution.ambiguous_candidate_entity_ids)
+                ambiguous_evidence_json = exact_name_resolution.evidence_json
+                summary["exact_name_ambiguities_queued"] += 1
+
+        if ambiguous_candidate_entity_ids is not None and ambiguous_evidence_json is not None:
+            upsert_entity_resolution_queue_item(
+                session,
+                holding_id=holding.id,
+                candidate_entity_ids=ambiguous_candidate_entity_ids,
+                evidence_json=ambiguous_evidence_json,
+                top_candidate_score=(
+                    EXACT_NAME_CONFIDENCE_SCORE
+                    if ambiguous_evidence_json.get("ambiguity_kind") == "exact_name"
+                    else DETERMINISTIC_CONFIDENCE_SCORE
+                ),
+            )
+
+        if holding.entity_id is None:
+            summary["unresolved_rows_remaining"] += 1
 
     session.flush()
     return DeterministicResolutionSummary(
@@ -164,6 +242,16 @@ def resolve_entities_deterministically(
         unresolved_security_identifier=summary["unresolved_security_identifier"],
         ambiguous_abn=summary["ambiguous_abn"],
         ambiguous_security_identifier=summary["ambiguous_security_identifier"],
+        force_match_applications=summary["force_match_applications"],
+        force_no_match_suppressions=summary["force_no_match_suppressions"],
+        force_new_entity_creations=summary["force_new_entity_creations"],
+        redirect_to_parent_applications=summary["redirect_to_parent_applications"],
+        exact_name_auto_links=summary["exact_name_auto_links"],
+        exact_name_ambiguities_queued=summary["exact_name_ambiguities_queued"],
+        exact_name_candidates_rejected_due_to_scope_conflict=summary[
+            "exact_name_candidates_rejected_due_to_scope_conflict"
+        ],
+        unresolved_rows_remaining=summary["unresolved_rows_remaining"],
     )
 
 

@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Fund Detail</h1>
+
+<div class="metadata-grid">
+  <strong>fund_id</strong><span>{{ detail.fund_id | e }}</span>
+  <strong>fund_code</strong><span><code>{{ detail.fund_code | e }}</code></span>
+  <strong>fund_name</strong><span>{{ detail.fund_name | e }}</span>
+  <strong>latest_reporting_period</strong>
+  <span>{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else '') | e }}</span>
+</div>
+
+<h2>Change Since Prior Reporting Period</h2>
+{% if detail.change_since_prior_reporting_period.note %}
+<p>{{ detail.change_since_prior_reporting_period.note | e }}</p>
+{% endif %}
+<div class="metadata-grid">
+  <strong>available</strong><span>{{ detail.change_since_prior_reporting_period.available | e }}</span>
+  <strong>current_reporting_period_end_date</strong>
+  <span>{{ (detail.change_since_prior_reporting_period.current_reporting_period_end_date.isoformat() if detail.change_since_prior_reporting_period.current_reporting_period_end_date else '') | e }}</span>
+  <strong>prior_reporting_period_end_date</strong>
+  <span>{{ (detail.change_since_prior_reporting_period.prior_reporting_period_end_date.isoformat() if detail.change_since_prior_reporting_period.prior_reporting_period_end_date else '') | e }}</span>
+</div>
+
+{% for option in detail.investment_options %}
+<section>
+  <h2>{{ option.option_name | e }}</h2>
+  <p>
+    Option code: <code>{{ option.option_code | e }}</code>.
+    Observation count: {{ option.observation_count | e }}.
+    Reporting period: {{ (option.reporting_period_end_date.isoformat() if option.reporting_period_end_date else '') | e }}.
+  </p>
+
+  <h3>Asset-class mix by disclosure completeness</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Canonical Asset Class</th>
+        <th>Disclosure Completeness</th>
+        <th>Observation Count</th>
+        <th>Precise Value Rows</th>
+        <th>Precise Value (AUD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for mix in option.asset_class_mix %}
+        {% for bucket in mix.by_disclosure_completeness %}
+        <tr>
+          <td><code>{{ mix.canonical_asset_class_code | e }}</code></td>
+          <td><code>{{ bucket.disclosure_completeness | e }}</code></td>
+          <td>{{ bucket.observation_count | e }}</td>
+          <td>{{ bucket.precise_value_row_count | e }}</td>
+          <td>{{ bucket.precise_value_aud_total | e }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+      <tr>
+        <td colspan="5">No current asset-class mix for this option.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h3>Top direct private holdings</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Raw Name</th>
+        <th>Resolved Entity</th>
+        <th>Asset Class</th>
+        <th>Disclosure</th>
+        <th>Observation Kind</th>
+        <th>Value (AUD)</th>
+        <th>Ownership</th>
+        <th>Value Band</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in option.top_direct_private_holdings %}
+      <tr>
+        <td>{{ row.raw_name | e }}</td>
+        <td>
+          {% if row.entity_canonical_name %}
+            {{ row.entity_canonical_name | e }}{% if row.entity_type %} (<code>{{ row.entity_type | e }}</code>){% endif %}
+          {% else %}
+            unresolved
+          {% endif %}
+        </td>
+        <td><code>{{ row.canonical_asset_class_code | e }}</code><br>{{ row.source_asset_class_raw | e }}</td>
+        <td><code>{{ row.disclosure_completeness | e }}</code></td>
+        <td><code>{{ row.observation_kind | e }}</code></td>
+        <td>{{ row.value_aud if row.value_aud is not none else "" }}</td>
+        <td>{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
+        <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
+        <td>file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="9">No current direct private holdings for this option.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h3>Manager-level aggregate exposures</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Raw Name</th>
+        <th>Resolved Entity</th>
+        <th>Asset Class</th>
+        <th>Disclosure</th>
+        <th>Observation Kind</th>
+        <th>Value (AUD)</th>
+        <th>Value Band</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in option.manager_level_aggregate_exposures %}
+      <tr>
+        <td>{{ row.raw_name | e }}</td>
+        <td>
+          {% if row.entity_canonical_name %}
+            {{ row.entity_canonical_name | e }}{% if row.entity_type %} (<code>{{ row.entity_type | e }}</code>){% endif %}
+          {% else %}
+            unresolved
+          {% endif %}
+        </td>
+        <td><code>{{ row.canonical_asset_class_code | e }}</code><br>{{ row.source_asset_class_raw | e }}</td>
+        <td><code>{{ row.disclosure_completeness | e }}</code></td>
+        <td><code>{{ row.observation_kind | e }}</code></td>
+        <td>{{ row.value_aud if row.value_aud is not none else "" }}</td>
+        <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
+        <td>file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="8">No current manager-level aggregate exposures for this option.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h3>Other named private exposures</h3>
+  <p>These rows remain separate from direct holdings and manager rollups in the current stored truth.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Raw Name</th>
+        <th>Asset Class</th>
+        <th>Disclosure</th>
+        <th>Value Band</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in option.named_private_exposures %}
+      <tr>
+        <td>{{ row.raw_name | e }}</td>
+        <td><code>{{ row.canonical_asset_class_code | e }}</code><br>{{ row.source_asset_class_raw | e }}</td>
+        <td><code>{{ row.disclosure_completeness | e }}</code></td>
+        <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
+        <td>file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5">No additional named private exposures for this option.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% else %}
+<p>No investment options are currently available for this fund.</p>
+{% endfor %}
+{% endblock %}
