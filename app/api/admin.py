@@ -38,6 +38,7 @@ from app.read_models import (
     SourceFileHoldingRow,
     SourceFileListItem,
     SourceFileSummary,
+    approve_schema_review_mapping,
     get_entity_resolution_queue_detail,
     get_schema_review_queue_detail,
     get_source_file_detail,
@@ -376,6 +377,25 @@ class SchemaReviewQueueStatusUpdateRequest(BaseModel):
     status: str = Field(..., description="Minimal reviewer status transition. Allowed values: 'resolved' or 'rejected'.")
 
 
+class SchemaReviewQueueApproveTaxonomyRowRequest(BaseModel):
+    source_asset_class_raw: str
+    source_filter_raw: str | None = None
+    source_sub_filter_raw: str | None = None
+    source_section_raw: str | None = None
+    canonical_asset_class_code: str
+    is_aggregate_default: bool
+    disclosure_completeness_default: str | None = None
+    notes: str | None = None
+
+
+class SchemaReviewQueueApproveMappingRequest(BaseModel):
+    mapping_version_id: str
+    approved_by: str
+    notes: str | None = None
+    structural_expectations_json: dict[str, object]
+    taxonomy_mappings: list[SchemaReviewQueueApproveTaxonomyRowRequest]
+
+
 class EntityResolutionQueueListItemResponse(BaseModel):
     queue_item_id: int
     holding_id: int
@@ -589,6 +609,31 @@ def admin_schema_review_queue_update_status(
 ) -> SchemaReviewQueueDetailResponse:
     try:
         detail = update_schema_review_queue_status(session, review_item_id=review_item_id, new_status=payload.status)
+    except ValueError as exc:
+        message = str(exc)
+        status_code = status.HTTP_409_CONFLICT if "already" in message else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=status_code, detail=message) from exc
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Schema review item not found")
+    return SchemaReviewQueueDetailResponse.from_read_model(detail)
+
+
+@router.post("/schema-review-queue/{review_item_id}/approve-mapping", response_model=SchemaReviewQueueDetailResponse)
+def admin_schema_review_queue_approve_mapping(
+    review_item_id: int,
+    payload: SchemaReviewQueueApproveMappingRequest,
+    session: Session = Depends(get_db_session),
+) -> SchemaReviewQueueDetailResponse:
+    try:
+        detail = approve_schema_review_mapping(
+            session,
+            review_item_id=review_item_id,
+            mapping_version_id=payload.mapping_version_id,
+            approved_by=payload.approved_by,
+            notes=payload.notes,
+            structural_expectations_json=payload.structural_expectations_json,
+            taxonomy_mappings_payload=[row.model_dump() for row in payload.taxonomy_mappings],
+        )
     except ValueError as exc:
         message = str(exc)
         status_code = status.HTTP_409_CONFLICT if "already" in message else status.HTTP_400_BAD_REQUEST

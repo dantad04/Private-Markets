@@ -14,7 +14,11 @@ from app.api.app import create_app
 from app.db.models import Base, ReportingPeriod
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
-from app.entity_resolution.ifm_seed import IFM_CANONICAL_NAME, ensure_ifm_seed
+from app.entity_resolution.ifm_seed import (
+    IFM_CANONICAL_NAME,
+    ensure_ifm_art_sunsuper_issuer_relationship,
+    ensure_ifm_seed,
+)
 from app.ingest.loader import (
     ingest_art_sunsuper_local_file,
     ingest_australiansuper_local_file,
@@ -93,6 +97,7 @@ class TestManagerDetailApi(unittest.TestCase):
             )
             ifm_entity = ensure_ifm_seed(session)
             resolve_entities_deterministically(session, reporting_period_id=period.id)
+            ensure_ifm_art_sunsuper_issuer_relationship(session, ifm_entity_id=ifm_entity.id)
             session.commit()
 
             cls.ifm_entity_id = ifm_entity.id
@@ -121,6 +126,7 @@ class TestManagerDetailApi(unittest.TestCase):
         )
         self.assertIn("fixed_income", payload["asset_classes"])
         self.assertIn("unlisted_equity", payload["asset_classes"])
+        self.assertEqual(["manager", "issuer", "ownership"], payload["role_classes"])
 
     def test_manager_detail_endpoint_preserves_per_fund_option_period_observations_without_silent_aggregation(self) -> None:
         response = self.client.get(f"/entities/managers/{self.ifm_entity_id}")
@@ -182,6 +188,7 @@ class TestManagerDetailApi(unittest.TestCase):
         response = self.client.get(f"/entities/managers/{self.ifm_entity_id}")
         self.assertEqual(200, response.status_code)
         payload = response.json()
+        self.assertEqual(["manager", "issuer", "ownership"], payload["role_classes"])
         self.assertEqual([], payload["relationships"])
 
     def test_manager_detail_admin_ui_renders_same_underlying_data(self) -> None:
@@ -191,7 +198,10 @@ class TestManagerDetailApi(unittest.TestCase):
         self.assertIn("IFM Investors Pty Ltd", response.text)
         self.assertIn("IFM INVESTORS PTY LIMITED", response.text)
         self.assertIn("AustralianSuper", response.text)
+        self.assertIn("manager", response.text)
+        self.assertIn("issuer", response.text)
+        self.assertIn("ownership", response.text)
         self.assertIn("manager_rollup", response.text)
         self.assertIn("direct_holding", response.text)
         self.assertIn("unknown", response.text)
-        self.assertIn("No persisted relationships for this manager in current stored truth.", response.text)
+        self.assertIn("No persisted entity-to-entity relationships for this manager in current stored truth.", response.text)

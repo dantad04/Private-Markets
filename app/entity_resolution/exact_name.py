@@ -163,6 +163,11 @@ def infer_holding_entity_type_scope(holding: Holding) -> str | None:
         return "manager"
     if holding.issuer_entity_id is not None:
         return "company"
+    # Ownership-bearing rows can truthfully name a company or a manager (the IFM
+    # worked case is the canonical example), so do not hard-scope them from the
+    # source subclass alone.
+    if holding.ownership_pct is not None:
+        return None
 
     normalized_subclass = _normalize_text(holding.source_subclass_raw)
     if normalized_subclass == "externally managed":

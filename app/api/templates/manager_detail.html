@@ -36,10 +36,19 @@
   {% endfor %}
 </p>
 
+<p>
+  Role classes:
+  {% for role_class in detail.role_classes %}
+    <code>{{ role_class | e }}</code>{% if not loop.last %}, {% endif %}
+  {% else %}
+    none
+  {% endfor %}
+</p>
+
 {% if detail.relationships %}
 <div class="counts">
   <div>
-    <strong>Persisted relationships</strong>
+    <strong>Persisted entity-to-entity relationships</strong>
     <ul>
       {% for relationship in detail.relationships %}
       <li>
@@ -51,7 +60,7 @@
   </div>
 </div>
 {% else %}
-<p>No persisted relationships for this manager in current stored truth.</p>
+<p>No persisted entity-to-entity relationships for this manager in current stored truth.</p>
 {% endif %}
 
 <p>Observation kind stays <code>unknown</code> where current stored truth does not support a cleaner distinction.</p>

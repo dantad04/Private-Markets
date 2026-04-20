@@ -29,6 +29,28 @@
     <button type="submit">Mark rejected</button>
   </form>
 </div>
+
+<h2>Approve Mapping Version</h2>
+<form method="post" action="{{ request.url_for('schema_review_queue_approve_mapping', review_item_id=review_item.id) | e }}">
+  <div class="metadata-grid">
+    <label for="mapping_version_id"><strong>mapping_version_id</strong></label>
+    <input id="mapping_version_id" name="mapping_version_id" type="text" required>
+    <label for="approved_by"><strong>approved_by</strong></label>
+    <input id="approved_by" name="approved_by" type="text" required>
+    <label for="notes"><strong>notes</strong></label>
+    <input id="notes" name="notes" type="text">
+  </div>
+
+  <p><strong>structural_expectations_json</strong></p>
+  <textarea id="structural_expectations_json" name="structural_expectations_json" rows="8" cols="120" required>{}</textarea>
+
+  <p><strong>taxonomy_mappings_json</strong></p>
+  <textarea id="taxonomy_mappings_json" name="taxonomy_mappings_json" rows="12" cols="120" required>[]</textarea>
+
+  <p>
+    <button type="submit">Approve mapping version</button>
+  </p>
+</form>
 {% endif %}
 
 <h2>Source File Metadata</h2>

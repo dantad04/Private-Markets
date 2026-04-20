@@ -16,12 +16,17 @@ from app.db.models import (
     Entity,
     EntityAlias,
     EntityRelationship,
+    Holding,
     HoldingRelationship,
     ReportingPeriod,
 )
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
-from app.entity_resolution.ifm_seed import IFM_CANONICAL_NAME, ensure_ifm_seed
+from app.entity_resolution.ifm_seed import (
+    IFM_CANONICAL_NAME,
+    ensure_ifm_art_sunsuper_issuer_relationship,
+    ensure_ifm_seed,
+)
 from app.ingest.loader import (
     ingest_art_sunsuper_local_file,
     ingest_australiansuper_local_file,
@@ -100,6 +105,7 @@ class TestIfmWorkedCaseContract(unittest.TestCase):
             )
             ifm_entity = ensure_ifm_seed(session)
             resolve_entities_deterministically(session, reporting_period_id=period.id)
+            ensure_ifm_art_sunsuper_issuer_relationship(session, ifm_entity_id=ifm_entity.id)
             session.commit()
 
             cls.ifm_entity_id = ifm_entity.id
@@ -110,7 +116,7 @@ class TestIfmWorkedCaseContract(unittest.TestCase):
         cls.engine.dispose()
         cls.tempdir.cleanup()
 
-    def test_ifm_canonical_entity_and_aliases_exist_without_persisted_relationship_edges(self) -> None:
+    def test_ifm_canonical_entity_and_aliases_exist_with_single_seeded_issuer_holding_relationship(self) -> None:
         with self.SessionLocal() as session:
             entity = session.get(Entity, self.ifm_entity_id)
             self.assertIsNotNone(entity)
@@ -139,10 +145,48 @@ class TestIfmWorkedCaseContract(unittest.TestCase):
                 ),
             )
             self.assertEqual(
-                0,
+                1,
                 session.scalar(
                     select(func.count(HoldingRelationship.id)).where(
                         HoldingRelationship.related_entity_id == self.ifm_entity_id
+                    )
+                ),
+            )
+
+    def test_all_real_ifm_rows_link_to_the_same_canonical_entity_after_deterministic_resolution(self) -> None:
+        with self.SessionLocal() as session:
+            ifm_holdings = session.scalars(
+                select(Holding)
+                .where(
+                    Holding.raw_name.in_(
+                        ["IFM Investors Pty Ltd", "IFM INVESTORS PTY LIMITED", "IFM Investors"]
+                    )
+                )
+                .order_by(Holding.id.asc())
+            ).all()
+
+            self.assertEqual(10, len(ifm_holdings))
+            self.assertTrue(all(holding.entity_id == self.ifm_entity_id for holding in ifm_holdings))
+
+            unisuper_ownership_row = next(holding for holding in ifm_holdings if holding.source_row_number == 3163)
+            self.assertEqual("IFM INVESTORS PTY LIMITED", unisuper_ownership_row.raw_name)
+            self.assertEqual("ownership_only", unisuper_ownership_row.disclosure_completeness)
+            self.assertEqual(self.ifm_entity_id, unisuper_ownership_row.entity_id)
+            self.assertEqual(0.309, float(unisuper_ownership_row.ownership_pct))
+
+    def test_ifm_issuer_holding_relationship_seed_is_idempotent(self) -> None:
+        with self.SessionLocal() as session:
+            first = ensure_ifm_art_sunsuper_issuer_relationship(session, ifm_entity_id=self.ifm_entity_id)
+            second = ensure_ifm_art_sunsuper_issuer_relationship(session, ifm_entity_id=self.ifm_entity_id)
+            session.commit()
+
+            self.assertEqual(first.id, second.id)
+            self.assertEqual(
+                1,
+                session.scalar(
+                    select(func.count(HoldingRelationship.id)).where(
+                        HoldingRelationship.related_entity_id == self.ifm_entity_id,
+                        HoldingRelationship.relationship_role == "issuer",
                     )
                 ),
             )

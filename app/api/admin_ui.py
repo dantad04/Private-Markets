@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
+import json
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -11,6 +12,7 @@ from app.api.admin import get_db_session
 from app.entity_resolution.queue import apply_entity_resolution_queue_action
 from app.ingest.loader import LoaderError, ingest_hesta_local_file
 from app.read_models import (
+    approve_schema_review_mapping,
     get_company_detail,
     get_cross_adapter_holdings_by_name,
     get_entity_resolution_queue_detail,
@@ -333,6 +335,56 @@ def schema_review_queue_update_status(
         raise HTTPException(status_code=404, detail="Schema review item not found")
 
     flash_message = f"Review item {review_item_id} marked {detail.review_item.status}."
+    redirect_url = str(request.url_for("schema_review_queue_list").include_query_params(flash=flash_message, status="open"))
+    return RedirectResponse(url=redirect_url, status_code=status.HTTP_303_SEE_OTHER)
+
+
+@router.post("/schema-review-queue/{review_item_id}/approve-mapping", name="schema_review_queue_approve_mapping")
+def schema_review_queue_approve_mapping(
+    request: Request,
+    review_item_id: int,
+    mapping_version_id: str = Form(...),
+    approved_by: str = Form(...),
+    notes: str = Form(""),
+    structural_expectations_json: str = Form(...),
+    taxonomy_mappings_json: str = Form(...),
+    session: Session = Depends(get_db_session),
+) -> RedirectResponse:
+    try:
+        parsed_structural_expectations = json.loads(structural_expectations_json)
+    except json.JSONDecodeError as exc:
+        session.rollback()
+        raise HTTPException(status_code=400, detail="structural_expectations_json must be valid JSON") from exc
+    try:
+        parsed_taxonomy_mappings = json.loads(taxonomy_mappings_json)
+    except json.JSONDecodeError as exc:
+        session.rollback()
+        raise HTTPException(status_code=400, detail="taxonomy_mappings_json must be valid JSON") from exc
+
+    if not isinstance(parsed_structural_expectations, dict):
+        raise HTTPException(status_code=400, detail="structural_expectations_json must decode to a JSON object")
+    if not isinstance(parsed_taxonomy_mappings, list):
+        raise HTTPException(status_code=400, detail="taxonomy_mappings_json must decode to a JSON array")
+
+    try:
+        detail = approve_schema_review_mapping(
+            session,
+            review_item_id=review_item_id,
+            mapping_version_id=mapping_version_id,
+            approved_by=approved_by,
+            notes=notes,
+            structural_expectations_json=parsed_structural_expectations,
+            taxonomy_mappings_payload=parsed_taxonomy_mappings,
+        )
+    except ValueError as exc:
+        session.rollback()
+        raise HTTPException(status_code=400 if "already" not in str(exc) else 409, detail=str(exc)) from exc
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Schema review item not found")
+
+    flash_message = (
+        f"Review item {review_item_id} approved as mapping {detail.review_item.approved_mapping_version_id}."
+    )
     redirect_url = str(request.url_for("schema_review_queue_list").include_query_params(flash=flash_message, status="open"))
     return RedirectResponse(url=redirect_url, status_code=status.HTTP_303_SEE_OTHER)
 

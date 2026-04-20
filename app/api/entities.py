@@ -279,6 +279,7 @@ class ManagerDetailResponse(BaseModel):
     aliases: list[str]
     matched_raw_names: list[str]
     asset_classes: list[str]
+    role_classes: list[str]
     relationships: list[EntityRelationshipResponse]
     observation_count: int
     fund_count: int
@@ -295,6 +296,7 @@ class ManagerDetailResponse(BaseModel):
             aliases=item.aliases,
             matched_raw_names=item.matched_raw_names,
             asset_classes=item.asset_classes,
+            role_classes=item.role_classes,
             relationships=[EntityRelationshipResponse.from_read_model(row) for row in item.relationships],
             observation_count=item.observation_count,
             fund_count=item.fund_count,

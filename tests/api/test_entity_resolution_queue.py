@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 from fastapi.testclient import TestClient
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import sessionmaker
 
 from adapters.sunsuper_schema_normalisation import normalise_name
@@ -17,6 +17,7 @@ from app.db.models import (
     CanonicalAssetClass,
     Entity,
     EntityAlias,
+    EntityMatchOverride,
     EntityResolutionQueue,
     Fund,
     Holding,
@@ -174,6 +175,45 @@ class TestEntityResolutionQueueApi(unittest.TestCase):
             queue_item = session.query(EntityResolutionQueue).one()
             return queue_item.id, holding.id, first_entity.id, second_entity.id
 
+    def _add_follow_on_holding(self, session, *, like_holding_id: int, source_row_number: int) -> Holding:
+        original_holding = session.get(Holding, like_holding_id)
+        self.assertIsNotNone(original_holding)
+        follow_on_holding = Holding(
+            source_file_id=original_holding.source_file_id,
+            source_fund_id=original_holding.source_fund_id,
+            source_option_id=original_holding.source_option_id,
+            reporting_period_id=original_holding.reporting_period_id,
+            entity_id=None,
+            raw_name=original_holding.raw_name,
+            value_aud=original_holding.value_aud,
+            ownership_pct=original_holding.ownership_pct,
+            units=original_holding.units,
+            is_aggregate=original_holding.is_aggregate,
+            disclosure_completeness=original_holding.disclosure_completeness,
+            canonical_asset_class_id=original_holding.canonical_asset_class_id,
+            source_asset_class_raw=original_holding.source_asset_class_raw,
+            source_subclass_raw=original_holding.source_subclass_raw,
+            address=original_holding.address,
+            geo_lat=original_holding.geo_lat,
+            geo_lng=original_holding.geo_lng,
+            security_identifier_value=original_holding.security_identifier_value,
+            security_identifier_type=original_holding.security_identifier_type,
+            value_band_raw=original_holding.value_band_raw,
+            source_row_hash=f"follow-on-hash-{source_row_number}",
+            source_row_number=source_row_number,
+            raw_payload_json=[],
+            manager_entity_id=original_holding.manager_entity_id,
+            issuer_entity_id=original_holding.issuer_entity_id,
+            currency_raw=original_holding.currency_raw,
+            classification_raw=original_holding.classification_raw,
+            location_raw=original_holding.location_raw,
+            parse_warning_flags=[],
+            metadata_attached_from_row_numbers=[],
+        )
+        session.add(follow_on_holding)
+        session.flush()
+        return follow_on_holding
+
     def test_queue_list_and_detail_expose_candidate_aliases_and_evidence(self) -> None:
         queue_item_id, _holding_id, first_entity_id, second_entity_id = self._seed_ambiguous_abn_case()
 
@@ -232,6 +272,45 @@ class TestEntityResolutionQueueApi(unittest.TestCase):
             self.assertEqual("reviewer@example.com", queue_item.resolved_by)
             self.assertIsNotNone(queue_item.resolved_at)
 
+    def test_accept_action_persists_force_match_override_for_future_reruns(self) -> None:
+        queue_item_id, holding_id, first_entity_id, _second_entity_id = self._seed_ambiguous_abn_case()
+
+        response = self.client.post(
+            f"/admin/entity-resolution-queue/{queue_item_id}/action",
+            json={
+                "action": "accept",
+                "entity_id": first_entity_id,
+                "resolved_by": "reviewer@example.com",
+                "notes": "Accept scoped match for this queue item",
+            },
+        )
+        self.assertEqual(200, response.status_code)
+
+        with self.SessionLocal() as session:
+            follow_on_holding = self._add_follow_on_holding(session, like_holding_id=holding_id, source_row_number=2)
+            session.commit()
+
+            summary = resolve_entities_deterministically(session, reporting_period_id=follow_on_holding.reporting_period_id)
+            session.commit()
+
+            refreshed_follow_on = session.get(Holding, follow_on_holding.id)
+            override = session.scalar(
+                select(EntityMatchOverride).where(
+                    EntityMatchOverride.raw_name_normalized == normalise_name("Ambiguous Holdings Pty Ltd"),
+                    EntityMatchOverride.source_asset_class_scope == "Unlisted Equity",
+                    EntityMatchOverride.action == "force_match",
+                )
+            )
+            open_queue_count = session.scalar(
+                select(func.count(EntityResolutionQueue.id)).where(EntityResolutionQueue.status == "open")
+            )
+
+            self.assertEqual(first_entity_id, refreshed_follow_on.entity_id)
+            self.assertIsNotNone(override)
+            self.assertEqual(first_entity_id, override.matched_entity_id)
+            self.assertEqual(1, summary.force_match_applications)
+            self.assertEqual(0, open_queue_count)
+
     def test_reject_action_marks_queue_item_without_linking_holding(self) -> None:
         queue_item_id, holding_id, _first_entity_id, _second_entity_id = self._seed_ambiguous_abn_case()
 
@@ -253,6 +332,43 @@ class TestEntityResolutionQueueApi(unittest.TestCase):
             self.assertIsNone(holding.entity_id)
             self.assertEqual("rejected", queue_item.status)
             self.assertEqual("reviewer@example.com", queue_item.resolved_by)
+
+    def test_reject_action_persists_force_no_match_override_for_future_reruns(self) -> None:
+        queue_item_id, holding_id, _first_entity_id, _second_entity_id = self._seed_ambiguous_abn_case()
+
+        response = self.client.post(
+            f"/admin/entity-resolution-queue/{queue_item_id}/action",
+            json={
+                "action": "reject",
+                "resolved_by": "reviewer@example.com",
+                "notes": "Keep this raw name unresolved in this slice",
+            },
+        )
+        self.assertEqual(200, response.status_code)
+
+        with self.SessionLocal() as session:
+            follow_on_holding = self._add_follow_on_holding(session, like_holding_id=holding_id, source_row_number=3)
+            session.commit()
+
+            summary = resolve_entities_deterministically(session, reporting_period_id=follow_on_holding.reporting_period_id)
+            session.commit()
+
+            refreshed_follow_on = session.get(Holding, follow_on_holding.id)
+            override = session.scalar(
+                select(EntityMatchOverride).where(
+                    EntityMatchOverride.raw_name_normalized == normalise_name("Ambiguous Holdings Pty Ltd"),
+                    EntityMatchOverride.source_asset_class_scope == "Unlisted Equity",
+                    EntityMatchOverride.action == "force_no_match",
+                )
+            )
+            open_queue_count = session.scalar(
+                select(func.count(EntityResolutionQueue.id)).where(EntityResolutionQueue.status == "open")
+            )
+
+            self.assertIsNone(refreshed_follow_on.entity_id)
+            self.assertIsNotNone(override)
+            self.assertEqual(2, summary.force_no_match_suppressions)
+            self.assertEqual(0, open_queue_count)
 
     def test_create_new_action_creates_entity_alias_and_links_holding(self) -> None:
         queue_item_id, holding_id, _first_entity_id, _second_entity_id = self._seed_ambiguous_abn_case()
@@ -282,3 +398,43 @@ class TestEntityResolutionQueueApi(unittest.TestCase):
             self.assertEqual(normalise_name("Ambiguous Holdings Pty Ltd"), alias.alias_normalized)
             self.assertEqual("created_new", queue_item.status)
             self.assertEqual("reviewer@example.com", queue_item.resolved_by)
+
+    def test_create_new_action_persists_override_and_reuses_same_entity_on_rerun(self) -> None:
+        queue_item_id, holding_id, _first_entity_id, _second_entity_id = self._seed_ambiguous_abn_case()
+
+        response = self.client.post(
+            f"/admin/entity-resolution-queue/{queue_item_id}/action",
+            json={
+                "action": "create_new",
+                "resolved_by": "reviewer@example.com",
+                "notes": "Create and persist a fresh canonical entity for this scoped raw name",
+            },
+        )
+        self.assertEqual(200, response.status_code)
+
+        with self.SessionLocal() as session:
+            original_holding = session.get(Holding, holding_id)
+            created_entity_id = original_holding.entity_id
+            follow_on_holding = self._add_follow_on_holding(session, like_holding_id=holding_id, source_row_number=4)
+            session.commit()
+
+            summary = resolve_entities_deterministically(session, reporting_period_id=follow_on_holding.reporting_period_id)
+            session.commit()
+
+            refreshed_follow_on = session.get(Holding, follow_on_holding.id)
+            override = session.scalar(
+                select(EntityMatchOverride).where(
+                    EntityMatchOverride.raw_name_normalized == normalise_name("Ambiguous Holdings Pty Ltd"),
+                    EntityMatchOverride.source_asset_class_scope == "Unlisted Equity",
+                    EntityMatchOverride.action == "force_new_entity",
+                )
+            )
+            created_entity_count = session.scalar(
+                select(func.count(Entity.id)).where(Entity.canonical_name == "Ambiguous Holdings Pty Ltd")
+            )
+
+            self.assertEqual(created_entity_id, refreshed_follow_on.entity_id)
+            self.assertIsNotNone(override)
+            self.assertEqual(created_entity_id, override.matched_entity_id)
+            self.assertEqual(0, summary.force_new_entity_creations)
+            self.assertEqual(1, created_entity_count)

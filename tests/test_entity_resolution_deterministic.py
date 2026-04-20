@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import UTC, date, datetime, timedelta
+from decimal import Decimal
 from pathlib import Path
 import tempfile
 import unittest
@@ -712,6 +713,39 @@ class TestDeterministicEntityResolution(unittest.TestCase):
             self.assertEqual(0, summary.exact_name_auto_links)
             self.assertEqual(0, queue_count)
             self.assertEqual(1, summary.unresolved_rows_remaining)
+
+    def test_exact_name_ownership_row_does_not_force_company_scope_from_internally_managed_subclass(self) -> None:
+        with self.SessionLocal() as session:
+            manager_entity = self._add_entity(
+                session,
+                canonical_name="Ownership Match Manager Pty Ltd",
+                entity_type="manager",
+            )
+            self._add_entity_alias(
+                session,
+                entity_id=manager_entity.id,
+                alias="Ownership Match Manager Pty Ltd",
+            )
+            holding = self._add_holding(
+                session,
+                raw_name="Ownership Match Manager Pty Ltd",
+                source_row_number=18,
+                security_identifier_type=None,
+                security_identifier_value=None,
+                source_asset_class_raw="Unlisted Equity",
+            )
+            holding.source_subclass_raw = "Internally Managed"
+            holding.disclosure_completeness = "ownership_only"
+            holding.ownership_pct = Decimal("0.309")
+
+            summary = resolve_entities_deterministically(session, reporting_period_id=self.period_id)
+            session.commit()
+
+            refreshed_holding = session.get(Holding, holding.id)
+            self.assertEqual(manager_entity.id, refreshed_holding.entity_id)
+            self.assertEqual(1, summary.exact_name_auto_links)
+            self.assertEqual(0, summary.exact_name_candidates_rejected_due_to_scope_conflict)
+            self.assertEqual(0, summary.unresolved_rows_remaining)
 
     def test_identifier_match_still_wins_over_exact_name_matching(self) -> None:
         with self.SessionLocal() as session:

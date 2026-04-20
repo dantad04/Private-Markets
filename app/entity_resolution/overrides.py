@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from adapters.sunsuper_schema_normalisation import normalise_name
 from app.db.models import Entity, EntityAlias, EntityMatchOverride, Holding
+from app.entity_resolution.exact_name import infer_holding_entity_type_scope
 
 
 FORCE_MATCH_ACTION = "force_match"
@@ -176,11 +177,7 @@ def _is_override_expired(override: EntityMatchOverride) -> bool:
 
 
 def _infer_explicit_holding_entity_type_scope(holding: Holding) -> str | None:
-    if holding.issuer_entity_id is not None:
-        return "issuer"
-    if holding.manager_entity_id is not None:
-        return "manager"
-    return None
+    return infer_holding_entity_type_scope(holding)
 
 
 def _get_override_target_entity_if_present(session: Session, override: EntityMatchOverride) -> Entity | None:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from decimal import Decimal
 import math
 
@@ -19,10 +19,12 @@ from app.db.models import (
     EntityResolutionQueue,
     Fund,
     Holding,
+    HoldingRelationship,
     InvestmentOption,
     ReportingPeriod,
     SchemaReviewQueue,
     SourceFile,
+    TaxonomyMapping,
 )
 
 
@@ -224,6 +226,7 @@ class ManagerDetailReadModel:
     aliases: list[str]
     matched_raw_names: list[str]
     asset_classes: list[str]
+    role_classes: list[str]
     relationships: list[EntityRelationshipReadModel]
     observation_count: int
     fund_count: int
@@ -832,6 +835,152 @@ def update_schema_review_queue_status(
     return get_schema_review_queue_detail(session, review_item_id=review_item_id)
 
 
+def approve_schema_review_mapping(
+    session: Session,
+    *,
+    review_item_id: int,
+    mapping_version_id: str,
+    approved_by: str,
+    notes: str | None,
+    structural_expectations_json: dict[str, object],
+    taxonomy_mappings_payload: list[dict[str, object]],
+) -> SchemaReviewQueueDetailReadModel | None:
+    review_item = session.get(SchemaReviewQueue, review_item_id)
+    if review_item is None:
+        return None
+    if review_item.status != "open":
+        raise ValueError(f"review item {review_item_id} is already {review_item.status}")
+
+    normalized_mapping_version_id = mapping_version_id.strip()
+    if normalized_mapping_version_id == "":
+        raise ValueError("mapping_version_id is required")
+    if session.get(AdapterMappingVersion, normalized_mapping_version_id) is not None:
+        raise ValueError(f"mapping version {normalized_mapping_version_id} already exists")
+
+    normalized_approved_by = approved_by.strip()
+    if normalized_approved_by == "":
+        raise ValueError("approved_by is required")
+    if not isinstance(structural_expectations_json, dict):
+        raise ValueError("structural_expectations_json must be an object")
+    if not taxonomy_mappings_payload:
+        raise ValueError("taxonomy_mappings must contain at least one row")
+
+    source_file = session.get(SourceFile, review_item.source_file_id) if review_item.source_file_id is not None else None
+    schema_fingerprint = review_item.observed_schema_fingerprint or (source_file.schema_fingerprint if source_file else None)
+    if schema_fingerprint is None or schema_fingerprint.strip() == "":
+        raise ValueError("schema review item does not have an observed schema_fingerprint")
+
+    approved_at = datetime.now(UTC)
+    effective_from_period_id = source_file.reporting_period_id if source_file is not None else None
+
+    mapping_version = AdapterMappingVersion(
+        id=normalized_mapping_version_id,
+        adapter_key=review_item.adapter_key,
+        schema_fingerprint=schema_fingerprint,
+        structural_expectations_json=structural_expectations_json,
+        notes=_normalize_optional_text(notes),
+        approved_by=normalized_approved_by,
+        approved_at=approved_at,
+        effective_from_period_id=effective_from_period_id,
+        effective_to_period_id=None,
+        is_active=True,
+    )
+    session.add(mapping_version)
+    session.flush()
+
+    seen_taxonomy_keys: set[tuple[object, ...]] = set()
+    for row_payload in taxonomy_mappings_payload:
+        taxonomy_row = _build_taxonomy_mapping_from_payload(
+            adapter_key=review_item.adapter_key,
+            mapping_version_id=normalized_mapping_version_id,
+            approved_by=normalized_approved_by,
+            approved_at=approved_at,
+            effective_from_period_id=effective_from_period_id,
+            payload=row_payload,
+        )
+        taxonomy_key = (
+            taxonomy_row.source_asset_class_raw,
+            taxonomy_row.source_filter_raw,
+            taxonomy_row.source_sub_filter_raw,
+            taxonomy_row.source_section_raw,
+            taxonomy_row.is_aggregate_default,
+        )
+        if taxonomy_key in seen_taxonomy_keys:
+            raise ValueError(
+                "taxonomy_mappings contains duplicate scope rows for "
+                f"{taxonomy_key!r}"
+            )
+        seen_taxonomy_keys.add(taxonomy_key)
+        session.add(taxonomy_row)
+
+    review_item.approved_mapping_version_id = normalized_mapping_version_id
+    review_item.status = "resolved"
+    if source_file is not None:
+        source_file.mapping_version_id = normalized_mapping_version_id
+    session.flush()
+    return get_schema_review_queue_detail(session, review_item_id=review_item_id)
+
+
+def _build_taxonomy_mapping_from_payload(
+    *,
+    adapter_key: str,
+    mapping_version_id: str,
+    approved_by: str,
+    approved_at: datetime,
+    effective_from_period_id: int | None,
+    payload: dict[str, object],
+) -> TaxonomyMapping:
+    if not isinstance(payload, dict):
+        raise ValueError("taxonomy_mappings rows must be objects")
+
+    source_asset_class_raw = _require_nonempty_text(payload.get("source_asset_class_raw"), "source_asset_class_raw")
+    canonical_asset_class_code = _require_nonempty_text(
+        payload.get("canonical_asset_class_code"),
+        "canonical_asset_class_code",
+    )
+    is_aggregate_default = payload.get("is_aggregate_default")
+    if not isinstance(is_aggregate_default, bool):
+        raise ValueError("taxonomy_mappings.is_aggregate_default must be true or false")
+
+    disclosure_completeness_default = payload.get("disclosure_completeness_default")
+    if disclosure_completeness_default is not None and not isinstance(disclosure_completeness_default, str):
+        raise ValueError("taxonomy_mappings.disclosure_completeness_default must be a string or null")
+
+    return TaxonomyMapping(
+        adapter_key=adapter_key,
+        mapping_version=mapping_version_id,
+        source_asset_class_raw=source_asset_class_raw,
+        source_filter_raw=_normalize_optional_text(payload.get("source_filter_raw")),
+        source_sub_filter_raw=_normalize_optional_text(payload.get("source_sub_filter_raw")),
+        source_section_raw=_normalize_optional_text(payload.get("source_section_raw")),
+        canonical_asset_class_code=canonical_asset_class_code,
+        is_aggregate_default=is_aggregate_default,
+        disclosure_completeness_default=_normalize_optional_text(disclosure_completeness_default),
+        notes=_normalize_optional_text(payload.get("notes")),
+        approved_by=approved_by,
+        approved_at=approved_at,
+        effective_from_period_id=effective_from_period_id,
+        effective_to_period_id=None,
+    )
+
+
+def _require_nonempty_text(value: object, field_name: str) -> str:
+    if not isinstance(value, str) or value.strip() == "":
+        raise ValueError(f"taxonomy_mappings.{field_name} is required")
+    return value.strip()
+
+
+def _normalize_optional_text(value: object) -> str | None:
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise ValueError("optional text fields must be strings or null")
+    normalized = value.strip()
+    if normalized == "":
+        return None
+    return normalized
+
+
 def get_source_file_detail(
     session: Session,
     *,
@@ -1362,6 +1511,11 @@ def get_manager_detail(
         (observation.reporting_period_end_date for observation in observations),
         default=None,
     )
+    role_classes = _derive_manager_role_classes(
+        session,
+        entity_id=entity_id,
+        observations=observations,
+    )
     return ManagerDetailReadModel(
         entity_id=entity.id,
         canonical_name=entity.canonical_name,
@@ -1370,6 +1524,7 @@ def get_manager_detail(
         aliases=aliases,
         matched_raw_names=sorted({observation.raw_name for observation in observations}),
         asset_classes=sorted({observation.canonical_asset_class_code for observation in observations}),
+        role_classes=role_classes,
         relationships=relationships,
         observation_count=len(observations),
         fund_count=len({observation.fund_code for observation in observations}),
@@ -1825,6 +1980,31 @@ def _derive_manager_observation_kind(
     if classification_raw is not None and "manager" in classification_raw.casefold():
         return "manager_rollup"
     return "unknown"
+
+
+def _derive_manager_role_classes(
+    session: Session,
+    *,
+    entity_id: int,
+    observations: list[ManagerObservationReadModel],
+) -> list[str]:
+    has_manager_role = any(observation.observation_kind == "manager_rollup" for observation in observations)
+    has_ownership_role = any(observation.ownership_pct is not None for observation in observations)
+    has_issuer_role = session.scalar(
+        select(func.count(HoldingRelationship.id)).where(
+            HoldingRelationship.related_entity_id == entity_id,
+            HoldingRelationship.relationship_role == "issuer",
+        )
+    ) > 0
+    return [
+        role_class
+        for role_class, is_present in (
+            ("manager", has_manager_role),
+            ("issuer", has_issuer_role),
+            ("ownership", has_ownership_role),
+        )
+        if is_present
+    ]
 
 
 def _derive_fund_observation_kind(

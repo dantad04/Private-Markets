@@ -95,3 +95,61 @@ class TestAdminSchemaReviewQueueApi(unittest.TestCase):
         self.assertEqual(1, len(all_listing.json()))
         self.assertEqual("resolved", all_listing.json()[0]["status"])
 
+    def test_schema_review_queue_can_approve_new_mapping_version_and_taxonomy_rows(self) -> None:
+        drifted_path = Path(self.tempdir.name) / "art_qsuper_drifted_review_approve.csv"
+        drifted_text = FIXTURE_PATH.read_text(encoding="utf-8").replace(
+            "Externally Managed,ART CORE BOND FUND",
+            "External Mandate,ART CORE BOND FUND",
+            1,
+        )
+        drifted_path.write_text(drifted_text, encoding="utf-8")
+
+        ingest = self.client.post(
+            "/admin/ingest/local-file/art-qsuper",
+            json={
+                "file_path": str(drifted_path),
+                "fund_code": "art",
+                "fund_name": "ART",
+            },
+        )
+        self.assertEqual(409, ingest.status_code)
+
+        review_item_id = self.client.get("/admin/schema-review-queue").json()[0]["review_item_id"]
+        approve = self.client.post(
+            f"/admin/schema-review-queue/{review_item_id}/approve-mapping",
+            json={
+                "mapping_version_id": "art-qsuper-stage2-review-v2",
+                "approved_by": "reviewer@example.com",
+                "notes": "Approved updated ART-QSuper mapping from review queue.",
+                "structural_expectations_json": {
+                    "observed_internal_external_values": [
+                        "External Mandate",
+                        "Internally Managed",
+                    ]
+                },
+                "taxonomy_mappings": [
+                    {
+                        "source_asset_class_raw": "Fixed Income",
+                        "source_filter_raw": "External Mandate",
+                        "source_sub_filter_raw": None,
+                        "source_section_raw": None,
+                        "canonical_asset_class_code": "fixed_income",
+                        "is_aggregate_default": False,
+                        "disclosure_completeness_default": "value_only",
+                        "notes": "Approved from queue",
+                    }
+                ],
+            },
+        )
+        self.assertEqual(200, approve.status_code)
+        payload = approve.json()
+        self.assertEqual("resolved", payload["review_item"]["status"])
+        self.assertEqual("art-qsuper-stage2-review-v2", payload["review_item"]["approved_mapping_version_id"])
+        self.assertEqual("art-qsuper-stage2-review-v2", payload["approved_mapping_version"]["mapping_version_id"])
+        self.assertEqual("reviewer@example.com", payload["approved_mapping_version"]["approved_by"])
+
+        detail = self.client.get(f"/admin/schema-review-queue/{review_item_id}")
+        self.assertEqual(200, detail.status_code)
+        detail_payload = detail.json()
+        self.assertEqual("art-qsuper-stage2-review-v2", detail_payload["source_file"]["mapping_version_id"])
+        self.assertEqual("art-qsuper-stage2-review-v2", detail_payload["approved_mapping_version"]["mapping_version_id"])
