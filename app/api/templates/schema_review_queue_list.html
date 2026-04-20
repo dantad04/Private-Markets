@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ page_title | e }}</h1>
+
+<div class="status-filters">
+  <strong>Filter:</strong>
+  <a href="{{ request.url_for('schema_review_queue_list') | e }}?status=open">open</a>
+  <a href="{{ request.url_for('schema_review_queue_list') | e }}?status=all">all</a>
+  <a href="{{ request.url_for('schema_review_queue_list') | e }}?status=resolved">resolved</a>
+  <a href="{{ request.url_for('schema_review_queue_list') | e }}?status=rejected">rejected</a>
+  <span>current={{ queue_status | e }}</span>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>review_item_id</th>
+      <th>adapter_key</th>
+      <th>fund_code</th>
+      <th>review_reason</th>
+      <th>status</th>
+      <th>approved_mapping_version_id</th>
+      <th>observed_schema_fingerprint</th>
+      <th>created_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in review_items %}
+    <tr>
+      <td><a href="{{ request.url_for('schema_review_queue_detail', review_item_id=row.id) | e }}">{{ row.id | e }}</a></td>
+      <td>{{ row.adapter_key | e }}</td>
+      <td>{{ (row.fund_code or '') | e }}</td>
+      <td>{{ row.review_reason | e }}</td>
+      <td>{{ row.status | e }}</td>
+      <td>{{ (row.approved_mapping_version_id or '') | e }}</td>
+      <td>{{ (row.observed_schema_fingerprint or '') | e }}</td>
+      <td>{{ row.created_at | iso_utc | e }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="8">No review items found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

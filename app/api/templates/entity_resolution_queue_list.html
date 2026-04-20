@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Entity Resolution Queue</h1>
+
+<div class="status-filters">
+  <a href="{{ request.url_for('entity_resolution_queue_list') | e }}?status=open">Open</a>
+  <a href="{{ request.url_for('entity_resolution_queue_list') | e }}?status=all">All</a>
+  <a href="{{ request.url_for('entity_resolution_queue_list') | e }}?status=accepted">Accepted</a>
+  <a href="{{ request.url_for('entity_resolution_queue_list') | e }}?status=rejected">Rejected</a>
+  <a href="{{ request.url_for('entity_resolution_queue_list') | e }}?status=created_new">Created New</a>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Raw Name</th>
+      <th>Fund</th>
+      <th>Option</th>
+      <th>Period</th>
+      <th>Status</th>
+      <th>Top Score</th>
+      <th>Opened</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in queue_items %}
+    <tr>
+      <td><a href="{{ request.url_for('entity_resolution_queue_detail', queue_item_id=item.id) | e }}">{{ item.id }}</a></td>
+      <td>{{ item.raw_name | e }}</td>
+      <td>{{ item.fund_name | e }} (<code>{{ item.fund_code | e }}</code>)</td>
+      <td>{{ item.option_name | e }}</td>
+      <td>{{ item.reporting_period_end_date.isoformat() }}</td>
+      <td><code>{{ item.status | e }}</code></td>
+      <td>{{ item.top_candidate_score }}</td>
+      <td>{{ item.opened_at | iso_utc }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if not queue_items %}
+<p>No queue items for this status.</p>
+{% endif %}
+{% endblock %}

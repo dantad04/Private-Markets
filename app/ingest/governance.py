@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import csv
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 import io
 
@@ -19,7 +19,10 @@ from app.db.models import AdapterMappingVersion, SchemaReviewQueue, SourceFile, 
 AWARE_MAPPING_VERSION_ID = "aware-stage2-v1"
 ART_QSUPER_MAPPING_VERSION_ID = "art-qsuper-stage2-v1"
 ART_SUNSUPER_MAPPING_VERSION_ID = "art-sunsuper-stage2-v1"
-AUSTRALIANSUPER_MAPPING_VERSION_ID = "australiansuper-stage2-v1"
+AUSTRALIANSUPER_MEMBER_DIRECT_MAPPING_VERSION_ID = "australiansuper-stage2-v1"
+AUSTRALIANSUPER_MAPPING_VERSION_ID = AUSTRALIANSUPER_MEMBER_DIRECT_MAPPING_VERSION_ID
+AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID = "australiansuper-stage2-stable-v1"
+AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID = "australiansuper-stage2-conservative-v1"
 UNISUPER_MAPPING_VERSION_ID = "unisuper-stage2-v1"
 HOSTPLUS_MAPPING_VERSION_ID = "hostplus-stage2-v1"
 
@@ -62,6 +65,18 @@ class ApprovedAdapterMappingSeed:
     approved_by: str
     approved_at: datetime
     taxonomy_rows: tuple[ApprovedTaxonomyMappingSeed, ...]
+
+
+def _retarget_taxonomy_notes(
+    taxonomy_rows: tuple[ApprovedTaxonomyMappingSeed, ...],
+    *,
+    from_label: str,
+    to_label: str,
+) -> tuple[ApprovedTaxonomyMappingSeed, ...]:
+    return tuple(
+        replace(row, notes=row.notes.replace(from_label, to_label) if row.notes else None)
+        for row in taxonomy_rows
+    )
 
 
 AWARE_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
@@ -426,7 +441,7 @@ ART_SUNSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 
 
 AUSTRALIANSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
-    id=AUSTRALIANSUPER_MAPPING_VERSION_ID,
+    id=AUSTRALIANSUPER_MEMBER_DIRECT_MAPPING_VERSION_ID,
     adapter_key="AustralianSuperPhdAdapter",
     schema_fingerprint="c481c669d86f58bb9f7ed95eceb6a814872a91747b96b7aa17253cb7c324e2d6",
     structural_expectations_json={
@@ -450,6 +465,8 @@ AUSTRALIANSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
             "Name of Issuer/Counterparty",
             "Total",
         ],
+        "observed_option_codes": ["AR2O"],
+        "observed_option_names": ["Member Direct"],
     },
     notes=(
         "Approved Stage 2 AustralianSuper narrow slice using the real Member Direct file and a thin "
@@ -598,6 +615,413 @@ AUSTRALIANSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
             "aggregate_total",
             "Official AustralianSuper Member Direct internally managed fixed-income total",
         ),
+    ),
+)
+
+
+AUSTRALIANSUPER_STABLE_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint="9155b44a6c15c0e694f43fef3402dc4840c3937803c8606f27318c5699afb413",
+    structural_expectations_json={
+        "observed_headers": AUSTRALIANSUPER_REAL_HEADER,
+        "observed_asset_classes": [
+            "Cash",
+            "Fixed Income",
+            "Listed Alternatives",
+            "Listed Equity",
+            "Listed Infrastructure",
+            "Listed Property",
+            "Private Debt",
+            "Private Equity",
+            "Unlisted Alternatives",
+            "Unlisted Equity",
+            "Unlisted Infrastructure",
+            "Unlisted Property",
+        ],
+        "observed_filters": [
+            "All Assets",
+            "Externally Managed",
+            "Fixed Income Private Debt",
+            "Internally Managed",
+            "Listed",
+            "Private Equity",
+        ],
+        "observed_name_types": [
+            "Asset Class",
+            "Currency Exposure",
+            "Kind of Derivatives",
+            "Name",
+            "Name of Fund Manager",
+            "Name of Institution",
+            "Name of Issuer/Counterparty",
+            "Total",
+        ],
+        "observed_option_codes": ["ARST"],
+        "observed_option_names": ["Stable"],
+    },
+    notes=(
+        "Approved Stage 2 AustralianSuper Stable slice using the real Stable file and the thin "
+        "fund-specific adapter. Member Direct and Conservative Balanced are approved; Socially "
+        "Aware remains gated pending its own mapping approval."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 20, tzinfo=UTC),
+    taxonomy_rows=(
+        ApprovedTaxonomyMappingSeed(
+            "Cash",
+            "All Assets",
+            None,
+            None,
+            "cash",
+            False,
+            None,
+            "Official AustralianSuper Stable cash institution holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "All Assets",
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "Official AustralianSuper Stable fixed-income issuer holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "Externally Managed",
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "Official AustralianSuper Stable externally managed fixed-income slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "Internally Managed",
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "Official AustralianSuper Stable internally managed fixed-income slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Alternatives",
+            "Listed",
+            None,
+            None,
+            "alternatives",
+            False,
+            None,
+            "Official AustralianSuper Stable listed-alternatives holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Equity",
+            "Listed",
+            None,
+            None,
+            "listed_equity",
+            False,
+            None,
+            "Official AustralianSuper Stable listed-equity holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            "Listed",
+            None,
+            None,
+            "listed_infrastructure",
+            False,
+            None,
+            "Official AustralianSuper Stable listed-infrastructure holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Property",
+            "Listed",
+            None,
+            None,
+            "listed_property",
+            False,
+            None,
+            "Official AustralianSuper Stable listed-property holding",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Private Debt",
+            "Fixed Income Private Debt",
+            None,
+            None,
+            "private_debt",
+            False,
+            "name_only",
+            "Official AustralianSuper Stable private-debt name-only disclosure",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Private Equity",
+            "Private Equity",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            "name_only",
+            "Official AustralianSuper Stable private-equity name-only disclosure",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Alternatives",
+            "Internally Managed",
+            None,
+            None,
+            "alternatives",
+            False,
+            "name_only",
+            "Official AustralianSuper Stable unlisted-alternatives name-only disclosure",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            None,
+            "Official AustralianSuper Stable externally managed unlisted-equity slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            "ownership_only",
+            "Official AustralianSuper Stable internally managed unlisted-equity ownership slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure",
+            "All Assets",
+            None,
+            None,
+            "unlisted_infrastructure",
+            False,
+            "name_only",
+            "Official AustralianSuper Stable all-assets unlisted-infrastructure metadata row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_infrastructure",
+            False,
+            None,
+            "Official AustralianSuper Stable externally managed unlisted-infrastructure slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_infrastructure",
+            False,
+            "ownership_only",
+            "Official AustralianSuper Stable internally managed unlisted-infrastructure ownership slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Property",
+            "All Assets",
+            None,
+            None,
+            "unlisted_property",
+            False,
+            "name_only",
+            "Official AustralianSuper Stable all-assets unlisted-property metadata row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Property",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_property",
+            False,
+            None,
+            "Official AustralianSuper Stable externally managed unlisted-property slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Property",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_property",
+            False,
+            "ownership_only",
+            "Official AustralianSuper Stable internally managed unlisted-property ownership slice",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Cash",
+            "All Assets",
+            None,
+            None,
+            "cash",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable cash total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "Externally Managed",
+            None,
+            None,
+            "fixed_income",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable externally managed fixed-income total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income",
+            "Internally Managed",
+            None,
+            None,
+            "fixed_income",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable internally managed fixed-income total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Alternatives",
+            "Listed",
+            None,
+            None,
+            "alternatives",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable listed-alternatives total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Equity",
+            "Listed",
+            None,
+            None,
+            "listed_equity",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable listed-equity total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            "Listed",
+            None,
+            None,
+            "listed_infrastructure",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable listed-infrastructure total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Property",
+            "Listed",
+            None,
+            None,
+            "listed_property",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable listed-property total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Alternatives",
+            "Internally Managed",
+            None,
+            None,
+            "alternatives",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable internally managed unlisted-alternatives total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable externally managed unlisted-equity total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_equity",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable internally managed unlisted-equity total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_infrastructure",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable externally managed unlisted-infrastructure total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_infrastructure",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable internally managed unlisted-infrastructure total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Property",
+            "Externally Managed",
+            None,
+            None,
+            "unlisted_property",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable externally managed unlisted-property total",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Property",
+            "Internally Managed",
+            None,
+            None,
+            "unlisted_property",
+            True,
+            "aggregate_total",
+            "Official AustralianSuper Stable internally managed unlisted-property total",
+        ),
+    ),
+)
+
+
+AUSTRALIANSUPER_CONSERVATIVE_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint=AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.schema_fingerprint,
+    structural_expectations_json={
+        **AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.structural_expectations_json,
+        "observed_option_codes": ["ARYO"],
+        "observed_option_names": ["Conservative Balanced"],
+    },
+    notes=(
+        "Approved Stage 2 AustralianSuper Conservative Balanced slice using the real "
+        "Conservative file and the thin fund-specific adapter. Member Direct and Stable are "
+        "approved; Socially Aware remains gated pending its own mapping approval."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 20, tzinfo=UTC),
+    taxonomy_rows=_retarget_taxonomy_notes(
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.taxonomy_rows,
+        from_label="Stable",
+        to_label="Conservative Balanced",
     ),
 )
 
@@ -1097,21 +1521,28 @@ HOSTPLUS_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
-APPROVED_MAPPING_SEEDS = {
-    AWARE_APPROVED_MAPPING.adapter_key: AWARE_APPROVED_MAPPING,
-    ART_QSUPER_APPROVED_MAPPING.adapter_key: ART_QSUPER_APPROVED_MAPPING,
-    ART_SUNSUPER_APPROVED_MAPPING.adapter_key: ART_SUNSUPER_APPROVED_MAPPING,
-    AUSTRALIANSUPER_APPROVED_MAPPING.adapter_key: AUSTRALIANSUPER_APPROVED_MAPPING,
-    UNISUPER_APPROVED_MAPPING.adapter_key: UNISUPER_APPROVED_MAPPING,
-    HOSTPLUS_APPROVED_MAPPING.adapter_key: HOSTPLUS_APPROVED_MAPPING,
+APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
+    AWARE_APPROVED_MAPPING.adapter_key: (AWARE_APPROVED_MAPPING,),
+    ART_QSUPER_APPROVED_MAPPING.adapter_key: (ART_QSUPER_APPROVED_MAPPING,),
+    ART_SUNSUPER_APPROVED_MAPPING.adapter_key: (ART_SUNSUPER_APPROVED_MAPPING,),
+    AUSTRALIANSUPER_APPROVED_MAPPING.adapter_key: (
+        AUSTRALIANSUPER_APPROVED_MAPPING,
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING,
+        AUSTRALIANSUPER_CONSERVATIVE_APPROVED_MAPPING,
+    ),
+    UNISUPER_APPROVED_MAPPING.adapter_key: (UNISUPER_APPROVED_MAPPING,),
+    HOSTPLUS_APPROVED_MAPPING.adapter_key: (HOSTPLUS_APPROVED_MAPPING,),
 }
 
 
-def ensure_approved_mapping_seeded(session: Session, *, adapter_key: str) -> AdapterMappingVersion:
-    seed = APPROVED_MAPPING_SEEDS.get(adapter_key)
-    if seed is None:
+def _approved_mapping_seeds_for(adapter_key: str) -> tuple[ApprovedAdapterMappingSeed, ...]:
+    seeds = APPROVED_MAPPING_SEEDS.get(adapter_key)
+    if seeds is None:
         raise MissingApprovedMappingError(f"No approved mapping seed is configured for adapter {adapter_key!r}")
+    return seeds
 
+
+def _ensure_seed_seeded(session: Session, *, seed: ApprovedAdapterMappingSeed) -> AdapterMappingVersion:
     mapping_version = session.get(AdapterMappingVersion, seed.id)
     if mapping_version is None:
         mapping_version = AdapterMappingVersion(
@@ -1156,6 +1587,14 @@ def ensure_approved_mapping_seeded(session: Session, *, adapter_key: str) -> Ada
     return mapping_version
 
 
+def ensure_approved_mapping_seeded(session: Session, *, adapter_key: str) -> AdapterMappingVersion:
+    mapping_versions = [
+        _ensure_seed_seeded(session, seed=seed)
+        for seed in _approved_mapping_seeds_for(adapter_key)
+    ]
+    return mapping_versions[0]
+
+
 def enforce_approved_mapping(
     session: Session,
     *,
@@ -1164,32 +1603,36 @@ def enforce_approved_mapping(
     raw_bytes: bytes,
     source_section_raw: str | None = None,
 ) -> str:
-    mapping_version = ensure_approved_mapping_seeded(session, adapter_key=source_file.adapter_key)
-    drift_summary = _build_structural_drift_summary(mapping_version, parse_result)
-    if drift_summary:
-        source_file.mapping_version_id = mapping_version.id
-        source_file.ingest_status = "review_required"
-        create_schema_review_queue_item(
-            session,
-            source_file=source_file,
-            approved_mapping_version_id=mapping_version.id,
-            review_reason="schema_drift",
-            observed_schema_fingerprint=parse_result.schema_fingerprint,
-            drift_summary_json=drift_summary,
-            raw_bytes=raw_bytes,
-        )
-        session.flush()
-        raise SchemaDriftDetectedError(
-            f"{source_file.adapter_key} drift detected against approved mapping {mapping_version.id}"
-        )
+    mapping_versions = [
+        _ensure_seed_seeded(session, seed=seed)
+        for seed in _approved_mapping_seeds_for(source_file.adapter_key)
+    ]
+    best_drift_match: tuple[AdapterMappingVersion, dict[str, object]] | None = None
+    best_taxonomy_match: tuple[AdapterMappingVersion, dict[str, object]] | None = None
 
-    taxonomy_summary = _build_taxonomy_validation_summary(
-        session,
-        mapping_version_id=mapping_version.id,
-        parse_result=parse_result,
-        source_section_raw=source_section_raw,
-    )
-    if taxonomy_summary:
+    for mapping_version in mapping_versions:
+        drift_summary = _build_structural_drift_summary(mapping_version, parse_result)
+        if drift_summary:
+            if best_drift_match is None or _summary_score(drift_summary) < _summary_score(best_drift_match[1]):
+                best_drift_match = (mapping_version, drift_summary)
+            continue
+
+        taxonomy_summary = _build_taxonomy_validation_summary(
+            session,
+            mapping_version_id=mapping_version.id,
+            parse_result=parse_result,
+            source_section_raw=source_section_raw,
+        )
+        if taxonomy_summary:
+            if best_taxonomy_match is None or _summary_score(taxonomy_summary) < _summary_score(best_taxonomy_match[1]):
+                best_taxonomy_match = (mapping_version, taxonomy_summary)
+            continue
+
+        source_file.mapping_version_id = mapping_version.id
+        return mapping_version.id
+
+    if best_taxonomy_match is not None:
+        mapping_version, taxonomy_summary = best_taxonomy_match
         source_file.mapping_version_id = mapping_version.id
         source_file.ingest_status = "review_required"
         create_schema_review_queue_item(
@@ -1206,8 +1649,25 @@ def enforce_approved_mapping(
             f"{source_file.adapter_key} emitted rows not covered by approved taxonomy mapping {mapping_version.id}"
         )
 
+    if best_drift_match is None:
+        raise MissingApprovedMappingError(f"No approved mapping seed is configured for adapter {source_file.adapter_key!r}")
+
+    mapping_version, drift_summary = best_drift_match
     source_file.mapping_version_id = mapping_version.id
-    return mapping_version.id
+    source_file.ingest_status = "review_required"
+    create_schema_review_queue_item(
+        session,
+        source_file=source_file,
+        approved_mapping_version_id=mapping_version.id,
+        review_reason="schema_drift",
+        observed_schema_fingerprint=parse_result.schema_fingerprint,
+        drift_summary_json=drift_summary,
+        raw_bytes=raw_bytes,
+    )
+    session.flush()
+    raise SchemaDriftDetectedError(
+        f"{source_file.adapter_key} drift detected against approved mapping {mapping_version.id}"
+    )
 
 
 def create_schema_review_queue_item(
@@ -1259,6 +1719,15 @@ def _build_structural_drift_summary(
         "observed_filters",
         "observed_name_types",
     ):
+        if expected.get(key) != actual.get(key):
+            summary[key] = {
+                "expected": expected.get(key),
+                "actual": actual.get(key),
+            }
+
+    for key in ("observed_option_codes", "observed_option_names"):
+        if key not in expected:
+            continue
         if expected.get(key) != actual.get(key):
             summary[key] = {
                 "expected": expected.get(key),
@@ -1339,6 +1808,16 @@ def _build_taxonomy_validation_summary(
     if not mismatches:
         return {}
     return {"taxonomy_mismatches": mismatches[:10]}
+
+
+def _summary_score(summary: dict[str, object]) -> int:
+    score = len(summary)
+    for value in summary.values():
+        if isinstance(value, dict):
+            score += len(value)
+        elif isinstance(value, list):
+            score += len(value)
+    return score
 
 
 def _sample_rows(raw_bytes: bytes) -> list[list[str]]:

@@ -8,7 +8,19 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.api.admin import get_db_session
-from app.read_models import EntityDetailReadModel, EntityObservationReadModel, get_entity_detail_by_name
+from app.read_models import (
+    CanonicalEntityDetailReadModel,
+    CrossAdapterHoldingsReadModel,
+    CrossAdapterObservationReadModel,
+    EntityObservedHoldingsCountReadModel,
+    EntityRelationshipReadModel,
+    EntityDetailReadModel,
+    EntityObservationReadModel,
+    get_canonical_entity_detail,
+    get_cross_adapter_holdings_by_entity_id,
+    get_cross_adapter_holdings_by_name,
+    get_entity_detail_by_name,
+)
 
 
 router = APIRouter(prefix="/entities", tags=["entities"])
@@ -91,6 +103,125 @@ class EntityDetailResponse(BaseModel):
         )
 
 
+class CrossAdapterObservationResponse(BaseModel):
+    normalized_name: str
+    raw_name: str
+    source_file_id: int
+    fund_code: str
+    fund_name: str
+    option_code: str
+    option_name: str
+    reporting_period_end_date: date
+    disclosure_completeness: str
+    value_aud: str | None
+    ownership_pct: str | None
+    value_band_raw: str | None
+    is_aggregate: bool
+
+    @classmethod
+    def from_read_model(cls, item: CrossAdapterObservationReadModel) -> "CrossAdapterObservationResponse":
+        return cls(
+            normalized_name=item.normalized_name,
+            raw_name=item.raw_name,
+            source_file_id=item.source_file_id,
+            fund_code=item.fund_code,
+            fund_name=item.fund_name,
+            option_code=item.option_code,
+            option_name=item.option_name,
+            reporting_period_end_date=item.reporting_period_end_date,
+            disclosure_completeness=item.disclosure_completeness,
+            value_aud=_decimal_string(item.value_aud),
+            ownership_pct=_decimal_string(item.ownership_pct),
+            value_band_raw=item.value_band_raw,
+            is_aggregate=item.is_aggregate,
+        )
+
+
+class CrossAdapterHoldingsResponse(BaseModel):
+    entity_id: int | None
+    lookup_name: str
+    normalized_lookup_name: str
+    matched_normalized_names: list[str]
+    matched_raw_names: list[str]
+    observation_count: int
+    fund_count: int
+    observations: list[CrossAdapterObservationResponse]
+
+    @classmethod
+    def from_read_model(cls, item: CrossAdapterHoldingsReadModel) -> "CrossAdapterHoldingsResponse":
+        return cls(
+            entity_id=item.entity_id,
+            lookup_name=item.lookup_name,
+            normalized_lookup_name=item.normalized_lookup_name,
+            matched_normalized_names=item.matched_normalized_names,
+            matched_raw_names=item.matched_raw_names,
+            observation_count=item.observation_count,
+            fund_count=item.fund_count,
+            observations=[CrossAdapterObservationResponse.from_read_model(row) for row in item.observations],
+        )
+
+
+class EntityRelationshipResponse(BaseModel):
+    relationship_id: int
+    from_entity_id: int
+    to_entity_id: int
+    relationship_type: str
+    source: str
+    notes: str | None
+
+    @classmethod
+    def from_read_model(cls, item: EntityRelationshipReadModel) -> "EntityRelationshipResponse":
+        return cls(
+            relationship_id=item.relationship_id,
+            from_entity_id=item.from_entity_id,
+            to_entity_id=item.to_entity_id,
+            relationship_type=item.relationship_type,
+            source=item.source,
+            notes=item.notes,
+        )
+
+
+class EntityObservedHoldingsCountResponse(BaseModel):
+    fund_code: str
+    fund_name: str
+    reporting_period_end_date: date
+    observation_count: int
+
+    @classmethod
+    def from_read_model(cls, item: EntityObservedHoldingsCountReadModel) -> "EntityObservedHoldingsCountResponse":
+        return cls(
+            fund_code=item.fund_code,
+            fund_name=item.fund_name,
+            reporting_period_end_date=item.reporting_period_end_date,
+            observation_count=item.observation_count,
+        )
+
+
+class CanonicalEntityDetailResponse(BaseModel):
+    entity_id: int
+    canonical_name: str
+    entity_type: str
+    abn: str | None
+    aliases: list[str]
+    relationships: list[EntityRelationshipResponse]
+    observed_holdings_count_by_fund_period: list[EntityObservedHoldingsCountResponse]
+
+    @classmethod
+    def from_read_model(cls, item: CanonicalEntityDetailReadModel) -> "CanonicalEntityDetailResponse":
+        return cls(
+            entity_id=item.entity_id,
+            canonical_name=item.canonical_name,
+            entity_type=item.entity_type,
+            abn=item.abn,
+            aliases=item.aliases,
+            relationships=[EntityRelationshipResponse.from_read_model(row) for row in item.relationships],
+            observed_holdings_count_by_fund_period=[
+                EntityObservedHoldingsCountResponse.from_read_model(row)
+                for row in item.observed_holdings_count_by_fund_period
+            ],
+        )
+
+
 @router.get("/by-name", response_model=EntityDetailResponse)
 def entity_detail_by_name(
     name: str = Query(..., min_length=1, description="Case-insensitive exact raw holding name lookup"),
@@ -100,3 +231,35 @@ def entity_detail_by_name(
     if detail is None:
         raise HTTPException(status_code=404, detail="Entity observations not found")
     return EntityDetailResponse.from_read_model(detail)
+
+
+@router.get("/cross-adapter", response_model=CrossAdapterHoldingsResponse)
+def cross_adapter_holdings_by_name(
+    name: str | None = Query(
+        None,
+        min_length=1,
+        description="Conservative raw-name lookup across loaded current source files",
+    ),
+    entity_id: int | None = Query(None, ge=1, description="Canonical entity id lookup across aliases and linked holdings"),
+    session: Session = Depends(get_db_session),
+) -> CrossAdapterHoldingsResponse:
+    if entity_id is not None:
+        detail = get_cross_adapter_holdings_by_entity_id(session, entity_id=entity_id)
+    elif name is not None:
+        detail = get_cross_adapter_holdings_by_name(session, name=name)
+    else:
+        raise HTTPException(status_code=400, detail="Provide either name or entity_id")
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Cross-adapter holdings not found")
+    return CrossAdapterHoldingsResponse.from_read_model(detail)
+
+
+@router.get("/{entity_id}", response_model=CanonicalEntityDetailResponse)
+def canonical_entity_detail(
+    entity_id: int,
+    session: Session = Depends(get_db_session),
+) -> CanonicalEntityDetailResponse:
+    detail = get_canonical_entity_detail(session, entity_id=entity_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Entity not found")
+    return CanonicalEntityDetailResponse.from_read_model(detail)

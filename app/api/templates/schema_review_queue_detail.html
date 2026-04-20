@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ page_title | e }}</h1>
+
+<div class="metadata-grid">
+  <strong>review_item_id</strong><span>{{ review_item.id | e }}</span>
+  <strong>adapter_key</strong><span>{{ review_item.adapter_key | e }}</span>
+  <strong>source_file_id</strong><span>{{ (review_item.source_file_id or '') | e }}</span>
+  <strong>fund_code</strong><span>{{ (review_item.fund_code or '') | e }}</span>
+  <strong>fund_name</strong><span>{{ (review_item.fund_name or '') | e }}</span>
+  <strong>source_url</strong><span>{{ review_item.source_url | e }}</span>
+  <strong>checksum</strong><span>{{ review_item.checksum | e }}</span>
+  <strong>review_reason</strong><span>{{ review_item.review_reason | e }}</span>
+  <strong>status</strong><span>{{ review_item.status | e }}</span>
+  <strong>approved_mapping_version_id</strong><span>{{ (review_item.approved_mapping_version_id or '') | e }}</span>
+  <strong>observed_schema_fingerprint</strong><span>{{ (review_item.observed_schema_fingerprint or '') | e }}</span>
+  <strong>created_at</strong><span>{{ review_item.created_at | iso_utc | e }}</span>
+  <strong>updated_at</strong><span>{{ review_item.updated_at | iso_utc | e }}</span>
+</div>
+
+{% if review_item.status == "open" %}
+<div class="actions">
+  <form method="post" action="{{ request.url_for('schema_review_queue_update_status', review_item_id=review_item.id) | e }}">
+    <input type="hidden" name="status" value="resolved">
+    <button type="submit">Mark resolved</button>
+  </form>
+  <form method="post" action="{{ request.url_for('schema_review_queue_update_status', review_item_id=review_item.id) | e }}">
+    <input type="hidden" name="status" value="rejected">
+    <button type="submit">Mark rejected</button>
+  </form>
+</div>
+{% endif %}
+
+<h2>Source File Metadata</h2>
+{% if source_file %}
+<div class="metadata-grid">
+  <strong>source_file_id</strong><span>{{ source_file.id | e }}</span>
+  <strong>fund_code</strong><span>{{ source_file.fund_code | e }}</span>
+  <strong>fund_name</strong><span>{{ source_file.fund_name | e }}</span>
+  <strong>adapter_key</strong><span>{{ source_file.adapter_key | e }}</span>
+  <strong>source_url</strong><span>{{ source_file.source_url | e }}</span>
+  <strong>checksum</strong><span>{{ source_file.checksum | e }}</span>
+  <strong>ingest_status</strong><span>{{ source_file.ingest_status | e }}</span>
+  <strong>schema_fingerprint</strong><span>{{ (source_file.schema_fingerprint or '') | e }}</span>
+  <strong>mapping_version_id</strong><span>{{ (source_file.mapping_version_id or '') | e }}</span>
+  <strong>reporting_period</strong><span>{{ (source_file.reporting_period_end_date.isoformat() if source_file.reporting_period_end_date else '') | e }}</span>
+  <strong>publication_date</strong><span>{{ (source_file.publication_date.isoformat() if source_file.publication_date else '') | e }}</span>
+  <strong>received_at</strong><span>{{ source_file.received_at | iso_utc | e }}</span>
+  <strong>investment_option_name</strong><span>{{ (source_file.investment_option_name or '') | e }}</span>
+</div>
+{% else %}
+<p>No source-file metadata is linked to this review item.</p>
+{% endif %}
+
+<h2>Approved Mapping Version</h2>
+{% if approved_mapping_version %}
+<div class="metadata-grid">
+  <strong>mapping_version_id</strong><span>{{ approved_mapping_version.id | e }}</span>
+  <strong>adapter_key</strong><span>{{ approved_mapping_version.adapter_key | e }}</span>
+  <strong>schema_fingerprint</strong><span>{{ approved_mapping_version.schema_fingerprint | e }}</span>
+  <strong>approved_by</strong><span>{{ approved_mapping_version.approved_by | e }}</span>
+  <strong>approved_at</strong><span>{{ approved_mapping_version.approved_at | iso_utc | e }}</span>
+  <strong>notes</strong><span>{{ (approved_mapping_version.notes or '') | e }}</span>
+</div>
+{% else %}
+<p>No approved mapping version is attached to this review item.</p>
+{% endif %}
+
+<h2>Drift Summary</h2>
+<pre>{{ drift_summary_json | json_pretty | e }}</pre>
+
+<h2>Sample Rows</h2>
+<pre>{{ sample_rows_json | csv_row | e }}</pre>
+{% endblock %}

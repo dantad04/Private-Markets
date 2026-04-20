@@ -40,10 +40,15 @@ def _csv_row(value):
     return buffer.getvalue()
 
 
+def _json_pretty(value):
+    return json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
+
+
 def create_templates() -> Jinja2Templates:
     templates = Jinja2Templates(directory=str(Path(__file__).resolve().parent / "templates"))
     templates.env.filters["iso_utc"] = _format_datetime_utc
     templates.env.filters["csv_row"] = _csv_row
+    templates.env.filters["json_pretty"] = _json_pretty
     return templates
 
 

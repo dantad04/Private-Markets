@@ -11,6 +11,7 @@ from adapters.base import SourceFileMetadata
 
 AUSTRALIANSUPER_FIXTURE_DIR = Path("tests/fixtures/real/australiansuper").resolve()
 STABLE_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Stable PHD (1).csv"
+CONSERVATIVE_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Conservative PHD (1).csv"
 MEMBER_DIRECT_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Member Direct PHD (1).csv"
 
 
@@ -115,3 +116,22 @@ class TestAustralianSuperAdapter(unittest.TestCase):
         )
         self.assertEqual("multiple_precise_rows_within_group", review_event["details"]["reason"])
         self.assertEqual([764, 968, 1076, 1077], review_event["details"]["source_row_numbers"])
+
+    def test_conservative_file_reuses_stable_merge_shape_without_adapter_changes(self) -> None:
+        result = self.adapter.parse(make_metadata(CONSERVATIVE_PATH), CONSERVATIVE_PATH.read_bytes())
+
+        self.assertEqual(["ARYO"], result.structural_metadata["observed_option_codes"])
+        self.assertEqual(["Conservative Balanced"], result.structural_metadata["observed_option_names"])
+        self.assertEqual(54, result.parse_statistics["merged_duplicate_groups"])
+        self.assertEqual(17, result.parse_statistics["skipped_portfolio_posture_rows"])
+        self.assertFalse(any(record.source_asset_class_raw == "Derivatives" for record in result.holdings))
+
+        row = next(record for record in result.holdings if record.source_row_number == 3368)
+        self.assertEqual("1200 W Carroll", row.raw_name)
+        self.assertEqual("Unlisted Property", row.source_asset_class_raw)
+        self.assertEqual("Internally Managed", row.source_subclass_raw)
+        self.assertEqual("ownership_only", row.disclosure_completeness)
+        self.assertEqual("Office", row.classification_raw)
+        self.assertEqual("< $2m", row.value_band_raw)
+        self.assertEqual([3877], row.metadata_attached_from_row_numbers)
+        self.assertEqual([3368, 3877], [entry["source_row_number"] for entry in row.raw_payload_json])

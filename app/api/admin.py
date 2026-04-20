@@ -13,6 +13,7 @@ from adapters.hostplus_errors import HostPlusAdapterError
 from adapters.sunsuper_schema_errors import SunsuperSchemaAdapterError
 from adapters.unisuper_errors import UniSuperAdapterError
 from app.db.session import get_session
+from app.entity_resolution.queue import apply_entity_resolution_queue_action
 from app.ingest.loader import (
     LoadSummary,
     LoaderError,
@@ -26,12 +27,24 @@ from app.ingest.loader import (
 )
 from app.ingest.governance import SchemaDriftDetectedError, UnapprovedTaxonomyMappingError
 from app.read_models import (
+    ApprovedMappingVersionSummary,
+    EntityResolutionQueueCandidate,
+    EntityResolutionQueueDetailReadModel,
+    EntityResolutionQueueHoldingSummary,
+    EntityResolutionQueueListItem,
+    SchemaReviewQueueDetailReadModel,
+    SchemaReviewQueueListItem,
     SourceFileDetailReadModel,
     SourceFileHoldingRow,
     SourceFileListItem,
     SourceFileSummary,
+    get_entity_resolution_queue_detail,
+    get_schema_review_queue_detail,
     get_source_file_detail,
+    list_entity_resolution_queue_items,
+    list_schema_review_queue_items,
     list_source_files,
+    update_schema_review_queue_status,
 )
 
 
@@ -276,6 +289,196 @@ class SourceFileDetailResponse(BaseModel):
         )
 
 
+class SchemaReviewQueueListItemResponse(BaseModel):
+    review_item_id: int
+    adapter_key: str
+    source_file_id: int | None
+    source_url: str
+    checksum: str
+    fund_code: str | None
+    fund_name: str | None
+    review_reason: str
+    status: str
+    approved_mapping_version_id: str | None
+    observed_schema_fingerprint: str | None
+    created_at: datetime
+    updated_at: datetime
+
+    @classmethod
+    def from_read_model(cls, item: SchemaReviewQueueListItem) -> "SchemaReviewQueueListItemResponse":
+        return cls(
+            review_item_id=item.id,
+            adapter_key=item.adapter_key,
+            source_file_id=item.source_file_id,
+            source_url=item.source_url,
+            checksum=item.checksum,
+            fund_code=item.fund_code,
+            fund_name=item.fund_name,
+            review_reason=item.review_reason,
+            status=item.status,
+            approved_mapping_version_id=item.approved_mapping_version_id,
+            observed_schema_fingerprint=item.observed_schema_fingerprint,
+            created_at=item.created_at,
+            updated_at=item.updated_at,
+        )
+
+
+class ApprovedMappingVersionSummaryResponse(BaseModel):
+    mapping_version_id: str
+    adapter_key: str
+    schema_fingerprint: str
+    approved_by: str
+    approved_at: datetime
+    notes: str | None
+
+    @classmethod
+    def from_read_model(
+        cls,
+        item: ApprovedMappingVersionSummary,
+    ) -> "ApprovedMappingVersionSummaryResponse":
+        return cls(
+            mapping_version_id=item.id,
+            adapter_key=item.adapter_key,
+            schema_fingerprint=item.schema_fingerprint,
+            approved_by=item.approved_by,
+            approved_at=item.approved_at,
+            notes=item.notes,
+        )
+
+
+class SchemaReviewQueueDetailResponse(BaseModel):
+    review_item: SchemaReviewQueueListItemResponse
+    source_file: SourceFileSummaryResponse | None
+    approved_mapping_version: ApprovedMappingVersionSummaryResponse | None
+    drift_summary_json: object
+    sample_rows_json: list[list[str]]
+
+    @classmethod
+    def from_read_model(cls, detail: SchemaReviewQueueDetailReadModel) -> "SchemaReviewQueueDetailResponse":
+        return cls(
+            review_item=SchemaReviewQueueListItemResponse.from_read_model(detail.review_item),
+            source_file=(
+                SourceFileSummaryResponse.from_read_model(detail.source_file)
+                if detail.source_file is not None
+                else None
+            ),
+            approved_mapping_version=(
+                ApprovedMappingVersionSummaryResponse.from_read_model(detail.approved_mapping_version)
+                if detail.approved_mapping_version is not None
+                else None
+            ),
+            drift_summary_json=detail.drift_summary_json,
+            sample_rows_json=detail.sample_rows_json,
+        )
+
+
+class SchemaReviewQueueStatusUpdateRequest(BaseModel):
+    status: str = Field(..., description="Minimal reviewer status transition. Allowed values: 'resolved' or 'rejected'.")
+
+
+class EntityResolutionQueueListItemResponse(BaseModel):
+    queue_item_id: int
+    holding_id: int
+    raw_name: str | None
+    fund_code: str
+    fund_name: str
+    option_name: str
+    reporting_period_end_date: date
+    status: str
+    top_candidate_score: str
+    opened_at: datetime
+    resolved_at: datetime | None
+
+    @classmethod
+    def from_read_model(cls, item: EntityResolutionQueueListItem) -> "EntityResolutionQueueListItemResponse":
+        return cls(
+            queue_item_id=item.id,
+            holding_id=item.holding_id,
+            raw_name=item.raw_name,
+            fund_code=item.fund_code,
+            fund_name=item.fund_name,
+            option_name=item.option_name,
+            reporting_period_end_date=item.reporting_period_end_date,
+            status=item.status,
+            top_candidate_score=_decimal_string(item.top_candidate_score) or "0",
+            opened_at=item.opened_at,
+            resolved_at=item.resolved_at,
+        )
+
+
+class EntityResolutionQueueHoldingResponse(BaseModel):
+    holding_id: int
+    raw_name: str | None
+    source_file_id: int
+    fund_code: str
+    fund_name: str
+    option_name: str
+    reporting_period_end_date: date
+    security_identifier_type: str | None
+    security_identifier_value: str | None
+
+    @classmethod
+    def from_read_model(cls, item: EntityResolutionQueueHoldingSummary) -> "EntityResolutionQueueHoldingResponse":
+        return cls(
+            holding_id=item.holding_id,
+            raw_name=item.raw_name,
+            source_file_id=item.source_file_id,
+            fund_code=item.fund_code,
+            fund_name=item.fund_name,
+            option_name=item.option_name,
+            reporting_period_end_date=item.reporting_period_end_date,
+            security_identifier_type=item.security_identifier_type,
+            security_identifier_value=item.security_identifier_value,
+        )
+
+
+class EntityResolutionQueueCandidateResponse(BaseModel):
+    entity_id: int
+    canonical_name: str
+    entity_type: str
+    abn: str | None
+    aliases: list[str]
+
+    @classmethod
+    def from_read_model(cls, item: EntityResolutionQueueCandidate) -> "EntityResolutionQueueCandidateResponse":
+        return cls(
+            entity_id=item.entity_id,
+            canonical_name=item.canonical_name,
+            entity_type=item.entity_type,
+            abn=item.abn,
+            aliases=item.aliases,
+        )
+
+
+class EntityResolutionQueueDetailResponse(BaseModel):
+    queue_item: EntityResolutionQueueListItemResponse
+    holding: EntityResolutionQueueHoldingResponse
+    candidates: list[EntityResolutionQueueCandidateResponse]
+    evidence_json: object
+    candidate_entity_ids: list[int]
+    resolved_by: str | None
+    notes: str | None
+
+    @classmethod
+    def from_read_model(cls, item: EntityResolutionQueueDetailReadModel) -> "EntityResolutionQueueDetailResponse":
+        return cls(
+            queue_item=EntityResolutionQueueListItemResponse.from_read_model(item.queue_item),
+            holding=EntityResolutionQueueHoldingResponse.from_read_model(item.holding),
+            candidates=[EntityResolutionQueueCandidateResponse.from_read_model(candidate) for candidate in item.candidates],
+            evidence_json=item.evidence_json,
+            candidate_entity_ids=item.candidate_entity_ids,
+            resolved_by=item.resolved_by,
+            notes=item.notes,
+        )
+
+
+class EntityResolutionQueueActionRequest(BaseModel):
+    action: str = Field(..., description="One of 'accept', 'reject', or 'create_new'.")
+    entity_id: int | None = Field(None, description="Required when action='accept'.")
+    resolved_by: str | None = None
+    notes: str | None = None
+
+
 def get_db_session():
     session = get_session()
     try:
@@ -304,6 +507,95 @@ def admin_source_file_detail(
     if detail is None:
         raise HTTPException(status_code=404, detail="Source file not found")
     return SourceFileDetailResponse.from_read_model(detail)
+
+
+@router.get("/entity-resolution-queue", response_model=list[EntityResolutionQueueListItemResponse])
+def admin_entity_resolution_queue_list(
+    status_filter: str = Query("open", alias="status"),
+    session: Session = Depends(get_db_session),
+) -> list[EntityResolutionQueueListItemResponse]:
+    return [
+        EntityResolutionQueueListItemResponse.from_read_model(item)
+        for item in list_entity_resolution_queue_items(session, status_filter=status_filter)
+    ]
+
+
+@router.get("/entity-resolution-queue/{queue_item_id}", response_model=EntityResolutionQueueDetailResponse)
+def admin_entity_resolution_queue_detail(
+    queue_item_id: int,
+    session: Session = Depends(get_db_session),
+) -> EntityResolutionQueueDetailResponse:
+    detail = get_entity_resolution_queue_detail(session, queue_item_id=queue_item_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Entity resolution item not found")
+    return EntityResolutionQueueDetailResponse.from_read_model(detail)
+
+
+@router.post("/entity-resolution-queue/{queue_item_id}/action", response_model=EntityResolutionQueueDetailResponse)
+def admin_entity_resolution_queue_action(
+    queue_item_id: int,
+    payload: EntityResolutionQueueActionRequest,
+    session: Session = Depends(get_db_session),
+) -> EntityResolutionQueueDetailResponse:
+    try:
+        queue_item = apply_entity_resolution_queue_action(
+            session,
+            queue_item_id=queue_item_id,
+            action=payload.action,
+            chosen_entity_id=payload.entity_id,
+            resolved_by=payload.resolved_by,
+            notes=payload.notes,
+        )
+    except ValueError as exc:
+        message = str(exc)
+        status_code = status.HTTP_409_CONFLICT if "already" in message else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=status_code, detail=message) from exc
+    if queue_item is None:
+        raise HTTPException(status_code=404, detail="Entity resolution item not found")
+
+    detail = get_entity_resolution_queue_detail(session, queue_item_id=queue_item_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Entity resolution item not found")
+    return EntityResolutionQueueDetailResponse.from_read_model(detail)
+
+
+@router.get("/schema-review-queue", response_model=list[SchemaReviewQueueListItemResponse])
+def admin_schema_review_queue_list(
+    status_filter: str = Query("open", alias="status"),
+    session: Session = Depends(get_db_session),
+) -> list[SchemaReviewQueueListItemResponse]:
+    return [
+        SchemaReviewQueueListItemResponse.from_read_model(item)
+        for item in list_schema_review_queue_items(session, status_filter=status_filter)
+    ]
+
+
+@router.get("/schema-review-queue/{review_item_id}", response_model=SchemaReviewQueueDetailResponse)
+def admin_schema_review_queue_detail(
+    review_item_id: int,
+    session: Session = Depends(get_db_session),
+) -> SchemaReviewQueueDetailResponse:
+    detail = get_schema_review_queue_detail(session, review_item_id=review_item_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Schema review item not found")
+    return SchemaReviewQueueDetailResponse.from_read_model(detail)
+
+
+@router.post("/schema-review-queue/{review_item_id}/status", response_model=SchemaReviewQueueDetailResponse)
+def admin_schema_review_queue_update_status(
+    review_item_id: int,
+    payload: SchemaReviewQueueStatusUpdateRequest,
+    session: Session = Depends(get_db_session),
+) -> SchemaReviewQueueDetailResponse:
+    try:
+        detail = update_schema_review_queue_status(session, review_item_id=review_item_id, new_status=payload.status)
+    except ValueError as exc:
+        message = str(exc)
+        status_code = status.HTTP_409_CONFLICT if "already" in message else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=status_code, detail=message) from exc
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Schema review item not found")
+    return SchemaReviewQueueDetailResponse.from_read_model(detail)
 
 
 @router.post("/ingest/local-file", response_model=AdminIngestResponse)

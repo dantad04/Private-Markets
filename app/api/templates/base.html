@@ -83,12 +83,24 @@
       padding: 8px 12px;
       font: inherit;
     }
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .status-filters {
+      margin-bottom: 16px;
+    }
+    .status-filters a {
+      margin-right: 12px;
+    }
   </style>
 </head>
 <body>
   <div class="banner">{{ banner_text | e }}</div>
   <nav>
     <a href="{{ request.url_for('source_files_list') | e }}">Source files</a>
+    <a href="{{ request.url_for('schema_review_queue_list') | e }}">Schema review queue</a>
     <a href="{{ request.url_for('admin_ui_ingest_form') | e }}">Ingest</a>
   </nav>
   {% if flash %}

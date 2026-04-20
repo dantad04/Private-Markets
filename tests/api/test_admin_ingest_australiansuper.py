@@ -12,12 +12,18 @@ from app.api.admin import get_db_session
 from app.api.app import create_app
 from app.db.models import Base, ReportingPeriod, SchemaReviewQueue, SourceFile
 from app.db.session import get_engine
-from app.ingest.governance import AUSTRALIANSUPER_MAPPING_VERSION_ID
+from app.ingest.governance import (
+    AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID,
+)
 
 
 FIXTURE_DIR = Path("tests/fixtures/real/australiansuper").resolve()
 MEMBER_DIRECT_PATH = FIXTURE_DIR / "Member Direct PHD (1).csv"
 STABLE_PATH = FIXTURE_DIR / "Stable PHD (1).csv"
+CONSERVATIVE_PATH = FIXTURE_DIR / "Conservative PHD (1).csv"
+SOCIALLY_AWARE_PATH = FIXTURE_DIR / "Socially Aware PHD.csv"
 
 
 class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
@@ -115,21 +121,101 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
         self.assertEqual("2844353758", total_row["value_aud"])
         self.assertEqual("Listed Equity", total_row["source_asset_class_raw"])
 
-        admin_ui_detail = self.client.get(f"/admin/ui/source-files/{payload['source_file_id']}")
+        admin_ui_detail = self.client.get(
+            f"/admin/ui/source-files/{payload['source_file_id']}",
+            params={"page": 1, "size": 200},
+        )
         self.assertEqual(200, admin_ui_detail.status_code)
         self.assertIn("Morella Corporation Ltd", admin_ui_detail.text)
-        self.assertIn("aggregate_total", admin_ui_detail.text)
 
         entity_detail = self.client.get("/entities/by-name", params={"name": "Morella Corporation Ltd"})
         self.assertEqual(200, entity_detail.status_code)
         self.assertEqual("fully_disclosed", entity_detail.json()["observations"][0]["disclosure_completeness"])
         self.assertEqual("BNSMZ47", entity_detail.json()["observations"][0]["security_identifier_value"])
 
-    def test_admin_ingest_stable_file_returns_review_conflict_until_broader_mapping_is_approved(self) -> None:
+    def test_admin_ingest_stable_file_uses_approved_mapping_and_keeps_ambiguities_in_review_queue(self) -> None:
         response = self.client.post(
             "/admin/ingest/local-file/australiansuper",
             json={
                 "file_path": str(STABLE_PATH),
+                "fund_code": "australiansuper",
+                "fund_name": "AustralianSuper",
+                "reporting_period_id": self.reporting_period_id,
+            },
+        )
+        self.assertEqual(200, response.status_code)
+        payload = response.json()
+        self.assertEqual(4023, payload["rows_staged"])
+        self.assertEqual(4023, payload["rows_inserted"])
+
+        with self.SessionLocal() as session:
+            source_file = session.get(SourceFile, payload["source_file_id"])
+            self.assertEqual(AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID, source_file.mapping_version_id)
+            self.assertEqual(194, session.query(SchemaReviewQueue).count())
+
+        detail = self.client.get(
+            f"/admin/source-files/{payload['source_file_id']}",
+            params={"page": 18, "size": 200},
+        )
+        self.assertEqual(200, detail.status_code)
+        holdings = detail.json()["holdings"]
+        ifm_row = next(row for row in holdings if row["source_row_number"] == 3420)
+        self.assertEqual("IFM Investors", ifm_row["raw_name"])
+        self.assertEqual([3999], ifm_row["metadata_attached_from_row_numbers"])
+        self.assertEqual("$100m to $300m", ifm_row["value_band_raw"])
+
+        admin_ui_detail = self.client.get(
+            f"/admin/ui/source-files/{payload['source_file_id']}",
+            params={"page": 18, "size": 200},
+        )
+        self.assertEqual(200, admin_ui_detail.status_code)
+        self.assertIn("IFM Investors", admin_ui_detail.text)
+        self.assertIn("metadata_attached_from_row_numbers=[3999]", admin_ui_detail.text)
+
+    def test_admin_ingest_conservative_file_uses_the_conservative_mapping_seed(self) -> None:
+        response = self.client.post(
+            "/admin/ingest/local-file/australiansuper",
+            json={
+                "file_path": str(CONSERVATIVE_PATH),
+                "fund_code": "australiansuper",
+                "fund_name": "AustralianSuper",
+                "reporting_period_id": self.reporting_period_id,
+            },
+        )
+        self.assertEqual(200, response.status_code)
+        payload = response.json()
+        self.assertEqual(4023, payload["rows_staged"])
+        self.assertEqual(4023, payload["rows_inserted"])
+
+        with self.SessionLocal() as session:
+            source_file = session.get(SourceFile, payload["source_file_id"])
+            self.assertEqual(AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID, source_file.mapping_version_id)
+            self.assertEqual(194, session.query(SchemaReviewQueue).count())
+
+        detail = self.client.get(
+            f"/admin/source-files/{payload['source_file_id']}",
+            params={"page": 17, "size": 200},
+        )
+        self.assertEqual(200, detail.status_code)
+        holdings = detail.json()["holdings"]
+        merged_row = next(row for row in holdings if row["source_row_number"] == 3368)
+        self.assertEqual("1200 W Carroll", merged_row["raw_name"])
+        self.assertEqual([3877], merged_row["metadata_attached_from_row_numbers"])
+        self.assertEqual("< $2m", merged_row["value_band_raw"])
+
+        admin_ui_detail = self.client.get(
+            f"/admin/ui/source-files/{payload['source_file_id']}",
+            params={"page": 17, "size": 200},
+        )
+        self.assertEqual(200, admin_ui_detail.status_code)
+        self.assertIn("1200 W Carroll", admin_ui_detail.text)
+        self.assertIn("metadata_attached_from_row_numbers=[3877]", admin_ui_detail.text)
+
+    def test_admin_ingest_socially_aware_file_remains_review_gated(self) -> None:
+        response = self.client.post(
+            "/admin/ingest/local-file/australiansuper",
+            json={
+                "file_path": str(SOCIALLY_AWARE_PATH),
                 "fund_code": "australiansuper",
                 "fund_name": "AustralianSuper",
                 "reporting_period_id": self.reporting_period_id,

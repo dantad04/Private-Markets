@@ -8,6 +8,7 @@ from sqlalchemy import (
     Boolean,
     Date,
     DateTime,
+    Enum,
     ForeignKey,
     Index,
     Integer,
@@ -35,6 +36,13 @@ CANONICAL_ASSET_CLASS_SEED = [
     {"code": "alternatives", "label": "Alternatives", "parent_code": None, "description": "Residual alternative asset classes."},
     {"code": "multi_asset_other", "label": "Multi-Asset / Other", "parent_code": None, "description": "Residual bucket for ambiguous section totals or uncategorised rows."},
 ]
+ENTITY_SECURITY_IDENTIFIER_TYPES = ("ABN", "ASX", "ISIN", "CUSIP", "LEI")
+ENTITY_SECURITY_IDENTIFIER_TYPE_ENUM = Enum(
+    *ENTITY_SECURITY_IDENTIFIER_TYPES,
+    name="entity_identifier_type",
+    native_enum=False,
+    validate_strings=True,
+)
 
 
 class Base(DeclarativeBase):
@@ -274,6 +282,49 @@ class EntityAlias(Base):
         onupdate=func.now(),
         nullable=False,
     )
+
+
+class EntitySecurityIdentifier(Base):
+    __tablename__ = "entity_security_identifiers"
+    __table_args__ = (
+        Index(
+            "uq_entity_security_identifiers_type_value_not_null",
+            "identifier_type",
+            "identifier_value",
+            unique=True,
+            sqlite_where=text("identifier_value IS NOT NULL"),
+            postgresql_where=text("identifier_value IS NOT NULL"),
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    entity_id: Mapped[int] = mapped_column(ForeignKey("entities.id"), index=True, nullable=False)
+    identifier_type: Mapped[str] = mapped_column(ENTITY_SECURITY_IDENTIFIER_TYPE_ENUM, nullable=False)
+    identifier_value: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    is_preferred: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
+    source: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class EntityResolutionQueue(Base):
+    __tablename__ = "entity_resolution_queue"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    holding_id: Mapped[int] = mapped_column(ForeignKey("holdings.id"), index=True, nullable=False)
+    candidate_entity_ids: Mapped[list[int]] = mapped_column(JSON, nullable=False)
+    top_candidate_score: Mapped[Decimal] = mapped_column(Numeric(6, 5), nullable=False)
+    evidence_json: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False)
+    status: Mapped[str] = mapped_column(String(32), default="open", server_default="open", nullable=False)
+    opened_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    resolved_by: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
 class EntityRelationship(Base):

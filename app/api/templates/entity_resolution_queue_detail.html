@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Entity Resolution Item {{ detail.queue_item.id }}</h1>
+
+<div class="metadata-grid">
+  <strong>Status</strong><span><code>{{ detail.queue_item.status | e }}</code></span>
+  <strong>Raw name</strong><span>{{ detail.holding.raw_name | e }}</span>
+  <strong>Fund</strong><span>{{ detail.holding.fund_name | e }} (<code>{{ detail.holding.fund_code | e }}</code>)</span>
+  <strong>Option</strong><span>{{ detail.holding.option_name | e }}</span>
+  <strong>Period</strong><span>{{ detail.holding.reporting_period_end_date.isoformat() }}</span>
+  <strong>Identifier</strong><span><code>{{ detail.holding.security_identifier_type | e }}</code> {{ detail.holding.security_identifier_value | e }}</span>
+  <strong>Source file</strong><span>{{ detail.holding.source_file_id }}</span>
+</div>
+
+<h2>Candidates</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Entity ID</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>ABN</th>
+      <th>Aliases</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for candidate in detail.candidates %}
+    <tr>
+      <td>{{ candidate.entity_id }}</td>
+      <td>{{ candidate.canonical_name | e }}</td>
+      <td><code>{{ candidate.entity_type | e }}</code></td>
+      <td>{{ candidate.abn | e }}</td>
+      <td>
+        {% for alias in candidate.aliases %}
+          <code>{{ alias | e }}</code>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Evidence</h2>
+<pre>{{ detail.evidence_json | json_pretty }}</pre>
+
+{% if detail.queue_item.status == "open" %}
+<div class="actions">
+  <form method="post" action="{{ request.url_for('entity_resolution_queue_action', queue_item_id=detail.queue_item.id) | e }}">
+    <input type="hidden" name="action" value="accept">
+    <div class="field">
+      <label for="entity_id">Accept candidate entity id</label><br>
+      <input id="entity_id" name="entity_id" type="number" required>
+    </div>
+    <div class="field">
+      <label for="resolved_by_accept">Resolved by</label><br>
+      <input id="resolved_by_accept" name="resolved_by" type="text" value="admin-ui">
+    </div>
+    <div class="field">
+      <label for="notes_accept">Notes</label><br>
+      <input id="notes_accept" name="notes" type="text" value="">
+    </div>
+    <button type="submit">Accept</button>
+  </form>
+
+  <form method="post" action="{{ request.url_for('entity_resolution_queue_action', queue_item_id=detail.queue_item.id) | e }}">
+    <input type="hidden" name="action" value="reject">
+    <input type="hidden" name="resolved_by" value="admin-ui">
+    <button type="submit">Reject</button>
+  </form>
+
+  <form method="post" action="{{ request.url_for('entity_resolution_queue_action', queue_item_id=detail.queue_item.id) | e }}">
+    <input type="hidden" name="action" value="create_new">
+    <input type="hidden" name="resolved_by" value="admin-ui">
+    <button type="submit">Create New Entity</button>
+  </form>
+</div>
+{% else %}
+<p>Resolved by {{ detail.resolved_by | e }} at {{ detail.queue_item.resolved_at | iso_utc }}.</p>
+{% if detail.notes %}
+<pre>{{ detail.notes | e }}</pre>
+{% endif %}
+{% endif %}
+{% endblock %}

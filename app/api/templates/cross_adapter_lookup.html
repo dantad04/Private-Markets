@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Cross-Adapter Lookup</h1>
+
+<form method="get" action="{{ request.url_for('cross_adapter_lookup') | e }}">
+  <div class="field">
+    <label for="name">Name query</label><br>
+    <input id="name" name="name" type="text" value="{{ lookup_name | e }}" placeholder="IFM Investors">
+  </div>
+  <button type="submit">Search</button>
+</form>
+
+{% if detail %}
+<div class="counts">
+  <div>
+    <strong>Lookup</strong>
+    <div><code>{{ detail.lookup_name | e }}</code></div>
+  </div>
+  <div>
+    <strong>Normalized</strong>
+    <div><code>{{ detail.normalized_lookup_name | e }}</code></div>
+  </div>
+  <div>
+    <strong>Funds</strong>
+    <div>{{ detail.fund_count }}</div>
+  </div>
+  <div>
+    <strong>Observations</strong>
+    <div>{{ detail.observation_count }}</div>
+  </div>
+</div>
+
+<p>
+  Matched raw names:
+  {% for raw_name in detail.matched_raw_names %}
+    <code>{{ raw_name | e }}</code>{% if not loop.last %}, {% endif %}
+  {% endfor %}
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Normalized Name</th>
+      <th>Raw Name</th>
+      <th>Fund</th>
+      <th>Option</th>
+      <th>Period</th>
+      <th>Disclosure</th>
+      <th>Value (AUD)</th>
+      <th>Ownership</th>
+      <th>Value Band</th>
+      <th>Source File</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in detail.observations %}
+    <tr>
+      <td><code>{{ row.normalized_name | e }}</code></td>
+      <td>{{ row.raw_name | e }}</td>
+      <td>{{ row.fund_name | e }} (<code>{{ row.fund_code | e }}</code>)</td>
+      <td>{{ row.option_name | e }} (<code>{{ row.option_code | e }}</code>)</td>
+      <td>{{ row.reporting_period_end_date.isoformat() }}</td>
+      <td><code>{{ row.disclosure_completeness | e }}</code></td>
+      <td>{{ row.value_aud if row.value_aud is not none else "" }}</td>
+      <td>{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
+      <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
+      <td>{{ row.source_file_id }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% elif lookup_performed %}
+<p>No current holdings matched that query.</p>
+{% else %}
+<p>Search by conservative normalised raw name. Results stay per fund, per option, and per period; nothing is silently aggregated across funds.</p>
+{% endif %}
+{% endblock %}

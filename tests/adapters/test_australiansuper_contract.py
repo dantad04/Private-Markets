@@ -12,20 +12,46 @@ from adapters.australiansuper import AustralianSuperPhdAdapter
 from adapters.base import AdapterParseResult, SourceFileMetadata
 
 
-FIXTURE_PATH = Path("tests/fixtures/real/australiansuper/Member Direct PHD (1).csv")
-CONTRACT_PATH = Path("tests/adapters/contracts/australiansuper/member_direct_canonical_output.json")
+CONTRACT_CASES = (
+    (
+        "member_direct",
+        Path("tests/fixtures/real/australiansuper/Member Direct PHD (1).csv"),
+        Path("tests/adapters/contracts/australiansuper/member_direct_canonical_output.json"),
+        "contract-fixture-australiansuper-member-direct",
+        "contract-fixture-australiansuper-member-direct-sha256-placeholder",
+    ),
+    (
+        "stable",
+        Path("tests/fixtures/real/australiansuper/Stable PHD (1).csv"),
+        Path("tests/adapters/contracts/australiansuper/stable_canonical_output.json"),
+        "contract-fixture-australiansuper-stable",
+        "contract-fixture-australiansuper-stable-sha256-placeholder",
+    ),
+    (
+        "conservative",
+        Path("tests/fixtures/real/australiansuper/Conservative PHD (1).csv"),
+        Path("tests/adapters/contracts/australiansuper/conservative_canonical_output.json"),
+        "contract-fixture-australiansuper-conservative",
+        "contract-fixture-australiansuper-conservative-sha256-placeholder",
+    ),
+)
 
 
-def make_contract_metadata() -> SourceFileMetadata:
+def make_contract_metadata(
+    *,
+    fixture_path: Path,
+    source_file_id: str,
+    checksum: str,
+) -> SourceFileMetadata:
     return SourceFileMetadata(
-        source_file_id="contract-fixture-australiansuper-member-direct",
+        source_file_id=source_file_id,
         fund_id="australiansuper",
         fund_code="australiansuper",
         suspected_adapter_key="AustralianSuperPhdAdapter",
         reporting_period_id=1,
-        source_url=str(FIXTURE_PATH),
-        checksum="contract-fixture-australiansuper-member-direct-sha256-placeholder",
-        received_at=datetime(2026, 4, 19, 0, 0, 0),
+        source_url=str(fixture_path),
+        checksum=checksum,
+        received_at=datetime(2026, 4, 20, 0, 0, 0),
         reporting_period_end_date=date(2025, 12, 31),
     )
 
@@ -81,23 +107,33 @@ def serialise_parse_result(result: AdapterParseResult) -> dict[str, object]:
     }
 
 
-def load_committed_contract() -> dict[str, object]:
-    return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+def load_committed_contract(contract_path: Path) -> dict[str, object]:
+    return json.loads(contract_path.read_text(encoding="utf-8"))
 
 
 class TestAustralianSuperFrozenContract(unittest.TestCase):
     maxDiff = None
 
-    def test_member_direct_fixture_matches_frozen_contract(self) -> None:
-        result = AustralianSuperPhdAdapter().parse(make_contract_metadata(), FIXTURE_PATH.read_bytes())
-        actual = serialise_parse_result(result)
-        expected = load_committed_contract()
+    def test_australiansuper_real_fixtures_match_frozen_contracts(self) -> None:
+        adapter = AustralianSuperPhdAdapter()
+        for label, fixture_path, contract_path, source_file_id, checksum in CONTRACT_CASES:
+            with self.subTest(contract=label):
+                result = adapter.parse(
+                    make_contract_metadata(
+                        fixture_path=fixture_path,
+                        source_file_id=source_file_id,
+                        checksum=checksum,
+                    ),
+                    fixture_path.read_bytes(),
+                )
+                actual = serialise_parse_result(result)
+                expected = load_committed_contract(contract_path)
 
-        if actual != expected:
-            self.fail(_build_contract_mismatch_message(expected, actual))
+                if actual != expected:
+                    self.fail(_build_contract_mismatch_message(label, expected, actual))
 
 
-def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[str, object]) -> str:
+def _build_contract_mismatch_message(label: str, expected: dict[str, object], actual: dict[str, object]) -> str:
     mismatches: list[str] = []
 
     for key in ("schema_fingerprint", "adapter_warnings", "structural_metadata", "parse_statistics"):
@@ -106,8 +142,8 @@ def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[s
                 difflib.unified_diff(
                     json.dumps(expected.get(key), indent=2, ensure_ascii=False, sort_keys=True).splitlines(),
                     json.dumps(actual.get(key), indent=2, ensure_ascii=False, sort_keys=True).splitlines(),
-                    fromfile=f"expected.{key}",
-                    tofile=f"actual.{key}",
+                    fromfile=f"expected.{label}.{key}",
+                    tofile=f"actual.{label}.{key}",
                     lineterm="",
                 )
             )
@@ -144,4 +180,4 @@ def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[s
     if row_mismatches:
         mismatches.append("first mismatched holdings:\n" + "\n\n".join(row_mismatches))
 
-    return "Frozen AustralianSuper contract drift detected.\n\n" + "\n\n".join(mismatches)
+    return f"Frozen AustralianSuper contract drift detected for {label}.\n\n" + "\n\n".join(mismatches)

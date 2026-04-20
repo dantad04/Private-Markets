@@ -8,9 +8,10 @@ Implementation status update:
   compatible with the ART-Sunsuper adapter as-is.
 - The follow-on implementation now exists as a thin `AustralianSuperPhdAdapter`
   with explicit identity verification.
-- The approved loader/admin production slice is currently the official
-  `Member Direct PHD (1).csv` family. Broader AustralianSuper option shapes
-  remain staged behind additional mapping approval.
+- Approved loader/admin production support now covers the official
+  `Member Direct PHD (1).csv`, `Stable PHD (1).csv`, and
+  `Conservative PHD (1).csv` families. `Socially Aware` remains staged behind
+  additional mapping approval.
 
 ## Scope
 
@@ -41,11 +42,13 @@ Implementation outcome:
    AustralianSuper-specific header and field normalisation.
 3. Identity verification now depends on source/domain/content signals, not
    `AR**` prefixes.
-4. The approved production-ingest claim is narrow: `Member Direct PHD (1).csv`
-   only.
-5. `Stable`, `Conservative Balanced`, and `Socially Aware` can parse through
-   the adapter, but remain review-gated until their mappings are approved.
+4. Approved production-ingest support now covers `Member Direct PHD (1).csv`,
+   `Stable PHD (1).csv`, and `Conservative PHD (1).csv`.
+5. `Socially Aware` can parse through the adapter, but remains review-gated
+   until its mapping is approved.
 6. No generic shared-family adapter was introduced.
+7. The next bounded AustralianSuper decision is the dedicated `Socially Aware`
+   go / no-go note in `docs/australiansuper-socially-aware-audit.md`.
 
 ## Real-file differences from the current ART-Sunsuper contract
 
