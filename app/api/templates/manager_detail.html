@@ -1,108 +1,277 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Manager Detail</h1>
+<div class="manager-page-view">
+  <section class="editorial-hero">
+    <p class="eyebrow">Manager Roll-up Exposure View</p>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 class="hero-title">{{ detail.canonical_name | e }}</h1>
+        <p class="hero-deck">
+          Reviewed manager detail preserving direct holdings, manager-level aggregate exposure, and
+          non-precise disclosures without inventing look-through coverage or cross-fund totals.
+        </p>
+        <div class="token-row">
+          <span class="badge badge--confidence" title="{{ detail.entity_confidence_detail | e }}">
+            Confidence: {{ detail.entity_confidence_label | e }}
+          </span>
+          {% for role_class in detail.role_classes %}
+          <span class="badge badge--meta">{{ role_class | replace("_", " ") | title | e }}</span>
+          {% else %}
+          <span class="badge badge--meta">Role classes unavailable</span>
+          {% endfor %}
+          {% for label, count in detail.disclosure_summary %}
+          <span class="badge badge--disclosure">
+            {{ label | e }} <span class="badge-count">{{ count | e }}</span>
+          </span>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="hero-metrics" aria-label="Manager summary metrics">
+        <div class="metric">
+          <div class="metric-label">Disclosing funds</div>
+          <div class="metric-value">{{ detail.fund_count | e }}</div>
+          <div class="metric-note">Current reviewed slice</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Observations</div>
+          <div class="metric-value">{{ detail.observation_count | e }}</div>
+          <div class="metric-note">Across visible aliases</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Asset classes</div>
+          <div class="metric-value">{{ detail.asset_classes | length }}</div>
+          <div class="metric-note">Current stored truth only</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="metadata-grid">
-  <strong>entity_id</strong><span>{{ detail.entity_id | e }}</span>
-  <strong>canonical_name</strong><span>{{ detail.canonical_name | e }}</span>
-  <strong>entity_type</strong><span>{{ detail.entity_type | e }}</span>
-  <strong>abn</strong><span>{{ (detail.abn or '') | e }}</span>
-  <strong>fund_count</strong><span>{{ detail.fund_count | e }}</span>
-  <strong>observation_count</strong><span>{{ detail.observation_count | e }}</span>
-  <strong>latest_reporting_period</strong><span>{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else '') | e }}</span>
-  <strong>asset_classes</strong>
-  <span>
-    {% for asset_class in detail.asset_classes %}
-      <code>{{ asset_class | e }}</code>{% if not loop.last %}, {% endif %}
-    {% else %}
-      none
-    {% endfor %}
-  </span>
-</div>
+  <div class="manager-layout">
+    <main class="manager-main">
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Current exposure view</p>
+            <h2 class="section-title">
+              Observed manager-linked rows
+              <span class="section-count">{{ detail.primary_observations | length }} rows</span>
+            </h2>
+          </div>
+          <p class="section-note">
+            Disclosure completeness stays explicit on every row. This page shows current stored truth only and does
+            not compute a manager look-through total across funds or options.
+          </p>
+        </div>
+        <div class="table-shell">
+          <table class="dense-table">
+            <thead>
+              <tr>
+                <th>Fund</th>
+                <th>Observed Name</th>
+                <th>Exposure</th>
+                <th class="num">Ownership</th>
+                <th class="num">Value (AUD)</th>
+                <th>Confidence</th>
+                <th>Period</th>
+                <th>Provenance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in detail.primary_observations %}
+              <tr>
+                <td>
+                  <div class="table-primary">{{ row.fund_name | e }}</div>
+                  <div class="table-secondary"><code>{{ row.fund_code | e }}</code></div>
+                  <div class="table-tertiary">{{ row.option_name | e }} <code>{{ row.option_code | e }}</code></div>
+                </td>
+                <td>
+                  <div class="table-primary">{{ row.raw_name | e }}</div>
+                  {% if row.raw_name != detail.canonical_name %}
+                  <div class="table-secondary">Observed alias within the canonical manager view.</div>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="token-row token-row--tight">
+                    <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
+                    <span class="badge badge--meta">{{ row.observation_kind_label | e }}</span>
+                  </div>
+                  <div class="table-secondary">
+                    <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
+                  </div>
+                  {% if row.source_subclass_raw %}
+                  <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
+                  {% endif %}
+                </td>
+                <td class="num mono">{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
+                <td class="num mono">{{ row.value_aud if row.value_aud is not none else "" }}</td>
+                <td>
+                  <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
+                    {{ row.confidence_label | e }}
+                  </span>
+                </td>
+                <td class="mono">{{ row.reporting_period_end_date.isoformat() }}</td>
+                <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="8" class="empty-state">No current precise manager-linked observations.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-<p>
-  Aliases:
-  {% for alias in detail.aliases %}
-    <code>{{ alias | e }}</code>{% if not loop.last %}, {% endif %}
-  {% endfor %}
-</p>
+      {% if detail.supplemental_observations %}
+      <section class="section-block section-block--value-band">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Separate non-precise facet</p>
+            <h2 class="section-title">
+              Non-precise disclosures
+              <span class="section-count">{{ detail.supplemental_observations | length }} rows</span>
+            </h2>
+          </div>
+          <p class="section-note">
+            These rows stay visible because they matter for coverage, but they do not imply precise manager totals
+            or complete look-through exposure.
+          </p>
+        </div>
+        <div class="table-shell">
+          <table class="dense-table dense-table--value-band">
+            <thead>
+              <tr>
+                <th>Fund</th>
+                <th>Observed Name</th>
+                <th>Disclosure</th>
+                <th>Exposure</th>
+                <th>Confidence</th>
+                <th>Provenance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in detail.supplemental_observations %}
+              <tr>
+                <td>
+                  <div class="table-primary">{{ row.fund_name | e }}</div>
+                  <div class="table-secondary"><code>{{ row.fund_code | e }}</code></div>
+                  <div class="table-tertiary">{{ row.option_name | e }} <code>{{ row.option_code | e }}</code></div>
+                </td>
+                <td>
+                  <div class="table-primary">{{ row.raw_name | e }}</div>
+                  {% if row.raw_name != detail.canonical_name %}
+                  <div class="table-secondary">Observed alias within the canonical manager view.</div>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="token-row token-row--tight">
+                    <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
+                    <span class="badge badge--meta">{{ row.observation_kind_label | e }}</span>
+                  </div>
+                  {% if row.value_band_raw %}
+                  <div class="table-primary mono">{{ row.value_band_raw | e }}</div>
+                  {% else %}
+                  <div class="table-secondary">No precise dollar value or ownership percentage disclosed.</div>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="table-secondary">
+                    <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
+                  </div>
+                  {% if row.source_subclass_raw %}
+                  <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
+                  {% endif %}
+                </td>
+                <td>
+                  <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
+                    {{ row.confidence_label | e }}
+                  </span>
+                </td>
+                <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {% endif %}
+    </main>
 
-<p>
-  Matched raw names:
-  {% for raw_name in detail.matched_raw_names %}
-    <code>{{ raw_name | e }}</code>{% if not loop.last %}, {% endif %}
-  {% else %}
-    none
-  {% endfor %}
-</p>
+    <aside class="manager-rail">
+      <section class="rail-card">
+        <p class="section-kicker">Canonical record</p>
+        <h2 class="rail-title">Entity snapshot</h2>
+        <dl class="meta-list">
+          <div><dt>entity_id</dt><dd class="mono">{{ detail.entity_id | e }}</dd></div>
+          <div><dt>entity_type</dt><dd>{{ detail.entity_type | e }}</dd></div>
+          <div><dt>abn</dt><dd class="mono">{{ (detail.abn or "—") | e }}</dd></div>
+          <div><dt>latest period</dt><dd class="mono">{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else "—") | e }}</dd></div>
+          <div><dt>confidence</dt><dd><span class="badge badge--confidence" title="{{ detail.entity_confidence_detail | e }}">{{ detail.entity_confidence_label | e }}</span></dd></div>
+        </dl>
+      </section>
 
-<p>
-  Role classes:
-  {% for role_class in detail.role_classes %}
-    <code>{{ role_class | e }}</code>{% if not loop.last %}, {% endif %}
-  {% else %}
-    none
-  {% endfor %}
-</p>
+      <section class="rail-card">
+        <p class="section-kicker">Coverage</p>
+        <h2 class="rail-title">Roles and asset classes</h2>
+        <div class="token-row token-row--stacked">
+          {% for role_class in detail.role_classes %}
+          <span class="badge badge--meta">{{ role_class | replace("_", " ") | title | e }}</span>
+          {% else %}
+          <span class="quiet-note">No role classes recorded.</span>
+          {% endfor %}
+        </div>
+        <div class="token-row token-row--stacked">
+          {% for asset_class in detail.asset_classes %}
+          <span class="badge badge--meta"><code>{{ asset_class | e }}</code></span>
+          {% else %}
+          <span class="quiet-note">No asset classes recorded.</span>
+          {% endfor %}
+        </div>
+      </section>
 
-{% if detail.relationships %}
-<div class="counts">
-  <div>
-    <strong>Persisted entity-to-entity relationships</strong>
-    <ul>
-      {% for relationship in detail.relationships %}
-      <li>
-        <code>{{ relationship.relationship_type | e }}</code>
-        from {{ relationship.from_entity_id | e }} to {{ relationship.to_entity_id | e }}
-      </li>
-      {% endfor %}
-    </ul>
+      <section class="rail-card">
+        <p class="section-kicker">Known names</p>
+        <h2 class="rail-title">Aliases and observed variants</h2>
+        <div class="token-row token-row--stacked">
+          {% for alias in detail.aliases %}
+          <span class="badge badge--meta"><code>{{ alias | e }}</code></span>
+          {% else %}
+          <span class="quiet-note">No aliases recorded.</span>
+          {% endfor %}
+        </div>
+        <p class="quiet-note quiet-note--spaced">
+          Matched raw names:
+          {% for raw_name in detail.matched_raw_names %}
+            <code>{{ raw_name | e }}</code>{% if not loop.last %}, {% endif %}
+          {% else %}
+            none
+          {% endfor %}
+        </p>
+      </section>
+
+      <section class="rail-card">
+        <p class="section-kicker">Scope and discipline</p>
+        <h2 class="rail-title">Interpretation</h2>
+        <p class="quiet-note">{{ detail.resolution_scope_note | e }}</p>
+        <p class="quiet-note quiet-note--spaced">
+          Observation kind stays <code>Unknown</code> where current stored truth does not support a cleaner distinction.
+        </p>
+        {% if detail.relationships %}
+        <ul class="relationship-list">
+          {% for relationship in detail.relationships %}
+          <li>
+            <code>{{ relationship.relationship_type | e }}</code>
+            from {{ relationship.from_entity_id | e }} to {{ relationship.to_entity_id | e }}
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="quiet-note quiet-note--spaced">
+          No persisted entity-to-entity relationships for this manager in current stored truth.
+        </p>
+        {% endif %}
+      </section>
+    </aside>
   </div>
 </div>
-{% else %}
-<p>No persisted entity-to-entity relationships for this manager in current stored truth.</p>
-{% endif %}
-
-<p>Observation kind stays <code>unknown</code> where current stored truth does not support a cleaner distinction.</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Raw Name</th>
-      <th>Fund</th>
-      <th>Option</th>
-      <th>Period</th>
-      <th>Asset Class</th>
-      <th>Source Subclass</th>
-      <th>Disclosure</th>
-      <th>Observation Kind</th>
-      <th>Value (AUD)</th>
-      <th>Ownership</th>
-      <th>Value Band</th>
-      <th>Source</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in detail.observations %}
-    <tr>
-      <td>{{ row.raw_name | e }}</td>
-      <td>{{ row.fund_name | e }} (<code>{{ row.fund_code | e }}</code>)</td>
-      <td>{{ row.option_name | e }} (<code>{{ row.option_code | e }}</code>)</td>
-      <td>{{ row.reporting_period_end_date.isoformat() }}</td>
-      <td><code>{{ row.canonical_asset_class_code | e }}</code><br>{{ row.source_asset_class_raw | e }}</td>
-      <td>{{ (row.source_subclass_raw or '') | e }}</td>
-      <td><code>{{ row.disclosure_completeness | e }}</code></td>
-      <td><code>{{ row.observation_kind | e }}</code></td>
-      <td>{{ row.value_aud if row.value_aud is not none else "" }}</td>
-      <td>{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
-      <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
-      <td>file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
-    </tr>
-    {% else %}
-    <tr>
-      <td colspan="12">No current observations for this manager.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
 {% endblock %}

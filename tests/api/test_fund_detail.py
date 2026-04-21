@@ -191,14 +191,22 @@ class TestFundDetailApi(unittest.TestCase):
         self.assertIsNone(change["prior_reporting_period_end_date"])
         self.assertIn("Only one reporting period", change["note"])
 
-    def test_fund_detail_admin_ui_renders_same_underlying_sections(self) -> None:
+    def test_fund_detail_admin_ui_renders_premium_fund_sections_without_blending_truth(self) -> None:
         response = self.client.get("/admin/ui/funds/art")
         self.assertEqual(200, response.status_code)
-        self.assertIn("Fund Detail", response.text)
+        self.assertIn("Fund disclosure view", response.text)
         self.assertIn("ART Balanced", response.text)
         self.assertIn("ART Stable", response.text)
+        self.assertIn("Change since prior reporting period", response.text)
+        self.assertIn("History unavailable", response.text)
         self.assertIn("Asset-class mix by disclosure completeness", response.text)
         self.assertIn("Top direct private holdings", response.text)
         self.assertIn("Manager-level aggregate exposures", response.text)
+        self.assertIn("Value-band disclosures", response.text)
+        self.assertIn("Value-band rows excluded from totals", response.text)
+        self.assertIn("computed dollar totals", response.text)
+        self.assertIn("Blackbird Ventures Growth I", response.text)
+        self.assertIn("Delphi Ventures VIII, L.P.", response.text)
+        self.assertIn("Industry Super Holdings Pty Ltd", response.text)
+        self.assertIn("IFM Investors Pty Ltd", response.text)
         self.assertIn("Only one reporting period", response.text)
-

@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.api.admin import get_db_session
 from app.api.app import create_app
-from app.db.models import Base, EntityRelationship, HoldingRelationship, ReportingPeriod
+from app.db.models import Base, Entity, EntityRelationship, HoldingRelationship, ReportingPeriod
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
 from app.entity_resolution.industry_super_holdings_seed import (
@@ -105,10 +105,22 @@ class TestCompanyDetailApi(unittest.TestCase):
                 reporting_period_id=period.id,
             )
             entity = ensure_industry_super_holdings_seed(session)
+            blackbird_entity = Entity(
+                entity_type="company",
+                canonical_name="Blackbird Ventures Growth I",
+                abn=None,
+                country_code="AU",
+                is_australian_entity=True,
+                confidence_tier="seeded",
+                notes="Stage 4 company-page value-band fixture entity.",
+            )
+            session.add(blackbird_entity)
+            session.flush()
             resolve_entities_deterministically(session, reporting_period_id=period.id)
             session.commit()
 
             cls.entity_id = entity.id
+            cls.blackbird_entity_id = blackbird_entity.id
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -269,11 +281,24 @@ class TestCompanyDetailApi(unittest.TestCase):
 
         ui_response = self.client.get(f"/admin/ui/companies/{self.entity_id}")
         self.assertEqual(200, ui_response.status_code)
-        self.assertIn("Company Detail", ui_response.text)
+        self.assertIn("Named Private Company Ownership Index", ui_response.text)
         self.assertIn("Industry Super Holdings Pty Ltd", ui_response.text)
         self.assertIn("Industry Super Holdings Pty Ltd F/P", ui_response.text)
         self.assertIn("HC High Growth - Class A Option", ui_response.text)
         self.assertIn("0.1432", ui_response.text)
         self.assertIn("0.1317", ui_response.text)
+        self.assertIn("Confidence: Reviewed", ui_response.text)
+        self.assertIn("Observed holdings", ui_response.text)
+        self.assertIn("Holder slices", ui_response.text)
         self.assertIn("No persisted relationships for this company in current stored truth.", ui_response.text)
         self.assertIn("Only one reporting period is currently available", ui_response.text)
+
+    def test_company_detail_admin_ui_surfaces_value_band_rows_in_a_separate_facet(self) -> None:
+        ui_response = self.client.get(f"/admin/ui/companies/{self.blackbird_entity_id}")
+        self.assertEqual(200, ui_response.status_code)
+        self.assertIn("Blackbird Ventures Growth I", ui_response.text)
+        self.assertIn("Value-band disclosures", ui_response.text)
+        self.assertIn("excluded from computed dollar totals", ui_response.text)
+        self.assertIn("$100m-$500m", ui_response.text)
+        self.assertIn("Confidence: Reviewed", ui_response.text)
+        self.assertIn("Name Only", ui_response.text)

@@ -4,29 +4,62 @@
   <meta charset="utf-8">
   <title>{{ page_title | e }} - Private Market Insider: Australia</title>
   <style>
+    :root {
+      --page-ground: #f5efe6;
+      --panel-ground: rgba(255, 252, 247, 0.9);
+      --panel-strong: #fffaf3;
+      --ink: #191512;
+      --ink-soft: #4f463f;
+      --ink-muted: #776b61;
+      --rule: #d4c8ba;
+      --rule-strong: #b8aa99;
+      --accent: #b54d2e;
+      --accent-soft: rgba(181, 77, 46, 0.1);
+      --badge-fill: rgba(25, 21, 18, 0.04);
+      --shadow: 0 18px 40px rgba(62, 43, 28, 0.08);
+      --display-font: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      --body-font: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      --mono-font: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
     body {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      margin: 24px;
-      line-height: 1.4;
-      color: #111;
+      margin: 0;
+      background: #f8f5f0;
+      color: var(--ink);
+      font-family: var(--body-font);
+      line-height: 1.5;
+    }
+    .page-frame {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 24px 64px;
     }
     nav {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
     }
     nav a {
-      margin-right: 12px;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+    nav a:hover {
+      border-bottom-color: var(--accent);
     }
     .banner,
     .flash,
     .error {
-      border: 1px solid #999;
+      border: 1px solid var(--rule);
       padding: 10px 12px;
       margin-bottom: 16px;
-      background: #f5f5f5;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink-soft);
     }
     .error {
-      border-color: #b33;
-      background: #fff0f0;
+      border-color: #b35a44;
+      background: #fff2ee;
+      color: #7a2f1d;
     }
     table {
       border-collapse: collapse;
@@ -94,21 +127,439 @@
     .status-filters a {
       margin-right: 12px;
     }
+    h1,
+    h2,
+    h3 {
+      color: var(--ink);
+    }
+    .mono,
+    code,
+    pre {
+      font-family: var(--mono-font);
+    }
+    .company-page-view,
+    .fund-page-view,
+    .manager-page-view {
+      color: var(--ink);
+      margin-top: 28px;
+    }
+    .editorial-hero {
+      background:
+        radial-gradient(circle at top right, rgba(181, 77, 46, 0.12), transparent 34%),
+        linear-gradient(180deg, rgba(255, 252, 247, 0.98), rgba(249, 242, 232, 0.96));
+      border: 1px solid var(--rule);
+      box-shadow: var(--shadow);
+      padding: 28px 28px 24px;
+      margin-bottom: 28px;
+    }
+    .eyebrow,
+    .section-kicker {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.9fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .hero-title {
+      margin: 0;
+      font-family: var(--display-font);
+      font-size: clamp(2.35rem, 4vw, 4.25rem);
+      font-weight: 600;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+    .hero-deck {
+      max-width: 60ch;
+      margin: 14px 0 0;
+      color: var(--ink-soft);
+      font-size: 1rem;
+    }
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .metric {
+      border-top: 1px solid var(--rule-strong);
+      padding-top: 12px;
+    }
+    .metric-label {
+      color: var(--ink-muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .metric-value {
+      margin-top: 6px;
+      font-family: var(--display-font);
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      line-height: 1;
+    }
+    .metric-note {
+      margin-top: 6px;
+      color: var(--ink-muted);
+      font-size: 0.82rem;
+    }
+    .token-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .token-row--tight {
+      margin-top: 0;
+    }
+    .token-row--stacked {
+      margin-top: 0;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 0 10px;
+      border: 1px solid var(--rule);
+      background: var(--badge-fill);
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .badge code {
+      font-size: 0.74rem;
+    }
+    .badge--confidence {
+      border-color: rgba(181, 77, 46, 0.35);
+      background: rgba(181, 77, 46, 0.08);
+      color: #8a381f;
+    }
+    .badge--disclosure {
+      background: rgba(25, 21, 18, 0.03);
+    }
+    .badge--value-band {
+      border-color: rgba(181, 77, 46, 0.35);
+      background: rgba(181, 77, 46, 0.12);
+      color: #8a381f;
+    }
+    .badge--meta {
+      background: rgba(255, 255, 255, 0.75);
+    }
+    .badge-count {
+      font-family: var(--mono-font);
+      color: var(--ink);
+    }
+    .company-layout,
+    .fund-layout,
+    .manager-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.9fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .section-block,
+    .rail-card {
+      background: var(--panel-ground);
+      border: 1px solid var(--rule);
+      box-shadow: var(--shadow);
+    }
+    .section-block {
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .section-block--value-band {
+      background: linear-gradient(180deg, rgba(255, 249, 242, 0.96), rgba(250, 244, 236, 0.96));
+    }
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 14px;
+    }
+    .section-title,
+    .rail-title {
+      margin: 0;
+      font-family: var(--display-font);
+      font-size: 1.45rem;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+    .section-count {
+      display: inline-block;
+      margin-left: 10px;
+      color: var(--ink-muted);
+      font-family: var(--mono-font);
+      font-size: 0.82rem;
+      vertical-align: middle;
+    }
+    .section-note,
+    .quiet-note {
+      margin: 0;
+      color: var(--ink-soft);
+      max-width: 48ch;
+      font-size: 0.92rem;
+    }
+    .quiet-note--spaced {
+      margin-top: 14px;
+    }
+    .section-subblock {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+    }
+    .section-subblock:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+    .table-shell {
+      overflow-x: auto;
+    }
+    .dense-table {
+      margin: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+    }
+    .dense-table th,
+    .dense-table td {
+      border: 0;
+      border-bottom: 1px solid var(--rule);
+      padding: 12px 10px;
+      background: transparent;
+      color: var(--ink);
+    }
+    .dense-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: rgba(250, 244, 236, 0.96);
+      color: var(--ink-muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .dense-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+    .table-primary {
+      font-weight: 600;
+    }
+    .table-secondary,
+    .table-tertiary {
+      color: var(--ink-muted);
+      font-size: 0.86rem;
+    }
+    .table-tertiary {
+      margin-top: 2px;
+    }
+    .num {
+      text-align: right;
+    }
+    .provenance-cell {
+      color: var(--ink-muted);
+      font-size: 0.84rem;
+    }
+    .empty-state {
+      color: var(--ink-muted);
+      text-align: center;
+      padding: 20px 12px;
+    }
+    .company-rail,
+    .fund-rail,
+    .manager-rail {
+      display: grid;
+      gap: 18px;
+    }
+    .rail-card {
+      padding: 20px;
+    }
+    .meta-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+    }
+    .meta-list div {
+      display: grid;
+      grid-template-columns: minmax(88px, 110px) minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+    .meta-list dt {
+      color: var(--ink-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .meta-list dd {
+      margin: 0;
+    }
+    .relationship-list {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--ink-soft);
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .feature-card {
+      min-height: 100%;
+      padding: 20px;
+      border: 1px solid var(--rule);
+      background: rgba(255, 255, 255, 0.62);
+    }
+    .feature-kicker {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .feature-title {
+      margin: 0;
+      font-family: var(--display-font);
+      font-size: 1.2rem;
+      line-height: 1.1;
+    }
+    .feature-deck {
+      margin: 10px 0 0;
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+    }
+    .feature-link {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+    }
+    .feature-link:hover {
+      color: var(--accent);
+    }
+    .search-scope {
+      margin-top: 16px;
+    }
+    .search-scope legend {
+      margin-bottom: 8px;
+      padding: 0;
+      color: var(--ink-muted);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .scope-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .scope-pill {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      border: 1px solid var(--rule);
+      background: rgba(255, 255, 255, 0.66);
+      color: var(--ink-soft);
+      cursor: pointer;
+    }
+    .scope-pill input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .scope-pill span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+    .scope-pill-count {
+      color: var(--ink);
+      font-family: var(--mono-font);
+      font-size: 0.8rem;
+    }
+    .scope-pill:hover {
+      border-color: rgba(181, 77, 46, 0.45);
+      color: var(--ink);
+    }
+    .scope-pill--active {
+      border-color: rgba(181, 77, 46, 0.45);
+      background: rgba(181, 77, 46, 0.1);
+      color: #8a381f;
+    }
+    @media (max-width: 1040px) {
+      .hero-grid,
+      .company-layout,
+      .fund-layout,
+      .manager-layout,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 720px) {
+      .page-frame {
+        padding: 18px 14px 40px;
+      }
+      .editorial-hero,
+      .section-block,
+      .rail-card {
+        padding: 18px;
+      }
+      .hero-metrics {
+        grid-template-columns: 1fr;
+      }
+      .section-heading {
+        align-items: start;
+      }
+      .dense-table {
+        table-layout: auto;
+      }
+      .dense-table th,
+      .dense-table td {
+        padding: 10px 8px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="banner">{{ banner_text | e }}</div>
-  <nav>
-    <a href="{{ request.url_for('source_files_list') | e }}">Source files</a>
-    <a href="{{ request.url_for('schema_review_queue_list') | e }}">Schema review queue</a>
-    <a href="{{ request.url_for('admin_ui_ingest_form') | e }}">Ingest</a>
-  </nav>
-  {% if flash %}
-  <div class="flash">{{ flash | e }}</div>
-  {% endif %}
-  {% if error_message %}
-  <div class="error">{{ error_message | e }}</div>
-  {% endif %}
-  {% block content %}{% endblock %}
+  <div class="page-frame">
+    <div class="banner">{{ banner_text | e }}</div>
+    <nav>
+      <a href="{{ request.url_for('admin_ui_root') | e }}">Home</a>
+      <a href="{{ request.url_for('search_page') | e }}">Search</a>
+      <a href="{{ request.url_for('source_files_list') | e }}">Source files</a>
+      <a href="{{ request.url_for('schema_review_queue_list') | e }}">Schema review queue</a>
+      <a href="{{ request.url_for('admin_ui_ingest_form') | e }}">Ingest</a>
+    </nav>
+    {% if flash %}
+    <div class="flash">{{ flash | e }}</div>
+    {% endif %}
+    {% if error_message %}
+    <div class="error">{{ error_message | e }}</div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </div>
 </body>
 </html>

@@ -1,178 +1,466 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Fund Detail</h1>
-
-<div class="metadata-grid">
-  <strong>fund_id</strong><span>{{ detail.fund_id | e }}</span>
-  <strong>fund_code</strong><span><code>{{ detail.fund_code | e }}</code></span>
-  <strong>fund_name</strong><span>{{ detail.fund_name | e }}</span>
-  <strong>latest_reporting_period</strong>
-  <span>{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else '') | e }}</span>
-</div>
-
-<h2>Change Since Prior Reporting Period</h2>
-{% if detail.change_since_prior_reporting_period.note %}
-<p>{{ detail.change_since_prior_reporting_period.note | e }}</p>
-{% endif %}
-<div class="metadata-grid">
-  <strong>available</strong><span>{{ detail.change_since_prior_reporting_period.available | e }}</span>
-  <strong>current_reporting_period_end_date</strong>
-  <span>{{ (detail.change_since_prior_reporting_period.current_reporting_period_end_date.isoformat() if detail.change_since_prior_reporting_period.current_reporting_period_end_date else '') | e }}</span>
-  <strong>prior_reporting_period_end_date</strong>
-  <span>{{ (detail.change_since_prior_reporting_period.prior_reporting_period_end_date.isoformat() if detail.change_since_prior_reporting_period.prior_reporting_period_end_date else '') | e }}</span>
-</div>
-
+{% set summary = namespace(direct_rows=0, manager_rows=0, value_band_rows=0) %}
 {% for option in detail.investment_options %}
-<section>
-  <h2>{{ option.option_name | e }}</h2>
-  <p>
-    Option code: <code>{{ option.option_code | e }}</code>.
-    Observation count: {{ option.observation_count | e }}.
-    Reporting period: {{ (option.reporting_period_end_date.isoformat() if option.reporting_period_end_date else '') | e }}.
-  </p>
-
-  <h3>Asset-class mix by disclosure completeness</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Canonical Asset Class</th>
-        <th>Disclosure Completeness</th>
-        <th>Observation Count</th>
-        <th>Precise Value Rows</th>
-        <th>Precise Value (AUD)</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for mix in option.asset_class_mix %}
-        {% for bucket in mix.by_disclosure_completeness %}
-        <tr>
-          <td><code>{{ mix.canonical_asset_class_code | e }}</code></td>
-          <td><code>{{ bucket.disclosure_completeness | e }}</code></td>
-          <td>{{ bucket.observation_count | e }}</td>
-          <td>{{ bucket.precise_value_row_count | e }}</td>
-          <td>{{ bucket.precise_value_aud_total | e }}</td>
-        </tr>
-        {% endfor %}
-      {% else %}
-      <tr>
-        <td colspan="5">No current asset-class mix for this option.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <h3>Top direct private holdings</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Raw Name</th>
-        <th>Resolved Entity</th>
-        <th>Asset Class</th>
-        <th>Disclosure</th>
-        <th>Observation Kind</th>
-        <th>Value (AUD)</th>
-        <th>Ownership</th>
-        <th>Value Band</th>
-        <th>Source</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in option.top_direct_private_holdings %}
-      <tr>
-        <td>{{ row.raw_name | e }}</td>
-        <td>
-          {% if row.entity_canonical_name %}
-            {{ row.entity_canonical_name | e }}{% if row.entity_type %} (<code>{{ row.entity_type | e }}</code>){% endif %}
-          {% else %}
-            unresolved
-          {% endif %}
-        </td>
-        <td><code>{{ row.canonical_asset_class_code | e }}</code><br>{{ row.source_asset_class_raw | e }}</td>
-        <td><code>{{ row.disclosure_completeness | e }}</code></td>
-        <td><code>{{ row.observation_kind | e }}</code></td>
-        <td>{{ row.value_aud if row.value_aud is not none else "" }}</td>
-        <td>{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
-        <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
-        <td>file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="9">No current direct private holdings for this option.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <h3>Manager-level aggregate exposures</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Raw Name</th>
-        <th>Resolved Entity</th>
-        <th>Asset Class</th>
-        <th>Disclosure</th>
-        <th>Observation Kind</th>
-        <th>Value (AUD)</th>
-        <th>Value Band</th>
-        <th>Source</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in option.manager_level_aggregate_exposures %}
-      <tr>
-        <td>{{ row.raw_name | e }}</td>
-        <td>
-          {% if row.entity_canonical_name %}
-            {{ row.entity_canonical_name | e }}{% if row.entity_type %} (<code>{{ row.entity_type | e }}</code>){% endif %}
-          {% else %}
-            unresolved
-          {% endif %}
-        </td>
-        <td><code>{{ row.canonical_asset_class_code | e }}</code><br>{{ row.source_asset_class_raw | e }}</td>
-        <td><code>{{ row.disclosure_completeness | e }}</code></td>
-        <td><code>{{ row.observation_kind | e }}</code></td>
-        <td>{{ row.value_aud if row.value_aud is not none else "" }}</td>
-        <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
-        <td>file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="8">No current manager-level aggregate exposures for this option.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <h3>Other named private exposures</h3>
-  <p>These rows remain separate from direct holdings and manager rollups in the current stored truth.</p>
-  <table>
-    <thead>
-      <tr>
-        <th>Raw Name</th>
-        <th>Asset Class</th>
-        <th>Disclosure</th>
-        <th>Value Band</th>
-        <th>Source</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in option.named_private_exposures %}
-      <tr>
-        <td>{{ row.raw_name | e }}</td>
-        <td><code>{{ row.canonical_asset_class_code | e }}</code><br>{{ row.source_asset_class_raw | e }}</td>
-        <td><code>{{ row.disclosure_completeness | e }}</code></td>
-        <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
-        <td>file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="5">No additional named private exposures for this option.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</section>
-{% else %}
-<p>No investment options are currently available for this fund.</p>
+  {% set summary.direct_rows = summary.direct_rows + (option.top_direct_private_holdings | length) %}
+  {% set summary.manager_rows = summary.manager_rows + (option.manager_level_aggregate_exposures | length) %}
+  {% set summary.value_band_rows = summary.value_band_rows + (option.value_band_exposures | length) %}
 {% endfor %}
+<div class="fund-page-view">
+  <section class="editorial-hero">
+    <p class="eyebrow">Fund disclosure view</p>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 class="hero-title">{{ detail.fund_name | e }}</h1>
+        <p class="hero-deck">
+          Option-level fund detail preserving the difference between top direct private holdings,
+          manager-level aggregate exposures, and non-precise value-band disclosures. Computed dollar
+          totals include only precise-value rows; name-only and value-band rows remain visible but excluded.
+        </p>
+        <div class="token-row">
+          <span class="badge badge--meta">Fund code <code>{{ detail.fund_code | e }}</code></span>
+          <span class="badge badge--meta">
+            Latest period
+            <code>{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else "—") | e }}</code>
+          </span>
+          <span class="badge badge--value-band">Value-band rows excluded from totals: {{ summary.value_band_rows | e }}</span>
+        </div>
+      </div>
+      <div class="hero-metrics" aria-label="Fund summary metrics">
+        <div class="metric">
+          <div class="metric-label">Investment options</div>
+          <div class="metric-value">{{ detail.investment_options | length }}</div>
+          <div class="metric-note">Current reporting slice</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Direct holdings</div>
+          <div class="metric-value">{{ summary.direct_rows | e }}</div>
+          <div class="metric-note">Named private rows</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Manager rollups</div>
+          <div class="metric-value">{{ summary.manager_rows | e }}</div>
+          <div class="metric-note">Separate aggregate exposures</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="fund-layout">
+    <main class="fund-main">
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Change over time</p>
+            <h2 class="section-title">Change since prior reporting period</h2>
+          </div>
+          <p class="section-note">
+            Change is shown only when current stored truth contains a valid prior-period comparison.
+            This page does not backfill or infer missing history.
+          </p>
+        </div>
+        <div class="token-row">
+          {% if detail.change_since_prior_reporting_period.available %}
+          <span class="badge badge--meta">Change available</span>
+          {% else %}
+          <span class="badge badge--value-band">History unavailable</span>
+          {% endif %}
+          <span class="badge badge--meta">
+            Current period
+            <code>{{ (detail.change_since_prior_reporting_period.current_reporting_period_end_date.isoformat() if detail.change_since_prior_reporting_period.current_reporting_period_end_date else "—") | e }}</code>
+          </span>
+          <span class="badge badge--meta">
+            Prior period
+            <code>{{ (detail.change_since_prior_reporting_period.prior_reporting_period_end_date.isoformat() if detail.change_since_prior_reporting_period.prior_reporting_period_end_date else "—") | e }}</code>
+          </span>
+        </div>
+        {% if detail.change_since_prior_reporting_period.note %}
+        <div class="section-subblock">
+          <p class="quiet-note">{{ detail.change_since_prior_reporting_period.note | e }}</p>
+        </div>
+        {% endif %}
+      </section>
+
+      {% for option in detail.investment_options %}
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Investment option</p>
+            <h2 class="section-title">
+              {{ option.option_name | e }}
+              <span class="section-count">{{ option.observation_count | e }} rows</span>
+            </h2>
+          </div>
+          <p class="section-note">
+            Option-level separation is preserved. Asset-class totals below include only precise-value rows
+            and stay split by disclosure completeness instead of being silently blended.
+          </p>
+        </div>
+        <div class="token-row">
+          <span class="badge badge--meta">Option code <code>{{ option.option_code | e }}</code></span>
+          <span class="badge badge--meta">
+            Reporting period
+            <code>{{ (option.reporting_period_end_date.isoformat() if option.reporting_period_end_date else "—") | e }}</code>
+          </span>
+          <span class="badge badge--meta">Direct holdings {{ option.top_direct_private_holdings | length }}</span>
+          <span class="badge badge--meta">Manager rollups {{ option.manager_level_aggregate_exposures | length }}</span>
+        </div>
+
+        <div class="section-subblock">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Mix and coverage</p>
+              <h3 class="section-title">Asset-class mix by disclosure completeness</h3>
+            </div>
+            <p class="section-note">
+              Precise value totals exclude rows disclosed only as names or value bands.
+            </p>
+          </div>
+          <div class="table-shell">
+            <table class="dense-table">
+              <thead>
+                <tr>
+                  <th>Asset class</th>
+                  <th>Disclosure</th>
+                  <th class="num">Rows</th>
+                  <th class="num">Precise rows</th>
+                  <th class="num">Precise value (AUD)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for mix in option.asset_class_mix %}
+                  {% for bucket in mix.by_disclosure_completeness %}
+                  <tr>
+                    <td>
+                      <div class="table-primary">{{ mix.canonical_asset_class_code | replace("_", " ") | title }}</div>
+                      <div class="table-secondary"><code>{{ mix.canonical_asset_class_code | e }}</code></div>
+                    </td>
+                    <td>
+                      <span class="badge badge--disclosure">
+                        {{ bucket.disclosure_completeness | replace("_", " ") | title }}
+                      </span>
+                    </td>
+                    <td class="num mono">{{ bucket.observation_count | e }}</td>
+                    <td class="num mono">{{ bucket.precise_value_row_count | e }}</td>
+                    <td class="num mono">{{ bucket.precise_value_aud_total | e }}</td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="5" class="empty-state">No current asset-class mix for this investment option.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-subblock">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Named issuer view</p>
+              <h3 class="section-title">
+                Top direct private holdings
+                <span class="section-count">{{ option.top_direct_private_holdings | length }} rows</span>
+              </h3>
+            </div>
+            <p class="section-note">
+              Direct issuer rows stay separate from manager rollups. Confidence and disclosure completeness
+              remain visible without implying look-through totals across the fund.
+            </p>
+          </div>
+          <div class="table-shell">
+            <table class="dense-table">
+              <thead>
+                <tr>
+                  <th>Observed name</th>
+                  <th>Exposure</th>
+                  <th class="num">Ownership</th>
+                  <th class="num">Value (AUD)</th>
+                  <th>Confidence</th>
+                  <th>Provenance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in option.top_direct_private_holdings %}
+                <tr>
+                  <td>
+                    <div class="table-primary">{{ row.raw_name | e }}</div>
+                    <div class="table-secondary">
+                      {{ (row.entity_canonical_name or "Unresolved in current stored truth") | e }}
+                    </div>
+                    {% if row.entity_type %}
+                    <div class="table-tertiary">{{ row.entity_type | replace("_", " ") | title | e }}</div>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div class="token-row token-row--tight">
+                      <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
+                      <span class="badge badge--meta">{{ row.observation_kind_label | e }}</span>
+                    </div>
+                    <div class="table-secondary">
+                      <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
+                    </div>
+                    {% if row.source_subclass_raw %}
+                    <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
+                    {% endif %}
+                  </td>
+                  <td class="num mono">{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
+                  <td class="num mono">{{ row.value_aud if row.value_aud is not none else "" }}</td>
+                  <td>
+                    <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
+                      {{ row.confidence_label | e }}
+                    </span>
+                  </td>
+                  <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="6" class="empty-state">No current direct private holdings for this investment option.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-subblock">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Manager rollups</p>
+              <h3 class="section-title">
+                Manager-level aggregate exposures
+                <span class="section-count">{{ option.manager_level_aggregate_exposures | length }} rows</span>
+              </h3>
+            </div>
+            <p class="section-note">
+              These are manager-level aggregates, not named direct issuer positions. They stay in a distinct table.
+            </p>
+          </div>
+          <div class="table-shell">
+            <table class="dense-table">
+              <thead>
+                <tr>
+                  <th>Observed name</th>
+                  <th>Exposure</th>
+                  <th class="num">Value (AUD)</th>
+                  <th>Confidence</th>
+                  <th>Provenance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in option.manager_level_aggregate_exposures %}
+                <tr>
+                  <td>
+                    <div class="table-primary">{{ row.raw_name | e }}</div>
+                    <div class="table-secondary">
+                      {{ (row.entity_canonical_name or "Unresolved in current stored truth") | e }}
+                    </div>
+                    {% if row.entity_type %}
+                    <div class="table-tertiary">{{ row.entity_type | replace("_", " ") | title | e }}</div>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div class="token-row token-row--tight">
+                      <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
+                      <span class="badge badge--meta">{{ row.observation_kind_label | e }}</span>
+                    </div>
+                    <div class="table-secondary">
+                      <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
+                    </div>
+                    {% if row.classification_raw %}
+                    <div class="table-tertiary">{{ row.classification_raw | e }}</div>
+                    {% elif row.source_subclass_raw %}
+                    <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
+                    {% endif %}
+                  </td>
+                  <td class="num mono">{{ row.value_aud if row.value_aud is not none else "" }}</td>
+                  <td>
+                    <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
+                      {{ row.confidence_label | e }}
+                    </span>
+                  </td>
+                  <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="5" class="empty-state">No current manager-level aggregate exposures for this investment option.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {% if option.other_named_private_exposures %}
+        <div class="section-subblock">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Additional named rows</p>
+              <h3 class="section-title">Other named private exposures</h3>
+            </div>
+            <p class="section-note">
+              These rows stay visible but separate because current stored truth does not support classifying them
+              as direct holdings or manager rollups.
+            </p>
+          </div>
+          <div class="table-shell">
+            <table class="dense-table">
+              <thead>
+                <tr>
+                  <th>Observed name</th>
+                  <th>Exposure</th>
+                  <th>Confidence</th>
+                  <th>Provenance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in option.other_named_private_exposures %}
+                <tr>
+                  <td>
+                    <div class="table-primary">{{ row.raw_name | e }}</div>
+                    <div class="table-secondary">
+                      {{ (row.entity_canonical_name or "Unresolved in current stored truth") | e }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="token-row token-row--tight">
+                      <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
+                    </div>
+                    <div class="table-secondary">
+                      <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
+                      {{ row.confidence_label | e }}
+                    </span>
+                  </td>
+                  <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endif %}
+      </section>
+
+      {% if option.value_band_exposures %}
+      <section class="section-block section-block--value-band">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Separate non-precise facet</p>
+            <h2 class="section-title">
+              {{ option.option_name | e }} Value-band disclosures
+              <span class="section-count">{{ option.value_band_exposures | length }} rows</span>
+            </h2>
+          </div>
+          <p class="section-note">
+            These rows disclose a value band rather than a precise amount. They remain visible, but they never
+            appear in computed dollar totals on this page.
+          </p>
+        </div>
+        <div class="table-shell">
+          <table class="dense-table">
+            <thead>
+              <tr>
+                <th>Observed name</th>
+                <th>Value band</th>
+                <th>Exposure</th>
+                <th>Confidence</th>
+                <th>Provenance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in option.value_band_exposures %}
+              <tr>
+                <td>
+                  <div class="table-primary">{{ row.raw_name | e }}</div>
+                  <div class="table-secondary">
+                    {{ (row.entity_canonical_name or "Unresolved in current stored truth") | e }}
+                  </div>
+                </td>
+                <td>
+                  <span class="badge badge--value-band">Value Band</span>
+                  <div class="table-primary mono">{{ row.value_band_raw | e }}</div>
+                </td>
+                <td>
+                  <div class="token-row token-row--tight">
+                    <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
+                  </div>
+                  <div class="table-secondary">
+                    <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
+                  </div>
+                </td>
+                <td>
+                  <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
+                    {{ row.confidence_label | e }}
+                  </span>
+                </td>
+                <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {% endif %}
+      {% else %}
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Investment options</p>
+            <h2 class="section-title">No current option data</h2>
+          </div>
+          <p class="section-note">
+            No investment options are currently available for this fund in the current stored truth.
+          </p>
+        </div>
+      </section>
+      {% endfor %}
+    </main>
+
+    <aside class="fund-rail">
+      <section class="rail-card">
+        <p class="section-kicker">Fund snapshot</p>
+        <h2 class="rail-title">Current slice</h2>
+        <dl class="meta-list">
+          <div><dt>fund_id</dt><dd class="mono">{{ detail.fund_id | e }}</dd></div>
+          <div><dt>fund_code</dt><dd><code>{{ detail.fund_code | e }}</code></dd></div>
+          <div><dt>latest period</dt><dd class="mono">{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else "—") | e }}</dd></div>
+          <div><dt>options</dt><dd>{{ detail.investment_options | length }}</dd></div>
+          <div><dt>direct rows</dt><dd>{{ summary.direct_rows | e }}</dd></div>
+          <div><dt>manager rows</dt><dd>{{ summary.manager_rows | e }}</dd></div>
+        </dl>
+      </section>
+
+      <section class="rail-card">
+        <p class="section-kicker">Investment options</p>
+        <h2 class="rail-title">Current coverage</h2>
+        <div class="token-row token-row--stacked">
+          {% for option in detail.investment_options %}
+          <span class="badge badge--meta">
+            {{ option.option_name | e }} <span class="badge-count">{{ option.observation_count | e }}</span>
+          </span>
+          {% else %}
+          <span class="quiet-note">No investment options recorded.</span>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="rail-card">
+        <p class="section-kicker">Scope and discipline</p>
+        <h2 class="rail-title">Interpretation</h2>
+        <p class="quiet-note">
+          Direct holdings, manager-level aggregate exposures, and value-band disclosures are shown on separate
+          surfaces. No value-band or name-only row contributes to computed dollar totals.
+        </p>
+        <p class="quiet-note">
+          Change remains unavailable until a valid prior-period comparison exists in current stored truth.
+        </p>
+      </section>
+    </aside>
+  </div>
+</div>
 {% endblock %}

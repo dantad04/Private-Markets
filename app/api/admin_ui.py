@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 import json
+from typing import Literal
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -12,27 +13,46 @@ from app.api.admin import get_db_session
 from app.entity_resolution.queue import apply_entity_resolution_queue_action
 from app.ingest.loader import LoaderError, ingest_hesta_local_file
 from app.read_models import (
+    SEARCH_FILTER_LABELS,
     approve_schema_review_mapping,
     get_company_detail,
     get_cross_adapter_holdings_by_name,
     get_entity_resolution_queue_detail,
     get_fund_detail,
+    get_homepage,
     get_manager_detail,
     get_schema_review_queue_detail,
     get_source_file_detail,
     list_entity_resolution_queue_items,
     list_schema_review_queue_items,
     list_source_files,
+    search_entities_and_funds,
     update_schema_review_queue_status,
 )
 
 
 router = APIRouter(prefix="/admin/ui", tags=["admin-ui"])
 
+SEARCH_KIND_OPTIONS = [
+    {"value": search_kind, "label": label}
+    for search_kind, label in SEARCH_FILTER_LABELS.items()
+]
+
 
 @router.get("", include_in_schema=False)
-def admin_ui_root() -> RedirectResponse:
-    return RedirectResponse(url="/admin/ui/source-files", status_code=status.HTTP_303_SEE_OTHER)
+def admin_ui_root(
+    request: Request,
+    session: Session = Depends(get_db_session),
+) -> HTMLResponse:
+    return _render(
+        request,
+        "home.html",
+        {
+            "page_title": "Home",
+            "homepage": get_homepage(session),
+            "search_kind_options": SEARCH_KIND_OPTIONS,
+        },
+    )
 
 
 def _render(request: Request, template_name: str, context: dict, status_code: int = 200) -> HTMLResponse:
@@ -140,6 +160,32 @@ def cross_adapter_lookup(
             "lookup_name": lookup_name,
             "detail": detail,
             "lookup_performed": bool(lookup_name),
+        },
+    )
+
+
+@router.get("/search", response_class=HTMLResponse, name="search_page")
+def search_page(
+    request: Request,
+    q: str = Query(""),
+    kind: Literal["all", "company", "fund", "manager"] = Query("all"),
+    session: Session = Depends(get_db_session),
+) -> HTMLResponse:
+    lookup_query = q.strip()
+    search = None
+    if lookup_query:
+        search = search_entities_and_funds(session, query=lookup_query, kind=kind)
+
+    return _render(
+        request,
+        "search.html",
+        {
+            "page_title": "Search",
+            "query": lookup_query,
+            "active_kind": kind,
+            "search": search,
+            "search_kind_options": SEARCH_KIND_OPTIONS,
+            "lookup_performed": bool(lookup_query),
         },
     )
 

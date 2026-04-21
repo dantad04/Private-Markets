@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="fund-page-view">
+  <section class="editorial-hero">
+    <p class="eyebrow">Stage 4 search slice</p>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 class="hero-title">Search</h1>
+        <p class="hero-deck">
+          Fast bounded search across funds, canonical companies, canonical managers, and seeded aliases, with
+          quiet scope filters that help users move from the homepage into the right existing surface quickly.
+          Discovery graph, identifiers, address search, and vehicle discovery remain deliberately later.
+        </p>
+        <form method="get" action="{{ request.url_for('search_page') | e }}">
+          <div class="field">
+            <label for="q">Search query</label><br>
+            <input id="q" name="q" type="text" value="{{ query | e }}" placeholder="Industry Super Holdings">
+          </div>
+          <fieldset class="search-scope">
+            <legend>Search scope</legend>
+            <div class="scope-row">
+              {% for option in search_kind_options %}
+              <label class="scope-pill {% if active_kind == option.value %}scope-pill--active{% endif %}">
+                <input
+                  type="radio"
+                  name="kind"
+                  value="{{ option.value | e }}"
+                  {% if active_kind == option.value %}checked{% endif %}
+                >
+                <span>
+                  {{ option.label | e }}
+                  {% if search %}
+                  <span class="scope-pill-count">{{ search.kind_counts.get(option.value, 0) | e }}</span>
+                  {% endif %}
+                </span>
+              </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div class="hero-metrics" aria-label="Search summary metrics">
+        <div class="metric">
+          <div class="metric-label">Coverage</div>
+          <div class="metric-value">3</div>
+          <div class="metric-note">Funds, companies, managers</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Alias aware</div>
+          <div class="metric-value">Yes</div>
+          <div class="metric-note">Canonical plus seeded aliases</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Visible now</div>
+          <div class="metric-value">{{ search.result_count if search else 0 }}</div>
+          <div class="metric-note">Results in the current scope</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="fund-layout">
+    <main class="fund-main">
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Current search scope</p>
+            <h2 class="section-title">Results</h2>
+          </div>
+          <p class="section-note">
+            Matching is still ranked conservatively across canonical names, aliases, fund codes, and fund names.
+            This slice adds quiet result typing and scope filters without broadening into discovery.
+          </p>
+        </div>
+
+        {% if search %}
+        <div class="token-row">
+          <span class="badge badge--meta">Query <code>{{ search.query | e }}</code></span>
+          <span class="badge badge--meta">Scope {{ search_kind_options | selectattr('value', 'equalto', search.active_kind) | map(attribute='label') | first | e }}</span>
+          <span class="badge badge--meta">Normalized <code>{{ search.normalized_query | e }}</code></span>
+          <span class="badge badge--meta">Visible {{ search.result_count | e }}</span>
+          <span class="badge badge--meta">Total matches {{ search.total_result_count | e }}</span>
+        </div>
+        {% if search.result_count %}
+        <div class="section-subblock">
+          {% for group in search.results | groupby("result_kind") %}
+          <div class="section-subblock">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Result type</p>
+                <h3 class="section-title">{{ group.list[0].result_kind_label | e }}</h3>
+              </div>
+              <p class="section-note">{{ group.list | length }} visible result{% if group.list | length != 1 %}s{% endif %}</p>
+            </div>
+            <div class="table-shell">
+              <table class="dense-table">
+                <thead>
+                  <tr>
+                    <th>Result</th>
+                    <th>Matched on</th>
+                    <th>Open</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for result in group.list %}
+                  <tr>
+                    <td>
+                      <div class="table-primary">{{ result.title | e }}</div>
+                      {% if result.result_kind == "fund" and result.fund_code %}
+                      <div class="table-secondary"><code>{{ result.fund_code | e }}</code></div>
+                      {% elif result.entity_id %}
+                      <div class="table-secondary">Entity {{ result.entity_id | e }}</div>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <span class="badge badge--disclosure">{{ result.matched_on_label | e }}</span>
+                      <div class="table-secondary"><code>{{ result.matched_value | e }}</code></div>
+                    </td>
+                    <td>
+                      {% if result.result_kind == "fund" and result.fund_code %}
+                      <a href="{{ request.url_for('fund_detail_page', fund_code=result.fund_code) | e }}">Open fund</a>
+                      {% elif result.result_kind == "company" and result.entity_id %}
+                      <a href="{{ request.url_for('company_detail_page', entity_id=result.entity_id) | e }}">Open company</a>
+                      {% elif result.result_kind == "manager" and result.entity_id %}
+                      <a href="{{ request.url_for('manager_detail_page', entity_id=result.entity_id) | e }}">Open manager</a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="quiet-note">No company, fund, or manager results matched this query.</p>
+        {% endif %}
+        {% elif lookup_performed %}
+        <p class="quiet-note">No company, fund, or manager results matched this query.</p>
+        {% else %}
+        <p class="quiet-note">
+          Start with a fund code, a canonical company or manager name, or a known alias, then narrow to the
+          right surface with the quiet scope filters above.
+        </p>
+        {% endif %}
+      </section>
+    </main>
+
+    <aside class="fund-rail">
+      <section class="rail-card">
+        <p class="section-kicker">Scope and discipline</p>
+        <h2 class="rail-title">This slice covers</h2>
+        <div class="token-row token-row--stacked">
+          <span class="badge badge--meta">Canonical names</span>
+          <span class="badge badge--meta">Aliases</span>
+          <span class="badge badge--meta">Fund codes</span>
+          <span class="badge badge--meta">Fund names</span>
+          <span class="badge badge--meta">Type filters</span>
+        </div>
+      </section>
+
+      <section class="rail-card">
+        <p class="section-kicker">Deliberately later</p>
+        <h2 class="rail-title">Not in this slice</h2>
+        <p class="quiet-note">
+          Identifier recall, address search, vehicle discovery, graph/discovery expansion, geography maps, and
+          manager-page redesign remain out of scope here.
+        </p>
+      </section>
+    </aside>
+  </div>
+</div>
+{% endblock %}

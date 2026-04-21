@@ -215,6 +215,11 @@ class ManagerObservationReadModel:
     value_band_raw: str | None
     currency_raw: str | None
     observation_kind: str
+    disclosure_label: str
+    observation_kind_label: str
+    confidence_label: str
+    confidence_detail: str
+    is_non_precise: bool
 
 
 @dataclass(frozen=True)
@@ -231,7 +236,13 @@ class ManagerDetailReadModel:
     observation_count: int
     fund_count: int
     latest_reporting_period: date | None
+    entity_confidence_label: str
+    entity_confidence_detail: str
+    disclosure_summary: list[tuple[str, int]]
+    resolution_scope_note: str
     observations: list[ManagerObservationReadModel]
+    primary_observations: list[ManagerObservationReadModel]
+    supplemental_observations: list[ManagerObservationReadModel]
 
 
 @dataclass(frozen=True)
@@ -252,6 +263,10 @@ class CompanyObservationReadModel:
     ownership_pct: Decimal | None
     value_band_raw: str | None
     currency_raw: str | None
+    disclosure_label: str
+    confidence_label: str
+    confidence_detail: str
+    is_value_band: bool
 
 
 @dataclass(frozen=True)
@@ -273,12 +288,18 @@ class CompanyDetailReadModel:
     relationships: list[EntityRelationshipReadModel]
     observation_count: int
     fund_count: int
+    holder_slice_count: int
     latest_reporting_period: date | None
     history_is_limited: bool
     history_note: str | None
     resolution_scope_note: str
+    entity_confidence_label: str
+    entity_confidence_detail: str
+    disclosure_summary: list[tuple[str, int]]
     period_history: list[CompanyPeriodHistoryReadModel]
     observations: list[CompanyObservationReadModel]
+    primary_observations: list[CompanyObservationReadModel]
+    value_band_observations: list[CompanyObservationReadModel]
 
 
 @dataclass(frozen=True)
@@ -313,6 +334,10 @@ class FundObservationSummaryReadModel:
     value_aud: Decimal | None
     ownership_pct: Decimal | None
     value_band_raw: str | None
+    disclosure_label: str
+    observation_kind_label: str
+    confidence_label: str
+    confidence_detail: str
 
 
 @dataclass(frozen=True)
@@ -326,6 +351,8 @@ class FundInvestmentOptionReadModel:
     top_direct_private_holdings: list[FundObservationSummaryReadModel]
     manager_level_aggregate_exposures: list[FundObservationSummaryReadModel]
     named_private_exposures: list[FundObservationSummaryReadModel]
+    value_band_exposures: list[FundObservationSummaryReadModel]
+    other_named_private_exposures: list[FundObservationSummaryReadModel]
 
 
 @dataclass(frozen=True)
@@ -344,6 +371,60 @@ class FundDetailReadModel:
     latest_reporting_period: date | None
     investment_options: list[FundInvestmentOptionReadModel]
     change_since_prior_reporting_period: FundChangeReadModel
+
+
+@dataclass(frozen=True)
+class SearchResultReadModel:
+    result_kind: str
+    result_kind_label: str
+    title: str
+    matched_on: str
+    matched_on_label: str
+    matched_value: str
+    entity_id: int | None
+    fund_code: str | None
+
+
+@dataclass(frozen=True)
+class SearchResultsReadModel:
+    query: str
+    normalized_query: str
+    active_kind: str
+    result_count: int
+    total_result_count: int
+    kind_counts: dict[str, int]
+    results: list[SearchResultReadModel]
+
+
+@dataclass(frozen=True)
+class HomepageChangeMetricReadModel:
+    label: str
+    value: int
+    trend_note: str
+
+
+@dataclass(frozen=True)
+class HomepageFeatureEntryReadModel:
+    kicker: str
+    title: str
+    deck: str
+    result_kind: str
+    entity_id: int | None
+    fund_code: str | None
+    search_query: str | None
+    cta_label: str | None
+    status_label: str | None
+
+
+@dataclass(frozen=True)
+class HomepageReadModel:
+    latest_reporting_period: date | None
+    prior_reporting_period: date | None
+    change_available: bool
+    change_note: str
+    change_metrics: list[HomepageChangeMetricReadModel]
+    featured_entries: list[HomepageFeatureEntryReadModel]
+    editorial_note: str
 
 
 @dataclass(frozen=True)
@@ -1426,6 +1507,9 @@ def get_manager_detail(
     aliases = _get_entity_aliases(session, entity=entity)
     normalized_aliases = {normalise_name(alias) for alias in aliases}
     relationships = _get_entity_relationships(session, entity_id=entity_id)
+    entity_confidence_label, entity_confidence_detail = _company_entity_confidence(
+        confidence_tier=entity.confidence_tier,
+    )
 
     rows = session.execute(
         select(
@@ -1477,6 +1561,24 @@ def get_manager_detail(
         normalized_name = normalise_name(row.raw_name)
         if row.entity_id != entity_id and normalized_name not in normalized_aliases:
             continue
+        observation_kind = _derive_manager_observation_kind(
+            entity_id=entity_id,
+            manager_entity_id=row.manager_entity_id,
+            issuer_entity_id=row.issuer_entity_id,
+            disclosure_completeness=row.disclosure_completeness,
+            ownership_pct=row.ownership_pct,
+            source_subclass_raw=row.source_subclass_raw,
+            classification_raw=row.classification_raw,
+        )
+        row_confidence_label, row_confidence_detail = _company_observation_confidence(
+            current_entity_id=entity_id,
+            observation_entity_id=row.entity_id,
+            observation_raw_name=row.raw_name,
+            canonical_name=entity.canonical_name,
+            normalized_aliases=normalized_aliases,
+            entity_confidence_label=entity_confidence_label,
+            entity_confidence_detail=entity_confidence_detail,
+        )
         observations.append(
             ManagerObservationReadModel(
                 raw_name=row.raw_name,
@@ -1495,15 +1597,12 @@ def get_manager_detail(
                 ownership_pct=row.ownership_pct,
                 value_band_raw=row.value_band_raw,
                 currency_raw=row.currency_raw,
-                observation_kind=_derive_manager_observation_kind(
-                    entity_id=entity_id,
-                    manager_entity_id=row.manager_entity_id,
-                    issuer_entity_id=row.issuer_entity_id,
-                    disclosure_completeness=row.disclosure_completeness,
-                    ownership_pct=row.ownership_pct,
-                    source_subclass_raw=row.source_subclass_raw,
-                    classification_raw=row.classification_raw,
-                ),
+                observation_kind=observation_kind,
+                disclosure_label=_humanize_disclosure_completeness(row.disclosure_completeness),
+                observation_kind_label=_humanize_observation_kind(observation_kind),
+                confidence_label=row_confidence_label,
+                confidence_detail=row_confidence_detail,
+                is_non_precise=row.value_aud is None and row.ownership_pct is None,
             )
         )
 
@@ -1516,6 +1615,16 @@ def get_manager_detail(
         entity_id=entity_id,
         observations=observations,
     )
+    disclosure_counter = Counter(observation.disclosure_completeness for observation in observations)
+    disclosure_summary = [
+        (_humanize_disclosure_completeness(disclosure_key), disclosure_counter[disclosure_key])
+        for disclosure_key in sorted(
+            disclosure_counter,
+            key=lambda item: DISCLOSURE_COMPLETENESS_SORT_ORDER.get(item, 999),
+        )
+    ]
+    primary_observations = [observation for observation in observations if not observation.is_non_precise]
+    supplemental_observations = [observation for observation in observations if observation.is_non_precise]
     return ManagerDetailReadModel(
         entity_id=entity.id,
         canonical_name=entity.canonical_name,
@@ -1529,7 +1638,16 @@ def get_manager_detail(
         observation_count=len(observations),
         fund_count=len({observation.fund_code for observation in observations}),
         latest_reporting_period=latest_reporting_period,
+        entity_confidence_label=entity_confidence_label,
+        entity_confidence_detail=entity_confidence_detail,
+        disclosure_summary=disclosure_summary,
+        resolution_scope_note=(
+            "Current manager detail stays on stored disclosed rows only. No look-through traversal, no "
+            "cross-fund total, and no extra relationship inference is added on this page."
+        ),
         observations=observations,
+        primary_observations=primary_observations,
+        supplemental_observations=supplemental_observations,
     )
 
 
@@ -1545,6 +1663,9 @@ def get_company_detail(
     aliases = _get_entity_aliases(session, entity=entity)
     normalized_aliases = {normalise_name(alias) for alias in aliases}
     relationships = _get_entity_relationships(session, entity_id=entity_id)
+    entity_confidence_label, entity_confidence_detail = _company_entity_confidence(
+        confidence_tier=entity.confidence_tier,
+    )
 
     rows = session.execute(
         select(
@@ -1593,6 +1714,15 @@ def get_company_detail(
         normalized_name = normalise_name(row.raw_name)
         if row.entity_id != entity_id and normalized_name not in normalized_aliases:
             continue
+        row_confidence_label, row_confidence_detail = _company_observation_confidence(
+            current_entity_id=entity_id,
+            observation_entity_id=row.entity_id,
+            observation_raw_name=row.raw_name,
+            canonical_name=entity.canonical_name,
+            normalized_aliases=normalized_aliases,
+            entity_confidence_label=entity_confidence_label,
+            entity_confidence_detail=entity_confidence_detail,
+        )
         observations.append(
             CompanyObservationReadModel(
                 raw_name=row.raw_name,
@@ -1611,6 +1741,10 @@ def get_company_detail(
                 ownership_pct=row.ownership_pct,
                 value_band_raw=row.value_band_raw,
                 currency_raw=row.currency_raw,
+                disclosure_label=_humanize_disclosure_completeness(row.disclosure_completeness),
+                confidence_label=row_confidence_label,
+                confidence_detail=row_confidence_detail,
+                is_value_band=row.value_band_raw is not None,
             )
         )
 
@@ -1646,6 +1780,22 @@ def get_company_detail(
         if history_is_limited
         else None
     )
+    holder_slice_count = len(
+        {
+            (observation.fund_code, observation.option_code, observation.reporting_period_end_date)
+            for observation in observations
+        }
+    )
+    disclosure_counter = Counter(observation.disclosure_completeness for observation in observations)
+    disclosure_summary = [
+        (_humanize_disclosure_completeness(disclosure_key), disclosure_counter[disclosure_key])
+        for disclosure_key in sorted(
+            disclosure_counter,
+            key=lambda item: DISCLOSURE_COMPLETENESS_SORT_ORDER.get(item, 999),
+        )
+    ]
+    primary_observations = [observation for observation in observations if not observation.is_value_band]
+    value_band_observations = [observation for observation in observations if observation.is_value_band]
 
     return CompanyDetailReadModel(
         entity_id=entity.id,
@@ -1658,6 +1808,7 @@ def get_company_detail(
         relationships=relationships,
         observation_count=len(observations),
         fund_count=len({observation.fund_code for observation in observations}),
+        holder_slice_count=holder_slice_count,
         latest_reporting_period=latest_reporting_period,
         history_is_limited=history_is_limited,
         history_note=history_note,
@@ -1665,8 +1816,13 @@ def get_company_detail(
             "Only linked holdings and exact seeded aliases are included here; unresolved raw-name variants remain "
             "outside the canonical company view until current stored truth supports linking them."
         ),
+        entity_confidence_label=entity_confidence_label,
+        entity_confidence_detail=entity_confidence_detail,
+        disclosure_summary=disclosure_summary,
         period_history=period_history,
         observations=observations,
+        primary_observations=primary_observations,
+        value_band_observations=value_band_observations,
     )
 
 
@@ -1683,6 +1839,39 @@ PRIVATE_ASSET_CLASS_CODES = {
     "unlisted_equity",
     "unlisted_infrastructure",
     "unlisted_property",
+}
+
+SEARCH_KIND_LABELS = {
+    "company": "Company",
+    "fund": "Fund",
+    "manager": "Manager",
+}
+
+SEARCH_FILTER_LABELS = {
+    "all": "All results",
+    "company": "Companies",
+    "fund": "Funds",
+    "manager": "Managers",
+}
+
+SEARCH_KIND_SORT_ORDER = {
+    "fund": 0,
+    "company": 1,
+    "manager": 2,
+}
+
+SEARCH_MATCH_LABELS = {
+    "alias": "Alias",
+    "canonical_name": "Canonical name",
+    "fund_code": "Fund code",
+    "fund_name": "Fund name",
+}
+
+SEARCH_MATCH_SOURCE_PRIORITY = {
+    "fund_code": 240,
+    "canonical_name": 200,
+    "fund_name": 180,
+    "alias": 160,
 }
 
 
@@ -1725,6 +1914,7 @@ def get_fund_detail(
             CanonicalAssetClass.code.label("canonical_asset_class_code"),
             Entity.canonical_name.label("entity_canonical_name"),
             Entity.entity_type.label("entity_type"),
+            Entity.confidence_tier.label("entity_confidence_tier"),
             InvestmentOption.id.label("option_id"),
             InvestmentOption.source_option_code.label("option_code"),
             InvestmentOption.source_option_name.label("option_name"),
@@ -1769,6 +1959,8 @@ def get_fund_detail(
         top_direct_private_holdings: list[FundObservationSummaryReadModel] = []
         manager_level_aggregate_exposures: list[FundObservationSummaryReadModel] = []
         named_private_exposures: list[FundObservationSummaryReadModel] = []
+        value_band_exposures: list[FundObservationSummaryReadModel] = []
+        other_named_private_exposures: list[FundObservationSummaryReadModel] = []
 
         for row in option_specific_rows:
             observation_kind = _derive_fund_observation_kind(
@@ -1778,6 +1970,15 @@ def get_fund_detail(
                 source_subclass_raw=row.source_subclass_raw,
                 classification_raw=row.classification_raw,
             )
+            if row.entity_canonical_name is not None:
+                confidence_label, confidence_detail = _company_entity_confidence(
+                    confidence_tier=row.entity_confidence_tier,
+                )
+            else:
+                confidence_label, confidence_detail = (
+                    "Unresolved",
+                    "This observation is not currently linked to a canonical entity in stored truth.",
+                )
             summary = FundObservationSummaryReadModel(
                 raw_name=row.raw_name,
                 entity_id=row.entity_id,
@@ -1795,6 +1996,10 @@ def get_fund_detail(
                 value_aud=row.value_aud,
                 ownership_pct=row.ownership_pct,
                 value_band_raw=row.value_band_raw,
+                disclosure_label=_humanize_disclosure_completeness(row.disclosure_completeness),
+                observation_kind_label=_humanize_observation_kind(observation_kind),
+                confidence_label=confidence_label,
+                confidence_detail=confidence_detail,
             )
 
             bucket_key = (row.canonical_asset_class_code, row.disclosure_completeness)
@@ -1816,6 +2021,10 @@ def get_fund_detail(
                     top_direct_private_holdings.append(summary)
                 elif observation_kind == "unknown":
                     named_private_exposures.append(summary)
+                    if summary.value_band_raw is not None:
+                        value_band_exposures.append(summary)
+                    else:
+                        other_named_private_exposures.append(summary)
 
             if observation_kind == "manager_rollup":
                 manager_level_aggregate_exposures.append(summary)
@@ -1863,6 +2072,14 @@ def get_fund_detail(
                     named_private_exposures,
                     key=_fund_observation_sort_key,
                 )[:10],
+                value_band_exposures=sorted(
+                    value_band_exposures,
+                    key=_fund_observation_sort_key,
+                )[:10],
+                other_named_private_exposures=sorted(
+                    other_named_private_exposures,
+                    key=_fund_observation_sort_key,
+                )[:10],
             )
         )
 
@@ -1881,6 +2098,292 @@ def get_fund_detail(
                 if prior_reporting_period is None
                 else "Change since prior reporting period is not yet exposed on the fund detail slice."
             ),
+        ),
+    )
+
+
+def search_entities_and_funds(
+    session: Session,
+    *,
+    query: str,
+    limit: int = 20,
+    kind: str = "all",
+) -> SearchResultsReadModel:
+    lookup_query = query.strip()
+    if lookup_query == "":
+        raise ValueError("query must not be blank")
+    active_kind = _normalise_search_kind(kind)
+
+    normalized_query = normalise_name(lookup_query)
+    if normalized_query == "":
+        return SearchResultsReadModel(
+            query=lookup_query,
+            normalized_query=normalized_query,
+            active_kind=active_kind,
+            result_count=0,
+            total_result_count=0,
+            kind_counts={search_kind: 0 for search_kind in SEARCH_FILTER_LABELS},
+            results=[],
+        )
+
+    query_casefold = lookup_query.casefold()
+    scored_results: list[tuple[int, SearchResultReadModel]] = []
+
+    fund_rows = session.execute(
+        select(
+            Fund.code,
+            Fund.name,
+        ).order_by(Fund.name.asc(), Fund.code.asc())
+    ).all()
+    for row in fund_rows:
+        best_match = _best_search_candidate(
+            query_casefold=query_casefold,
+            normalized_query=normalized_query,
+            candidates=(
+                ("fund_code", row.code),
+                ("fund_name", row.name),
+            ),
+        )
+        if best_match is None:
+            continue
+        score, matched_on, matched_value = best_match
+        scored_results.append(
+            (
+                score,
+                SearchResultReadModel(
+                    result_kind="fund",
+                    result_kind_label=SEARCH_KIND_LABELS["fund"],
+                    title=row.name,
+                    matched_on=matched_on,
+                    matched_on_label=SEARCH_MATCH_LABELS[matched_on],
+                    matched_value=matched_value,
+                    entity_id=None,
+                    fund_code=row.code,
+                ),
+            )
+        )
+
+    entity_rows = session.execute(
+        select(
+            Entity.id,
+            Entity.entity_type,
+            Entity.canonical_name,
+            EntityAlias.alias,
+        )
+        .outerjoin(EntityAlias, EntityAlias.entity_id == Entity.id)
+        .where(Entity.entity_type.in_(("company", "manager")))
+        .order_by(
+            Entity.entity_type.asc(),
+            Entity.canonical_name.asc(),
+            EntityAlias.is_preferred.desc(),
+            EntityAlias.alias.asc(),
+        )
+    ).all()
+
+    entities_by_id: dict[int, dict[str, object]] = {}
+    for row in entity_rows:
+        entity_bucket = entities_by_id.setdefault(
+            int(row.id),
+            {
+                "entity_type": row.entity_type,
+                "canonical_name": row.canonical_name,
+                "aliases": [],
+            },
+        )
+        if row.alias is not None:
+            aliases = entity_bucket["aliases"]
+            if row.alias not in aliases:
+                aliases.append(row.alias)
+
+    for entity_id, entity_bucket in entities_by_id.items():
+        entity_type = str(entity_bucket["entity_type"])
+        canonical_name = str(entity_bucket["canonical_name"])
+        aliases = [str(alias) for alias in entity_bucket["aliases"]]
+        best_match = _best_search_candidate(
+            query_casefold=query_casefold,
+            normalized_query=normalized_query,
+            candidates=[("canonical_name", canonical_name), *[("alias", alias) for alias in aliases]],
+        )
+        if best_match is None:
+            continue
+        score, matched_on, matched_value = best_match
+        scored_results.append(
+            (
+                score,
+                SearchResultReadModel(
+                    result_kind=entity_type,
+                    result_kind_label=SEARCH_KIND_LABELS[entity_type],
+                    title=canonical_name,
+                    matched_on=matched_on,
+                    matched_on_label=SEARCH_MATCH_LABELS[matched_on],
+                    matched_value=matched_value,
+                    entity_id=entity_id,
+                    fund_code=None,
+                ),
+            )
+        )
+
+    scored_results.sort(
+        key=lambda item: (
+            -item[0],
+            SEARCH_KIND_SORT_ORDER.get(item[1].result_kind, 999),
+            item[1].title.casefold(),
+            item[1].matched_value.casefold(),
+        )
+    )
+    all_results = [item for _, item in scored_results]
+    kind_counts = {
+        "all": len(all_results),
+        **{
+            search_kind: sum(1 for item in all_results if item.result_kind == search_kind)
+            for search_kind in SEARCH_KIND_LABELS
+        },
+    }
+    filtered_results = (
+        [item for item in all_results if item.result_kind == active_kind]
+        if active_kind != "all"
+        else all_results
+    )
+    results = filtered_results[:limit]
+    return SearchResultsReadModel(
+        query=lookup_query,
+        normalized_query=normalized_query,
+        active_kind=active_kind,
+        result_count=len(results),
+        total_result_count=len(all_results),
+        kind_counts=kind_counts,
+        results=results,
+    )
+
+
+def get_homepage(session: Session) -> HomepageReadModel:
+    period_dates = session.scalars(
+        select(ReportingPeriod.period_end_date)
+        .join(SourceFile, SourceFile.reporting_period_id == ReportingPeriod.id)
+        .where(
+            SourceFile.reporting_period_id.is_not(None),
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+        )
+        .distinct()
+        .order_by(ReportingPeriod.period_end_date.desc())
+    ).all()
+
+    latest_reporting_period = period_dates[0] if period_dates else None
+    prior_reporting_period = period_dates[1] if len(period_dates) > 1 else None
+
+    latest_counts = _get_homepage_period_counts(session, period_end_date=latest_reporting_period)
+    prior_counts = (
+        _get_homepage_period_counts(session, period_end_date=prior_reporting_period)
+        if prior_reporting_period is not None
+        else None
+    )
+    change_available = prior_counts is not None
+
+    featured_company = session.scalar(
+        select(Entity).where(
+            Entity.entity_type == "company",
+            Entity.canonical_name == "Industry Super Holdings Pty Ltd",
+        )
+    )
+    featured_manager = session.scalar(
+        select(Entity).where(
+            Entity.entity_type == "manager",
+            Entity.canonical_name == "IFM Investors Pty Ltd",
+        )
+    )
+
+    return HomepageReadModel(
+        latest_reporting_period=latest_reporting_period,
+        prior_reporting_period=prior_reporting_period,
+        change_available=change_available,
+        change_note=(
+            "Current-period counts are compared with the prior loaded reporting period."
+            if change_available
+            else "Only one current reporting period is loaded, so this strip stays honest about change being unavailable."
+        ),
+        change_metrics=[
+            HomepageChangeMetricReadModel(
+                label="Funds",
+                value=latest_counts["fund_count"],
+                trend_note=_homepage_trend_note(
+                    current=latest_counts["fund_count"],
+                    prior=(prior_counts["fund_count"] if prior_counts is not None else None),
+                ),
+            ),
+            HomepageChangeMetricReadModel(
+                label="Companies",
+                value=latest_counts["company_count"],
+                trend_note=_homepage_trend_note(
+                    current=latest_counts["company_count"],
+                    prior=(prior_counts["company_count"] if prior_counts is not None else None),
+                ),
+            ),
+            HomepageChangeMetricReadModel(
+                label="Managers",
+                value=latest_counts["manager_count"],
+                trend_note=_homepage_trend_note(
+                    current=latest_counts["manager_count"],
+                    prior=(prior_counts["manager_count"] if prior_counts is not None else None),
+                ),
+            ),
+        ],
+        featured_entries=[
+            HomepageFeatureEntryReadModel(
+                kicker="Named private company ownership",
+                title=(
+                    featured_company.canonical_name
+                    if featured_company is not None
+                    else "Direct private company ownership index"
+                ),
+                deck=(
+                    "Lead with a company view that preserves per-fund disclosure variance, completeness states, "
+                    "and the rule that cross-fund totals are never silently computed."
+                ),
+                result_kind="company",
+                entity_id=(featured_company.id if featured_company is not None else None),
+                fund_code=None,
+                search_query=("Industry Super Holdings" if featured_company is None else None),
+                cta_label="Open company",
+                status_label="Live now",
+            ),
+            HomepageFeatureEntryReadModel(
+                kicker="Manager exposure view",
+                title=(
+                    featured_manager.canonical_name
+                    if featured_manager is not None
+                    else "Manager exposure surface"
+                ),
+                deck=(
+                    "Use the manager page to separate manager rollups from owned issuers and keep disclosure limits "
+                    "useful instead of flattening them into one blended exposure story."
+                ),
+                result_kind="manager",
+                entity_id=(featured_manager.id if featured_manager is not None else None),
+                fund_code=None,
+                search_query=("IFM Investors" if featured_manager is None else None),
+                cta_label="Open manager",
+                status_label="Live now",
+            ),
+            HomepageFeatureEntryReadModel(
+                kicker="Mapped property and infrastructure assets",
+                title="Property and infrastructure map",
+                deck=(
+                    "Geo-coordinates, addresses, and classification-rich rows already exist in stored truth, "
+                    "but the dedicated mapped asset surface is staged to Stage 5."
+                ),
+                result_kind="coming_later",
+                entity_id=None,
+                fund_code=None,
+                search_query=None,
+                cta_label=None,
+                status_label="Coming later",
+            ),
+        ],
+        editorial_note=(
+            "Disclosure completeness is the core rule of the product. Some rows give precise values, some give "
+            "ownership only, some disclose a value band, and some name an exposure without a precise amount. "
+            "That unevenness is a feature to interpret carefully, not noise to smooth away."
         ),
     )
 
@@ -2070,4 +2573,209 @@ def _build_cross_adapter_holdings_read_model(
         observation_count=len(observations),
         fund_count=len({item.fund_code for item in observations}),
         observations=observations,
+    )
+
+
+def _humanize_disclosure_completeness(value: str) -> str:
+    return value.replace("_", " ").title()
+
+
+def _humanize_observation_kind(value: str) -> str:
+    return value.replace("_", " ").title()
+
+
+def _best_search_candidate(
+    *,
+    query_casefold: str,
+    normalized_query: str,
+    candidates: list[tuple[str, str]] | tuple[tuple[str, str], ...],
+) -> tuple[int, str, str] | None:
+    best_match: tuple[int, str, str] | None = None
+    for matched_on, candidate_value in candidates:
+        score = _search_candidate_score(
+            query_casefold=query_casefold,
+            normalized_query=normalized_query,
+            matched_on=matched_on,
+            candidate_value=candidate_value,
+        )
+        if score is None:
+            continue
+        if best_match is None or score > best_match[0]:
+            best_match = (score, matched_on, candidate_value)
+    return best_match
+
+
+def _normalise_search_kind(value: str) -> str:
+    normalized_kind = value.strip().casefold()
+    if normalized_kind not in SEARCH_FILTER_LABELS:
+        raise ValueError(f"Unsupported search kind: {value}")
+    return normalized_kind
+
+
+def _search_candidate_score(
+    *,
+    query_casefold: str,
+    normalized_query: str,
+    matched_on: str,
+    candidate_value: str,
+) -> int | None:
+    candidate = candidate_value.strip()
+    if candidate == "":
+        return None
+
+    candidate_casefold = candidate.casefold()
+    candidate_normalized = normalise_name(candidate)
+    if candidate_normalized == "":
+        return None
+
+    if candidate_normalized == normalized_query:
+        strength = 400
+    elif candidate_casefold == query_casefold:
+        strength = 380
+    elif candidate_normalized.startswith(normalized_query):
+        strength = 300
+    elif candidate_casefold.startswith(query_casefold):
+        strength = 280
+    elif normalized_query in candidate_normalized:
+        strength = 200
+    elif query_casefold in candidate_casefold:
+        strength = 180
+    else:
+        return None
+
+    return SEARCH_MATCH_SOURCE_PRIORITY[matched_on] + strength
+
+
+def _get_homepage_period_counts(
+    session: Session,
+    *,
+    period_end_date: date | None,
+) -> dict[str, int]:
+    if period_end_date is None:
+        return {
+            "fund_count": 0,
+            "company_count": 0,
+            "manager_count": 0,
+        }
+
+    source_file_filters = (
+        SourceFile.is_current_version.is_(True),
+        SourceFile.ingest_status == "loaded",
+        ReportingPeriod.period_end_date == period_end_date,
+    )
+
+    fund_count = int(
+        session.scalar(
+            select(func.count(func.distinct(SourceFile.fund_id)))
+            .join(ReportingPeriod, ReportingPeriod.id == SourceFile.reporting_period_id)
+            .where(*source_file_filters)
+        )
+        or 0
+    )
+    company_count = int(
+        session.scalar(
+            select(func.count(func.distinct(Holding.entity_id)))
+            .join(SourceFile, SourceFile.id == Holding.source_file_id)
+            .join(ReportingPeriod, ReportingPeriod.id == Holding.reporting_period_id)
+            .join(Entity, Entity.id == Holding.entity_id)
+            .where(
+                *source_file_filters,
+                Holding.is_aggregate.is_(False),
+                Entity.entity_type == "company",
+            )
+        )
+        or 0
+    )
+    manager_count = int(
+        session.scalar(
+            select(func.count(func.distinct(Holding.entity_id)))
+            .join(SourceFile, SourceFile.id == Holding.source_file_id)
+            .join(ReportingPeriod, ReportingPeriod.id == Holding.reporting_period_id)
+            .join(Entity, Entity.id == Holding.entity_id)
+            .where(
+                *source_file_filters,
+                Holding.is_aggregate.is_(False),
+                Entity.entity_type == "manager",
+            )
+        )
+        or 0
+    )
+    return {
+        "fund_count": fund_count,
+        "company_count": company_count,
+        "manager_count": manager_count,
+    }
+
+
+def _homepage_trend_note(*, current: int, prior: int | None) -> str:
+    if prior is None:
+        return "No prior loaded period yet"
+    delta = current - prior
+    if delta > 0:
+        return f"Up {delta} vs prior"
+    if delta < 0:
+        return f"Down {abs(delta)} vs prior"
+    return "Flat vs prior"
+
+
+def _company_entity_confidence(*, confidence_tier: str | None) -> tuple[str, str]:
+    normalized_tier = (confidence_tier or "").strip().casefold()
+    if normalized_tier == "seeded":
+        return (
+            "Reviewed",
+            "Stored confidence tier is seeded. Current company detail is anchored to a reviewed canonical seed rather than a raw-score display.",
+        )
+    if normalized_tier == "high":
+        return (
+            "High Confidence",
+            "Stored confidence tier is high confidence. Raw score is intentionally hidden from the default page view.",
+        )
+    if normalized_tier == "medium":
+        return (
+            "Medium Confidence",
+            "Stored confidence tier is medium confidence. Raw score is intentionally hidden from the default page view.",
+        )
+    if normalized_tier == "low":
+        return (
+            "Low Confidence",
+            "Stored confidence tier is low confidence. Raw score is intentionally hidden from the default page view.",
+        )
+    if normalized_tier:
+        return (
+            confidence_tier.replace("_", " ").title(),
+            "Confidence is shown as a tier on the page and not as a raw score by default.",
+        )
+    return (
+        "Linked",
+        "No stored confidence tier is present for this canonical entity. Current observations are included because they are linked or match a reviewed alias in current stored truth.",
+    )
+
+
+def _company_observation_confidence(
+    *,
+    current_entity_id: int,
+    observation_entity_id: int | None,
+    observation_raw_name: str,
+    canonical_name: str,
+    normalized_aliases: set[str],
+    entity_confidence_label: str,
+    entity_confidence_detail: str,
+) -> tuple[str, str]:
+    if observation_entity_id == current_entity_id:
+        return entity_confidence_label, entity_confidence_detail
+
+    normalized_raw_name = normalise_name(observation_raw_name)
+    if normalized_raw_name in normalized_aliases and observation_raw_name != canonical_name:
+        return (
+            "Observed Alias",
+            "This row is shown because the observed raw name matches a reviewed alias for the canonical company.",
+        )
+    if normalized_raw_name in normalized_aliases:
+        return (
+            "Linked",
+            "This row is shown because the observed raw name matches the canonical company record in current stored truth.",
+        )
+    return (
+        "Unresolved",
+        "This row is not currently linked strongly enough to receive a cleaner confidence label.",
     )
