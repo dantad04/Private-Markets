@@ -1,18 +1,29 @@
 from __future__ import annotations
 
+from datetime import date
 from decimal import Decimal
 
 from sqlalchemy import select
 
 from adapters.sunsuper_schema_normalisation import normalise_name
 from app.db.models import Entity, EntityAlias
+from app.entity_resolution.deterministic import normalise_abn
 
 
 ROC_CAPITAL_CANONICAL_NAME = "ROC Capital Pty Limited"
 ROC_CAPITAL_SEED_SOURCE = "roc-capital-stage5-v1"
-ROC_CAPITAL_NOTES = (
+ROC_CAPITAL_REVIEWED_ABN = "37 167 858 764"
+ROC_CAPITAL_REVIEW_SOURCE = "manual review against the Australian Business Register public record"
+ROC_CAPITAL_REVIEWED_BY = "codex"
+ROC_CAPITAL_REVIEWED_AT = date(2026, 4, 22)
+ROC_CAPITAL_REGISTERED_NAME_ON_ABR = "ROC CAPITAL PTY LIMITED"
+ROC_CAPITAL_LEGACY_NOTES = (
     "Stage 5 canonical manager dependency slice. Exact observed aliases only; no reviewed ABR or ASIC "
     "enrichment is persisted on this entity."
+)
+ROC_CAPITAL_NOTES = (
+    "Stage 5 ROC Capital proof-slice seed. Reviewed ABN and ABR provenance are persisted on the canonical "
+    "manager entity."
 )
 ROC_CAPITAL_OBSERVED_ALIASES: tuple[tuple[str, bool], ...] = (
     ("ROC Capital Pty Limited", True),
@@ -30,8 +41,14 @@ def ensure_roc_capital_seed(session) -> Entity:
         entity = Entity(
             entity_type="manager",
             canonical_name=ROC_CAPITAL_CANONICAL_NAME,
-            abn=None,
-            confidence_tier=None,
+            abn=ROC_CAPITAL_REVIEWED_ABN,
+            abn_review_source=ROC_CAPITAL_REVIEW_SOURCE,
+            abn_reviewed_by=ROC_CAPITAL_REVIEWED_BY,
+            abn_reviewed_at=ROC_CAPITAL_REVIEWED_AT,
+            registered_name_on_abr=ROC_CAPITAL_REGISTERED_NAME_ON_ABR,
+            country_code="AU",
+            is_australian_entity=True,
+            confidence_tier="seeded",
             notes=ROC_CAPITAL_NOTES,
         )
         session.add(entity)
@@ -70,5 +87,61 @@ def _ensure_roc_capital_seed_shape(entity: Entity) -> None:
             "Canonical ROC Capital entity already exists with a conflicting entity_type "
             f"({entity.entity_type!r}); expected 'manager'"
         )
-    if entity.notes is None:
+
+    if normalise_abn(entity.abn) not in {None, normalise_abn(ROC_CAPITAL_REVIEWED_ABN)}:
+        raise ValueError(
+            "Canonical ROC Capital entity already has a conflicting reviewed ABN "
+            f"({entity.abn!r}); expected {ROC_CAPITAL_REVIEWED_ABN!r}"
+        )
+    if entity.abn is None:
+        entity.abn = ROC_CAPITAL_REVIEWED_ABN
+
+    if entity.registered_name_on_abr not in {None, ROC_CAPITAL_REGISTERED_NAME_ON_ABR}:
+        raise ValueError(
+            "Canonical ROC Capital entity already has conflicting ABR registered-name provenance "
+            f"({entity.registered_name_on_abr!r}); expected {ROC_CAPITAL_REGISTERED_NAME_ON_ABR!r}"
+        )
+    if entity.registered_name_on_abr is None:
+        entity.registered_name_on_abr = ROC_CAPITAL_REGISTERED_NAME_ON_ABR
+
+    _ensure_matching_or_fill(
+        entity=entity,
+        attribute_name="abn_review_source",
+        expected_value=ROC_CAPITAL_REVIEW_SOURCE,
+    )
+    _ensure_matching_or_fill(
+        entity=entity,
+        attribute_name="abn_reviewed_by",
+        expected_value=ROC_CAPITAL_REVIEWED_BY,
+    )
+    _ensure_matching_or_fill(
+        entity=entity,
+        attribute_name="abn_reviewed_at",
+        expected_value=ROC_CAPITAL_REVIEWED_AT,
+    )
+    _ensure_matching_or_fill(
+        entity=entity,
+        attribute_name="confidence_tier",
+        expected_value="seeded",
+    )
+
+    if entity.is_australian_entity is False:
+        raise ValueError("Canonical ROC Capital entity is marked non-Australian despite reviewed ABR registration")
+    if entity.is_australian_entity is None:
+        entity.is_australian_entity = True
+    if entity.country_code in {None, ""}:
+        entity.country_code = "AU"
+    if entity.notes in {None, ROC_CAPITAL_LEGACY_NOTES}:
         entity.notes = ROC_CAPITAL_NOTES
+
+
+def _ensure_matching_or_fill(entity: Entity, *, attribute_name: str, expected_value: object) -> None:
+    existing_value = getattr(entity, attribute_name)
+    if existing_value is None:
+        setattr(entity, attribute_name, expected_value)
+        return
+    if existing_value != expected_value:
+        raise ValueError(
+            f"Canonical ROC Capital entity already has conflicting {attribute_name} "
+            f"({existing_value!r}); expected {expected_value!r}"
+        )

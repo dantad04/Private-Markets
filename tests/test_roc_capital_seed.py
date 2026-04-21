@@ -13,8 +13,13 @@ from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
 from app.entity_resolution.roc_capital_seed import (
     ROC_CAPITAL_CANONICAL_NAME,
+    ROC_CAPITAL_REGISTERED_NAME_ON_ABR,
     ROC_CAPITAL_NOTES,
     ROC_CAPITAL_OBSERVED_ALIASES,
+    ROC_CAPITAL_REVIEWED_ABN,
+    ROC_CAPITAL_REVIEWED_AT,
+    ROC_CAPITAL_REVIEWED_BY,
+    ROC_CAPITAL_REVIEW_SOURCE,
     ensure_roc_capital_seed,
 )
 from app.ingest.loader import ingest_australiansuper_local_file, ingest_hostplus_local_file
@@ -78,12 +83,14 @@ class TestRocCapitalSeed(unittest.TestCase):
 
             self.assertEqual(ROC_CAPITAL_CANONICAL_NAME, entity.canonical_name)
             self.assertEqual("manager", entity.entity_type)
-            self.assertIsNone(entity.abn)
-            self.assertIsNone(entity.abn_review_source)
-            self.assertIsNone(entity.abn_reviewed_by)
-            self.assertIsNone(entity.abn_reviewed_at)
-            self.assertIsNone(entity.registered_name_on_abr)
-            self.assertIsNone(entity.confidence_tier)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_ABN, entity.abn)
+            self.assertEqual(ROC_CAPITAL_REVIEW_SOURCE, entity.abn_review_source)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_BY, entity.abn_reviewed_by)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_AT, entity.abn_reviewed_at)
+            self.assertEqual(ROC_CAPITAL_REGISTERED_NAME_ON_ABR, entity.registered_name_on_abr)
+            self.assertEqual("seeded", entity.confidence_tier)
+            self.assertTrue(entity.is_australian_entity)
+            self.assertEqual("AU", entity.country_code)
             self.assertEqual(ROC_CAPITAL_NOTES, entity.notes)
 
             aliases = session.scalars(
@@ -118,10 +125,24 @@ class TestRocCapitalSeed(unittest.TestCase):
             refreshed = session.get(Entity, first.id)
             self.assertIsNotNone(refreshed)
             assert refreshed is not None
-            self.assertIsNone(refreshed.abn_review_source)
-            self.assertIsNone(refreshed.abn_reviewed_by)
-            self.assertIsNone(refreshed.abn_reviewed_at)
-            self.assertIsNone(refreshed.registered_name_on_abr)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_ABN, refreshed.abn)
+            self.assertEqual(ROC_CAPITAL_REVIEW_SOURCE, refreshed.abn_review_source)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_BY, refreshed.abn_reviewed_by)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_AT, refreshed.abn_reviewed_at)
+            self.assertEqual(ROC_CAPITAL_REGISTERED_NAME_ON_ABR, refreshed.registered_name_on_abr)
+            self.assertEqual("seeded", refreshed.confidence_tier)
+
+    def test_conflicting_reviewed_identity_raises_in_manager_style_conflict_guard(self) -> None:
+        with self.SessionLocal() as session:
+            entity = session.get(Entity, self.entity_id)
+            self.assertIsNotNone(entity)
+            assert entity is not None
+
+            entity.abn = "37 167 858 765"
+            session.flush()
+
+            with self.assertRaisesRegex(ValueError, "conflicting reviewed ABN"):
+                ensure_roc_capital_seed(session)
 
     def test_deterministic_resolution_links_current_roc_rows_and_reruns_idempotently(self) -> None:
         with self.SessionLocal() as session:
@@ -152,7 +173,12 @@ class TestRocCapitalSeed(unittest.TestCase):
             self.assertIsNotNone(detail)
             assert detail is not None
 
-            self.assertEqual("Linked", detail.entity_confidence_label)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_ABN, detail.abn)
+            self.assertEqual(ROC_CAPITAL_REVIEW_SOURCE, detail.abn_review_source)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_BY, detail.abn_reviewed_by)
+            self.assertEqual(ROC_CAPITAL_REVIEWED_AT, detail.abn_reviewed_at)
+            self.assertEqual(ROC_CAPITAL_REGISTERED_NAME_ON_ABR, detail.registered_name_on_abr)
+            self.assertEqual("Reviewed", detail.entity_confidence_label)
             self.assertEqual(3, detail.observation_count)
             self.assertEqual(2, detail.fund_count)
             self.assertEqual(["manager"], detail.role_classes)
