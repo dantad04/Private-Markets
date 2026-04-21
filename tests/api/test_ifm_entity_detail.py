@@ -11,10 +11,18 @@ from sqlalchemy.orm import sessionmaker
 
 from app.api.admin import get_db_session
 from app.api.app import create_app
-from app.db.models import Base, Entity, EntityAlias, ReportingPeriod
+from app.db.models import Base, Entity, EntityAlias, EntityRelationship, HoldingRelationship, ReportingPeriod
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
-from app.entity_resolution.ifm_seed import IFM_CANONICAL_NAME, ensure_ifm_seed
+from app.entity_resolution.ifm_seed import (
+    IFM_CANONICAL_NAME,
+    IFM_REGISTERED_NAME_ON_ABR,
+    IFM_REVIEWED_ABN,
+    IFM_REVIEWED_AT,
+    IFM_REVIEWED_BY,
+    IFM_REVIEW_SOURCE,
+    ensure_ifm_seed,
+)
 from app.ingest.loader import (
     ingest_art_sunsuper_local_file,
     ingest_australiansuper_local_file,
@@ -103,6 +111,19 @@ class TestIfmEntityDetailApi(unittest.TestCase):
         cls.engine.dispose()
         cls.tempdir.cleanup()
 
+    def test_ifm_seed_persists_reviewed_abn_and_abr_provenance(self) -> None:
+        with self.SessionLocal() as session:
+            entity = session.get(Entity, self.ifm_entity_id)
+            self.assertIsNotNone(entity)
+            assert entity is not None
+
+            self.assertEqual(IFM_REVIEWED_ABN, entity.abn)
+            self.assertEqual(IFM_REVIEW_SOURCE, entity.abn_review_source)
+            self.assertEqual(IFM_REVIEWED_BY, entity.abn_reviewed_by)
+            self.assertEqual(IFM_REVIEWED_AT, entity.abn_reviewed_at)
+            self.assertEqual(IFM_REGISTERED_NAME_ON_ABR, entity.registered_name_on_abr)
+            self.assertTrue(entity.is_australian_entity)
+
     def test_ifm_seed_is_idempotent_when_reapplied(self) -> None:
         with self.SessionLocal() as session:
             first = ensure_ifm_seed(session)
@@ -112,6 +133,31 @@ class TestIfmEntityDetailApi(unittest.TestCase):
             self.assertEqual(first.id, second.id)
             self.assertEqual(1, session.scalar(select(func.count(Entity.id)).where(Entity.canonical_name == IFM_CANONICAL_NAME)))
             self.assertEqual(3, session.scalar(select(func.count(EntityAlias.id)).where(EntityAlias.entity_id == first.id)))
+            refreshed = session.get(Entity, first.id)
+            self.assertIsNotNone(refreshed)
+            assert refreshed is not None
+            self.assertEqual(IFM_REVIEWED_ABN, refreshed.abn)
+            self.assertEqual(IFM_REVIEW_SOURCE, refreshed.abn_review_source)
+            self.assertEqual(IFM_REVIEWED_BY, refreshed.abn_reviewed_by)
+            self.assertEqual(IFM_REVIEWED_AT, refreshed.abn_reviewed_at)
+            self.assertEqual(IFM_REGISTERED_NAME_ON_ABR, refreshed.registered_name_on_abr)
+            self.assertEqual(
+                0,
+                session.scalar(
+                    select(func.count(EntityRelationship.id)).where(
+                        (EntityRelationship.from_entity_id == first.id)
+                        | (EntityRelationship.to_entity_id == first.id)
+                    )
+                ),
+            )
+            self.assertEqual(
+                0,
+                session.scalar(
+                    select(func.count(HoldingRelationship.id)).where(
+                        HoldingRelationship.related_entity_id == first.id
+                    )
+                ),
+            )
 
     def test_entity_detail_by_id_returns_ifm_aliases_and_fund_period_counts(self) -> None:
         response = self.client.get(f"/entities/{self.ifm_entity_id}")
@@ -121,7 +167,7 @@ class TestIfmEntityDetailApi(unittest.TestCase):
         self.assertEqual(self.ifm_entity_id, payload["entity_id"])
         self.assertEqual(IFM_CANONICAL_NAME, payload["canonical_name"])
         self.assertEqual("manager", payload["entity_type"])
-        self.assertIsNone(payload["abn"])
+        self.assertEqual(IFM_REVIEWED_ABN, payload["abn"])
         self.assertEqual(
             {"IFM Investors Pty Ltd", "IFM INVESTORS PTY LIMITED", "IFM Investors"},
             set(payload["aliases"]),
@@ -186,3 +232,18 @@ class TestIfmEntityDetailApi(unittest.TestCase):
                 for row in observations_by_fund["australiansuper"]
             )
         )
+
+    def test_ifm_manager_page_renders_reviewed_abn_and_abr_provenance(self) -> None:
+        response = self.client.get(f"/admin/ui/managers/{self.ifm_entity_id}")
+        self.assertEqual(200, response.status_code)
+        self.assertIn("IFM Investors Pty Ltd", response.text)
+        self.assertIn(IFM_REVIEWED_ABN, response.text)
+        self.assertIn("ABR reviewed", response.text)
+        self.assertIn(IFM_REVIEW_SOURCE, response.text)
+        self.assertIn("dan", response.text)
+        self.assertIn(IFM_REVIEWED_AT.isoformat(), response.text)
+        self.assertIn(IFM_REGISTERED_NAME_ON_ABR, response.text)
+
+    def test_ifm_company_page_remains_unavailable_for_manager_entity(self) -> None:
+        response = self.client.get(f"/admin/ui/companies/{self.ifm_entity_id}")
+        self.assertEqual(404, response.status_code)

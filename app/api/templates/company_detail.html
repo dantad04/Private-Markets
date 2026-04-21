@@ -234,6 +234,19 @@
           <div><dt>entity_id</dt><dd class="mono">{{ detail.entity_id | e }}</dd></div>
           <div><dt>entity_type</dt><dd>{{ detail.entity_type | e }}</dd></div>
           <div><dt>abn</dt><dd class="mono">{{ (detail.abn or "—") | e }}</dd></div>
+          {% if detail.abn_review_source and detail.abn_reviewed_by and detail.abn_reviewed_at %}
+          <div>
+            <dt>ABR review</dt>
+            <dd>
+              <span class="badge badge--meta">ABR reviewed</span>
+              <div class="table-secondary">{{ detail.abn_review_source | e }}</div>
+              <div class="table-tertiary mono">{{ detail.abn_reviewed_by | e }} · {{ detail.abn_reviewed_at.isoformat() | e }}</div>
+            </dd>
+          </div>
+          {% endif %}
+          {% if detail.registered_name_on_abr %}
+          <div><dt>ABR name</dt><dd class="mono">{{ detail.registered_name_on_abr | e }}</dd></div>
+          {% endif %}
           <div><dt>latest period</dt><dd class="mono">{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else "—") | e }}</dd></div>
           <div><dt>confidence</dt><dd><span class="badge badge--confidence" title="{{ detail.entity_confidence_detail | e }}">{{ detail.entity_confidence_label | e }}</span></dd></div>
         </dl>

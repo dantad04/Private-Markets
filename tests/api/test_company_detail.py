@@ -17,6 +17,7 @@ from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
 from app.entity_resolution.industry_super_holdings_seed import (
     INDUSTRY_SUPER_HOLDINGS_CANONICAL_NAME,
+    INDUSTRY_SUPER_HOLDINGS_REVIEWED_ABN,
     ensure_industry_super_holdings_seed,
 )
 from app.ingest.loader import (
@@ -136,7 +137,7 @@ class TestCompanyDetailApi(unittest.TestCase):
         self.assertEqual(self.entity_id, payload["entity_id"])
         self.assertEqual(INDUSTRY_SUPER_HOLDINGS_CANONICAL_NAME, payload["canonical_name"])
         self.assertEqual("company", payload["entity_type"])
-        self.assertIsNone(payload["abn"])
+        self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_ABN, payload["abn"])
         self.assertEqual(
             {
                 "Industry Super Holdings",

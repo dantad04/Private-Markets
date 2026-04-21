@@ -228,6 +228,10 @@ class ManagerDetailReadModel:
     canonical_name: str
     entity_type: str
     abn: str | None
+    abn_review_source: str | None
+    abn_reviewed_by: str | None
+    abn_reviewed_at: date | None
+    registered_name_on_abr: str | None
     aliases: list[str]
     matched_raw_names: list[str]
     asset_classes: list[str]
@@ -282,6 +286,10 @@ class CompanyDetailReadModel:
     canonical_name: str
     entity_type: str
     abn: str | None
+    abn_review_source: str | None
+    abn_reviewed_by: str | None
+    abn_reviewed_at: date | None
+    registered_name_on_abr: str | None
     aliases: list[str]
     matched_raw_names: list[str]
     asset_classes: list[str]
@@ -1630,6 +1638,10 @@ def get_manager_detail(
         canonical_name=entity.canonical_name,
         entity_type=entity.entity_type,
         abn=entity.abn,
+        abn_review_source=entity.abn_review_source,
+        abn_reviewed_by=entity.abn_reviewed_by,
+        abn_reviewed_at=entity.abn_reviewed_at,
+        registered_name_on_abr=entity.registered_name_on_abr,
         aliases=aliases,
         matched_raw_names=sorted({observation.raw_name for observation in observations}),
         asset_classes=sorted({observation.canonical_asset_class_code for observation in observations}),
@@ -1802,6 +1814,10 @@ def get_company_detail(
         canonical_name=entity.canonical_name,
         entity_type=entity.entity_type,
         abn=entity.abn,
+        abn_review_source=entity.abn_review_source,
+        abn_reviewed_by=entity.abn_reviewed_by,
+        abn_reviewed_at=entity.abn_reviewed_at,
+        registered_name_on_abr=entity.registered_name_on_abr,
         aliases=aliases,
         matched_raw_names=sorted({observation.raw_name for observation in observations}),
         asset_classes=sorted({observation.canonical_asset_class_code for observation in observations}),

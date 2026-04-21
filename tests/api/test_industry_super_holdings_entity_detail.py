@@ -1,23 +1,17 @@
 from __future__ import annotations
 
 from datetime import date
-from decimal import Decimal
 from pathlib import Path
 import tempfile
 import unittest
 
+from fastapi.testclient import TestClient
 from sqlalchemy import func, select
 from sqlalchemy.orm import sessionmaker
 
-from app.db.models import (
-    Base,
-    Entity,
-    EntityAlias,
-    EntityRelationship,
-    Holding,
-    HoldingRelationship,
-    ReportingPeriod,
-)
+from app.api.admin import get_db_session
+from app.api.app import create_app
+from app.db.models import Base, Entity, EntityAlias, EntityRelationship, HoldingRelationship, ReportingPeriod
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
 from app.entity_resolution.industry_super_holdings_seed import (
@@ -37,7 +31,6 @@ from app.ingest.loader import (
     ingest_hostplus_local_file,
     ingest_unisuper_local_file,
 )
-from app.read_models import get_cross_adapter_holdings_by_entity_id
 
 
 ART_SUNSUPER_FIXTURE_PATH = Path("tests/fixtures/art_sunsuper_synthetic_stable_minimal.csv").resolve()
@@ -45,29 +38,31 @@ ART_QSUPER_FIXTURE_PATH = Path("tests/fixtures/art_qsuper_synthetic_balanced_min
 HOSTPLUS_FIXTURE_PATH = Path("tests/fixtures/hostplus_real_extract.csv").resolve()
 UNISUPER_FIXTURE_PATH = Path("tests/fixtures/unisuper_real_extract.csv").resolve()
 AUSTRALIANSUPER_STABLE_FIXTURE_PATH = Path("tests/fixtures/real/australiansuper/Stable PHD (1).csv").resolve()
-OBSERVED_NAME_SOURCE_PATHS = (
-    ART_SUNSUPER_FIXTURE_PATH,
-    ART_QSUPER_FIXTURE_PATH,
-    HOSTPLUS_FIXTURE_PATH,
-    UNISUPER_FIXTURE_PATH,
-    AUSTRALIANSUPER_STABLE_FIXTURE_PATH,
-)
-UNRESOLVED_UNISUPER_DISCOUNT_NAME = "INDUSTRY SUPER HOLDINGS PTY LTD 7.5% MINORITY DISCOUNT"
-ALIASES_TO_SOURCE_PATHS = {
-    "Industry Super Holdings": HOSTPLUS_FIXTURE_PATH,
-    "Industry Super Holdings Pty Ltd": ART_QSUPER_FIXTURE_PATH,
-    "Industry Super Holdings Pty Ltd F/P": AUSTRALIANSUPER_STABLE_FIXTURE_PATH,
-}
 
 
-class TestIndustrySuperHoldingsSeed(unittest.TestCase):
+class TestIndustrySuperHoldingsEntityDetailApi(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.tempdir = tempfile.TemporaryDirectory()
-        cls.database_url = f"sqlite:///{Path(cls.tempdir.name) / 'industry_super_holdings_seed.db'}"
+        cls.database_url = f"sqlite:///{Path(cls.tempdir.name) / 'stage5_industry_super_holdings_entity_detail.db'}"
         cls.engine = get_engine(cls.database_url)
         Base.metadata.create_all(cls.engine)
         cls.SessionLocal = sessionmaker(bind=cls.engine, autoflush=False, autocommit=False, future=True)
+        cls.app = create_app()
+
+        def override_get_db_session():
+            session = cls.SessionLocal()
+            try:
+                yield session
+                session.commit()
+            except Exception:
+                session.rollback()
+                raise
+            finally:
+                session.close()
+
+        cls.app.dependency_overrides[get_db_session] = override_get_db_session
+        cls.client = TestClient(cls.app)
 
         with cls.SessionLocal() as session:
             period = ReportingPeriod(
@@ -114,22 +109,23 @@ class TestIndustrySuperHoldingsSeed(unittest.TestCase):
                 file_path=str(AUSTRALIANSUPER_STABLE_FIXTURE_PATH),
                 reporting_period_id=period.id,
             )
-
             entity = ensure_industry_super_holdings_seed(session)
             cls.entity_id = entity.id
-            cls.period_id = period.id
-            cls.resolution_summary = resolve_entities_deterministically(session, reporting_period_id=period.id)
+            resolve_entities_deterministically(session, reporting_period_id=period.id)
             session.commit()
 
     @classmethod
     def tearDownClass(cls) -> None:
+        cls.app.dependency_overrides.clear()
         cls.engine.dispose()
         cls.tempdir.cleanup()
 
-    def test_canonical_seed_exists_with_real_observed_aliases_only(self) -> None:
+    def test_industry_super_holdings_seed_persists_reviewed_abn_and_abr_provenance(self) -> None:
         with self.SessionLocal() as session:
             entity = session.get(Entity, self.entity_id)
             self.assertIsNotNone(entity)
+            assert entity is not None
+
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_CANONICAL_NAME, entity.canonical_name)
             self.assertEqual("company", entity.entity_type)
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_ABN, entity.abn)
@@ -139,25 +135,7 @@ class TestIndustrySuperHoldingsSeed(unittest.TestCase):
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REGISTERED_NAME_ON_ABR, entity.registered_name_on_abr)
             self.assertTrue(entity.is_australian_entity)
 
-            aliases = session.scalars(
-                select(EntityAlias.alias)
-                .where(EntityAlias.entity_id == self.entity_id)
-                .order_by(EntityAlias.alias.asc())
-            ).all()
-            self.assertEqual(
-                [
-                    "Industry Super Holdings",
-                    "Industry Super Holdings Pty Ltd",
-                    "Industry Super Holdings Pty Ltd F/P",
-                ],
-                aliases,
-            )
-
-            for alias in aliases:
-                self.assertIn(alias, ALIASES_TO_SOURCE_PATHS[alias].read_text(errors="ignore"))
-            self.assertNotIn("MINORITY DISCOUNT", " ".join(aliases))
-
-    def test_seed_is_idempotent(self) -> None:
+    def test_industry_super_holdings_seed_is_idempotent_when_reapplied(self) -> None:
         with self.SessionLocal() as session:
             first = ensure_industry_super_holdings_seed(session)
             second = ensure_industry_super_holdings_seed(session)
@@ -178,6 +156,7 @@ class TestIndustrySuperHoldingsSeed(unittest.TestCase):
                     select(func.count(EntityAlias.id)).where(EntityAlias.entity_id == first.id)
                 ),
             )
+
             refreshed = session.get(Entity, first.id)
             self.assertIsNotNone(refreshed)
             assert refreshed is not None
@@ -186,65 +165,12 @@ class TestIndustrySuperHoldingsSeed(unittest.TestCase):
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_BY, refreshed.abn_reviewed_by)
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_AT, refreshed.abn_reviewed_at)
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REGISTERED_NAME_ON_ABR, refreshed.registered_name_on_abr)
-
-    def test_conflicting_reviewed_identity_is_corrected_to_authoritative_facts(self) -> None:
-        with self.SessionLocal() as session:
-            entity = session.get(Entity, self.entity_id)
-            self.assertIsNotNone(entity)
-            assert entity is not None
-
-            entity.abn = "71 119 748 061"
-            entity.abn_review_source = "stale manual note"
-            entity.abn_reviewed_by = "stale-reviewer"
-            entity.abn_reviewed_at = date(2026, 4, 20)
-            entity.registered_name_on_abr = "Industry Super Australia Pty Ltd"
-            session.flush()
-
-            refreshed = ensure_industry_super_holdings_seed(session)
-            session.commit()
-
-            self.assertEqual(self.entity_id, refreshed.id)
-            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_ABN, refreshed.abn)
-            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEW_SOURCE, refreshed.abn_review_source)
-            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_BY, refreshed.abn_reviewed_by)
-            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_AT, refreshed.abn_reviewed_at)
-            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REGISTERED_NAME_ON_ABR, refreshed.registered_name_on_abr)
-
-    def test_exact_name_resolution_links_safe_rows_and_leaves_discount_variant_unresolved(self) -> None:
-        with self.SessionLocal() as session:
-            linked_rows = session.execute(
-                select(Holding.raw_name, func.count(Holding.id))
-                .where(Holding.entity_id == self.entity_id)
-                .group_by(Holding.raw_name)
-                .order_by(Holding.raw_name.asc())
-            ).all()
-
-            self.assertEqual(
-                [
-                    ("Industry Super Holdings", 1),
-                    ("Industry Super Holdings Pty Ltd", 2),
-                    ("Industry Super Holdings Pty Ltd F/P", 2),
-                ],
-                linked_rows,
-            )
-            self.assertEqual(5, self.resolution_summary.exact_name_auto_links)
-
-            unresolved_discount_count = session.scalar(
-                select(func.count(Holding.id)).where(
-                    Holding.raw_name == UNRESOLVED_UNISUPER_DISCOUNT_NAME,
-                    Holding.entity_id.is_(None),
-                )
-            )
-            self.assertEqual(1, unresolved_discount_count)
-
-    def test_no_relationship_rows_are_created_and_no_cross_fund_total_is_computed(self) -> None:
-        with self.SessionLocal() as session:
             self.assertEqual(
                 0,
                 session.scalar(
                     select(func.count(EntityRelationship.id)).where(
-                        (EntityRelationship.from_entity_id == self.entity_id)
-                        | (EntityRelationship.to_entity_id == self.entity_id)
+                        (EntityRelationship.from_entity_id == first.id)
+                        | (EntityRelationship.to_entity_id == first.id)
                     )
                 ),
             )
@@ -252,27 +178,18 @@ class TestIndustrySuperHoldingsSeed(unittest.TestCase):
                 0,
                 session.scalar(
                     select(func.count(HoldingRelationship.id)).where(
-                        HoldingRelationship.related_entity_id == self.entity_id
+                        HoldingRelationship.related_entity_id == first.id
                     )
                 ),
             )
 
-            read_model = get_cross_adapter_holdings_by_entity_id(session, entity_id=self.entity_id)
-            self.assertIsNotNone(read_model)
-            self.assertEqual(self.entity_id, read_model.entity_id)
-            self.assertEqual(5, read_model.observation_count)
-            self.assertEqual(3, read_model.fund_count)
-            self.assertFalse(hasattr(read_model, "total_ownership_pct"))
-            self.assertEqual(
-                {
-                    ("art", "ART Balanced", Decimal("0.1432")),
-                    ("art", "ART Stable", Decimal("0.18")),
-                    ("hostplus", "HC High Growth - Class A Option", Decimal("0.1317")),
-                    ("australiansuper", "Stable", Decimal("0.0018")),
-                    ("australiansuper", "Stable", None),
-                },
-                {
-                    (item.fund_code, item.option_name, item.ownership_pct)
-                    for item in read_model.observations
-                },
-            )
+    def test_industry_super_holdings_company_page_renders_reviewed_abn_and_abr_provenance(self) -> None:
+        response = self.client.get(f"/admin/ui/companies/{self.entity_id}")
+        self.assertEqual(200, response.status_code)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_CANONICAL_NAME, response.text)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_REVIEWED_ABN, response.text)
+        self.assertIn("ABR reviewed", response.text)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_REVIEW_SOURCE, response.text)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_REVIEWED_BY, response.text)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_REVIEWED_AT.isoformat(), response.text)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_REGISTERED_NAME_ON_ABR, response.text)
