@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 import tempfile
 import unittest
@@ -13,8 +14,16 @@ from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
 from app.entity_resolution.virtual_communities_seed import (
     VIRTUAL_COMMUNITIES_CANONICAL_NAME,
+    VIRTUAL_COMMUNITIES_LEGACY_CANONICAL_NAME,
+    VIRTUAL_COMMUNITIES_LEGACY_NOTES,
     VIRTUAL_COMMUNITIES_NOTES,
     VIRTUAL_COMMUNITIES_OBSERVED_ALIASES,
+    VIRTUAL_COMMUNITIES_REGISTERED_NAME_ON_ABR,
+    VIRTUAL_COMMUNITIES_REVIEWED_ABN,
+    VIRTUAL_COMMUNITIES_REVIEWED_AT,
+    VIRTUAL_COMMUNITIES_REVIEWED_BY,
+    VIRTUAL_COMMUNITIES_REVIEW_SOURCE,
+    VIRTUAL_COMMUNITIES_SEED_SOURCE,
     ensure_virtual_communities_seed,
 )
 from app.ingest.loader import ingest_australiansuper_local_file, ingest_hostplus_local_file
@@ -67,6 +76,30 @@ class TestVirtualCommunitiesSeed(unittest.TestCase):
                 reporting_period_id=period.id,
             )
 
+            legacy_entity = Entity(
+                entity_type="manager",
+                canonical_name=VIRTUAL_COMMUNITIES_LEGACY_CANONICAL_NAME,
+                abn=None,
+                country_code=None,
+                is_australian_entity=None,
+                confidence_tier=None,
+                notes=VIRTUAL_COMMUNITIES_LEGACY_NOTES,
+            )
+            session.add(legacy_entity)
+            session.flush()
+            session.add(
+                EntityAlias(
+                    entity_id=legacy_entity.id,
+                    alias=VIRTUAL_COMMUNITIES_LEGACY_CANONICAL_NAME,
+                    alias_normalized="virtual communities pty ltd",
+                    source_system=VIRTUAL_COMMUNITIES_SEED_SOURCE,
+                    source_file_id=None,
+                    is_preferred=True,
+                    match_confidence=Decimal("1.0"),
+                )
+            )
+            session.flush()
+
             entity = ensure_virtual_communities_seed(session)
             cls.entity_id = entity.id
             cls.period_id = period.id
@@ -78,7 +111,7 @@ class TestVirtualCommunitiesSeed(unittest.TestCase):
         cls.engine.dispose()
         cls.tempdir.cleanup()
 
-    def test_canonical_manager_seed_exists_with_exact_observed_alias_only(self) -> None:
+    def test_canonical_manager_seed_reconciles_legacy_name_to_reviewed_identity_in_place(self) -> None:
         with self.SessionLocal() as session:
             entity = session.get(Entity, self.entity_id)
             self.assertIsNotNone(entity)
@@ -86,23 +119,23 @@ class TestVirtualCommunitiesSeed(unittest.TestCase):
 
             self.assertEqual(VIRTUAL_COMMUNITIES_CANONICAL_NAME, entity.canonical_name)
             self.assertEqual("manager", entity.entity_type)
-            self.assertIsNone(entity.abn)
-            self.assertIsNone(entity.abn_review_source)
-            self.assertIsNone(entity.abn_reviewed_by)
-            self.assertIsNone(entity.abn_reviewed_at)
-            self.assertIsNone(entity.registered_name_on_abr)
-            self.assertIsNone(entity.country_code)
-            self.assertIsNone(entity.is_australian_entity)
-            self.assertIsNone(entity.confidence_tier)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_ABN, entity.abn)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEW_SOURCE, entity.abn_review_source)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_BY, entity.abn_reviewed_by)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_AT, entity.abn_reviewed_at)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REGISTERED_NAME_ON_ABR, entity.registered_name_on_abr)
+            self.assertEqual("AU", entity.country_code)
+            self.assertTrue(entity.is_australian_entity)
+            self.assertEqual("seeded", entity.confidence_tier)
             self.assertEqual(VIRTUAL_COMMUNITIES_NOTES, entity.notes)
 
-            aliases = session.scalars(
-                select(EntityAlias.alias)
+            aliases = session.execute(
+                select(EntityAlias.alias, EntityAlias.is_preferred)
                 .where(EntityAlias.entity_id == self.entity_id)
                 .order_by(EntityAlias.alias.asc())
             ).all()
             self.assertEqual(
-                [alias for alias, _is_preferred in VIRTUAL_COMMUNITIES_OBSERVED_ALIASES],
+                list(VIRTUAL_COMMUNITIES_OBSERVED_ALIASES),
                 aliases,
             )
 
@@ -130,10 +163,13 @@ class TestVirtualCommunitiesSeed(unittest.TestCase):
             refreshed = session.get(Entity, first.id)
             self.assertIsNotNone(refreshed)
             assert refreshed is not None
-            self.assertIsNone(refreshed.abn)
-            self.assertIsNone(refreshed.abn_review_source)
-            self.assertIsNone(refreshed.registered_name_on_abr)
-            self.assertIsNone(refreshed.confidence_tier)
+            self.assertEqual(VIRTUAL_COMMUNITIES_CANONICAL_NAME, refreshed.canonical_name)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_ABN, refreshed.abn)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEW_SOURCE, refreshed.abn_review_source)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_BY, refreshed.abn_reviewed_by)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_AT, refreshed.abn_reviewed_at)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REGISTERED_NAME_ON_ABR, refreshed.registered_name_on_abr)
+            self.assertEqual("seeded", refreshed.confidence_tier)
 
     def test_conflicting_entity_type_raises_instead_of_silently_widening_scope(self) -> None:
         with self.SessionLocal() as session:
@@ -147,11 +183,23 @@ class TestVirtualCommunitiesSeed(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "conflicting entity_type"):
                 ensure_virtual_communities_seed(session)
 
+    def test_conflicting_reviewed_identity_raises_in_manager_style_conflict_guard(self) -> None:
+        with self.SessionLocal() as session:
+            entity = session.get(Entity, self.entity_id)
+            self.assertIsNotNone(entity)
+            assert entity is not None
+
+            entity.abn = "55 086 385 347"
+            session.flush()
+
+            with self.assertRaisesRegex(ValueError, "conflicting reviewed ABN"):
+                ensure_virtual_communities_seed(session)
+
     def test_deterministic_resolution_links_all_current_exact_match_rows_and_reruns_idempotently(self) -> None:
         with self.SessionLocal() as session:
             rows = session.scalars(
                 select(Holding)
-                .where(Holding.raw_name == VIRTUAL_COMMUNITIES_CANONICAL_NAME)
+                .where(Holding.raw_name == VIRTUAL_COMMUNITIES_LEGACY_CANONICAL_NAME)
                 .order_by(Holding.source_file_id.asc(), Holding.source_row_number.asc())
             ).all()
 
@@ -167,18 +215,23 @@ class TestVirtualCommunitiesSeed(unittest.TestCase):
             self.assertEqual(0, second_summary.exact_name_auto_links)
             self.assertEqual(5, second_summary.holdings_skipped_prelinked)
 
-    def test_manager_detail_keeps_current_scope_behavior_explicit_and_unreviewed(self) -> None:
+    def test_manager_detail_keeps_current_scope_behavior_explicit_after_reviewed_reconciliation(self) -> None:
         with self.SessionLocal() as session:
             detail = get_manager_detail(session, entity_id=self.entity_id)
             self.assertIsNotNone(detail)
             assert detail is not None
 
-            self.assertIsNone(detail.abn)
-            self.assertIsNone(detail.abn_review_source)
-            self.assertIsNone(detail.abn_reviewed_by)
-            self.assertIsNone(detail.abn_reviewed_at)
-            self.assertIsNone(detail.registered_name_on_abr)
-            self.assertEqual("Linked", detail.entity_confidence_label)
+            self.assertEqual(VIRTUAL_COMMUNITIES_CANONICAL_NAME, detail.canonical_name)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_ABN, detail.abn)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEW_SOURCE, detail.abn_review_source)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_BY, detail.abn_reviewed_by)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REVIEWED_AT, detail.abn_reviewed_at)
+            self.assertEqual(VIRTUAL_COMMUNITIES_REGISTERED_NAME_ON_ABR, detail.registered_name_on_abr)
+            self.assertEqual(
+                ["Virtual Communities Limited", "Virtual Communities Pty Ltd"],
+                detail.aliases,
+            )
+            self.assertEqual("Reviewed", detail.entity_confidence_label)
             self.assertEqual(5, detail.observation_count)
             self.assertEqual(2, detail.fund_count)
             self.assertEqual(["manager", "ownership"], detail.role_classes)
