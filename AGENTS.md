@@ -15,9 +15,75 @@ with manager-level aggregate exposure.
 - Stage 2 acceptance remains met; Cbus onboarding is contingently deferred
   pending real sample files and is not a current blocker.
 - Stage 5 is the active implementation stage.
-- The current IFM reviewed-ABN work is accepted as a bounded Stage 5 ASIC
-  cross-reference proof slice.
-- That proof slice does **not** mean Stage 5 acceptance criterion 1 is met at
+- The current IFM reviewed-ABN work and the Virtual Communities reviewed
+  identity reconciliation are accepted as bounded Stage 5 ASIC
+  cross-reference proof slices.
+- Virtual Communities is now reconciled and reviewed at bounded proof-slice
+  scope.
+- Bentham Asset Management Pty Ltd dependency creation is complete as a bounded
+  Stage 5 proof slice.
+- Bentham Asset Management Pty Ltd now has a completed one-entity reviewed
+  identity layer on top of the earlier dependency slice.
+- The current Bentham slice stays correctly within the Stage 5 ASIC / ABR
+  boundary.
+- The accepted Wellington dependency preflight established that the fresh
+  repo-native state had no directly eligible unreviewed canonical Australian
+  private manager / company entities, and that Wellington Management Australia
+  Pty Ltd is the cleanest next direct candidate for a bounded canonical manager
+  dependency slice.
+- Wellington Management Australia Pty Ltd dependency creation is complete as a
+  bounded Stage 5 proof slice.
+- Wellington Management Australia Pty Ltd now has a completed one-entity
+  reviewed identity layer on top of the earlier dependency slice.
+- The current Wellington slice stays correctly within the Stage 5 ASIC / ABR
+  boundary.
+- The accepted Catalyst dependency preflight established that the fresh
+  repo-native state had no directly eligible unreviewed canonical Australian
+  private manager / company entities, and that Catalyst Investment Managers Pty
+  Ltd is the cleanest next direct candidate for a bounded canonical manager
+  dependency slice.
+- Catalyst Investment Managers Pty Ltd dependency creation is complete as a
+  bounded Stage 5 proof slice.
+- The current Catalyst slice correctly stops short of reviewed ABR / ASIC
+  identity enrichment.
+- Catalyst Investment Managers Pty Ltd now has a completed one-entity reviewed
+  identity layer on top of the earlier dependency slice.
+- The current Catalyst slice stays correctly within the Stage 5 ASIC / ABR
+  boundary.
+- The accepted Alphinity dependency preflight established that the fresh
+  repo-native state had no directly eligible unreviewed canonical Australian
+  private manager / company entities.
+- Alphinity Investment Management Pty Ltd is the cleanest next direct
+  candidate for a bounded canonical manager dependency slice.
+- Alphinity Investment Management Pty Ltd dependency creation is complete as a
+  bounded Stage 5 proof slice.
+- The current Alphinity slice correctly stops short of reviewed ABR / ASIC
+  identity enrichment.
+- Alphinity Investment Management Pty Ltd now has a completed one-entity
+  reviewed identity layer on top of the earlier dependency slice.
+- The current Alphinity slice stays correctly within the Stage 5 ASIC / ABR
+  boundary.
+- The fresh repo-native state has no directly eligible unreviewed canonical
+  Australian private manager / company entities left in the currently
+  renderable set.
+- Palisade Investment Partners Limited has tight manager evidence, but its
+  current ABR classification as an Australian Public Company makes it a weaker
+  fit for the next Stage 5 acceptance-criterion-1 slice.
+- Brandon Capital Partners is the cleanest next unresolved Australian private
+  candidate from the current repo-native manager evidence.
+- The correct next slice is Brandon Capital Partners canonical manager
+  dependency creation only.
+- Brandon Capital Partners dependency creation is complete as a bounded Stage 5
+  proof slice.
+- The current Brandon slice correctly stops short of reviewed ABR / ASIC
+  identity enrichment.
+- Brandon Capital Partners does not require an identity-reconciliation slice.
+- Under current repo conventions, the observed Brandon Capital Partners form
+  versus the ABR legal-form BRANDON CAPITAL PARTNERS PTY LTD wording is an
+  alias-level variant only.
+- The correct next slice is Brandon Capital Partners straight reviewed identity
+  enrichment in place.
+- Those proof slices do **not** mean Stage 5 acceptance criterion 1 is met at
   stage scope.
 - No property or infrastructure map work has started in this proof slice.
 - The first Stage 5 implementation boundary is ASIC cross-reference proof work,
