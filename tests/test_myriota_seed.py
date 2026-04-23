@@ -19,6 +19,19 @@ from app.entity_resolution.myriota_seed import (
     MYRIOTA_OBSERVED_ALIASES,
     ensure_myriota_seed,
 )
+from app.entity_resolution.private_entity_asic_company_register_cross_reference import (
+    ASIC_COMPANY_STATUS_REGISTERED,
+    ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES,
+    ASIC_REVIEWED_AT,
+    ASIC_REVIEWED_BY,
+    ASIC_REVIEW_SOURCE,
+    MYRIOTA_ABN,
+    MYRIOTA_ACN,
+    MYRIOTA_ASIC_CROSS_REFERENCE,
+    MYRIOTA_ASIC_NEXT_REVIEW_DATE,
+    MYRIOTA_ASIC_REGISTRATION_DATE,
+    ensure_myriota_asic_company_register_cross_reference,
+)
 from app.ingest.loader import ingest_hostplus_local_file
 from app.read_models import get_company_detail
 
@@ -74,6 +87,7 @@ class TestMyriotaSeed(unittest.TestCase):
             )
 
             entity = ensure_myriota_seed(session)
+            ensure_myriota_asic_company_register_cross_reference(session)
             cls.entity_id = entity.id
             cls.period_id = period.id
             cls.first_resolution_summary = resolve_entities_deterministically(session, reporting_period_id=period.id)
@@ -105,7 +119,7 @@ class TestMyriotaSeed(unittest.TestCase):
             for row in rows
         ]
 
-    def test_canonical_company_seed_exists_with_exact_observed_alias_only(self) -> None:
+    def test_canonical_company_seed_persists_asic_cross_reference_without_abr_review_layer(self) -> None:
         with self.SessionLocal() as session:
             entity = session.get(Entity, self.entity_id)
             self.assertIsNotNone(entity)
@@ -113,20 +127,20 @@ class TestMyriotaSeed(unittest.TestCase):
 
             self.assertEqual(MYRIOTA_CANONICAL_NAME, entity.canonical_name)
             self.assertEqual("company", entity.entity_type)
-            self.assertIsNone(entity.abn)
+            self.assertEqual(MYRIOTA_ABN, entity.abn)
             self.assertIsNone(entity.abn_review_source)
             self.assertIsNone(entity.registered_name_on_abr)
-            self.assertIsNone(entity.acn)
-            self.assertIsNone(entity.asic_company_status)
-            self.assertIsNone(entity.asic_company_type)
-            self.assertIsNone(entity.asic_registration_date)
-            self.assertIsNone(entity.asic_next_review_date)
-            self.assertIsNone(entity.asic_record_url)
-            self.assertIsNone(entity.asic_review_source)
-            self.assertIsNone(entity.asic_reviewed_by)
-            self.assertIsNone(entity.asic_reviewed_at)
-            self.assertIsNone(entity.country_code)
-            self.assertIsNone(entity.is_australian_entity)
+            self.assertEqual(MYRIOTA_ACN, entity.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, entity.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, entity.asic_company_type)
+            self.assertEqual(MYRIOTA_ASIC_REGISTRATION_DATE, entity.asic_registration_date)
+            self.assertEqual(MYRIOTA_ASIC_NEXT_REVIEW_DATE, entity.asic_next_review_date)
+            self.assertEqual(MYRIOTA_ASIC_CROSS_REFERENCE.record_url, entity.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, entity.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, entity.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, entity.asic_reviewed_at)
+            self.assertEqual("AU", entity.country_code)
+            self.assertTrue(entity.is_australian_entity)
             self.assertIsNone(entity.confidence_tier)
             self.assertEqual(MYRIOTA_NOTES, entity.notes)
 
@@ -144,10 +158,12 @@ class TestMyriotaSeed(unittest.TestCase):
             for alias in aliases:
                 self.assertIn(alias, fixture_text)
 
-    def test_seed_is_idempotent_and_does_not_populate_reviewed_identity_or_asic_fields(self) -> None:
+    def test_seed_is_idempotent_and_reapplies_only_myriota_asic_fields(self) -> None:
         with self.SessionLocal() as session:
             first = ensure_myriota_seed(session)
             second = ensure_myriota_seed(session)
+            ensure_myriota_asic_company_register_cross_reference(session)
+            ensure_myriota_asic_company_register_cross_reference(session)
             session.commit()
 
             self.assertEqual(first.id, second.id)
@@ -167,13 +183,16 @@ class TestMyriotaSeed(unittest.TestCase):
             entity = session.get(Entity, first.id)
             self.assertIsNotNone(entity)
             assert entity is not None
-            self.assertIsNone(entity.abn)
-            self.assertIsNone(entity.acn)
-            self.assertIsNone(entity.asic_review_source)
-            self.assertIsNone(entity.asic_reviewed_at)
+            self.assertEqual(MYRIOTA_ABN, entity.abn)
+            self.assertIsNone(entity.abn_review_source)
+            self.assertIsNone(entity.registered_name_on_abr)
+            self.assertEqual(MYRIOTA_ACN, entity.acn)
+            self.assertEqual(MYRIOTA_ASIC_CROSS_REFERENCE.record_url, entity.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, entity.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_AT, entity.asic_reviewed_at)
             self.assertIsNone(entity.confidence_tier)
 
-    def test_exact_name_resolution_links_myriota_and_company_detail_stays_dependency_only(self) -> None:
+    def test_exact_name_resolution_links_myriota_and_company_detail_stays_honest_with_asic_only_slice(self) -> None:
         with self.SessionLocal() as session:
             rows = session.scalars(
                 select(Holding)
@@ -208,17 +227,18 @@ class TestMyriotaSeed(unittest.TestCase):
             self.assertEqual(date(2025, 12, 31), detail.latest_reporting_period)
             self.assertTrue(detail.history_is_limited)
             self.assertEqual("Linked", detail.entity_confidence_label)
-            self.assertIsNone(detail.abn)
+            self.assertEqual(MYRIOTA_ABN, detail.abn)
+            self.assertIsNone(detail.abn_review_source)
             self.assertIsNone(detail.registered_name_on_abr)
-            self.assertIsNone(detail.acn)
-            self.assertIsNone(detail.asic_company_status)
-            self.assertIsNone(detail.asic_company_type)
-            self.assertIsNone(detail.asic_registration_date)
-            self.assertIsNone(detail.asic_next_review_date)
-            self.assertIsNone(detail.asic_record_url)
-            self.assertIsNone(detail.asic_review_source)
-            self.assertIsNone(detail.asic_reviewed_by)
-            self.assertIsNone(detail.asic_reviewed_at)
+            self.assertEqual(MYRIOTA_ACN, detail.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, detail.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, detail.asic_company_type)
+            self.assertEqual(MYRIOTA_ASIC_REGISTRATION_DATE, detail.asic_registration_date)
+            self.assertEqual(MYRIOTA_ASIC_NEXT_REVIEW_DATE, detail.asic_next_review_date)
+            self.assertEqual(MYRIOTA_ASIC_CROSS_REFERENCE.record_url, detail.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, detail.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, detail.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, detail.asic_reviewed_at)
 
             self.assertEqual(1, len(detail.observations))
             observation = detail.observations[0]

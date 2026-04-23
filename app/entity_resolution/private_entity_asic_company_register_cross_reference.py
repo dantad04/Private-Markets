@@ -49,6 +49,10 @@ from app.entity_resolution.industry_super_holdings_seed import (
     INDUSTRY_SUPER_HOLDINGS_REVIEWED_ABN,
     ensure_industry_super_holdings_seed,
 )
+from app.entity_resolution.myriota_seed import (
+    MYRIOTA_CANONICAL_NAME,
+    ensure_myriota_seed,
+)
 from app.entity_resolution.roc_capital_seed import (
     ROC_CAPITAL_CANONICAL_NAME,
     ROC_CAPITAL_REGISTERED_NAME_ON_ABR,
@@ -125,13 +129,18 @@ BGH_CAPITAL_ACN = "617 386 982"
 BGH_CAPITAL_ASIC_REGISTRATION_DATE = date(2017, 2, 14)
 BGH_CAPITAL_ASIC_NEXT_REVIEW_DATE = date(2027, 2, 14)
 
+MYRIOTA_ABN = "65 609 161 373"
+MYRIOTA_ACN = "609 161 373"
+MYRIOTA_ASIC_REGISTRATION_DATE = date(2015, 11, 6)
+MYRIOTA_ASIC_NEXT_REVIEW_DATE = date(2026, 11, 6)
+
 
 @dataclass(frozen=True)
 class AsicCompanyRegisterCrossReference:
     canonical_name: str
     entity_type: str
     reviewed_abn: str
-    registered_name: str
+    registered_name: str | None
     acn: str
     registration_date: date
     next_review_date: date
@@ -254,6 +263,16 @@ BGH_CAPITAL_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
     next_review_date=BGH_CAPITAL_ASIC_NEXT_REVIEW_DATE,
 )
 
+MYRIOTA_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=MYRIOTA_CANONICAL_NAME,
+    entity_type="company",
+    reviewed_abn=MYRIOTA_ABN,
+    registered_name=None,
+    acn=MYRIOTA_ACN,
+    registration_date=MYRIOTA_ASIC_REGISTRATION_DATE,
+    next_review_date=MYRIOTA_ASIC_NEXT_REVIEW_DATE,
+)
+
 
 def ensure_private_entity_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
     ensure_brandon_capital_partners_seed(session)
@@ -303,6 +322,12 @@ def ensure_bgh_capital_asic_company_register_cross_reference_subset(session) -> 
     ensure_bgh_capital_seed(session)
 
     return (ensure_bgh_capital_asic_company_register_cross_reference(session),)
+
+
+def ensure_myriota_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_myriota_seed(session)
+
+    return (ensure_myriota_asic_company_register_cross_reference(session),)
 
 
 def ensure_brandon_capital_partners_asic_company_register_cross_reference(session) -> Entity:
@@ -382,6 +407,13 @@ def ensure_bgh_capital_asic_company_register_cross_reference(session) -> Entity:
     )
 
 
+def ensure_myriota_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=MYRIOTA_ASIC_CROSS_REFERENCE,
+    )
+
+
 def _ensure_entity_asic_company_register_cross_reference(
     session,
     *,
@@ -406,7 +438,10 @@ def _ensure_entity_asic_company_register_cross_reference(
             f"Canonical entity {cross_reference.canonical_name!r} already has a conflicting reviewed ABN "
             f"({entity.abn!r}); expected {cross_reference.reviewed_abn!r}"
         )
-    if entity.registered_name_on_abr not in {None, cross_reference.registered_name}:
+    if cross_reference.registered_name is not None and entity.registered_name_on_abr not in {
+        None,
+        cross_reference.registered_name,
+    }:
         raise ValueError(
             f"Canonical entity {cross_reference.canonical_name!r} already has conflicting registered-name "
             f"provenance ({entity.registered_name_on_abr!r}); expected {cross_reference.registered_name!r}"
@@ -417,6 +452,7 @@ def _ensure_entity_asic_company_register_cross_reference(
             "company registration"
         )
 
+    _ensure_matching_or_fill(entity=entity, attribute_name="abn", expected_value=cross_reference.reviewed_abn)
     _ensure_matching_or_fill(entity=entity, attribute_name="acn", expected_value=cross_reference.acn)
     _ensure_matching_or_fill(
         entity=entity,
