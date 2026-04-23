@@ -15,7 +15,13 @@ from app.entity_resolution.blackbird_ventures_seed import (
     BLACKBIRD_VENTURES_ALIASES,
     BLACKBIRD_VENTURES_CANONICAL_NAME,
     BLACKBIRD_VENTURES_CURRENT_LEGAL_ALIAS,
+    BLACKBIRD_VENTURES_OBSERVED_LEGAL_ALIAS,
     BLACKBIRD_VENTURES_NOTES,
+    BLACKBIRD_VENTURES_REGISTERED_NAME_ON_ABR,
+    BLACKBIRD_VENTURES_REVIEWED_ABN,
+    BLACKBIRD_VENTURES_REVIEWED_AT,
+    BLACKBIRD_VENTURES_REVIEWED_BY,
+    BLACKBIRD_VENTURES_REVIEW_SOURCE,
     ensure_blackbird_ventures_seed,
 )
 from app.entity_resolution.deterministic import resolve_entities_deterministically
@@ -30,7 +36,7 @@ AUSTRALIANSUPER_CONSERVATIVE_FIXTURE_PATH = Path(
 HOSTPLUS_FIXTURE_PATH = Path("tests/fixtures/hostplus_real_extract.csv").resolve()
 BLACKBIRD_VENTURES_OBSERVED_NAMES = (
     BLACKBIRD_VENTURES_CANONICAL_NAME,
-    BLACKBIRD_VENTURES_CURRENT_LEGAL_ALIAS,
+    BLACKBIRD_VENTURES_OBSERVED_LEGAL_ALIAS,
 )
 BLACKBIRD_VENTURES_FUND_VEHICLE_NAME = "Den - Blackbird Ventures 2022 Core Fund"
 
@@ -134,7 +140,7 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
             for row in rows
         ]
 
-    def test_canonical_manager_seed_persists_dependency_only_shape_and_is_idempotent(self) -> None:
+    def test_canonical_manager_seed_persists_reviewed_identity_in_place_and_is_idempotent(self) -> None:
         with self.SessionLocal() as session:
             first = ensure_blackbird_ventures_seed(session)
             second = ensure_blackbird_ventures_seed(session)
@@ -161,14 +167,14 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
             assert entity is not None
             self.assertEqual(BLACKBIRD_VENTURES_CANONICAL_NAME, entity.canonical_name)
             self.assertEqual("manager", entity.entity_type)
-            self.assertIsNone(entity.abn)
-            self.assertIsNone(entity.abn_review_source)
-            self.assertIsNone(entity.abn_reviewed_by)
-            self.assertIsNone(entity.abn_reviewed_at)
-            self.assertIsNone(entity.registered_name_on_abr)
-            self.assertIsNone(entity.country_code)
-            self.assertIsNone(entity.is_australian_entity)
-            self.assertIsNone(entity.confidence_tier)
+            self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_ABN, entity.abn)
+            self.assertEqual(BLACKBIRD_VENTURES_REVIEW_SOURCE, entity.abn_review_source)
+            self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_BY, entity.abn_reviewed_by)
+            self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_AT, entity.abn_reviewed_at)
+            self.assertEqual(BLACKBIRD_VENTURES_REGISTERED_NAME_ON_ABR, entity.registered_name_on_abr)
+            self.assertEqual("AU", entity.country_code)
+            self.assertTrue(entity.is_australian_entity)
+            self.assertEqual("seeded", entity.confidence_tier)
             self.assertEqual(BLACKBIRD_VENTURES_NOTES, entity.notes)
 
             aliases = session.scalars(
@@ -214,21 +220,24 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
             self.assertEqual(0, second_summary.exact_name_auto_links)
             self.assertEqual(5, second_summary.holdings_skipped_prelinked)
 
-    def test_manager_detail_renders_linked_blackbird_rows_without_reviewed_identity_fields(self) -> None:
+    def test_manager_detail_renders_reviewed_identity_layer_and_keeps_fund_vehicle_rows_outside_boundary(
+        self,
+    ) -> None:
         with self.SessionLocal() as session:
             detail = get_manager_detail(session, entity_id=self.entity_id)
             self.assertIsNotNone(detail)
             assert detail is not None
 
             self.assertEqual(BLACKBIRD_VENTURES_CANONICAL_NAME, detail.canonical_name)
-            self.assertIsNone(detail.abn)
-            self.assertIsNone(detail.abn_review_source)
-            self.assertIsNone(detail.abn_reviewed_by)
-            self.assertIsNone(detail.abn_reviewed_at)
-            self.assertIsNone(detail.registered_name_on_abr)
+            self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_ABN, detail.abn)
+            self.assertEqual(BLACKBIRD_VENTURES_REVIEW_SOURCE, detail.abn_review_source)
+            self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_BY, detail.abn_reviewed_by)
+            self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_AT, detail.abn_reviewed_at)
+            self.assertEqual(BLACKBIRD_VENTURES_REGISTERED_NAME_ON_ABR, detail.registered_name_on_abr)
             self.assertEqual(
                 [
                     BLACKBIRD_VENTURES_CANONICAL_NAME,
+                    BLACKBIRD_VENTURES_OBSERVED_LEGAL_ALIAS,
                     BLACKBIRD_VENTURES_CURRENT_LEGAL_ALIAS,
                 ],
                 detail.aliases,
@@ -236,11 +245,11 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
             self.assertEqual(
                 [
                     BLACKBIRD_VENTURES_CANONICAL_NAME,
-                    BLACKBIRD_VENTURES_CURRENT_LEGAL_ALIAS,
+                    BLACKBIRD_VENTURES_OBSERVED_LEGAL_ALIAS,
                 ],
                 detail.matched_raw_names,
             )
-            self.assertEqual("Linked", detail.entity_confidence_label)
+            self.assertEqual("Reviewed", detail.entity_confidence_label)
             self.assertEqual(5, detail.observation_count)
             self.assertEqual(2, detail.fund_count)
             self.assertEqual(["manager"], detail.role_classes)
@@ -283,3 +292,11 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
                 },
                 supplemental_rows,
             )
+
+            fund_vehicle_rows = session.scalars(
+                select(Holding)
+                .where(Holding.raw_name == BLACKBIRD_VENTURES_FUND_VEHICLE_NAME)
+                .order_by(Holding.source_file_id.asc(), Holding.source_row_number.asc())
+            ).all()
+            self.assertEqual(2, len(fund_vehicle_rows))
+            self.assertTrue(all(holding.entity_id is None for holding in fund_vehicle_rows))
