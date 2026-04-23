@@ -232,6 +232,15 @@ class ManagerDetailReadModel:
     abn_reviewed_by: str | None
     abn_reviewed_at: date | None
     registered_name_on_abr: str | None
+    acn: str | None
+    asic_company_status: str | None
+    asic_company_type: str | None
+    asic_registration_date: date | None
+    asic_next_review_date: date | None
+    asic_record_url: str | None
+    asic_review_source: str | None
+    asic_reviewed_by: str | None
+    asic_reviewed_at: date | None
     aliases: list[str]
     matched_raw_names: list[str]
     asset_classes: list[str]
@@ -290,6 +299,15 @@ class CompanyDetailReadModel:
     abn_reviewed_by: str | None
     abn_reviewed_at: date | None
     registered_name_on_abr: str | None
+    acn: str | None
+    asic_company_status: str | None
+    asic_company_type: str | None
+    asic_registration_date: date | None
+    asic_next_review_date: date | None
+    asic_record_url: str | None
+    asic_review_source: str | None
+    asic_reviewed_by: str | None
+    asic_reviewed_at: date | None
     aliases: list[str]
     matched_raw_names: list[str]
     asset_classes: list[str]
@@ -1642,6 +1660,15 @@ def get_manager_detail(
         abn_reviewed_by=entity.abn_reviewed_by,
         abn_reviewed_at=entity.abn_reviewed_at,
         registered_name_on_abr=entity.registered_name_on_abr,
+        acn=entity.acn,
+        asic_company_status=entity.asic_company_status,
+        asic_company_type=entity.asic_company_type,
+        asic_registration_date=entity.asic_registration_date,
+        asic_next_review_date=entity.asic_next_review_date,
+        asic_record_url=entity.asic_record_url,
+        asic_review_source=entity.asic_review_source,
+        asic_reviewed_by=entity.asic_reviewed_by,
+        asic_reviewed_at=entity.asic_reviewed_at,
         aliases=aliases,
         matched_raw_names=sorted({observation.raw_name for observation in observations}),
         asset_classes=sorted({observation.canonical_asset_class_code for observation in observations}),
@@ -1818,6 +1845,15 @@ def get_company_detail(
         abn_reviewed_by=entity.abn_reviewed_by,
         abn_reviewed_at=entity.abn_reviewed_at,
         registered_name_on_abr=entity.registered_name_on_abr,
+        acn=entity.acn,
+        asic_company_status=entity.asic_company_status,
+        asic_company_type=entity.asic_company_type,
+        asic_registration_date=entity.asic_registration_date,
+        asic_next_review_date=entity.asic_next_review_date,
+        asic_record_url=entity.asic_record_url,
+        asic_review_source=entity.asic_review_source,
+        asic_reviewed_by=entity.asic_reviewed_by,
+        asic_reviewed_at=entity.asic_reviewed_at,
         aliases=aliases,
         matched_raw_names=sorted({observation.raw_name for observation in observations}),
         asset_classes=sorted({observation.canonical_asset_class_code for observation in observations}),

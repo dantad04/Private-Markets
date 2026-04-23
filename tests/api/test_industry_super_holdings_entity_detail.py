@@ -24,6 +24,18 @@ from app.entity_resolution.industry_super_holdings_seed import (
     INDUSTRY_SUPER_HOLDINGS_REVIEWED_BY,
     ensure_industry_super_holdings_seed,
 )
+from app.entity_resolution.private_entity_asic_company_register_cross_reference import (
+    ASIC_COMPANY_STATUS_REGISTERED,
+    ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES,
+    ASIC_REVIEWED_AT,
+    ASIC_REVIEWED_BY,
+    ASIC_REVIEW_SOURCE,
+    INDUSTRY_SUPER_HOLDINGS_ACN,
+    INDUSTRY_SUPER_HOLDINGS_ASIC_CROSS_REFERENCE,
+    INDUSTRY_SUPER_HOLDINGS_ASIC_NEXT_REVIEW_DATE,
+    INDUSTRY_SUPER_HOLDINGS_ASIC_REGISTRATION_DATE,
+    ensure_industry_super_holdings_asic_company_register_cross_reference,
+)
 from app.ingest.loader import (
     ingest_art_qsuper_local_file,
     ingest_art_sunsuper_local_file,
@@ -110,6 +122,7 @@ class TestIndustrySuperHoldingsEntityDetailApi(unittest.TestCase):
                 reporting_period_id=period.id,
             )
             entity = ensure_industry_super_holdings_seed(session)
+            ensure_industry_super_holdings_asic_company_register_cross_reference(session)
             cls.entity_id = entity.id
             resolve_entities_deterministically(session, reporting_period_id=period.id)
             session.commit()
@@ -133,12 +146,23 @@ class TestIndustrySuperHoldingsEntityDetailApi(unittest.TestCase):
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_BY, entity.abn_reviewed_by)
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_AT, entity.abn_reviewed_at)
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REGISTERED_NAME_ON_ABR, entity.registered_name_on_abr)
+            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_ACN, entity.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, entity.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, entity.asic_company_type)
+            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_ASIC_REGISTRATION_DATE, entity.asic_registration_date)
+            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_ASIC_NEXT_REVIEW_DATE, entity.asic_next_review_date)
+            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_ASIC_CROSS_REFERENCE.record_url, entity.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, entity.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, entity.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, entity.asic_reviewed_at)
             self.assertTrue(entity.is_australian_entity)
 
     def test_industry_super_holdings_seed_is_idempotent_when_reapplied(self) -> None:
         with self.SessionLocal() as session:
             first = ensure_industry_super_holdings_seed(session)
             second = ensure_industry_super_holdings_seed(session)
+            ensure_industry_super_holdings_asic_company_register_cross_reference(session)
+            ensure_industry_super_holdings_asic_company_register_cross_reference(session)
             session.commit()
 
             self.assertEqual(first.id, second.id)
@@ -165,6 +189,15 @@ class TestIndustrySuperHoldingsEntityDetailApi(unittest.TestCase):
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_BY, refreshed.abn_reviewed_by)
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REVIEWED_AT, refreshed.abn_reviewed_at)
             self.assertEqual(INDUSTRY_SUPER_HOLDINGS_REGISTERED_NAME_ON_ABR, refreshed.registered_name_on_abr)
+            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_ACN, refreshed.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, refreshed.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, refreshed.asic_company_type)
+            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_ASIC_REGISTRATION_DATE, refreshed.asic_registration_date)
+            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_ASIC_NEXT_REVIEW_DATE, refreshed.asic_next_review_date)
+            self.assertEqual(INDUSTRY_SUPER_HOLDINGS_ASIC_CROSS_REFERENCE.record_url, refreshed.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, refreshed.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, refreshed.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, refreshed.asic_reviewed_at)
             self.assertEqual(
                 0,
                 session.scalar(
@@ -183,7 +216,7 @@ class TestIndustrySuperHoldingsEntityDetailApi(unittest.TestCase):
                 ),
             )
 
-    def test_industry_super_holdings_company_page_renders_reviewed_abn_and_abr_provenance(self) -> None:
+    def test_industry_super_holdings_company_page_renders_reviewed_abn_abr_and_asic_provenance(self) -> None:
         response = self.client.get(f"/admin/ui/companies/{self.entity_id}")
         self.assertEqual(200, response.status_code)
         self.assertIn(INDUSTRY_SUPER_HOLDINGS_CANONICAL_NAME, response.text)
@@ -193,3 +226,14 @@ class TestIndustrySuperHoldingsEntityDetailApi(unittest.TestCase):
         self.assertIn(INDUSTRY_SUPER_HOLDINGS_REVIEWED_BY, response.text)
         self.assertIn(INDUSTRY_SUPER_HOLDINGS_REVIEWED_AT.isoformat(), response.text)
         self.assertIn(INDUSTRY_SUPER_HOLDINGS_REGISTERED_NAME_ON_ABR, response.text)
+        self.assertIn("ASIC cross-reference", response.text)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_ACN, response.text)
+        self.assertIn(ASIC_COMPANY_STATUS_REGISTERED, response.text)
+        self.assertIn(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, response.text)
+        self.assertIn(ASIC_REVIEW_SOURCE, response.text)
+        self.assertIn(ASIC_REVIEWED_BY, response.text)
+        self.assertIn(ASIC_REVIEWED_AT.isoformat(), response.text)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_ASIC_REGISTRATION_DATE.isoformat(), response.text)
+        self.assertIn(INDUSTRY_SUPER_HOLDINGS_ASIC_NEXT_REVIEW_DATE.isoformat(), response.text)
+        self.assertIn("ASIC company record", response.text)
+        self.assertIn("searchText=119748060", response.text)

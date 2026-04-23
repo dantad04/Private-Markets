@@ -14,6 +14,18 @@ from app.api.app import create_app
 from app.db.models import Base, Entity, EntityAlias, EntityRelationship, HoldingRelationship, ReportingPeriod
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
+from app.entity_resolution.ifm_asic_company_register_cross_reference import (
+    IFM_ACN,
+    IFM_ASIC_COMPANY_STATUS,
+    IFM_ASIC_COMPANY_TYPE,
+    IFM_ASIC_NEXT_REVIEW_DATE,
+    IFM_ASIC_RECORD_URL,
+    IFM_ASIC_REGISTRATION_DATE,
+    IFM_ASIC_REVIEWED_AT,
+    IFM_ASIC_REVIEWED_BY,
+    IFM_ASIC_REVIEW_SOURCE,
+    ensure_ifm_asic_company_register_cross_reference,
+)
 from app.entity_resolution.ifm_seed import (
     IFM_CANONICAL_NAME,
     IFM_REGISTERED_NAME_ON_ABR,
@@ -100,6 +112,7 @@ class TestIfmEntityDetailApi(unittest.TestCase):
                 reporting_period_id=period.id,
             )
             ifm_entity = ensure_ifm_seed(session)
+            ensure_ifm_asic_company_register_cross_reference(session)
             cls.ifm_entity_id = ifm_entity.id
             cls.period_id = period.id
             cls.resolver_summary = resolve_entities_deterministically(session, reporting_period_id=period.id)
@@ -122,12 +135,23 @@ class TestIfmEntityDetailApi(unittest.TestCase):
             self.assertEqual(IFM_REVIEWED_BY, entity.abn_reviewed_by)
             self.assertEqual(IFM_REVIEWED_AT, entity.abn_reviewed_at)
             self.assertEqual(IFM_REGISTERED_NAME_ON_ABR, entity.registered_name_on_abr)
+            self.assertEqual(IFM_ACN, entity.acn)
+            self.assertEqual(IFM_ASIC_COMPANY_STATUS, entity.asic_company_status)
+            self.assertEqual(IFM_ASIC_COMPANY_TYPE, entity.asic_company_type)
+            self.assertEqual(IFM_ASIC_REGISTRATION_DATE, entity.asic_registration_date)
+            self.assertEqual(IFM_ASIC_NEXT_REVIEW_DATE, entity.asic_next_review_date)
+            self.assertEqual(IFM_ASIC_RECORD_URL, entity.asic_record_url)
+            self.assertEqual(IFM_ASIC_REVIEW_SOURCE, entity.asic_review_source)
+            self.assertEqual(IFM_ASIC_REVIEWED_BY, entity.asic_reviewed_by)
+            self.assertEqual(IFM_ASIC_REVIEWED_AT, entity.asic_reviewed_at)
             self.assertTrue(entity.is_australian_entity)
 
     def test_ifm_seed_is_idempotent_when_reapplied(self) -> None:
         with self.SessionLocal() as session:
             first = ensure_ifm_seed(session)
             second = ensure_ifm_seed(session)
+            ensure_ifm_asic_company_register_cross_reference(session)
+            ensure_ifm_asic_company_register_cross_reference(session)
             session.commit()
 
             self.assertEqual(first.id, second.id)
@@ -141,6 +165,15 @@ class TestIfmEntityDetailApi(unittest.TestCase):
             self.assertEqual(IFM_REVIEWED_BY, refreshed.abn_reviewed_by)
             self.assertEqual(IFM_REVIEWED_AT, refreshed.abn_reviewed_at)
             self.assertEqual(IFM_REGISTERED_NAME_ON_ABR, refreshed.registered_name_on_abr)
+            self.assertEqual(IFM_ACN, refreshed.acn)
+            self.assertEqual(IFM_ASIC_COMPANY_STATUS, refreshed.asic_company_status)
+            self.assertEqual(IFM_ASIC_COMPANY_TYPE, refreshed.asic_company_type)
+            self.assertEqual(IFM_ASIC_REGISTRATION_DATE, refreshed.asic_registration_date)
+            self.assertEqual(IFM_ASIC_NEXT_REVIEW_DATE, refreshed.asic_next_review_date)
+            self.assertEqual(IFM_ASIC_RECORD_URL, refreshed.asic_record_url)
+            self.assertEqual(IFM_ASIC_REVIEW_SOURCE, refreshed.asic_review_source)
+            self.assertEqual(IFM_ASIC_REVIEWED_BY, refreshed.asic_reviewed_by)
+            self.assertEqual(IFM_ASIC_REVIEWED_AT, refreshed.asic_reviewed_at)
             self.assertEqual(
                 0,
                 session.scalar(
@@ -243,6 +276,18 @@ class TestIfmEntityDetailApi(unittest.TestCase):
         self.assertIn("dan", response.text)
         self.assertIn(IFM_REVIEWED_AT.isoformat(), response.text)
         self.assertIn(IFM_REGISTERED_NAME_ON_ABR, response.text)
+        self.assertIn("ASIC cross-reference", response.text)
+        self.assertIn("ASIC linked", response.text)
+        self.assertIn(IFM_ACN, response.text)
+        self.assertIn(IFM_ASIC_COMPANY_STATUS, response.text)
+        self.assertIn(IFM_ASIC_COMPANY_TYPE, response.text)
+        self.assertIn(IFM_ASIC_REVIEW_SOURCE, response.text)
+        self.assertIn(IFM_ASIC_REVIEWED_BY, response.text)
+        self.assertIn(IFM_ASIC_REVIEWED_AT.isoformat(), response.text)
+        self.assertIn(IFM_ASIC_REGISTRATION_DATE.isoformat(), response.text)
+        self.assertIn(IFM_ASIC_NEXT_REVIEW_DATE.isoformat(), response.text)
+        self.assertIn("ASIC company record", response.text)
+        self.assertIn("searchText=107247727", response.text)
 
     def test_ifm_company_page_remains_unavailable_for_manager_entity(self) -> None:
         response = self.client.get(f"/admin/ui/companies/{self.ifm_entity_id}")

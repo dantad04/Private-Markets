@@ -12,9 +12,9 @@ from app.db.models import Base, Entity, EntityAlias, Holding, ReportingPeriod
 from app.db.session import get_engine
 from app.entity_resolution.catalyst_investment_managers_seed import (
     CATALYST_INVESTMENT_MANAGERS_CANONICAL_NAME,
-    CATALYST_INVESTMENT_MANAGERS_REGISTERED_NAME_ON_ABR,
-    CATALYST_INVESTMENT_MANAGERS_NOTES,
     CATALYST_INVESTMENT_MANAGERS_ALIASES,
+    CATALYST_INVESTMENT_MANAGERS_NOTES,
+    CATALYST_INVESTMENT_MANAGERS_REGISTERED_NAME_ON_ABR,
     CATALYST_INVESTMENT_MANAGERS_REVIEWED_ABN,
     CATALYST_INVESTMENT_MANAGERS_REVIEWED_AT,
     CATALYST_INVESTMENT_MANAGERS_REVIEWED_BY,
@@ -22,6 +22,18 @@ from app.entity_resolution.catalyst_investment_managers_seed import (
     ensure_catalyst_investment_managers_seed,
 )
 from app.entity_resolution.deterministic import resolve_entities_deterministically
+from app.entity_resolution.private_entity_asic_company_register_cross_reference import (
+    ASIC_COMPANY_STATUS_REGISTERED,
+    ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES,
+    ASIC_REVIEWED_AT,
+    ASIC_REVIEWED_BY,
+    ASIC_REVIEW_SOURCE,
+    CATALYST_INVESTMENT_MANAGERS_ACN,
+    CATALYST_INVESTMENT_MANAGERS_ASIC_CROSS_REFERENCE,
+    CATALYST_INVESTMENT_MANAGERS_ASIC_NEXT_REVIEW_DATE,
+    CATALYST_INVESTMENT_MANAGERS_ASIC_REGISTRATION_DATE,
+    ensure_catalyst_investment_managers_asic_company_register_cross_reference,
+)
 from app.ingest.loader import ingest_australiansuper_local_file
 from app.read_models import get_manager_detail
 
@@ -67,6 +79,7 @@ class TestCatalystInvestmentManagersSeed(unittest.TestCase):
             )
 
             entity = ensure_catalyst_investment_managers_seed(session)
+            ensure_catalyst_investment_managers_asic_company_register_cross_reference(session)
             cls.entity_id = entity.id
             cls.period_id = period.id
             cls.first_resolution_summary = resolve_entities_deterministically(session, reporting_period_id=period.id)
@@ -81,6 +94,8 @@ class TestCatalystInvestmentManagersSeed(unittest.TestCase):
         with self.SessionLocal() as session:
             first = ensure_catalyst_investment_managers_seed(session)
             second = ensure_catalyst_investment_managers_seed(session)
+            ensure_catalyst_investment_managers_asic_company_register_cross_reference(session)
+            ensure_catalyst_investment_managers_asic_company_register_cross_reference(session)
             session.commit()
 
             self.assertEqual(first.id, second.id)
@@ -112,6 +127,15 @@ class TestCatalystInvestmentManagersSeed(unittest.TestCase):
                 CATALYST_INVESTMENT_MANAGERS_REGISTERED_NAME_ON_ABR,
                 entity.registered_name_on_abr,
             )
+            self.assertEqual(CATALYST_INVESTMENT_MANAGERS_ACN, entity.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, entity.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, entity.asic_company_type)
+            self.assertEqual(CATALYST_INVESTMENT_MANAGERS_ASIC_REGISTRATION_DATE, entity.asic_registration_date)
+            self.assertEqual(CATALYST_INVESTMENT_MANAGERS_ASIC_NEXT_REVIEW_DATE, entity.asic_next_review_date)
+            self.assertEqual(CATALYST_INVESTMENT_MANAGERS_ASIC_CROSS_REFERENCE.record_url, entity.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, entity.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, entity.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, entity.asic_reviewed_at)
             self.assertEqual("AU", entity.country_code)
             self.assertTrue(entity.is_australian_entity)
             self.assertEqual("seeded", entity.confidence_tier)
@@ -162,6 +186,15 @@ class TestCatalystInvestmentManagersSeed(unittest.TestCase):
                 CATALYST_INVESTMENT_MANAGERS_REGISTERED_NAME_ON_ABR,
                 detail.registered_name_on_abr,
             )
+            self.assertEqual(CATALYST_INVESTMENT_MANAGERS_ACN, detail.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, detail.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, detail.asic_company_type)
+            self.assertEqual(CATALYST_INVESTMENT_MANAGERS_ASIC_REGISTRATION_DATE, detail.asic_registration_date)
+            self.assertEqual(CATALYST_INVESTMENT_MANAGERS_ASIC_NEXT_REVIEW_DATE, detail.asic_next_review_date)
+            self.assertEqual(CATALYST_INVESTMENT_MANAGERS_ASIC_CROSS_REFERENCE.record_url, detail.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, detail.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, detail.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, detail.asic_reviewed_at)
             self.assertEqual(
                 [
                     CATALYST_INVESTMENT_MANAGERS_CANONICAL_NAME,

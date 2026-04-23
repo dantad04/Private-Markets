@@ -218,6 +218,36 @@
           {% if detail.registered_name_on_abr %}
           <div><dt>ABR name</dt><dd class="mono">{{ detail.registered_name_on_abr | e }}</dd></div>
           {% endif %}
+          {% if detail.acn %}
+          <div><dt>acn</dt><dd class="mono">{{ detail.acn | e }}</dd></div>
+          {% endif %}
+          {% if detail.asic_review_source and detail.asic_reviewed_by and detail.asic_reviewed_at %}
+          <div>
+            <dt>ASIC cross-reference</dt>
+            <dd>
+              <span class="badge badge--meta">ASIC linked</span>
+              {% if detail.asic_company_status or detail.asic_company_type %}
+              <div class="table-secondary">
+                {% if detail.asic_company_status %}{{ detail.asic_company_status | e }}{% endif %}
+                {% if detail.asic_company_status and detail.asic_company_type %} · {% endif %}
+                {% if detail.asic_company_type %}{{ detail.asic_company_type | e }}{% endif %}
+              </div>
+              {% endif %}
+              <div class="table-secondary">{{ detail.asic_review_source | e }}</div>
+              <div class="table-tertiary mono">{{ detail.asic_reviewed_by | e }} · {{ detail.asic_reviewed_at.isoformat() | e }}</div>
+              {% if detail.asic_registration_date or detail.asic_next_review_date %}
+              <div class="table-tertiary mono">
+                {% if detail.asic_registration_date %}registered {{ detail.asic_registration_date.isoformat() | e }}{% endif %}
+                {% if detail.asic_registration_date and detail.asic_next_review_date %} · {% endif %}
+                {% if detail.asic_next_review_date %}next review {{ detail.asic_next_review_date.isoformat() | e }}{% endif %}
+              </div>
+              {% endif %}
+              {% if detail.asic_record_url %}
+              <div class="table-tertiary"><a href="{{ detail.asic_record_url | e }}" target="_blank" rel="noreferrer">ASIC company record</a></div>
+              {% endif %}
+            </dd>
+          </div>
+          {% endif %}
           <div><dt>latest period</dt><dd class="mono">{{ (detail.latest_reporting_period.isoformat() if detail.latest_reporting_period else "—") | e }}</dd></div>
           <div><dt>confidence</dt><dd><span class="badge badge--confidence" title="{{ detail.entity_confidence_detail | e }}">{{ detail.entity_confidence_label | e }}</span></dd></div>
         </dl>
