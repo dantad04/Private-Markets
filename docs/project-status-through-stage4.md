@@ -1,6 +1,6 @@
 # Project Status Through Stage 4
 
-Date: 2026-04-22
+Date: 2026-04-23
 
 Implementation status update:
 
@@ -73,6 +73,25 @@ Implementation status update:
   proof slice.
 - The current Brandon slice correctly stops short of reviewed ABR / ASIC
   identity enrichment.
+- Stafford Capital Partners dependency creation is accepted as a dependency-only
+  preparatory Stage 5 slice.
+- The Stafford dependency slice is not counted as Stage 5 acceptance criterion
+  1 progress.
+- No brief-aligned scope drift occurred in the Stafford dependency slice.
+- No property or infrastructure map work started in the Stafford dependency
+  slice.
+- No reviewed ABR / ASIC enrichment was completed in the Stafford dependency
+  slice.
+- Stafford Capital Partners reviewed identity enrichment is accepted as a
+  one-entity reviewed identity proof slice.
+- The Stafford reviewed-identity slice is still not counted as Stage 5
+  acceptance criterion 1 progress under the strict master-brief wording.
+- No brief-aligned scope drift occurred in the Stafford reviewed-identity
+  slice.
+- No property or infrastructure map work started in the Stafford reviewed-
+  identity slice.
+- No broad ASIC / ABR sweep occurred in the Stafford reviewed-identity slice.
+- No unrelated cleanup occurred in the Stafford reviewed-identity slice.
 - Brandon Capital Partners does not require an identity-reconciliation slice.
 - Under current repo conventions, the observed Brandon Capital Partners form
   versus the ABR legal-form BRANDON CAPITAL PARTNERS PTY LTD wording is an
