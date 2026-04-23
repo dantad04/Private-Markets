@@ -18,6 +18,12 @@ from app.entity_resolution.alphinity_investment_management_seed import (
     ALPHINITY_INVESTMENT_MANAGEMENT_REVIEWED_ABN,
     ensure_alphinity_investment_management_seed,
 )
+from app.entity_resolution.bgh_capital_seed import (
+    BGH_CAPITAL_CANONICAL_NAME,
+    BGH_CAPITAL_REGISTERED_NAME_ON_ABR,
+    BGH_CAPITAL_REVIEWED_ABN,
+    ensure_bgh_capital_seed,
+)
 from app.entity_resolution.bentham_asset_management_seed import (
     BENTHAM_ASSET_MANAGEMENT_CANONICAL_NAME,
     BENTHAM_ASSET_MANAGEMENT_REGISTERED_NAME_ON_ABR,
@@ -114,6 +120,10 @@ BLACKBIRD_VENTURES_ASIC_NEXT_REVIEW_DATE = date(2026, 7, 2)
 SQUARE_PEG_CAPITAL_ACN = "164 352 229"
 SQUARE_PEG_CAPITAL_ASIC_REGISTRATION_DATE = date(2013, 7, 29)
 SQUARE_PEG_CAPITAL_ASIC_NEXT_REVIEW_DATE = date(2026, 9, 28)
+
+BGH_CAPITAL_ACN = "617 386 982"
+BGH_CAPITAL_ASIC_REGISTRATION_DATE = date(2017, 2, 14)
+BGH_CAPITAL_ASIC_NEXT_REVIEW_DATE = date(2027, 2, 14)
 
 
 @dataclass(frozen=True)
@@ -234,6 +244,16 @@ SQUARE_PEG_CAPITAL_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
     next_review_date=SQUARE_PEG_CAPITAL_ASIC_NEXT_REVIEW_DATE,
 )
 
+BGH_CAPITAL_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=BGH_CAPITAL_CANONICAL_NAME,
+    entity_type="manager",
+    reviewed_abn=BGH_CAPITAL_REVIEWED_ABN,
+    registered_name=BGH_CAPITAL_REGISTERED_NAME_ON_ABR,
+    acn=BGH_CAPITAL_ACN,
+    registration_date=BGH_CAPITAL_ASIC_REGISTRATION_DATE,
+    next_review_date=BGH_CAPITAL_ASIC_NEXT_REVIEW_DATE,
+)
+
 
 def ensure_private_entity_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
     ensure_brandon_capital_partners_seed(session)
@@ -277,6 +297,12 @@ def ensure_blackbird_square_peg_asic_company_register_cross_reference_subset(ses
         ensure_blackbird_ventures_asic_company_register_cross_reference(session),
         ensure_square_peg_capital_asic_company_register_cross_reference(session),
     )
+
+
+def ensure_bgh_capital_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_bgh_capital_seed(session)
+
+    return (ensure_bgh_capital_asic_company_register_cross_reference(session),)
 
 
 def ensure_brandon_capital_partners_asic_company_register_cross_reference(session) -> Entity:
@@ -346,6 +372,13 @@ def ensure_square_peg_capital_asic_company_register_cross_reference(session) -> 
     return _ensure_entity_asic_company_register_cross_reference(
         session,
         cross_reference=SQUARE_PEG_CAPITAL_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_bgh_capital_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=BGH_CAPITAL_ASIC_CROSS_REFERENCE,
     )
 
 
