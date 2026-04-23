@@ -71,6 +71,10 @@ from app.entity_resolution.square_peg_capital_seed import (
     SQUARE_PEG_CAPITAL_REVIEWED_ABN,
     ensure_square_peg_capital_seed,
 )
+from app.entity_resolution.vermont_aus_holdco_seed import (
+    VERMONT_AUS_HOLDCO_CANONICAL_NAME,
+    ensure_vermont_aus_holdco_seed,
+)
 from app.entity_resolution.wellington_management_australia_seed import (
     WELLINGTON_MANAGEMENT_AUSTRALIA_CANONICAL_NAME,
     WELLINGTON_MANAGEMENT_AUSTRALIA_REGISTERED_NAME_ON_ABR,
@@ -134,6 +138,12 @@ MYRIOTA_ACN = "609 161 373"
 MYRIOTA_ASIC_REGISTRATION_DATE = date(2015, 11, 6)
 MYRIOTA_ASIC_NEXT_REVIEW_DATE = date(2026, 11, 6)
 
+VERMONT_AUS_HOLDCO_ABN = "82 626 842 135"
+VERMONT_AUS_HOLDCO_ACN = "626 842 135"
+VERMONT_AUS_HOLDCO_ASIC_REGISTRATION_DATE = date(2018, 6, 15)
+VERMONT_AUS_HOLDCO_ASIC_NEXT_REVIEW_DATE = date(2026, 6, 15)
+VERMONT_AUS_HOLDCO_ASIC_REVIEWED_AT = date(2026, 4, 24)
+
 
 @dataclass(frozen=True)
 class AsicCompanyRegisterCrossReference:
@@ -144,6 +154,9 @@ class AsicCompanyRegisterCrossReference:
     acn: str
     registration_date: date
     next_review_date: date
+    review_source: str = ASIC_REVIEW_SOURCE
+    reviewed_by: str = ASIC_REVIEWED_BY
+    reviewed_at: date = ASIC_REVIEWED_AT
 
     @property
     def record_url(self) -> str:
@@ -273,6 +286,17 @@ MYRIOTA_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
     next_review_date=MYRIOTA_ASIC_NEXT_REVIEW_DATE,
 )
 
+VERMONT_AUS_HOLDCO_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=VERMONT_AUS_HOLDCO_CANONICAL_NAME,
+    entity_type="company",
+    reviewed_abn=VERMONT_AUS_HOLDCO_ABN,
+    registered_name=None,
+    acn=VERMONT_AUS_HOLDCO_ACN,
+    registration_date=VERMONT_AUS_HOLDCO_ASIC_REGISTRATION_DATE,
+    next_review_date=VERMONT_AUS_HOLDCO_ASIC_NEXT_REVIEW_DATE,
+    reviewed_at=VERMONT_AUS_HOLDCO_ASIC_REVIEWED_AT,
+)
+
 
 def ensure_private_entity_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
     ensure_brandon_capital_partners_seed(session)
@@ -328,6 +352,12 @@ def ensure_myriota_asic_company_register_cross_reference_subset(session) -> tupl
     ensure_myriota_seed(session)
 
     return (ensure_myriota_asic_company_register_cross_reference(session),)
+
+
+def ensure_vermont_aus_holdco_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_vermont_aus_holdco_seed(session)
+
+    return (ensure_vermont_aus_holdco_asic_company_register_cross_reference(session),)
 
 
 def ensure_brandon_capital_partners_asic_company_register_cross_reference(session) -> Entity:
@@ -414,6 +444,13 @@ def ensure_myriota_asic_company_register_cross_reference(session) -> Entity:
     )
 
 
+def ensure_vermont_aus_holdco_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=VERMONT_AUS_HOLDCO_ASIC_CROSS_REFERENCE,
+    )
+
+
 def _ensure_entity_asic_company_register_cross_reference(
     session,
     *,
@@ -482,17 +519,17 @@ def _ensure_entity_asic_company_register_cross_reference(
     _ensure_matching_or_fill(
         entity=entity,
         attribute_name="asic_review_source",
-        expected_value=ASIC_REVIEW_SOURCE,
+        expected_value=cross_reference.review_source,
     )
     _ensure_matching_or_fill(
         entity=entity,
         attribute_name="asic_reviewed_by",
-        expected_value=ASIC_REVIEWED_BY,
+        expected_value=cross_reference.reviewed_by,
     )
     _ensure_matching_or_fill(
         entity=entity,
         attribute_name="asic_reviewed_at",
-        expected_value=ASIC_REVIEWED_AT,
+        expected_value=cross_reference.reviewed_at,
     )
 
     if entity.country_code in {None, ""}:
