@@ -11,6 +11,18 @@ from sqlalchemy.orm import sessionmaker
 from app.db.models import Base, Entity, EntityAlias, Holding, ReportingPeriod
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
+from app.entity_resolution.private_entity_asic_company_register_cross_reference import (
+    ASIC_COMPANY_STATUS_REGISTERED,
+    ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES,
+    ASIC_REVIEWED_AT,
+    ASIC_REVIEWED_BY,
+    ASIC_REVIEW_SOURCE,
+    ROC_CAPITAL_ACN,
+    ROC_CAPITAL_ASIC_CROSS_REFERENCE,
+    ROC_CAPITAL_ASIC_NEXT_REVIEW_DATE,
+    ROC_CAPITAL_ASIC_REGISTRATION_DATE,
+    ensure_roc_capital_asic_company_register_cross_reference,
+)
 from app.entity_resolution.roc_capital_seed import (
     ROC_CAPITAL_CANONICAL_NAME,
     ROC_CAPITAL_REGISTERED_NAME_ON_ABR,
@@ -65,6 +77,7 @@ class TestRocCapitalSeed(unittest.TestCase):
             )
 
             entity = ensure_roc_capital_seed(session)
+            ensure_roc_capital_asic_company_register_cross_reference(session)
             cls.entity_id = entity.id
             cls.period_id = period.id
             cls.first_resolution_summary = resolve_entities_deterministically(session, reporting_period_id=period.id)
@@ -107,6 +120,8 @@ class TestRocCapitalSeed(unittest.TestCase):
         with self.SessionLocal() as session:
             first = ensure_roc_capital_seed(session)
             second = ensure_roc_capital_seed(session)
+            ensure_roc_capital_asic_company_register_cross_reference(session)
+            ensure_roc_capital_asic_company_register_cross_reference(session)
             session.commit()
 
             self.assertEqual(first.id, second.id)
@@ -130,6 +145,15 @@ class TestRocCapitalSeed(unittest.TestCase):
             self.assertEqual(ROC_CAPITAL_REVIEWED_BY, refreshed.abn_reviewed_by)
             self.assertEqual(ROC_CAPITAL_REVIEWED_AT, refreshed.abn_reviewed_at)
             self.assertEqual(ROC_CAPITAL_REGISTERED_NAME_ON_ABR, refreshed.registered_name_on_abr)
+            self.assertEqual(ROC_CAPITAL_ACN, refreshed.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, refreshed.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, refreshed.asic_company_type)
+            self.assertEqual(ROC_CAPITAL_ASIC_REGISTRATION_DATE, refreshed.asic_registration_date)
+            self.assertEqual(ROC_CAPITAL_ASIC_NEXT_REVIEW_DATE, refreshed.asic_next_review_date)
+            self.assertEqual(ROC_CAPITAL_ASIC_CROSS_REFERENCE.record_url, refreshed.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, refreshed.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, refreshed.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, refreshed.asic_reviewed_at)
             self.assertEqual("seeded", refreshed.confidence_tier)
 
     def test_conflicting_reviewed_identity_raises_in_manager_style_conflict_guard(self) -> None:
@@ -178,6 +202,15 @@ class TestRocCapitalSeed(unittest.TestCase):
             self.assertEqual(ROC_CAPITAL_REVIEWED_BY, detail.abn_reviewed_by)
             self.assertEqual(ROC_CAPITAL_REVIEWED_AT, detail.abn_reviewed_at)
             self.assertEqual(ROC_CAPITAL_REGISTERED_NAME_ON_ABR, detail.registered_name_on_abr)
+            self.assertEqual(ROC_CAPITAL_ACN, detail.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, detail.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, detail.asic_company_type)
+            self.assertEqual(ROC_CAPITAL_ASIC_REGISTRATION_DATE, detail.asic_registration_date)
+            self.assertEqual(ROC_CAPITAL_ASIC_NEXT_REVIEW_DATE, detail.asic_next_review_date)
+            self.assertEqual(ROC_CAPITAL_ASIC_CROSS_REFERENCE.record_url, detail.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, detail.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, detail.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, detail.asic_reviewed_at)
             self.assertEqual("Reviewed", detail.entity_confidence_label)
             self.assertEqual(3, detail.observation_count)
             self.assertEqual(2, detail.fund_count)

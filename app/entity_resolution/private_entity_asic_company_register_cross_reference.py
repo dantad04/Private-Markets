@@ -12,6 +12,18 @@ from app.entity_resolution.brandon_capital_partners_seed import (
     BRANDON_CAPITAL_PARTNERS_REVIEWED_ABN,
     ensure_brandon_capital_partners_seed,
 )
+from app.entity_resolution.alphinity_investment_management_seed import (
+    ALPHINITY_INVESTMENT_MANAGEMENT_CANONICAL_NAME,
+    ALPHINITY_INVESTMENT_MANAGEMENT_REGISTERED_NAME_ON_ABR,
+    ALPHINITY_INVESTMENT_MANAGEMENT_REVIEWED_ABN,
+    ensure_alphinity_investment_management_seed,
+)
+from app.entity_resolution.bentham_asset_management_seed import (
+    BENTHAM_ASSET_MANAGEMENT_CANONICAL_NAME,
+    BENTHAM_ASSET_MANAGEMENT_REGISTERED_NAME_ON_ABR,
+    BENTHAM_ASSET_MANAGEMENT_REVIEWED_ABN,
+    ensure_bentham_asset_management_seed,
+)
 from app.entity_resolution.catalyst_investment_managers_seed import (
     CATALYST_INVESTMENT_MANAGERS_CANONICAL_NAME,
     CATALYST_INVESTMENT_MANAGERS_REGISTERED_NAME_ON_ABR,
@@ -25,11 +37,23 @@ from app.entity_resolution.industry_super_holdings_seed import (
     INDUSTRY_SUPER_HOLDINGS_REVIEWED_ABN,
     ensure_industry_super_holdings_seed,
 )
+from app.entity_resolution.roc_capital_seed import (
+    ROC_CAPITAL_CANONICAL_NAME,
+    ROC_CAPITAL_REGISTERED_NAME_ON_ABR,
+    ROC_CAPITAL_REVIEWED_ABN,
+    ensure_roc_capital_seed,
+)
 from app.entity_resolution.stafford_capital_partners_seed import (
     STAFFORD_CAPITAL_PARTNERS_CANONICAL_NAME,
     STAFFORD_CAPITAL_PARTNERS_REGISTERED_NAME_ON_ABR,
     STAFFORD_CAPITAL_PARTNERS_REVIEWED_ABN,
     ensure_stafford_capital_partners_seed,
+)
+from app.entity_resolution.wellington_management_australia_seed import (
+    WELLINGTON_MANAGEMENT_AUSTRALIA_CANONICAL_NAME,
+    WELLINGTON_MANAGEMENT_AUSTRALIA_REGISTERED_NAME_ON_ABR,
+    WELLINGTON_MANAGEMENT_AUSTRALIA_REVIEWED_ABN,
+    ensure_wellington_management_australia_seed,
 )
 
 
@@ -54,6 +78,22 @@ CATALYST_INVESTMENT_MANAGERS_ASIC_NEXT_REVIEW_DATE = date(2027, 2, 17)
 INDUSTRY_SUPER_HOLDINGS_ACN = "119 748 060"
 INDUSTRY_SUPER_HOLDINGS_ASIC_REGISTRATION_DATE = date(2006, 5, 17)
 INDUSTRY_SUPER_HOLDINGS_ASIC_NEXT_REVIEW_DATE = date(2026, 5, 17)
+
+WELLINGTON_MANAGEMENT_AUSTRALIA_ACN = "167 091 090"
+WELLINGTON_MANAGEMENT_AUSTRALIA_ASIC_REGISTRATION_DATE = date(2014, 6, 3)
+WELLINGTON_MANAGEMENT_AUSTRALIA_ASIC_NEXT_REVIEW_DATE = date(2026, 6, 3)
+
+ROC_CAPITAL_ACN = "167 858 764"
+ROC_CAPITAL_ASIC_REGISTRATION_DATE = date(2014, 3, 5)
+ROC_CAPITAL_ASIC_NEXT_REVIEW_DATE = date(2027, 3, 5)
+
+ALPHINITY_INVESTMENT_MANAGEMENT_ACN = "140 833 709"
+ALPHINITY_INVESTMENT_MANAGEMENT_ASIC_REGISTRATION_DATE = date(2009, 11, 30)
+ALPHINITY_INVESTMENT_MANAGEMENT_ASIC_NEXT_REVIEW_DATE = date(2026, 11, 30)
+
+BENTHAM_ASSET_MANAGEMENT_ACN = "140 833 674"
+BENTHAM_ASSET_MANAGEMENT_ASIC_REGISTRATION_DATE = date(2009, 11, 30)
+BENTHAM_ASSET_MANAGEMENT_ASIC_NEXT_REVIEW_DATE = date(2026, 11, 30)
 
 
 @dataclass(frozen=True)
@@ -114,6 +154,46 @@ INDUSTRY_SUPER_HOLDINGS_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference
     next_review_date=INDUSTRY_SUPER_HOLDINGS_ASIC_NEXT_REVIEW_DATE,
 )
 
+WELLINGTON_MANAGEMENT_AUSTRALIA_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=WELLINGTON_MANAGEMENT_AUSTRALIA_CANONICAL_NAME,
+    entity_type="manager",
+    reviewed_abn=WELLINGTON_MANAGEMENT_AUSTRALIA_REVIEWED_ABN,
+    registered_name=WELLINGTON_MANAGEMENT_AUSTRALIA_REGISTERED_NAME_ON_ABR,
+    acn=WELLINGTON_MANAGEMENT_AUSTRALIA_ACN,
+    registration_date=WELLINGTON_MANAGEMENT_AUSTRALIA_ASIC_REGISTRATION_DATE,
+    next_review_date=WELLINGTON_MANAGEMENT_AUSTRALIA_ASIC_NEXT_REVIEW_DATE,
+)
+
+ROC_CAPITAL_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=ROC_CAPITAL_CANONICAL_NAME,
+    entity_type="manager",
+    reviewed_abn=ROC_CAPITAL_REVIEWED_ABN,
+    registered_name=ROC_CAPITAL_REGISTERED_NAME_ON_ABR,
+    acn=ROC_CAPITAL_ACN,
+    registration_date=ROC_CAPITAL_ASIC_REGISTRATION_DATE,
+    next_review_date=ROC_CAPITAL_ASIC_NEXT_REVIEW_DATE,
+)
+
+ALPHINITY_INVESTMENT_MANAGEMENT_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=ALPHINITY_INVESTMENT_MANAGEMENT_CANONICAL_NAME,
+    entity_type="manager",
+    reviewed_abn=ALPHINITY_INVESTMENT_MANAGEMENT_REVIEWED_ABN,
+    registered_name=ALPHINITY_INVESTMENT_MANAGEMENT_REGISTERED_NAME_ON_ABR,
+    acn=ALPHINITY_INVESTMENT_MANAGEMENT_ACN,
+    registration_date=ALPHINITY_INVESTMENT_MANAGEMENT_ASIC_REGISTRATION_DATE,
+    next_review_date=ALPHINITY_INVESTMENT_MANAGEMENT_ASIC_NEXT_REVIEW_DATE,
+)
+
+BENTHAM_ASSET_MANAGEMENT_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=BENTHAM_ASSET_MANAGEMENT_CANONICAL_NAME,
+    entity_type="manager",
+    reviewed_abn=BENTHAM_ASSET_MANAGEMENT_REVIEWED_ABN,
+    registered_name=BENTHAM_ASSET_MANAGEMENT_REGISTERED_NAME_ON_ABR,
+    acn=BENTHAM_ASSET_MANAGEMENT_ACN,
+    registration_date=BENTHAM_ASSET_MANAGEMENT_ASIC_REGISTRATION_DATE,
+    next_review_date=BENTHAM_ASSET_MANAGEMENT_ASIC_NEXT_REVIEW_DATE,
+)
+
 
 def ensure_private_entity_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
     ensure_brandon_capital_partners_seed(session)
@@ -126,6 +206,26 @@ def ensure_private_entity_asic_company_register_cross_reference_subset(session) 
         ensure_stafford_capital_partners_asic_company_register_cross_reference(session),
         ensure_catalyst_investment_managers_asic_company_register_cross_reference(session),
         ensure_industry_super_holdings_asic_company_register_cross_reference(session),
+    )
+
+
+def ensure_wellington_roc_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_wellington_management_australia_seed(session)
+    ensure_roc_capital_seed(session)
+
+    return (
+        ensure_wellington_management_australia_asic_company_register_cross_reference(session),
+        ensure_roc_capital_asic_company_register_cross_reference(session),
+    )
+
+
+def ensure_alphinity_bentham_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_alphinity_investment_management_seed(session)
+    ensure_bentham_asset_management_seed(session)
+
+    return (
+        ensure_alphinity_investment_management_asic_company_register_cross_reference(session),
+        ensure_bentham_asset_management_asic_company_register_cross_reference(session),
     )
 
 
@@ -154,6 +254,34 @@ def ensure_industry_super_holdings_asic_company_register_cross_reference(session
     return _ensure_entity_asic_company_register_cross_reference(
         session,
         cross_reference=INDUSTRY_SUPER_HOLDINGS_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_wellington_management_australia_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=WELLINGTON_MANAGEMENT_AUSTRALIA_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_roc_capital_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=ROC_CAPITAL_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_alphinity_investment_management_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=ALPHINITY_INVESTMENT_MANAGEMENT_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_bentham_asset_management_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=BENTHAM_ASSET_MANAGEMENT_ASIC_CROSS_REFERENCE,
     )
 
 
