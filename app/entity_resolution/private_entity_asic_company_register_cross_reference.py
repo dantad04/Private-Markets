@@ -24,6 +24,12 @@ from app.entity_resolution.bentham_asset_management_seed import (
     BENTHAM_ASSET_MANAGEMENT_REVIEWED_ABN,
     ensure_bentham_asset_management_seed,
 )
+from app.entity_resolution.blackbird_ventures_seed import (
+    BLACKBIRD_VENTURES_CANONICAL_NAME,
+    BLACKBIRD_VENTURES_REGISTERED_NAME_ON_ABR,
+    BLACKBIRD_VENTURES_REVIEWED_ABN,
+    ensure_blackbird_ventures_seed,
+)
 from app.entity_resolution.catalyst_investment_managers_seed import (
     CATALYST_INVESTMENT_MANAGERS_CANONICAL_NAME,
     CATALYST_INVESTMENT_MANAGERS_REGISTERED_NAME_ON_ABR,
@@ -48,6 +54,12 @@ from app.entity_resolution.stafford_capital_partners_seed import (
     STAFFORD_CAPITAL_PARTNERS_REGISTERED_NAME_ON_ABR,
     STAFFORD_CAPITAL_PARTNERS_REVIEWED_ABN,
     ensure_stafford_capital_partners_seed,
+)
+from app.entity_resolution.square_peg_capital_seed import (
+    SQUARE_PEG_CAPITAL_CANONICAL_NAME,
+    SQUARE_PEG_CAPITAL_REGISTERED_NAME_ON_ABR,
+    SQUARE_PEG_CAPITAL_REVIEWED_ABN,
+    ensure_square_peg_capital_seed,
 )
 from app.entity_resolution.wellington_management_australia_seed import (
     WELLINGTON_MANAGEMENT_AUSTRALIA_CANONICAL_NAME,
@@ -94,6 +106,14 @@ ALPHINITY_INVESTMENT_MANAGEMENT_ASIC_NEXT_REVIEW_DATE = date(2026, 11, 30)
 BENTHAM_ASSET_MANAGEMENT_ACN = "140 833 674"
 BENTHAM_ASSET_MANAGEMENT_ASIC_REGISTRATION_DATE = date(2009, 11, 30)
 BENTHAM_ASSET_MANAGEMENT_ASIC_NEXT_REVIEW_DATE = date(2026, 11, 30)
+
+BLACKBIRD_VENTURES_ACN = "159 044 989"
+BLACKBIRD_VENTURES_ASIC_REGISTRATION_DATE = date(2012, 6, 19)
+BLACKBIRD_VENTURES_ASIC_NEXT_REVIEW_DATE = date(2026, 7, 2)
+
+SQUARE_PEG_CAPITAL_ACN = "164 352 229"
+SQUARE_PEG_CAPITAL_ASIC_REGISTRATION_DATE = date(2013, 7, 29)
+SQUARE_PEG_CAPITAL_ASIC_NEXT_REVIEW_DATE = date(2026, 9, 28)
 
 
 @dataclass(frozen=True)
@@ -194,6 +214,26 @@ BENTHAM_ASSET_MANAGEMENT_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReferenc
     next_review_date=BENTHAM_ASSET_MANAGEMENT_ASIC_NEXT_REVIEW_DATE,
 )
 
+BLACKBIRD_VENTURES_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=BLACKBIRD_VENTURES_CANONICAL_NAME,
+    entity_type="manager",
+    reviewed_abn=BLACKBIRD_VENTURES_REVIEWED_ABN,
+    registered_name=BLACKBIRD_VENTURES_REGISTERED_NAME_ON_ABR,
+    acn=BLACKBIRD_VENTURES_ACN,
+    registration_date=BLACKBIRD_VENTURES_ASIC_REGISTRATION_DATE,
+    next_review_date=BLACKBIRD_VENTURES_ASIC_NEXT_REVIEW_DATE,
+)
+
+SQUARE_PEG_CAPITAL_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=SQUARE_PEG_CAPITAL_CANONICAL_NAME,
+    entity_type="manager",
+    reviewed_abn=SQUARE_PEG_CAPITAL_REVIEWED_ABN,
+    registered_name=SQUARE_PEG_CAPITAL_REGISTERED_NAME_ON_ABR,
+    acn=SQUARE_PEG_CAPITAL_ACN,
+    registration_date=SQUARE_PEG_CAPITAL_ASIC_REGISTRATION_DATE,
+    next_review_date=SQUARE_PEG_CAPITAL_ASIC_NEXT_REVIEW_DATE,
+)
+
 
 def ensure_private_entity_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
     ensure_brandon_capital_partners_seed(session)
@@ -226,6 +266,16 @@ def ensure_alphinity_bentham_asic_company_register_cross_reference_subset(sessio
     return (
         ensure_alphinity_investment_management_asic_company_register_cross_reference(session),
         ensure_bentham_asset_management_asic_company_register_cross_reference(session),
+    )
+
+
+def ensure_blackbird_square_peg_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_blackbird_ventures_seed(session)
+    ensure_square_peg_capital_seed(session)
+
+    return (
+        ensure_blackbird_ventures_asic_company_register_cross_reference(session),
+        ensure_square_peg_capital_asic_company_register_cross_reference(session),
     )
 
 
@@ -282,6 +332,20 @@ def ensure_bentham_asset_management_asic_company_register_cross_reference(sessio
     return _ensure_entity_asic_company_register_cross_reference(
         session,
         cross_reference=BENTHAM_ASSET_MANAGEMENT_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_blackbird_ventures_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=BLACKBIRD_VENTURES_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_square_peg_capital_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=SQUARE_PEG_CAPITAL_ASIC_CROSS_REFERENCE,
     )
 
 

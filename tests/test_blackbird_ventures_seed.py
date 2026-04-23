@@ -25,6 +25,18 @@ from app.entity_resolution.blackbird_ventures_seed import (
     ensure_blackbird_ventures_seed,
 )
 from app.entity_resolution.deterministic import resolve_entities_deterministically
+from app.entity_resolution.private_entity_asic_company_register_cross_reference import (
+    ASIC_COMPANY_STATUS_REGISTERED,
+    ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES,
+    ASIC_REVIEWED_AT,
+    ASIC_REVIEWED_BY,
+    ASIC_REVIEW_SOURCE,
+    BLACKBIRD_VENTURES_ACN,
+    BLACKBIRD_VENTURES_ASIC_CROSS_REFERENCE,
+    BLACKBIRD_VENTURES_ASIC_NEXT_REVIEW_DATE,
+    BLACKBIRD_VENTURES_ASIC_REGISTRATION_DATE,
+    ensure_blackbird_ventures_asic_company_register_cross_reference,
+)
 from app.ingest.loader import ingest_australiansuper_local_file, ingest_hostplus_local_file
 from app.read_models import get_manager_detail
 
@@ -109,6 +121,7 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
             )
 
             entity = ensure_blackbird_ventures_seed(session)
+            ensure_blackbird_ventures_asic_company_register_cross_reference(session)
             cls.entity_id = entity.id
             cls.period_id = period.id
             cls.first_resolution_summary = resolve_entities_deterministically(session, reporting_period_id=period.id)
@@ -144,6 +157,8 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
         with self.SessionLocal() as session:
             first = ensure_blackbird_ventures_seed(session)
             second = ensure_blackbird_ventures_seed(session)
+            ensure_blackbird_ventures_asic_company_register_cross_reference(session)
+            ensure_blackbird_ventures_asic_company_register_cross_reference(session)
             session.commit()
 
             self.assertEqual(first.id, second.id)
@@ -172,6 +187,15 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
             self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_BY, entity.abn_reviewed_by)
             self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_AT, entity.abn_reviewed_at)
             self.assertEqual(BLACKBIRD_VENTURES_REGISTERED_NAME_ON_ABR, entity.registered_name_on_abr)
+            self.assertEqual(BLACKBIRD_VENTURES_ACN, entity.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, entity.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, entity.asic_company_type)
+            self.assertEqual(BLACKBIRD_VENTURES_ASIC_REGISTRATION_DATE, entity.asic_registration_date)
+            self.assertEqual(BLACKBIRD_VENTURES_ASIC_NEXT_REVIEW_DATE, entity.asic_next_review_date)
+            self.assertEqual(BLACKBIRD_VENTURES_ASIC_CROSS_REFERENCE.record_url, entity.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, entity.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, entity.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, entity.asic_reviewed_at)
             self.assertEqual("AU", entity.country_code)
             self.assertTrue(entity.is_australian_entity)
             self.assertEqual("seeded", entity.confidence_tier)
@@ -234,6 +258,15 @@ class TestBlackbirdVenturesSeed(unittest.TestCase):
             self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_BY, detail.abn_reviewed_by)
             self.assertEqual(BLACKBIRD_VENTURES_REVIEWED_AT, detail.abn_reviewed_at)
             self.assertEqual(BLACKBIRD_VENTURES_REGISTERED_NAME_ON_ABR, detail.registered_name_on_abr)
+            self.assertEqual(BLACKBIRD_VENTURES_ACN, detail.acn)
+            self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, detail.asic_company_status)
+            self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, detail.asic_company_type)
+            self.assertEqual(BLACKBIRD_VENTURES_ASIC_REGISTRATION_DATE, detail.asic_registration_date)
+            self.assertEqual(BLACKBIRD_VENTURES_ASIC_NEXT_REVIEW_DATE, detail.asic_next_review_date)
+            self.assertEqual(BLACKBIRD_VENTURES_ASIC_CROSS_REFERENCE.record_url, detail.asic_record_url)
+            self.assertEqual(ASIC_REVIEW_SOURCE, detail.asic_review_source)
+            self.assertEqual(ASIC_REVIEWED_BY, detail.asic_reviewed_by)
+            self.assertEqual(ASIC_REVIEWED_AT, detail.asic_reviewed_at)
             self.assertEqual(
                 [
                     BLACKBIRD_VENTURES_CANONICAL_NAME,
