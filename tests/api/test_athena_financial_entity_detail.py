@@ -17,6 +17,18 @@ from app.entity_resolution.athena_financial_seed import (
     ensure_athena_financial_seed,
 )
 from app.entity_resolution.deterministic import resolve_entities_deterministically
+from app.entity_resolution.private_entity_asic_company_register_cross_reference import (
+    ASIC_COMPANY_STATUS_REGISTERED,
+    ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES,
+    ASIC_REVIEWED_BY,
+    ASIC_REVIEW_SOURCE,
+    ATHENA_FINANCIAL_ABN,
+    ATHENA_FINANCIAL_ACN,
+    ATHENA_FINANCIAL_ASIC_NEXT_REVIEW_DATE,
+    ATHENA_FINANCIAL_ASIC_REGISTRATION_DATE,
+    ATHENA_FINANCIAL_ASIC_REVIEWED_AT,
+    ensure_athena_financial_asic_company_register_cross_reference,
+)
 from app.ingest.loader import ingest_australiansuper_local_file
 
 
@@ -75,6 +87,7 @@ class TestAthenaFinancialEntityDetailApi(unittest.TestCase):
                 reporting_period_id=period.id,
             )
             entity = ensure_athena_financial_seed(session)
+            ensure_athena_financial_asic_company_register_cross_reference(session)
             cls.entity_id = entity.id
             resolve_entities_deterministically(session, reporting_period_id=period.id)
             session.commit()
@@ -85,13 +98,25 @@ class TestAthenaFinancialEntityDetailApi(unittest.TestCase):
         cls.engine.dispose()
         cls.tempdir.cleanup()
 
-    def test_athena_company_page_renders_dependency_only_company_detail_without_asic_block(self) -> None:
+    def test_athena_company_page_renders_asic_cross_reference_without_scope_drift(self) -> None:
         response = self.client.get(f"/admin/ui/companies/{self.entity_id}")
         self.assertEqual(200, response.status_code)
         self.assertIn(ATHENA_FINANCIAL_CANONICAL_NAME, response.text)
         self.assertIn("Linked", response.text)
         self.assertIn("2025-12-31", response.text)
-        self.assertIn("Athena Financial Pty Ltd", response.text)
+        self.assertIn(ATHENA_FINANCIAL_ABN, response.text)
+        self.assertIn(ATHENA_FINANCIAL_ACN, response.text)
+        self.assertIn("ASIC cross-reference", response.text)
+        self.assertIn(ASIC_COMPANY_STATUS_REGISTERED, response.text)
+        self.assertIn(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, response.text)
+        self.assertIn(ASIC_REVIEW_SOURCE, response.text)
+        self.assertIn(ASIC_REVIEWED_BY, response.text)
+        self.assertIn(ATHENA_FINANCIAL_ASIC_REVIEWED_AT.isoformat(), response.text)
+        self.assertIn(ATHENA_FINANCIAL_ASIC_REGISTRATION_DATE.isoformat(), response.text)
+        self.assertIn(ATHENA_FINANCIAL_ASIC_NEXT_REVIEW_DATE.isoformat(), response.text)
+        self.assertIn("ASIC company record", response.text)
+        self.assertIn("searchText=619535545", response.text)
         self.assertIn("No persisted relationships for this company in current stored truth.", response.text)
         self.assertNotIn("ABR reviewed", response.text)
-        self.assertNotIn("ASIC cross-reference", response.text)
+        self.assertNotIn("SYDNEY NSW 2000", response.text)
+        self.assertNotIn("ATHENA FINANCIAL PTY LTD", response.text)

@@ -18,6 +18,10 @@ from app.entity_resolution.alphinity_investment_management_seed import (
     ALPHINITY_INVESTMENT_MANAGEMENT_REVIEWED_ABN,
     ensure_alphinity_investment_management_seed,
 )
+from app.entity_resolution.athena_financial_seed import (
+    ATHENA_FINANCIAL_CANONICAL_NAME,
+    ensure_athena_financial_seed,
+)
 from app.entity_resolution.bgh_capital_seed import (
     BGH_CAPITAL_CANONICAL_NAME,
     BGH_CAPITAL_REGISTERED_NAME_ON_ABR,
@@ -143,6 +147,12 @@ VERMONT_AUS_HOLDCO_ACN = "626 842 135"
 VERMONT_AUS_HOLDCO_ASIC_REGISTRATION_DATE = date(2018, 6, 15)
 VERMONT_AUS_HOLDCO_ASIC_NEXT_REVIEW_DATE = date(2026, 6, 15)
 VERMONT_AUS_HOLDCO_ASIC_REVIEWED_AT = date(2026, 4, 24)
+
+ATHENA_FINANCIAL_ABN = "77 619 535 545"
+ATHENA_FINANCIAL_ACN = "619 535 545"
+ATHENA_FINANCIAL_ASIC_REGISTRATION_DATE = date(2017, 6, 5)
+ATHENA_FINANCIAL_ASIC_NEXT_REVIEW_DATE = date(2026, 6, 5)
+ATHENA_FINANCIAL_ASIC_REVIEWED_AT = date(2026, 4, 24)
 
 
 @dataclass(frozen=True)
@@ -297,6 +307,17 @@ VERMONT_AUS_HOLDCO_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
     reviewed_at=VERMONT_AUS_HOLDCO_ASIC_REVIEWED_AT,
 )
 
+ATHENA_FINANCIAL_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=ATHENA_FINANCIAL_CANONICAL_NAME,
+    entity_type="company",
+    reviewed_abn=ATHENA_FINANCIAL_ABN,
+    registered_name=None,
+    acn=ATHENA_FINANCIAL_ACN,
+    registration_date=ATHENA_FINANCIAL_ASIC_REGISTRATION_DATE,
+    next_review_date=ATHENA_FINANCIAL_ASIC_NEXT_REVIEW_DATE,
+    reviewed_at=ATHENA_FINANCIAL_ASIC_REVIEWED_AT,
+)
+
 
 def ensure_private_entity_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
     ensure_brandon_capital_partners_seed(session)
@@ -358,6 +379,12 @@ def ensure_vermont_aus_holdco_asic_company_register_cross_reference_subset(sessi
     ensure_vermont_aus_holdco_seed(session)
 
     return (ensure_vermont_aus_holdco_asic_company_register_cross_reference(session),)
+
+
+def ensure_athena_financial_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_athena_financial_seed(session)
+
+    return (ensure_athena_financial_asic_company_register_cross_reference(session),)
 
 
 def ensure_brandon_capital_partners_asic_company_register_cross_reference(session) -> Entity:
@@ -448,6 +475,13 @@ def ensure_vermont_aus_holdco_asic_company_register_cross_reference(session) -> 
     return _ensure_entity_asic_company_register_cross_reference(
         session,
         cross_reference=VERMONT_AUS_HOLDCO_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_athena_financial_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=ATHENA_FINANCIAL_ASIC_CROSS_REFERENCE,
     )
 
 
