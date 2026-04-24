@@ -1,0 +1,1194 @@
+Option Code,Option Name,Asset Class,Filter,Sub-Filter,Name,Name Type,Currency,Issuer Type,Security Identifier,Units Held,Location,Address,% Ownership,$ Value,Weighting (%),Actual Currency Exposure (%),Actual Asset Allocation (%),Effect of Derivatives Exposure (%),Classification,Sort Order,Value Range,Geo Latitude,Geo Longitude
+ARDI,Diversified Fixed Interest,Cash,,,Commonwealth Bank of Australia,Name of Institution,Australia Dollar,,,,,,,8984142.0,0.71,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Australia & New Zealand Banking Group Ltd,Name of Institution,Australia Dollar,,,,,,,2173695.0,0.17,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Royal Bank of Canada/Sydney,Name of Institution,Australia Dollar,,,,,,,3163402.0,0.25,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Australia & New Zealand Banking Group Ltd,Name of Institution,United States Dollar,,,,,,,1423839.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Bank of America NA,Name of Institution,United States Dollar,,,,,,,-144107.0,-0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Barclays Bank PLC,Name of Institution,Australia Dollar,,,,,,,-817060.0,-0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Barclays Bank PLC,Name of Institution,United States Dollar,,,,,,,-28761.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,BNP Paribas SA,Name of Institution,Australia Dollar,,,,,,,-638514.0,-0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,BNP Paribas SA,Name of Institution,United States Dollar,,,,,,,26881.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,BRED Banque Populaire,Name of Institution,Sweden Krona,,,,,,,151162.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Citibank NA,Name of Institution,Australia Dollar,,,,,,,-30784.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Citibank NA,Name of Institution,United States Dollar,,,,,,,-8156.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Commonwealth Bank of Australia,Name of Institution,Euro Member Countries,,,,,,,146561.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Commonwealth Bank of Australia,Name of Institution,United Kingdom Pound,,,,,,,328444.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Commonwealth Bank of Australia,Name of Institution,United States Dollar,,,,,,,2909356.0,0.23,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Deutsche Bank AG,Name of Institution,Australia Dollar,,,,,,,143.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Goldman Sachs International,Name of Institution,Australia Dollar,,,,,,,-736774.0,-0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Goldman Sachs International,Name of Institution,United States Dollar,,,,,,,-22322.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Hongkong and Shanghai Banking Corporation Ltd,Name of Institution,Australia Dollar,,,,,,,119203.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,Australia Dollar,,,,,,,3993961.0,0.32,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,Canada Dollar,,,,,,,-79836.0,-0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,Euro Member Countries,,,,,,,1648348.0,0.13,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,Japan Yen,,,,,,,1441360.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,New Zealand Dollar,,,,,,,328615.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,Norway Krone,,,,,,,77744.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,South Africa Rand,,,,,,,-83677.0,-0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,Sweden Krona,,,,,,,-141774.0,-0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,Switzerland Franc,,,,,,,19998.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,Thailand Baht,,,,,,,-3819.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,United Kingdom Pound,,,,,,,513334.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities LLC,Name of Institution,United States Dollar,,,,,,,9873669.0,0.78,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities PLC,Name of Institution,Australia Dollar,,,,,,,-2660871.0,-0.21,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities PLC,Name of Institution,Canada Dollar,,,,,,,74448.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities PLC,Name of Institution,Euro Member Countries,,,,,,,1169117.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities PLC,Name of Institution,Japan Yen,,,,,,,396063.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities PLC,Name of Institution,United Kingdom Pound,,,,,,,767364.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JP Morgan Securities PLC,Name of Institution,United States Dollar,,,,,,,8779211.0,0.7,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Australia Dollar,,,,,,,-22829236.0,-1.81,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Canada Dollar,,,,,,,388170.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Colombia Peso,,,,,,,7.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Czech Republic Koruna,,,,,,,8439.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Denmark Krone,,,,,,,3344.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Euro Member Countries,,,,,,,190324.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Israel Shekel,,,,,,,771.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Japan Yen,,,,,,,1861004.0,0.15,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Mexico Peso,,,,,,,41826.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,New Zealand Dollar,,,,,,,244763.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Norway Krone,,,,,,,79180.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Poland Zloty,,,,,,,10519.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Romania Leu,,,,,,,568.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Singapore Dollar,,,,,,,25954.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,South Africa Rand,,,,,,,142715.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Sweden Krona,,,,,,,115.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Switzerland Franc,,,,,,,-3705.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,United Kingdom Pound,,,,,,,421742.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,JPMorgan Chase Bank NA,Name of Institution,United States Dollar,,,,,,,-26433920.0,-2.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Mitsubishi UFJ Trust & Banking Corp/London,Name of Institution,Euro Member Countries,,,,,,,10643.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Morgan Stanley & Co International PLC,Name of Institution,Australia Dollar,,,,,,,-845978.0,-0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,MUFG Bank Ltd/London,Name of Institution,Euro Member Countries,,,,,,,160270.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,MUFG Bank Ltd/London,Name of Institution,United States Dollar,,,,,,,194577.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,National Australia Bank Ltd,Name of Institution,Australia Dollar,,,,,,,-861094.0,-0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,National Australia Bank Ltd,Name of Institution,Euro Member Countries,,,,,,,320540.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Royal Bank of Canada,Name of Institution,Australia Dollar,,,,,,,-59395.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Royal Bank of Canada,Name of Institution,United Kingdom Pound,,,,,,,97351.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Royal Bank of Canada,Name of Institution,United States Dollar,,,,,,,1697124.0,0.13,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Royal Bank of Canada/London,Name of Institution,Canada Dollar,,,,,,,242346.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Standard Chartered Bank,Name of Institution,Australia Dollar,,,,,,,335.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Standard Chartered Bank,Name of Institution,United Kingdom Pound,,,,,,,328444.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Sumitomo Mitsui Banking Corp/Sydney,Name of Institution,Australia Dollar,,,,,,,7924.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Toronto-Dominion Bank/The,Name of Institution,Australia Dollar,,,,,,,6.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,UBS AG,Name of Institution,Australia Dollar,,,,,,,924.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Westpac Banking Corp,Name of Institution,Australia Dollar,,,,,,,-524267.0,-0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Cash,,,Total,Total,,,,,,,,-1964067.0,-0.16,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Asset Class,,Fixed Income,Asset Class,,,,,,,,,,,92.42,-7.25,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Asset Class,,Cash,Asset Class,,,,,,,,,,,7.58,7.74,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Asset Class,,Equity,Asset Class,,,,,,,,,,,0.0,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Asset Class,,Property,Asset Class,,,,,,,,,,,0.0,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Asset Class,,Total,Total,,,,,,,,,,,100.0,0.49,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Currency,,AUD,Currency Exposure,,,,,,,,,,100.34,,51.15,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Currency,,Currencies of other developed markets,Currency Exposure,,,,,,,,,,2.57,,-18.3,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Currency,,Currencies of emerging markets,Currency Exposure,,,,,,,,,,0.03,,-0.36,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Currency,,USD,Currency Exposure,,,,,,,,,,-2.94,,-31.99,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Currency,,Total,Total,,,,,,,,,,100.0,,0.49,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Kind,,Futures,Kind of Derivatives,,,,,,,,1065967.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Kind,,Forwards,Kind of Derivatives,,,,,,,,5316398.0,0.42,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Kind,,Options,Kind of Derivatives,,,,,,,,3133674.0,0.25,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Kind,,Swaps,Kind of Derivatives,,,,,,,,-3300819.0,-0.26,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Derivatives,By Kind,,,Total,,,,,,,,6215220.0,0.49,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ACM Auto Trust 2023-2,Name of Issuer/Counterparty,,Asset Backed,,,,,,368465.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ACM Auto Trust 2024-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,108696.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ACM Auto Trust 2024-2,Name of Issuer/Counterparty,,Asset Backed,,,,,,829833.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ACM Auto Trust 2025-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,261097.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ACM Auto Trust 2025-4,Name of Issuer/Counterparty,,Asset Backed,,,,,,865350.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Airlines 2016-1 Class AA Pass Through Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,17601.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Airlines 2016-3 Class AA Pass Through Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,5231.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Airlines 2017-1 Class AA Pass Through Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,8279.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Airlines 2017-2 Class AA Pass Through Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,2747.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Airlines 2019-1 Class AA Pass Through Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,8818.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Airlines Inc,Name of Issuer/Counterparty,,Asset Backed,,,,,,309216.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Tower Trust #1,Name of Issuer/Counterparty,,Asset Backed,,,,,,40678.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AmeriCredit Automobile Receivables Trust 2025-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,503986.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Angle Asset Finance Radian Trust 2025-2,Name of Issuer/Counterparty,,Asset Backed,,,,,,533713.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Asimi Funding 2024-1 PLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,121827.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bridge 2024-SFR1 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,115993.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Castlelake Aircraft Structured Trust 2025-2,Name of Issuer/Counterparty,,Asset Backed,,,,,,378986.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cloud Capital Holdco LP,Name of Issuer/Counterparty,,Asset Backed,,,,,,499622.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CPS Auto Receivables Trust 2022-C,Name of Issuer/Counterparty,,Asset Backed,,,,,,132754.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Crown Castle Towers LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,17590.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,DataBank Issuer II LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,294278.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Delta Air Lines 2020-1 Class A Pass Through Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,35963.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dowson 2024-1 PLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,106136.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dynamoney ABS Trust 2025-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,1734077.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Exeter Automobile Receivables Trust 2025-5,Name of Issuer/Counterparty,,Asset Backed,,,,,,212483.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,FHF Issuer Trust 2024-3,Name of Issuer/Counterparty,,Asset Backed,,,,,,333059.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,FIGRE Trust 2025-FL1,Name of Issuer/Counterparty,,Asset Backed,,,,,,57690.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Firstmac Asset Funding Trust No. 1 Series Auto No. 2,Name of Issuer/Counterparty,,Asset Backed,,,,,,59688.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Flexicommercial Abs Trust 2023-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,64774.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Flexicommercial ABS Trust 2025-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,88280.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,FP Turbo Series 2023-1 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,164476.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Handy ABS 2024-1 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,45389.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Household Capital 2025-1 RMBS,Name of Issuer/Counterparty,,Asset Backed,,,,,,294210.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Judo Capital Markets Trust 2023-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,396188.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Metro Finance 2023-2 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,323059.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mission Lane Credit Card Master Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,99057.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Navigator 2024-1 Aviation Ltd,Name of Issuer/Counterparty,,Asset Backed,,,,,,195953.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NOW Trust 2025-2,Name of Issuer/Counterparty,,Asset Backed,,,,,,48595.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pagaya AI Technology in Housing Trust 2023-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,20320.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Panorama Auto Trust 2023-3,Name of Issuer/Counterparty,,Asset Backed,,,,,,331012.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Panorama Auto Trust 2024-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,320967.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Panorama Auto Trust 2025-3,Name of Issuer/Counterparty,,Asset Backed,,,,,,421688.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Panorama Auto Trust 2025-4,Name of Issuer/Counterparty,,Asset Backed,,,,,,603069.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pavillion Consumer 2025-1 PLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,330364.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Perpetual Corporate Trust Ltd,Name of Issuer/Counterparty,,Asset Backed,,,,,,119206.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Prodigy Finance CM2021-1 DAC,Name of Issuer/Counterparty,,Asset Backed,,,,,,16632.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ReadyCap Lending Small Business Loan Trust 2023-3,Name of Issuer/Counterparty,,Asset Backed,,,,,,102975.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Santander Drive Auto Receivables Trust 2025-4,Name of Issuer/Counterparty,,Asset Backed,,,,,,244897.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Satus 2024-1 PLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,132986.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SBA Tower Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,510020.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SLM Private Credit Student Loan Trust 2006-B,Name of Issuer/Counterparty,,Asset Backed,,,,,,525743.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SLM Student Loan Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,201058.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Small Business Origination Loan Trust 2024-1 DAC,Name of Issuer/Counterparty,,Asset Backed,,,,,,115202.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,STAR 2025-SFR5 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,596709.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,STAR 2025-SFR6 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,531474.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Taurus 2023-1 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,188284.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Taurus 2024-1PP Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,292884.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Taurus 2025-2 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,355763.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Trustee For Angle Asset Finance - Radian Trust 2023-3/The,Name of Issuer/Counterparty,,Asset Backed,,,,,,104679.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United Airlines 2019-1 Class AA Pass Through Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,158548.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United Airlines 2020-1 Class A Pass Through Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,94025.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,VINE 2023-SFR1 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,586788.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,VINE 2024-SFR1 Trust,Name of Issuer/Counterparty,,Asset Backed,,,,,,195200.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Wisr Freedom Trust Series 2023-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,421344.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Wisr Freedom Trust Series 2025-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,1035093.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Zip Master Trust Series 2024-2,Name of Issuer/Counterparty,,Asset Backed,,,,,,504983.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Zip Master Trust Series 2025-1,Name of Issuer/Counterparty,,Asset Backed,,,,,,540432.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Zip Master Trust Series 2025-2,Name of Issuer/Counterparty,,Asset Backed,,,,,,1182936.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,A1 Towers Holding GmbH,Name of Issuer/Counterparty,,Corporate,,,,,,270585.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AA Bond Co Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,468387.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Abbvie Inc,Name of Issuer/Counterparty,,Corporate,,,,,,14556.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Abn Amro Bank Nv,Name of Issuer/Counterparty,,Corporate,,,,,,443640.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Achmea Bank NV,Name of Issuer/Counterparty,,Corporate,,,,,,139310.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Adidas Ag,Name of Issuer/Counterparty,,Corporate,,,,,,30749.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AEP Texas Inc,Name of Issuer/Counterparty,,Corporate,,,,,,330148.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AerCap Ireland Capital DAC / AerCap Global Aviation Trust,Name of Issuer/Counterparty,,Corporate,,,,,,264170.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AES Andes SA,Name of Issuer/Counterparty,,Corporate,,,,,,83736.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AES Corp/The,Name of Issuer/Counterparty,,Corporate,,,,,,323734.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Affinity Water Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,63089.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Aib Group Plc,Name of Issuer/Counterparty,,Corporate,,,,,,25531.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Air Liquide Finance SA,Name of Issuer/Counterparty,,Corporate,,,,,,56561.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Aker BP ASA,Name of Issuer/Counterparty,,Corporate,,,,,,992556.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Al Rajhi Sukuk Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,177621.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Aldar Investment Properties Sukuk Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,221532.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Allianz Finance II BV,Name of Issuer/Counterparty,,Corporate,,,,,,49490.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Alphabet Inc,Name of Issuer/Counterparty,,Corporate,,,,,,706196.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Amal Trustees Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,184398.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Amazon.Com Inc,Name of Issuer/Counterparty,,Corporate,,,,,,200220.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ameren Corp,Name of Issuer/Counterparty,,Corporate,,,,,,314272.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Assets Trust LP,Name of Issuer/Counterparty,,Corporate,,,,,,73246.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Axle & Manufacturing Inc,Name of Issuer/Counterparty,,Corporate,,,,,,75787.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Electric Power Co Inc,Name of Issuer/Counterparty,,Corporate,,,,,,296894.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Express Co,Name of Issuer/Counterparty,,Corporate,,,,,,880261.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Homes 4 Rent LP,Name of Issuer/Counterparty,,Corporate,,,,,,5333.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Medical Systems Europe BV,Name of Issuer/Counterparty,,Corporate,,,,,,289656.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American National Global Funding,Name of Issuer/Counterparty,,Corporate,,,,,,168233.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American National Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,120852.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,American Tower Corp,Name of Issuer/Counterparty,,Corporate,,,,,,412768.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AMP Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1941.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Amphenol Corp,Name of Issuer/Counterparty,,Corporate,,,,,,282913.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ampol Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,4184864.0,0.33,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Amprion GmbH,Name of Issuer/Counterparty,,Corporate,,,,,,457491.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Anglian Water Osprey Financing PLC,Name of Issuer/Counterparty,,Corporate,,,,,,398246.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Anglian Water Services Financing PLC,Name of Issuer/Counterparty,,Corporate,,,,,,122122.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Anglo American Capital PLC,Name of Issuer/Counterparty,,Corporate,,,,,,42915.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Anheuser-Busch Cos LLC / Anheuser-Busch InBev Worldwide Inc,Name of Issuer/Counterparty,,Corporate,,,,,,122359.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Anheuser-Busch InBev SA/NV,Name of Issuer/Counterparty,,Corporate,,,,,,626216.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Aon North America Inc,Name of Issuer/Counterparty,,Corporate,,,,,,318437.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,APPF Commercial Finance Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,634730.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Apple Inc,Name of Issuer/Counterparty,,Corporate,,,,,,433311.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Aptiv Swiss Holdings Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,146768.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Arizona Public Service Co,Name of Issuer/Counterparty,,Corporate,,,,,,234888.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AS Mileage Plan IP Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,477355.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Asahi Group Holdings Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,49132.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ASB Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,52063.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ascension Health,Name of Issuer/Counterparty,,Corporate,,,,,,193198.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ashtead Capital Inc,Name of Issuer/Counterparty,,Corporate,,,,,,828386.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Asml Holding Nv,Name of Issuer/Counterparty,,Corporate,,,,,,47351.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Asr Nederland Nv,Name of Issuer/Counterparty,,Corporate,,,,,,25903.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Astrazeneca Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,180454.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Asurion LLC and Asurion Co-Issuer Inc,Name of Issuer/Counterparty,,Corporate,,,,,,143147.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,At&T Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1124091.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Athene Global Funding,Name of Issuer/Counterparty,,Corporate,,,,,,1515811.0,0.12,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Athene Holding Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,43390.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Athora Holding Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,440924.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Auckland International Airport Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,362988.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AusNet Services Holdings Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3427263.0,0.27,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Australia & New Zealand Banking Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,21706258.0,1.73,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Australia & New Zealand Banking Group Ltd/New York NY,Name of Issuer/Counterparty,,Corporate,,,,,,54104.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Australia Pacific Airports Melbourne Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2285745.0,0.18,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Australian Unity Healthcare Property Trust,Name of Issuer/Counterparty,,Corporate,,,,,,437206.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Australian Unity Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1163672.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Autoliv Inc,Name of Issuer/Counterparty,,Corporate,,,,,,65341.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Autostrade per l'Italia SpA,Name of Issuer/Counterparty,,Corporate,,,,,,29552.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Aviation Capital Group LLC,Name of Issuer/Counterparty,,Corporate,,,,,,110480.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Avolon Holdings Funding Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,154453.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Azelis Finance NV,Name of Issuer/Counterparty,,Corporate,,,,,,36689.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Baltimore Gas and Electric Co,Name of Issuer/Counterparty,,Corporate,,,,,,39209.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Banco Santander SA,Name of Issuer/Counterparty,,Corporate,,,,,,3759492.0,0.3,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bank of America Corp,Name of Issuer/Counterparty,,Corporate,,,,,,2475536.0,0.2,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bank Of Ireland Group Plc,Name of Issuer/Counterparty,,Corporate,,,,,,227465.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bank of Montreal,Name of Issuer/Counterparty,,Corporate,,,,,,161927.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bank of Montreal/London,Name of Issuer/Counterparty,,Corporate,,,,,,535908.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bank of Nova Scotia/The,Name of Issuer/Counterparty,,Corporate,,,,,,571616.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bank of Queensland Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,480983.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bankinter Sa,Name of Issuer/Counterparty,,Corporate,,,,,,41626.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Banque Federative du Credit Mutuel SA,Name of Issuer/Counterparty,,Corporate,,,,,,156470.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Banque Stellantis France SACA,Name of Issuer/Counterparty,,Corporate,,,,,,71318.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Barclays PLC,Name of Issuer/Counterparty,,Corporate,,,,,,3500750.0,0.28,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Basf Se,Name of Issuer/Counterparty,,Corporate,,,,,,68601.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Baxter International Inc,Name of Issuer/Counterparty,,Corporate,,,,,,54492.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bayer AG,Name of Issuer/Counterparty,,Corporate,,,,,,207427.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Becton Dickinson & Co,Name of Issuer/Counterparty,,Corporate,,,,,,171299.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bendigo & Adelaide Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1175984.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Berkshire Hathaway Finance Corp,Name of Issuer/Counterparty,,Corporate,,,,,,69069.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BGC Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,24629.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bimbo Bakeries USA Inc,Name of Issuer/Counterparty,,Corporate,,,,,,371827.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Black Hills Corp,Name of Issuer/Counterparty,,Corporate,,,,,,153491.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BMS Ireland Capital Funding DAC,Name of Issuer/Counterparty,,Corporate,,,,,,567940.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BNP Paribas SA,Name of Issuer/Counterparty,,Corporate,,,,,,4126676.0,0.33,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Boeing Co/The,Name of Issuer/Counterparty,,Corporate,,,,,,565074.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Boels Topholding BV,Name of Issuer/Counterparty,,Corporate,,,,,,78127.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Booking Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,159616.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Boston Gas Co,Name of Issuer/Counterparty,,Corporate,,,,,,323947.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Boston Properties LP,Name of Issuer/Counterparty,,Corporate,,,,,,146868.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BP Capital Markets America Inc,Name of Issuer/Counterparty,,Corporate,,,,,,132241.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BP Capital Markets PLC,Name of Issuer/Counterparty,,Corporate,,,,,,156723.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BPCE SA,Name of Issuer/Counterparty,,Corporate,,,,,,1517388.0,0.12,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BPCE SFH SA,Name of Issuer/Counterparty,,Corporate,,,,,,301675.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,British Telecommunications PLC,Name of Issuer/Counterparty,,Corporate,,,,,,1099955.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Brixmor Operating Partnership LP,Name of Issuer/Counterparty,,Corporate,,,,,,258488.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Broadcom Inc,Name of Issuer/Counterparty,,Corporate,,,,,,449460.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Brown & Brown Inc,Name of Issuer/Counterparty,,Corporate,,,,,,727785.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BUPA Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,388143.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Burlington Northern Santa Fe LLC,Name of Issuer/Counterparty,,Corporate,,,,,,30959.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CA Auto Bank SPA/Ireland,Name of Issuer/Counterparty,,Corporate,,,,,,147639.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cadent Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,18566.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Caixabank Sa,Name of Issuer/Counterparty,,Corporate,,,,,,956639.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Canadian Imperial Bank of Commerce,Name of Issuer/Counterparty,,Corporate,,,,,,101849.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Canadian Imperial Bank of Commerce/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1560.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Canadian Pacific Railway Co,Name of Issuer/Counterparty,,Corporate,,,,,,134593.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Capital One Financial Corp,Name of Issuer/Counterparty,,Corporate,,,,,,216585.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Capital Power US Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,152867.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cardinal Health Inc,Name of Issuer/Counterparty,,Corporate,,,,,,130424.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Carlsberg Breweries A/S,Name of Issuer/Counterparty,,Corporate,,,,,,40911.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Carnival Corp,Name of Issuer/Counterparty,,Corporate,,,,,,969785.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Carrefour Sa,Name of Issuer/Counterparty,,Corporate,,,,,,151748.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Carrier Global Corp,Name of Issuer/Counterparty,,Corporate,,,,,,331042.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Caterpillar Financial Services Corp,Name of Issuer/Counterparty,,Corporate,,,,,,507209.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CBRE Services Inc,Name of Issuer/Counterparty,,Corporate,,,,,,185042.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CCEP Finance Ireland DAC,Name of Issuer/Counterparty,,Corporate,,,,,,38350.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CCF Holding SAS,Name of Issuer/Counterparty,,Corporate,,,,,,163603.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CCF SFH SACA,Name of Issuer/Counterparty,,Corporate,,,,,,443772.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CCO Holdings LLC / CCO Holdings Capital Corp,Name of Issuer/Counterparty,,Corporate,,,,,,105761.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cellnex Finance Co SA,Name of Issuer/Counterparty,,Corporate,,,,,,849860.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CenterPoint Energy Houston Electric LLC,Name of Issuer/Counterparty,,Corporate,,,,,,226693.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Charter Communications Operating LLC / Charter Communications Operating Capital,Name of Issuer/Counterparty,,Corporate,,,,,,979834.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Chubb INA Holdings LLC,Name of Issuer/Counterparty,,Corporate,,,,,,54942.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cie de Saint-Gobain SA,Name of Issuer/Counterparty,,Corporate,,,,,,87332.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cie Generale des Etablissements Michelin SCA,Name of Issuer/Counterparty,,Corporate,,,,,,30877.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cigna Group/The,Name of Issuer/Counterparty,,Corporate,,,,,,570229.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cipher Compute LLC,Name of Issuer/Counterparty,,Corporate,,,,,,60971.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cisco Systems Inc,Name of Issuer/Counterparty,,Corporate,,,,,,170555.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Citadel Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,155851.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Citibank NA,Name of Issuer/Counterparty,,Corporate,,,,,,86982.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Citigroup Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1925918.0,0.15,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Citizens Financial Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,75376.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Coca-Cola Co/The,Name of Issuer/Counterparty,,Corporate,,,,,,86300.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Columbia Pipelines Holding Co LLC,Name of Issuer/Counterparty,,Corporate,,,,,,186717.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Comcast Corp,Name of Issuer/Counterparty,,Corporate,,,,,,763672.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Commerzbank AG,Name of Issuer/Counterparty,,Corporate,,,,,,92256.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CommonSpirit Health,Name of Issuer/Counterparty,,Corporate,,,,,,195326.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Commonwealth Bank of Australia,Name of Issuer/Counterparty,,Corporate,,,,,,16091339.0,1.28,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Commonwealth Bank of Australia/New York NY,Name of Issuer/Counterparty,,Corporate,,,,,,109817.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Commonwealth Edison Co,Name of Issuer/Counterparty,,Corporate,,,,,,338800.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Concentrix Corp,Name of Issuer/Counterparty,,Corporate,,,,,,105400.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ConocoPhillips Co,Name of Issuer/Counterparty,,Corporate,,,,,,89318.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Consolidated Edison Co of New York Inc,Name of Issuer/Counterparty,,Corporate,,,,,,544839.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cooperatieve Rabobank UA,Name of Issuer/Counterparty,,Corporate,,,,,,285846.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cooperatieve Rabobank UA/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,1371304.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cooperatieve Rabobank UA/NY,Name of Issuer/Counterparty,,Corporate,,,,,,299947.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Co-operative Bank Holdings Ltd/The,Name of Issuer/Counterparty,,Corporate,,,,,,127681.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Corebridge Financial Inc,Name of Issuer/Counterparty,,Corporate,,,,,,719468.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Corporate Office Properties LP,Name of Issuer/Counterparty,,Corporate,,,,,,124016.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cousins Properties LP,Name of Issuer/Counterparty,,Corporate,,,,,,482106.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Coventry Building Society,Name of Issuer/Counterparty,,Corporate,,,,,,109417.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Credit Agricole Corporate & Investment Bank SA/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1410075.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Credit Agricole Corporate and Investment Bank/London,Name of Issuer/Counterparty,,Corporate,,,,,,193707.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Credit Agricole Sa,Name of Issuer/Counterparty,,Corporate,,,,,,275899.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Credit Industriel et Commercial/New York,Name of Issuer/Counterparty,,Corporate,,,,,,1320147.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CRH SMW Finance DAC,Name of Issuer/Counterparty,,Corporate,,,,,,58631.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Crimson Bond Trust 2023-1P,Name of Issuer/Counterparty,,Corporate,,,,,,119442.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Crown Castle Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1243143.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CTR Partnership LP / CareTrust Capital Corp,Name of Issuer/Counterparty,,Corporate,,,,,,182488.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CubeSmart LP,Name of Issuer/Counterparty,,Corporate,,,,,,307853.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CVS Health Corp,Name of Issuer/Counterparty,,Corporate,,,,,,527442.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Danfoss Finance II BV,Name of Issuer/Counterparty,,Corporate,,,,,,261620.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Danske Bank A/S,Name of Issuer/Counterparty,,Corporate,,,,,,922651.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Darling Global Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,163646.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,DBS Bank Ltd/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,280546.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Delta Air Lines Inc,Name of Issuer/Counterparty,,Corporate,,,,,,156000.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Deutsche Bank AG,Name of Issuer/Counterparty,,Corporate,,,,,,166850.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Deutsche Bank AG/New York NY,Name of Issuer/Counterparty,,Corporate,,,,,,585838.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Deutsche Boerse Ag,Name of Issuer/Counterparty,,Corporate,,,,,,46368.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Deutsche Telekom Ag,Name of Issuer/Counterparty,,Corporate,,,,,,218177.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Deutsche Telekom International Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,69589.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,DEXUS Finance Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,505404.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,DH Europe Finance II Sarl,Name of Issuer/Counterparty,,Corporate,,,,,,53184.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Diageo Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,54406.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Digital Dutch Finco BV,Name of Issuer/Counterparty,,Corporate,,,,,,33316.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,DLR Kredit A/S,Name of Issuer/Counterparty,,Corporate,,,,,,1304061.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dnb Bank Asa,Name of Issuer/Counterparty,,Corporate,,,,,,198753.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dominion Energy Inc,Name of Issuer/Counterparty,,Corporate,,,,,,88640.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dominion Energy South Carolina Inc,Name of Issuer/Counterparty,,Corporate,,,,,,9816.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dow Chemical Co/The,Name of Issuer/Counterparty,,Corporate,,,,,,385221.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ds Smith Plc,Name of Issuer/Counterparty,,Corporate,,,,,,84340.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dt Midstream Inc,Name of Issuer/Counterparty,,Corporate,,,,,,538330.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dte Energy Co,Name of Issuer/Counterparty,,Corporate,,,,,,267477.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Duke Energy Carolinas LLC,Name of Issuer/Counterparty,,Corporate,,,,,,33788.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Duke Energy Corp,Name of Issuer/Counterparty,,Corporate,,,,,,689328.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Duke Energy Florida LLC,Name of Issuer/Counterparty,,Corporate,,,,,,262255.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Duke Energy Indiana LLC,Name of Issuer/Counterparty,,Corporate,,,,,,132953.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Duke Energy Ohio Inc,Name of Issuer/Counterparty,,Corporate,,,,,,20033.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Duke Energy Progress LLC,Name of Issuer/Counterparty,,Corporate,,,,,,21917.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Dyno Nobel Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,981175.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,E.ON SE,Name of Issuer/Counterparty,,Corporate,,,,,,1389157.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Eaton Capital ULC,Name of Issuer/Counterparty,,Corporate,,,,,,188121.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ecolab Inc,Name of Issuer/Counterparty,,Corporate,,,,,,112917.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,EDP SA,Name of Issuer/Counterparty,,Corporate,,,,,,252610.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,EDP Servicios Financieros Espana SA,Name of Issuer/Counterparty,,Corporate,,,,,,31303.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Elia Transmission Belgium SA,Name of Issuer/Counterparty,,Corporate,,,,,,52068.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,EMD Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,349627.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Enact Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,157253.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Enbridge Inc,Name of Issuer/Counterparty,,Corporate,,,,,,555909.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Enel Finance International NV,Name of Issuer/Counterparty,,Corporate,,,,,,364168.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Enel Spa,Name of Issuer/Counterparty,,Corporate,,,,,,323826.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Energy Transfer LP,Name of Issuer/Counterparty,,Corporate,,,,,,863910.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Engie Sa,Name of Issuer/Counterparty,,Corporate,,,,,,353335.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Eni Spa,Name of Issuer/Counterparty,,Corporate,,,,,,1099198.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Entegris Escrow Corp,Name of Issuer/Counterparty,,Corporate,,,,,,33486.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Entergy Arkansas LLC,Name of Issuer/Counterparty,,Corporate,,,,,,136642.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Enterprise Products Operating LLC,Name of Issuer/Counterparty,,Corporate,,,,,,186408.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Eog Resources Inc,Name of Issuer/Counterparty,,Corporate,,,,,,49527.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Epr Properties,Name of Issuer/Counterparty,,Corporate,,,,,,154056.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ERAC USA Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,222471.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Erste Group Bank Ag,Name of Issuer/Counterparty,,Corporate,,,,,,256055.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Essent Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,156953.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Eurobank SA,Name of Issuer/Counterparty,,Corporate,,,,,,78209.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Eurogrid GmbH,Name of Issuer/Counterparty,,Corporate,,,,,,222823.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Eversource Energy,Name of Issuer/Counterparty,,Corporate,,,,,,380332.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Exelon Corp,Name of Issuer/Counterparty,,Corporate,,,,,,264616.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Extra Space Storage LP,Name of Issuer/Counterparty,,Corporate,,,,,,523693.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Fidelity National Information Services Inc,Name of Issuer/Counterparty,,Corporate,,,,,,86284.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Firstenergy Corp,Name of Issuer/Counterparty,,Corporate,,,,,,821518.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,FirstEnergy Transmission LLC,Name of Issuer/Counterparty,,Corporate,,,,,,36264.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Fiserv Inc,Name of Issuer/Counterparty,,Corporate,,,,,,393343.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Florida Power & Light Co,Name of Issuer/Counterparty,,Corporate,,,,,,466446.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Flutter Treasury DAC,Name of Issuer/Counterparty,,Corporate,,,,,,381288.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Fmc Corp,Name of Issuer/Counterparty,,Corporate,,,,,,139842.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ford Motor Credit Co LLC,Name of Issuer/Counterparty,,Corporate,,,,,,326855.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Fortitude Global Funding,Name of Issuer/Counterparty,,Corporate,,,,,,61398.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Foundry JV Holdco LLC,Name of Issuer/Counterparty,,Corporate,,,,,,895990.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GA Global Funding Trust,Name of Issuer/Counterparty,,Corporate,,,,,,223186.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Gatwick Funding Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,35206.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,General Electric Co,Name of Issuer/Counterparty,,Corporate,,,,,,26551.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,General Motors Financial Co Inc,Name of Issuer/Counterparty,,Corporate,,,,,,565465.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Georgia Power Co,Name of Issuer/Counterparty,,Corporate,,,,,,8855.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Gildan Activewear Inc,Name of Issuer/Counterparty,,Corporate,,,,,,249054.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Gilead Sciences Inc,Name of Issuer/Counterparty,,Corporate,,,,,,120693.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GlaxoSmithKline Capital Inc,Name of Issuer/Counterparty,,Corporate,,,,,,131806.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GlaxoSmithKline Capital PLC,Name of Issuer/Counterparty,,Corporate,,,,,,68044.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Glencore Capital Finance DAC,Name of Issuer/Counterparty,,Corporate,,,,,,576250.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Global Atlantic Fin Co,Name of Issuer/Counterparty,,Corporate,,,,,,78777.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Global Payments Inc,Name of Issuer/Counterparty,,Corporate,,,,,,670967.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GLP Capital LP / GLP Financing II Inc,Name of Issuer/Counterparty,,Corporate,,,,,,347098.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Goldman Sachs Group Inc/The,Name of Issuer/Counterparty,,Corporate,,,,,,2907700.0,0.23,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hamburg Commercial Bank AG,Name of Issuer/Counterparty,,Corporate,,,,,,73567.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hammerson Plc,Name of Issuer/Counterparty,,Corporate,,,,,,428531.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,HCA Inc,Name of Issuer/Counterparty,,Corporate,,,,,,619462.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Heathrow Funding Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,407077.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Heineken Nv,Name of Issuer/Counterparty,,Corporate,,,,,,262876.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Henneman Trust,Name of Issuer/Counterparty,,Corporate,,,,,,140230.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hess Midstream Operations LP,Name of Issuer/Counterparty,,Corporate,,,,,,227875.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hewlett Packard Enterprise Co,Name of Issuer/Counterparty,,Corporate,,,,,,291683.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Highwoods Realty LP,Name of Issuer/Counterparty,,Corporate,,,,,,392852.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hiscox Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,139205.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Holcim Sterling Finance Netherlands BV,Name of Issuer/Counterparty,,Corporate,,,,,,19185.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Holding d'Infrastructures des Metiers de l'Environnement SAS,Name of Issuer/Counterparty,,Corporate,,,,,,232957.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hollard Insurance Co Pty Ltd/The,Name of Issuer/Counterparty,,Corporate,,,,,,942872.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Home Depot Inc/The,Name of Issuer/Counterparty,,Corporate,,,,,,432463.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hongkong & Shanghai Banking Corp Ltd-The-/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,392333.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,HSBC Continental Europe SA,Name of Issuer/Counterparty,,Corporate,,,,,,97022.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,HSBC Holdings PLC,Name of Issuer/Counterparty,,Corporate,,,,,,5313492.0,0.42,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hyundai Capital America,Name of Issuer/Counterparty,,Corporate,,,,,,614761.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ibercaja Banco SA,Name of Issuer/Counterparty,,Corporate,,,,,,104497.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Iberdrola Finanzas SA,Name of Issuer/Counterparty,,Corporate,,,,,,171115.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,IDS Financing PLC,Name of Issuer/Counterparty,,Corporate,,,,,,287098.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Immobiliare Grande Distribuzione Siiq Spa,Name of Issuer/Counterparty,,Corporate,,,,,,226252.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Imola Merger Corp,Name of Issuer/Counterparty,,Corporate,,,,,,158932.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Indofood CBP Sukses Makmur Tbk PT,Name of Issuer/Counterparty,,Corporate,,,,,,588204.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Informa Plc,Name of Issuer/Counterparty,,Corporate,,,,,,62363.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Infrastrutture Wireless Italiane Spa,Name of Issuer/Counterparty,,Corporate,,,,,,481593.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ING Bank Australia Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3033.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ING Bank NV/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1955.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ing Groep Nv,Name of Issuer/Counterparty,,Corporate,,,,,,516928.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Insurance Australia Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1729941.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Intel Corp,Name of Issuer/Counterparty,,Corporate,,,,,,699213.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Intercontinental Exchange Inc,Name of Issuer/Counterparty,,Corporate,,,,,,255674.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,International Business Machines Corp,Name of Issuer/Counterparty,,Corporate,,,,,,80415.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,International Distribution Services PLC,Name of Issuer/Counterparty,,Corporate,,,,,,211917.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Intesa Sanpaolo Spa,Name of Issuer/Counterparty,,Corporate,,,,,,257510.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JAB Holdings BV,Name of Issuer/Counterparty,,Corporate,,,,,,126933.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JBS USA Holding Lux Sarl / JBS USA Foods Group Holdings Inc / JBS USA Food Co,Name of Issuer/Counterparty,,Corporate,,,,,,134816.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JBS USA Holding Lux Sarl/ JBS USA Food Co/ JBS Lux Co Sarl,Name of Issuer/Counterparty,,Corporate,,,,,,210313.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JBS USA LUX Sarl / JBS USA Food Co / JBS USA Foods Group,Name of Issuer/Counterparty,,Corporate,,,,,,127507.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JDE Peet's NV,Name of Issuer/Counterparty,,Corporate,,,,,,86855.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JH North America Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,161728.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,John Deere Capital Corp,Name of Issuer/Counterparty,,Corporate,,,,,,110137.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Johnson & Johnson,Name of Issuer/Counterparty,,Corporate,,,,,,242599.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JPMorgan Chase & Co,Name of Issuer/Counterparty,,Corporate,,,,,,3220732.0,0.26,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Jyske Bank A/S,Name of Issuer/Counterparty,,Corporate,,,,,,916620.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Jyske Realkredit A/S,Name of Issuer/Counterparty,,Corporate,,,,,,1732958.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kaiser Foundation Hospitals,Name of Issuer/Counterparty,,Corporate,,,,,,81721.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,KBC Group NV,Name of Issuer/Counterparty,,Corporate,,,,,,955920.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Keurig Dr Pepper Inc,Name of Issuer/Counterparty,,Corporate,,,,,,240502.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kilroy Realty LP,Name of Issuer/Counterparty,,Corporate,,,,,,1108273.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kimco Realty OP LLC,Name of Issuer/Counterparty,,Corporate,,,,,,181313.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kinder Morgan Inc,Name of Issuer/Counterparty,,Corporate,,,,,,3660.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kite Realty Group LP,Name of Issuer/Counterparty,,Corporate,,,,,,254203.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Klepierre Sa,Name of Issuer/Counterparty,,Corporate,,,,,,287061.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Koninklijke Ahold Delhaize Nv,Name of Issuer/Counterparty,,Corporate,,,,,,55732.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Koninklijke Kpn Nv,Name of Issuer/Counterparty,,Corporate,,,,,,499567.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kraft Heinz Foods Co,Name of Issuer/Counterparty,,Corporate,,,,,,347326.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Las Vegas Sands Corp,Name of Issuer/Counterparty,,Corporate,,,,,,989984.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Leasys SpA,Name of Issuer/Counterparty,,Corporate,,,,,,218488.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Legrand Sa,Name of Issuer/Counterparty,,Corporate,,,,,,58067.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lendlease Finance Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2096005.0,0.17,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Liberty Financial Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3303154.0,0.26,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Linde Plc,Name of Issuer/Counterparty,,Corporate,,,,,,164893.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lineage Europe Finco BV,Name of Issuer/Counterparty,,Corporate,,,,,,186012.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lloyds Banking Group Plc,Name of Issuer/Counterparty,,Corporate,,,,,,4318922.0,0.34,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lockheed Martin Corp,Name of Issuer/Counterparty,,Corporate,,,,,,135647.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,London Power Networks PLC,Name of Issuer/Counterparty,,Corporate,,,,,,542128.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lorca Telecom Bondco SA,Name of Issuer/Counterparty,,Corporate,,,,,,117233.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lowe's Cos Inc,Name of Issuer/Counterparty,,Corporate,,,,,,434167.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,LOY Yang Holdings Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,160774.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,LPL Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,93456.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lseg Netherlands BV,Name of Issuer/Counterparty,,Corporate,,,,,,123457.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lvmh Moet Hennessy Louis Vuitton Se,Name of Issuer/Counterparty,,Corporate,,,,,,47840.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,LYB International Finance III LLC,Name of Issuer/Counterparty,,Corporate,,,,,,275059.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,M&G Plc,Name of Issuer/Counterparty,,Corporate,,,,,,134086.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Macquarie Airfinance Holdings Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,165285.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Macquarie Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1750312.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Macquarie Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,906059.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Magnum Icc Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,622775.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Manulife Financial Corp,Name of Issuer/Counterparty,,Corporate,,,,,,400022.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Marex Group PLC,Name of Issuer/Counterparty,,Corporate,,,,,,134490.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Marriott International Inc/MD,Name of Issuer/Counterparty,,Corporate,,,,,,66830.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mars Inc,Name of Issuer/Counterparty,,Corporate,,,,,,964410.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Marsh & McLennan Cos Inc,Name of Issuer/Counterparty,,Corporate,,,,,,266266.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mashreqbank PSC,Name of Issuer/Counterparty,,Corporate,,,,,,13788.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Massachusetts Institute of Technology,Name of Issuer/Counterparty,,Corporate,,,,,,65677.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mastercard Inc,Name of Issuer/Counterparty,,Corporate,,,,,,22875.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mcdonald's Corp,Name of Issuer/Counterparty,,Corporate,,,,,,175899.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Medtronic Global Holdings SCA,Name of Issuer/Counterparty,,Corporate,,,,,,71015.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mercialys Sa,Name of Issuer/Counterparty,,Corporate,,,,,,310344.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Merck & Co Inc,Name of Issuer/Counterparty,,Corporate,,,,,,325504.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Meritage Homes Corp,Name of Issuer/Counterparty,,Corporate,,,,,,14074.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Meta Platforms Inc,Name of Issuer/Counterparty,,Corporate,,,,,,476066.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Metropolitan Life Global Funding I,Name of Issuer/Counterparty,,Corporate,,,,,,145699.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Micron Technology Inc,Name of Issuer/Counterparty,,Corporate,,,,,,713783.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Microsoft Corp,Name of Issuer/Counterparty,,Corporate,,,,,,25683.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mitsubishi Ufj Financial Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1280338.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mitsubishi UFJ Trust & Banking Corp/London,Name of Issuer/Counterparty,,Corporate,,,,,,305128.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mizuho Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,21807.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mizuho Bank Ltd/New York NY,Name of Issuer/Counterparty,,Corporate,,,,,,1320322.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mizuho Financial Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,224743.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mondelez International Holdings Netherlands BV,Name of Issuer/Counterparty,,Corporate,,,,,,45915.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Monongahela Power Co,Name of Issuer/Counterparty,,Corporate,,,,,,85789.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Morgan Stanley,Name of Issuer/Counterparty,,Corporate,,,,,,2714107.0,0.22,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Motability Operations Group PLC,Name of Issuer/Counterparty,,Corporate,,,,,,53915.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,MPLX LP,Name of Issuer/Counterparty,,Corporate,,,,,,261616.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,MSD Netherlands Capital BV,Name of Issuer/Counterparty,,Corporate,,,,,,96216.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,MUFG Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,241880.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,MUFG Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,389327.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,National Australia Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,24539613.0,1.95,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,National Australia Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,195924.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,National Grid Electricity Transmission PLC,Name of Issuer/Counterparty,,Corporate,,,,,,92701.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nationwide Building Society,Name of Issuer/Counterparty,,Corporate,,,,,,1510054.0,0.12,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Natixis SA/New York NY,Name of Issuer/Counterparty,,Corporate,,,,,,1320298.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NatWest Group PLC,Name of Issuer/Counterparty,,Corporate,,,,,,106370.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NE Property BV,Name of Issuer/Counterparty,,Corporate,,,,,,189861.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Netflix Inc,Name of Issuer/Counterparty,,Corporate,,,,,,36692.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,New England Power Co,Name of Issuer/Counterparty,,Corporate,,,,,,113798.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,New York Life Global Funding,Name of Issuer/Counterparty,,Corporate,,,,,,435526.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NextEra Energy Capital Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1419899.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nisource Inc,Name of Issuer/Counterparty,,Corporate,,,,,,433322.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nissan Motor Acceptance Co LLC,Name of Issuer/Counterparty,,Corporate,,,,,,162646.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NLG Global Funding,Name of Issuer/Counterparty,,Corporate,,,,,,122512.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nnn Reit Inc,Name of Issuer/Counterparty,,Corporate,,,,,,432807.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nordea Bank Abp,Name of Issuer/Counterparty,,Corporate,,,,,,295466.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nordea Kredit Realkreditaktieselskab,Name of Issuer/Counterparty,,Corporate,,,,,,2409882.0,0.19,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Norfina Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1505956.0,0.12,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Norfolk Southern Corp,Name of Issuer/Counterparty,,Corporate,,,,,,694895.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Northumbrian Water Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,310308.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NSW Electricity Networks Finance Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3342145.0,0.27,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NTT Finance Corp,Name of Issuer/Counterparty,,Corporate,,,,,,764080.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nykredit Realkredit A/S,Name of Issuer/Counterparty,,Corporate,,,,,,4338117.0,0.34,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Occidental Petroleum Corp,Name of Issuer/Counterparty,,Corporate,,,,,,306859.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Oglethorpe Power Corp,Name of Issuer/Counterparty,,Corporate,,,,,,46579.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Oncor Electric Delivery Co LLC,Name of Issuer/Counterparty,,Corporate,,,,,,680885.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Oneok Inc,Name of Issuer/Counterparty,,Corporate,,,,,,682552.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,OP Corporate Bank plc,Name of Issuer/Counterparty,,Corporate,,,,,,96928.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Open Text Corp,Name of Issuer/Counterparty,,Corporate,,,,,,567777.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Oracle Corp,Name of Issuer/Counterparty,,Corporate,,,,,,1138822.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Orange Sa,Name of Issuer/Counterparty,,Corporate,,,,,,1456798.0,0.12,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Oversea-Chinese Banking Corp Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,2042605.0,0.16,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Owens Corning,Name of Issuer/Counterparty,,Corporate,,,,,,136105.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pacific Gas and Electric Co,Name of Issuer/Counterparty,,Corporate,,,,,,1090528.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Panorama Auto Trust,Name of Issuer/Counterparty,,Corporate,,,,,,162151.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Panorama Auto Trust 2023-2P,Name of Issuer/Counterparty,,Corporate,,,,,,105573.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Patrick Terminals Finance Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1540583.0,0.12,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PECO Energy Co,Name of Issuer/Counterparty,,Corporate,,,,,,124708.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Penske Truck Leasing Co Lp / PTL Finance Corp,Name of Issuer/Counterparty,,Corporate,,,,,,1122719.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pepsico Inc,Name of Issuer/Counterparty,,Corporate,,,,,,223754.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pernod Ricard International Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,103321.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pernod Ricard Sa,Name of Issuer/Counterparty,,Corporate,,,,,,354835.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Perpetual Corporate Trust Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,785534.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pfizer Investment Enterprises Pte Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,824142.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pfizer Netherlands International Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,290033.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Phillips 66 Co,Name of Issuer/Counterparty,,Corporate,,,,,,490348.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Piedmont Operating Partnership LP,Name of Issuer/Counterparty,,Corporate,,,,,,210536.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pilgrim's Pride Corp,Name of Issuer/Counterparty,,Corporate,,,,,,278623.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pioneer Natural Resources Co,Name of Issuer/Counterparty,,Corporate,,,,,,68975.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Piraeus Bank SA,Name of Issuer/Counterparty,,Corporate,,,,,,380922.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Plains All American Pipeline LP / PAA Finance Corp,Name of Issuer/Counterparty,,Corporate,,,,,,175434.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PNC Financial Services Group Inc/The,Name of Issuer/Counterparty,,Corporate,,,,,,221789.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Powszechna Kasa Oszczednosci Bank Polski Sa,Name of Issuer/Counterparty,,Corporate,,,,,,82496.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Principal Life Global Funding II,Name of Issuer/Counterparty,,Corporate,,,,,,135468.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Prologis Euro Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,338730.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Prologis Targeted US Logistics Fund LP,Name of Issuer/Counterparty,,Corporate,,,,,,249511.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Prosus Nv,Name of Issuer/Counterparty,,Corporate,,,,,,251588.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Protective Life Corp,Name of Issuer/Counterparty,,Corporate,,,,,,109338.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Providence St Joseph Health Obligated Group,Name of Issuer/Counterparty,,Corporate,,,,,,15271.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Prudential PLC,Name of Issuer/Counterparty,,Corporate,,,,,,179618.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PSEG Power LLC,Name of Issuer/Counterparty,,Corporate,,,,,,360760.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Public Service Co of Oklahoma,Name of Issuer/Counterparty,,Corporate,,,,,,42617.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Public Service Enterprise Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,176020.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Qantas Airways Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,906834.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Qbe Insurance Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3737242.0,0.3,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Qorvo Inc,Name of Issuer/Counterparty,,Corporate,,,,,,173872.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Qualcomm Inc,Name of Issuer/Counterparty,,Corporate,,,,,,243737.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Raiffeisen Bank International Ag,Name of Issuer/Counterparty,,Corporate,,,,,,117180.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Raiffeisen Schweiz Genossenschaft,Name of Issuer/Counterparty,,Corporate,,,,,,105440.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ramsay Health Care Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,229250.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,RCI Banque SA,Name of Issuer/Counterparty,,Corporate,,,,,,62977.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Realkredit Danmark A/S,Name of Issuer/Counterparty,,Corporate,,,,,,3140942.0,0.25,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Realty Income Corp,Name of Issuer/Counterparty,,Corporate,,,,,,706349.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,RELX Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,79396.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Renault Sa,Name of Issuer/Counterparty,,Corporate,,,,,,456867.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Repsol E&P Capital Markets US LLC,Name of Issuer/Counterparty,,Corporate,,,,,,116344.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Repsol Europe Finance Sarl,Name of Issuer/Counterparty,,Corporate,,,,,,45452.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Roche Finance Europe BV,Name of Issuer/Counterparty,,Corporate,,,,,,41954.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Roche Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,524809.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Rogers Communications Inc,Name of Issuer/Counterparty,,Corporate,,,,,,202192.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Royal Bank of Canada,Name of Issuer/Counterparty,,Corporate,,,,,,1322997.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Royal Bank of Canada/London,Name of Issuer/Counterparty,,Corporate,,,,,,293928.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Royal Bank of Canada/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,6826359.0,0.54,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Royal Caribbean Cruises Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,246064.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Royalty Pharma Plc,Name of Issuer/Counterparty,,Corporate,,,,,,556175.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,RTX Corp,Name of Issuer/Counterparty,,Corporate,,,,,,103979.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,RWE Finance US LLC,Name of Issuer/Counterparty,,Corporate,,,,,,317544.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,S&P Global Inc,Name of Issuer/Counterparty,,Corporate,,,,,,108363.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Santander UK Group Holdings PLC,Name of Issuer/Counterparty,,Corporate,,,,,,768523.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sartorius Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,397816.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Saudi Awwal Bank,Name of Issuer/Counterparty,,Corporate,,,,,,177562.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Scentre Group Trust 1,Name of Issuer/Counterparty,,Corporate,,,,,,3045037.0,0.24,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Scentre Group Trust 2,Name of Issuer/Counterparty,,Corporate,,,,,,662528.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Schlumberger Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,55180.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Schneider Electric Se,Name of Issuer/Counterparty,,Corporate,,,,,,44978.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Scottish Hydro Electric Transmission PLC,Name of Issuer/Counterparty,,Corporate,,,,,,29033.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Segro Plc,Name of Issuer/Counterparty,,Corporate,,,,,,50695.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SELP Finance Sarl,Name of Issuer/Counterparty,,Corporate,,,,,,54891.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Severn Trent Utilities Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,598504.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Shell Finance US Inc,Name of Issuer/Counterparty,,Corporate,,,,,,240444.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Shell International Finance BV,Name of Issuer/Counterparty,,Corporate,,,,,,42632.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Shurgard Luxembourg Sarl,Name of Issuer/Counterparty,,Corporate,,,,,,275847.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Siemens Financieringsmaatschappij NV,Name of Issuer/Counterparty,,Corporate,,,,,,159549.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SIG Combibloc PurchaseCo Sarl,Name of Issuer/Counterparty,,Corporate,,,,,,95159.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Simon Property Group LP,Name of Issuer/Counterparty,,Corporate,,,,,,195967.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sirius Real Estate Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,446995.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Skandinaviska Enskilda Banken AB,Name of Issuer/Counterparty,,Corporate,,,,,,202572.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Smurfit Kappa Treasury ULC,Name of Issuer/Counterparty,,Corporate,,,,,,157104.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Smurfit Westrock Financing DAC,Name of Issuer/Counterparty,,Corporate,,,,,,14776.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Snam Spa,Name of Issuer/Counterparty,,Corporate,,,,,,142621.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Societe Generale SA,Name of Issuer/Counterparty,,Corporate,,,,,,1601465.0,0.13,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sodexo SA,Name of Issuer/Counterparty,,Corporate,,,,,,39846.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,South West Water Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,427997.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Southern California Edison Co,Name of Issuer/Counterparty,,Corporate,,,,,,79500.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Southern Co Gas Capital Corp,Name of Issuer/Counterparty,,Corporate,,,,,,203056.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Southern Gas Networks PLC,Name of Issuer/Counterparty,,Corporate,,,,,,26120.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Southwestern Public Service Co,Name of Issuer/Counterparty,,Corporate,,,,,,324849.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Standard Chartered Bank/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,394434.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Standard Chartered Bank/Dubai,Name of Issuer/Counterparty,,Corporate,,,,,,293758.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Standard Chartered PLC,Name of Issuer/Counterparty,,Corporate,,,,,,77037.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Starbucks Corp,Name of Issuer/Counterparty,,Corporate,,,,,,42753.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Stellantis Financial Services US Corp,Name of Issuer/Counterparty,,Corporate,,,,,,159066.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Stockland Trust,Name of Issuer/Counterparty,,Corporate,,,,,,1892431.0,0.15,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Stryker Corp,Name of Issuer/Counterparty,,Corporate,,,,,,46646.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Suez SACA,Name of Issuer/Counterparty,,Corporate,,,,,,833564.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sumitomo Mitsui Banking Corp/Brussels,Name of Issuer/Counterparty,,Corporate,,,,,,273944.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sumitomo Mitsui Banking Corp/New York,Name of Issuer/Counterparty,,Corporate,,,,,,1321007.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sumitomo Mitsui Banking Corp/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1372098.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sumitomo Mitsui Financial Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,284750.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Suncorp Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,2804377.0,0.22,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sutter Health,Name of Issuer/Counterparty,,Corporate,,,,,,302502.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Svenska Handelsbanken Ab,Name of Issuer/Counterparty,,Corporate,,,,,,29279.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SW Finance I PLC,Name of Issuer/Counterparty,,Corporate,,,,,,494815.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sydney Airport Finance Co Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,21698.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Synchrony Financial,Name of Issuer/Counterparty,,Corporate,,,,,,832900.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SYNNEX Corp,Name of Issuer/Counterparty,,Corporate,,,,,,92549.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Synovus Bank/Columbus GA,Name of Issuer/Counterparty,,Corporate,,,,,,155469.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Takeda Pharmaceutical Co Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,161020.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Talanx Ag,Name of Issuer/Counterparty,,Corporate,,,,,,42074.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Targa Resources Corp,Name of Issuer/Counterparty,,Corporate,,,,,,437571.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Target Corp,Name of Issuer/Counterparty,,Corporate,,,,,,588207.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Taurus Finance Retail Warehouse Trust No. 2,Name of Issuer/Counterparty,,Corporate,,,,,,557598.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,TDC Net A/S,Name of Issuer/Counterparty,,Corporate,,,,,,173143.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Telstra Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,26581.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,TELUS Corp,Name of Issuer/Counterparty,,Corporate,,,,,,140195.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Teva Pharmaceutical Finance Netherlands II BV,Name of Issuer/Counterparty,,Corporate,,,,,,109728.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Texas Instruments Inc,Name of Issuer/Counterparty,,Corporate,,,,,,480457.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Thales Sa,Name of Issuer/Counterparty,,Corporate,,,,,,78892.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Thermo Fisher Scientific Finance I BV,Name of Issuer/Counterparty,,Corporate,,,,,,158106.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Time Warner Cable LLC,Name of Issuer/Counterparty,,Corporate,,,,,,36118.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,T-Mobile USA Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1024832.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Toronto-Dominion Bank/The,Name of Issuer/Counterparty,,Corporate,,,,,,401345.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,TotalEnergies Capital International SA,Name of Issuer/Counterparty,,Corporate,,,,,,263623.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Totalenergies Se,Name of Issuer/Counterparty,,Corporate,,,,,,154286.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Toyota Motor Credit Corp,Name of Issuer/Counterparty,,Corporate,,,,,,725343.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Toyota Motor Finance Netherlands BV,Name of Issuer/Counterparty,,Corporate,,,,,,234504.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,TransCanada PipeLines Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,216352.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Transurban Finance Co Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,140074.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Traton Finance Luxembourg SA,Name of Issuer/Counterparty,,Corporate,,,,,,123235.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Triton Bond Trust 2023-1 in respect of Series 1,Name of Issuer/Counterparty,,Corporate,,,,,,438578.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Truist Financial Corp,Name of Issuer/Counterparty,,Corporate,,,,,,868860.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,UBS AG/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,16.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,UBS AG/London,Name of Issuer/Counterparty,,Corporate,,,,,,129386.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ubs Group Ag,Name of Issuer/Counterparty,,Corporate,,,,,,1046713.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Unicredit Spa,Name of Issuer/Counterparty,,Corporate,,,,,,825246.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Unilever Capital Corp,Name of Issuer/Counterparty,,Corporate,,,,,,142049.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Unilever Finance Netherlands BV,Name of Issuer/Counterparty,,Corporate,,,,,,240470.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Unilever Plc,Name of Issuer/Counterparty,,Corporate,,,,,,19548.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Union Pacific Corp,Name of Issuer/Counterparty,,Corporate,,,,,,409380.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United AirLines Inc,Name of Issuer/Counterparty,,Corporate,,,,,,130639.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United Overseas Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,773935.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United Utilities Water Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,651648.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United Utilities Water Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,97254.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Unitedhealth Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,535547.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Us Bancorp,Name of Issuer/Counterparty,,Corporate,,,,,,606442.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Var Energi Asa,Name of Issuer/Counterparty,,Corporate,,,,,,651886.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ventas Realty LP,Name of Issuer/Counterparty,,Corporate,,,,,,611049.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Veolia Environnement SA,Name of Issuer/Counterparty,,Corporate,,,,,,413009.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Verallia SA,Name of Issuer/Counterparty,,Corporate,,,,,,236541.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Verizon Communications Inc,Name of Issuer/Counterparty,,Corporate,,,,,,1037102.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,VIA Outlets BV,Name of Issuer/Counterparty,,Corporate,,,,,,345046.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,VICI Properties LP / VICI Note Co Inc,Name of Issuer/Counterparty,,Corporate,,,,,,317972.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Viper Energy Partners LLC,Name of Issuer/Counterparty,,Corporate,,,,,,116763.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Virgin Money Uk Plc,Name of Issuer/Counterparty,,Corporate,,,,,,32035.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Virginia Electric and Power Co,Name of Issuer/Counterparty,,Corporate,,,,,,127377.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Viridium Group Sarl,Name of Issuer/Counterparty,,Corporate,,,,,,401456.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Visa Inc,Name of Issuer/Counterparty,,Corporate,,,,,,125959.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Vistra Operations Co LLC,Name of Issuer/Counterparty,,Corporate,,,,,,93023.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Vmed O2 UK Financing I PLC,Name of Issuer/Counterparty,,Corporate,,,,,,278365.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Vodafone Group Plc,Name of Issuer/Counterparty,,Corporate,,,,,,49747.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Volksbank Wien AG,Name of Issuer/Counterparty,,Corporate,,,,,,357823.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Volkswagen Bank GmbH,Name of Issuer/Counterparty,,Corporate,,,,,,532671.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Volkswagen Group of America Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,176749.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Volkswagen International Finance NV,Name of Issuer/Counterparty,,Corporate,,,,,,778875.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Volvo Treasury AB,Name of Issuer/Counterparty,,Corporate,,,,,,257508.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Vonovia SE,Name of Issuer/Counterparty,,Corporate,,,,,,2270190.0,0.18,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Walmart Inc,Name of Issuer/Counterparty,,Corporate,,,,,,549438.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Waste Management Inc,Name of Issuer/Counterparty,,Corporate,,,,,,232794.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,WEA Finance LLC,Name of Issuer/Counterparty,,Corporate,,,,,,79392.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Weir Group Australian Holdings Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3095457.0,0.25,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Weir Group Inc,Name of Issuer/Counterparty,,Corporate,,,,,,178055.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Wellcome Trust Ltd/The,Name of Issuer/Counterparty,,Corporate,,,,,,8287.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Wells Fargo & Co,Name of Issuer/Counterparty,,Corporate,,,,,,2172087.0,0.17,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Welltower OP LLC,Name of Issuer/Counterparty,,Corporate,,,,,,222954.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,WestConnex Finance Co Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1102226.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Western Alliance Bank,Name of Issuer/Counterparty,,Corporate,,,,,,161932.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Westfield Stratford City Finance NO 2 PLC,Name of Issuer/Counterparty,,Corporate,,,,,,224868.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Westinghouse Air Brake Technologies Corp,Name of Issuer/Counterparty,,Corporate,,,,,,542182.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Westpac Banking Corp,Name of Issuer/Counterparty,,Corporate,,,,,,11077586.0,0.88,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Williams Cos Inc/The,Name of Issuer/Counterparty,,Corporate,,,,,,407850.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Wisconsin Electric Power Co,Name of Issuer/Counterparty,,Corporate,,,,,,118446.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Woolworths Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,163219.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Worley Financial Services Pty Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1146628.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Wynnton Funding Trust,Name of Issuer/Counterparty,,Corporate,,,,,,385582.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Xcel Energy Inc,Name of Issuer/Counterparty,,Corporate,,,,,,315524.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Yorkshire Water Finance PLC,Name of Issuer/Counterparty,,Corporate,,,,,,790704.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Zimmer Biomet Holdings Inc,Name of Issuer/Counterparty,,Corporate,,,,,,39638.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Canada,Name of Issuer/Counterparty,,Government,,,,,,5006884.0,0.4,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Commonwealth of Australia,Name of Issuer/Counterparty,,Government,,,,,,164865590.0,13.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Czech Republic,Name of Issuer/Counterparty,,Government,,,,,,675931.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Federal Republic of Germany,Name of Issuer/Counterparty,,Government,,,,,,9651989.0,0.77,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Federation of Malaysia,Name of Issuer/Counterparty,,Government,,,,,,1771775.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,French Republic,Name of Issuer/Counterparty,,Government,,,,,,29434042.0,2.34,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Japan,Name of Issuer/Counterparty,,Government,,,,,,34344027.0,2.73,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kingdom of Belgium,Name of Issuer/Counterparty,,Government,,,,,,3588008.0,0.29,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kingdom of Norway,Name of Issuer/Counterparty,,Government,,,,,,365335.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kingdom of Spain,Name of Issuer/Counterparty,,Government,,,,,,14601646.0,1.16,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kingdom of Thailand,Name of Issuer/Counterparty,,Government,,,,,,1175446.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NBN Co Ltd,Name of Issuer/Counterparty,,Government,,,,,,839.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Republic of Austria,Name of Issuer/Counterparty,,Government,,,,,,3850850.0,0.31,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Republic of Finland,Name of Issuer/Counterparty,,Government,,,,,,1061845.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Republic of Italy,Name of Issuer/Counterparty,,Government,,,,,,25210210.0,2.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Republic of Lithuania,Name of Issuer/Counterparty,,Government,,,,,,802399.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Republic of Poland,Name of Issuer/Counterparty,,Government,,,,,,1090736.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Republic of Singapore,Name of Issuer/Counterparty,,Government,,,,,,501454.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Romania,Name of Issuer/Counterparty,,Government,,,,,,425020.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Slovak Republic,Name of Issuer/Counterparty,,Government,,,,,,745781.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sovereign in right of New Zealand,Name of Issuer/Counterparty,,Government,,,,,,11130582.0,0.88,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,State of Israel,Name of Issuer/Counterparty,,Government,,,,,,790730.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Swiss Confederation,Name of Issuer/Counterparty,,Government,,,,,,138508.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United Kingdom of Great Britain and Northern Ireland,Name of Issuer/Counterparty,,Government,,,,,,16253818.0,1.29,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United Mexican States,Name of Issuer/Counterparty,,Government,,,,,,1385774.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,United States of America,Name of Issuer/Counterparty,,Government,,,,,,129508040.0,10.3,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,280 Park Avenue 2017-280P Mortgage Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,130979.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,A&D Mortgage Trust 2023-NQM2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,328683.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,A&D Mortgage Trust 2023-NQM4,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,237733.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,A&D Mortgage Trust 2023-NQM5,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,139939.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,A&D Mortgage Trust 2024-NQM2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,327239.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,A&D Mortgage Trust 2024-NQM3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,616226.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,A&D Mortgage Trust 2025-NQM4,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,129734.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AFG,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,227977.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,AFG 2023-1 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,134640.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Apollo Series 2017-2 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,37818.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Aran Funding 2025-1 DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,227420.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ATLX 2024-RPL1 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,460302.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ATLX 2024-RPL2 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,575525.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BAMLL Trust 2024-BHP,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,825314.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Banna RMBS DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,239406.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Bayview Commercial Asset Trust 2005-2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,12737.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BF 2019-NYT Mortgage Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,278435.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BFLD 2024-VICT Mortgage Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,190438.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Blackwattle Series RMBS Trust No.6,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,162646.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BOCA Commercial Mortgage Trust 2025-BOCA,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,65856.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BPR Trust 2021-WILL,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,447739.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BPR Trust 2022-SSP,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,140022.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BRAVO Residential Funding Trust 2023-NQM7,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,64529.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BX Commercial Mortgage Trust 2022-CSMO,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,1173463.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BX Trust 2025-GW,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,535356.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Caister Finance DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,502688.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cassia 2022-1 SRL,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,347974.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Castell 2021-1 PLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,133201.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,CFMT 2024-R1 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,251703.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Chase Home Lending Mortgage Trust 2024-10,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,228811.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Chase Home Lending Mortgage Trust 2025-8,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,78326.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Chase Home Lending Mortgage Trust Series 2024-7,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,332634.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Citigroup Mortgage Loan Trust 2024-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,197125.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Citigroup Mortgage Loan Trust 2025-2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,364362.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Citigroup Mortgage Loan Trust 2025-4,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,118722.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Coventry Bond Trust 2023-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,181255.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Coventry Bond Trust 2023-2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,180117.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Cross 2023-H2 Mortgage Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,25745.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,E-MAC Program BV,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,327373.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Extended Stay America Trust 2025-ESH,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,125273.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Fannie Mae or Freddie Mac,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,25893925.0,2.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Federal Home Loan Mortgage Corp,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,1439019.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Federal National Mortgage Association,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,21338469.0,1.7,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Firstmac Mortgage Funding Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,739688.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Firstmac Mortgage Funding Trust NO 4 Series 2023-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,273621.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,FIRSTMAC MORTGAGE FUNDING TRUST NO. 4 SERIES 2024-3PP,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,230185.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,FirstMac Mortgage Funding Trust No.4 Series Eagle No 4,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,355084.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,FirstMac Mortgage Funding Trust No.4 Series Eagle No.1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,218150.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Fontainebleau Miami Beach Mortgage Trust 2024-FBLU,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,241936.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Freddie Mac Pool,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,21093442.0,1.68,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Freddie Mac Seasoned Credit Risk Transfer Trust Series 2018-3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,294489.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Freddie Mac Seasoned Credit Risk Transfer Trust Series 2019-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,530977.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Freddie Mac Seasoned Credit Risk Transfer Trust Series 2019-2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,741260.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Freddie Mac Seasoned Credit Risk Transfer Trust Series 2019-3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,706660.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Freddie Mac Seasoned Credit Risk Transfer Trust Series 2020-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,348493.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Freddie Mac Seasoned Credit Risk Transfer Trust Series 2020-2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,376551.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Freddie Mac Seasoned Credit Risk Transfer Trust Series 2020-3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,335649.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Government National Mortgage Association,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,12602700.0,1.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GS Mortgage Securities Corp Trust 2024-MARK,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,301651.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GS Mortgage-Backed Securities Trust 2023-PJ4,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,32151.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GS Mortgage-Backed Securities Trust 2024-PJ5,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,47806.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GS Mortgage-Backed Securities Trust 2025-PJ11,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,566689.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GS Mortgage-Backed Securities Trust 2025-PJ3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,559896.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GSJP Trust 2025-BEDS,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,105271.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,GWT 2024-WLF2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,129876.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Highways 2021 PLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,315734.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,HLTN Commercial Mortgage Trust 2024-DPLO,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,202081.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Household Capital 2024-1 RMBS,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,275694.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,HYT Commercial Mortgage Trust 2024-RGCY,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,209047.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,J.P. Morgan Mortgage Trust 2024-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,3010.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Jeronimo Funding DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,390127.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JP Morgan Mortgage Trust 2024-INV1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,385519.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,JW Commercial Mortgage Trust 2024-MRCO,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,563620.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,La Trobe Financial Capital Markets Trust 2023-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,850660.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,La Trobe Financial Capital Markets Trust 2023-3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,635681.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,La Trobe Financial Capital Markets Trust 2024-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,484133.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,La Trobe Financial Capital Markets Trust 2025-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,274295.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Lugo Funding DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,206507.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mansard Mortgages 2007-2 PLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,199943.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,MF1 2021-W10X,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,32854.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,MFA 2023-NQM4 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,84051.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mortgage House RMBS Osmium Series 2023-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,513431.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mortgage House RMBS Osmium Series 2024-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,101898.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mortgage House RMBS Osmium Series 2024-2,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,264560.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Mortgage House RMBS Prime Series 2025-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,2312210.0,0.18,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,New Residential Mortgage Loan Trust 2023-NQM1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,87516.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Newgate Funding PLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,14445.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NJ 2025-WBRK,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,283918.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NYC Commercial Mortgage Trust 2025-1155,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,442571.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NYCT Trust 2024-3ELV,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,605198.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,OBX 2023-NQM6 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,57229.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,OBX 2024-NQM3 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,19021.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Olympus 2024-1 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,510646.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Olympus 2025-2 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,143835.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ONNI Commerical Mortgage Trust 2024-APT,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,325815.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ORDE SERIES 2024-1 TRUST,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,52666.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Orion Trust 2023-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,354536.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Orion Trust 2025-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,272846.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,ORL Trust 2024-GLKS,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,463932.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Paragon Mortgages No 12 PLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,126265.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pembroke Property Finance 3 DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,51010.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PENN Commercial Mortgage Trust 2025-P11,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,281736.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pepper Prime 2025-1 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,939.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pepper Residential Securities Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,68434.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pepper Residential Securities Trust NO 35,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,45985.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pepper Residential Securities Trust No 37,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,121332.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pepper Residential Securities Trust No. 39,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,111002.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Pepper Residential Securities Trust No. 41,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,441.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Permanent Custodians Ltd,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,520288.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRET 2025-RPL2 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,457023.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRET 2025-RPL3 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,199956.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRET 2025-RPL4 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,89978.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Provident Funding Mortgage Trust 2025-3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,692655.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Provident Funding Mortgage Trust 2025-6,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,651340.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2023-NQM2 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,88199.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2023-NQM3 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,85809.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2023-RCF1 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,42224.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2024-RCF2 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,229840.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2024-RCF3 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,251594.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2024-RCF4 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,251736.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2024-RCF5 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,129473.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2024-RPL2 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,412616.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2024-RPL3 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,156801.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2024-RPL4 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,174492.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2025-RCF1 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,263218.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2025-RCF6 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,82183.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2025-RPL2 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,165923.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM 2025-RPL4 LLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,235913.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Prpm Fundido 2025-1 DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,757163.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PRPM Fundido 2025-2 DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,713893.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,PUMA-Series 2017-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,3.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Radian Mortgage Capital Trust 2025-J3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,379950.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Radian Mortgage Capital Trust 2025-J4,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,119182.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Rate Mortgage Trust 2024-J4,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,343679.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Rate Mortgage Trust 205-J1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,352858.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,RCKT Mortgage Trust 2025-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,404516.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ruby Bond Trust 2024-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,1200793.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Ruby Bond Trust 2025-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,656004.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sage AR Funding 2021 Holdings Ltd,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,369600.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Santander Residential 1 FT,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,302055.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SDR Commercial Mortgage Trust 2024-DSNY,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,11494.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sequoia Logistics 2025-1 DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,101804.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sequoia Mortgage Trust 2025-13,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,651864.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sequoia Mortgage Trust 2025-7,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,111308.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Sequoia Mortgage Trust 2025-8,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,253160.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Series 2019-1 REDS Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,54445.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Shamrock Residential 2024-1 DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,140465.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SHR Trust 2024-LXRY,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,99503.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,SMRT 2022-MINI,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,131395.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Solaris Trust 2024-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,195676.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Taurus 2020-1 NL DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,421231.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Taurus 2025-3 UK Designated Activity Co,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,234285.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,TCO Commercial Mortgage Trust 2024-DPM,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,90283.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Think Tank Residential Series 2025-4 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,175093.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Together Asset Backed Securitisation 14 2025-1ST1 PLC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,170504.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Triton Bond Trust 2023-1 in respect of Series 1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,837443.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Triton Bond Trust 2023-2 in respect of Series 1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,148753.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Triton Bond Trust 2024-1 in respect of Series 1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,157120.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Triton Bond Trust 2024-2 in respect of Series 1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,126763.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Triton Bond Trust 2025-4 in respect of Series 1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,224375.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Trustee For Emerald II Reverse Mortgage Series 2007-1 Trust/The,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,3650.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Trustee for the Triton Trust No 2/The,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,352197.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,TX Trust 2024-HOU,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,107773.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,UK Logistics 2024-1 DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,172301.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Vantage Data Centers Germany Borrower Lux Sarl,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,254979.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Vermilion Bond Trust 2023 in respect of Series 1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,232812.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Verus Securitization Trust 2023-3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,152916.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Verus Securitization Trust 2023-4,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,131048.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Verus Securitization Trust 2024-3,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,37354.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Vita Scientia 2022-1 DAC,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,178086.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Voyager CMBS Trust 2025-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,372020.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Air New Zealand Ltd,Name of Issuer/Counterparty,,Semi Government,,,,,,967310.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,"ALBERTA, PROVINCE OF",Name of Issuer/Counterparty,,Semi Government,,,,,,43998.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Auckland Council,Name of Issuer/Counterparty,,Semi Government,,,,,,1944773.0,0.15,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Australian Capital Territory,Name of Issuer/Counterparty,,Semi Government,,,,,,4802886.0,0.38,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,BNG Bank NV,Name of Issuer/Counterparty,,Semi Government,,,,,,1707167.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,City of New York NY,Name of Issuer/Counterparty,,Semi Government,,,,,,246406.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,City of San Antonio TX Electric & Gas Systems Revenue,Name of Issuer/Counterparty,,Semi Government,,,,,,140263.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Deutsche Bahn AG,Name of Issuer/Counterparty,,Semi Government,,,,,,201465.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Electricite De France Sa,Name of Issuer/Counterparty,,Semi Government,,,,,,1339374.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Export Development Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,3340995.0,0.27,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Export-Import Bank of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,96717.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Hera SpA,Name of Issuer/Counterparty,,Semi Government,,,,,,21171.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kommunalbanken AS,Name of Issuer/Counterparty,,Semi Government,,,,,,2754847.0,0.22,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Korea Development Bank/The,Name of Issuer/Counterparty,,Semi Government,,,,,,638.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Kreditanstalt fuer Wiederaufbau,Name of Issuer/Counterparty,,Semi Government,,,,,,1871724.0,0.15,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Landwirtschaftliche Rentenbank,Name of Issuer/Counterparty,,Semi Government,,,,,,6919809.0,0.55,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Logicor Financing Sarl,Name of Issuer/Counterparty,,Semi Government,,,,,,178734.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Metropolitan Transportation Authority Dedicated Tax Fund,Name of Issuer/Counterparty,,Semi Government,,,,,,170600.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NBN Co Ltd,Name of Issuer/Counterparty,,Semi Government,,,,,,1725136.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nederlandse Waterschapsbank NV,Name of Issuer/Counterparty,,Semi Government,,,,,,1392476.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,New South Wales Treasury Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,37901219.0,3.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,New Zealand Local Government Funding Agency Bond,Name of Issuer/Counterparty,,Semi Government,,,,,,2450100.0,0.19,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Norddeutsche Landesbank-Girozentrale,Name of Issuer/Counterparty,,Semi Government,,,,,,527360.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Northern Territory Treasury Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,3847153.0,0.31,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,NRW Bank,Name of Issuer/Counterparty,,Semi Government,,,,,,270669.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,P3 Group Sarl,Name of Issuer/Counterparty,,Semi Government,,,,,,907579.0,0.07,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Province of Alberta Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,3345346.0,0.27,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Province of British Columbia Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,4045327.0,0.32,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Province of Manitoba Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,2263464.0,0.18,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Province of Ontario Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,4633480.0,0.37,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Province of Quebec Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,2908721.0,0.23,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Queensland Treasury Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,50787610.0,4.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Republic of Indonesia,Name of Issuer/Counterparty,,Semi Government,,,,,,283487.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Republic of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,371590.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,RTE Reseau de Transport d'Electricite SADIR,Name of Issuer/Counterparty,,Semi Government,,,,,,279144.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,South Australian Government Financing Authority,Name of Issuer/Counterparty,,Semi Government,,,,,,6602548.0,0.52,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Svensk Exportkredit AB,Name of Issuer/Counterparty,,Semi Government,,,,,,364002.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Tasmanian Public Finance Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,3008964.0,0.24,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Telenor Asa,Name of Issuer/Counterparty,,Semi Government,,,,,,260072.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Treasury Corp of Victoria,Name of Issuer/Counterparty,,Semi Government,,,,,,55201988.0,4.39,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,UNEDIC ASSEO,Name of Issuer/Counterparty,,Semi Government,,,,,,32037.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Zuercher Kantonalbank,Name of Issuer/Counterparty,,Semi Government,,,,,,229364.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,African Development Bank,Name of Issuer/Counterparty,,Supranational,,,,,,1640141.0,0.13,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Asian Development Bank,Name of Issuer/Counterparty,,Supranational,,,,,,4302518.0,0.34,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Asian Infrastructure Investment Bank/The,Name of Issuer/Counterparty,,Supranational,,,,,,597802.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Council Of Europe Development Bank,Name of Issuer/Counterparty,,Supranational,,,,,,342825.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Eurofima Europaeische Gesellschaft fuer die Finanzierung von Eisenbahnmaterial,Name of Issuer/Counterparty,,Supranational,,,,,,1240336.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,European Investment Bank,Name of Issuer/Counterparty,,Supranational,,,,,,4173047.0,0.33,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,European Union,Name of Issuer/Counterparty,,Supranational,,,,,,5412432.0,0.43,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Inter-American Development Bank,Name of Issuer/Counterparty,,Supranational,,,,,,4683482.0,0.37,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Inter-American Investment Corp,Name of Issuer/Counterparty,,Supranational,,,,,,1401836.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,International Bank for Reconstruction & Development,Name of Issuer/Counterparty,,Supranational,,,,,,3134489.0,0.25,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,International Finance Corp,Name of Issuer/Counterparty,,Supranational,,,,,,5093450.0,0.4,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Nordic Investment Bank,Name of Issuer/Counterparty,,Supranational,,,,,,1108729.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,State Street Global Advisors,Name of Fund Manager,,Mixed,,,,,,93.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,All Assets,,Fixed Income Private Debt,Name of Issuer/Counterparty,,Asset Backed,,,,,,53174050.0,4.23,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Externally Managed,,Ardea,Name of Fund Manager,,,,,,,,122987833.0,9.78,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Externally Managed,,"Brandywine Global Investment Management, LLC",Name of Fund Manager,,,,,,,,0.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Externally Managed,,IFM Investors,Name of Fund Manager,,,,,,,,166462086.0,13.23,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Externally Managed,,Insight Investment Management Global Limited,Name of Fund Manager,,,,,,,,87847513.0,6.98,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Externally Managed,,Morgan Stanley Investment Management (Australia),Name of Fund Manager,,,,,,,,184885749.0,14.7,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Externally Managed,,State Street Global Advisors,Name of Fund Manager,,,,,,,,93.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Externally Managed,,Wellington Management Australia Pty Ltd,Name of Fund Manager,,,,,,,,75543594.0,6.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,African Development Bank,Name of Issuer/Counterparty,,Supranational,,,,,,1640141.0,0.13,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,AMP Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1941.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Asian Development Bank,Name of Issuer/Counterparty,,Supranational,,,,,,4302518.0,0.34,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Asian Infrastructure Investment Bank/The,Name of Issuer/Counterparty,,Supranational,,,,,,597802.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Auckland Council,Name of Issuer/Counterparty,,Semi Government,,,,,,1944773.0,0.15,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Australia & New Zealand Banking Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,8807492.0,0.7,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Australian Capital Territory,Name of Issuer/Counterparty,,Semi Government,,,,,,4802886.0,0.38,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Bank of Montreal,Name of Issuer/Counterparty,,Corporate,,,,,,26465.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Bank of Montreal/London,Name of Issuer/Counterparty,,Corporate,,,,,,535974.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Bank of Nova Scotia/The,Name of Issuer/Counterparty,,Corporate,,,,,,22015.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Bank of Queensland Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1551.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Bendigo & Adelaide Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3270.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,BNG Bank NV,Name of Issuer/Counterparty,,Semi Government,,,,,,1707167.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Canada,Name of Issuer/Counterparty,,Government,,,,,,4019502.0,0.32,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Canadian Imperial Bank of Commerce,Name of Issuer/Counterparty,,Corporate,,,,,,22001.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Canadian Imperial Bank of Commerce/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1560.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Commonwealth Bank of Australia,Name of Issuer/Counterparty,,Corporate,,,,,,8499277.0,0.68,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Commonwealth of Australia,Name of Issuer/Counterparty,,Government,,,,,,143240997.0,11.39,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Cooperatieve Rabobank UA/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,1305115.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Cooperatieve Rabobank UA/NY,Name of Issuer/Counterparty,,Corporate,,,,,,299984.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Council Of Europe Development Bank,Name of Issuer/Counterparty,,Supranational,,,,,,342825.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Credit Agricole Corporate & Investment Bank SA/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1341798.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Credit Agricole Corporate and Investment Bank/London,Name of Issuer/Counterparty,,Corporate,,,,,,193731.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Czech Republic,Name of Issuer/Counterparty,,Government,,,,,,675931.0,0.05,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,DBS Bank Ltd/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,266985.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Eurofima Europaeische Gesellschaft fuer die Finanzierung von Eisenbahnmaterial,Name of Issuer/Counterparty,,Supranational,,,,,,1240336.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,European Investment Bank,Name of Issuer/Counterparty,,Supranational,,,,,,4173051.0,0.33,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Export Development Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,3340995.0,0.27,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Export-Import Bank of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,96729.0,0.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Federal Republic of Germany,Name of Issuer/Counterparty,,Government,,,,,,3476942.0,0.28,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Federation of Malaysia,Name of Issuer/Counterparty,,Government,,,,,,1771775.0,0.14,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,French Republic,Name of Issuer/Counterparty,,Government,,,,,,14873393.0,1.18,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Hongkong & Shanghai Banking Corp Ltd-The-/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,373315.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,ING Bank Australia Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,3033.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,ING Bank NV/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1955.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Inter-American Development Bank,Name of Issuer/Counterparty,,Supranational,,,,,,4683482.0,0.37,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Inter-American Investment Corp,Name of Issuer/Counterparty,,Supranational,,,,,,1401836.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,International Bank for Reconstruction & Development,Name of Issuer/Counterparty,,Supranational,,,,,,3134489.0,0.25,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,International Finance Corp,Name of Issuer/Counterparty,,Supranational,,,,,,5093450.0,0.4,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Japan,Name of Issuer/Counterparty,,Government,,,,,,33628028.0,2.67,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Kingdom of Belgium,Name of Issuer/Counterparty,,Government,,,,,,3588008.0,0.29,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Kingdom of Norway,Name of Issuer/Counterparty,,Government,,,,,,365335.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Kingdom of Spain,Name of Issuer/Counterparty,,Government,,,,,,14601646.0,1.16,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Kingdom of Thailand,Name of Issuer/Counterparty,,Government,,,,,,1175446.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Kommunalbanken AS,Name of Issuer/Counterparty,,Semi Government,,,,,,2754847.0,0.22,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Korea Development Bank/The,Name of Issuer/Counterparty,,Semi Government,,,,,,638.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Kreditanstalt fuer Wiederaufbau,Name of Issuer/Counterparty,,Semi Government,,,,,,1871724.0,0.15,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Landwirtschaftliche Rentenbank,Name of Issuer/Counterparty,,Semi Government,,,,,,6919809.0,0.55,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Mitsubishi UFJ Trust & Banking Corp/London,Name of Issuer/Counterparty,,Corporate,,,,,,305164.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Mizuho Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,21807.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,MUFG Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,241910.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,MUFG Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,370455.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,National Australia Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,5365335.0,0.43,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,National Australia Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,195948.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,NBN Co Ltd,Name of Issuer/Counterparty,,Government,,,,,,839.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,NBN Co Ltd,Name of Issuer/Counterparty,,Semi Government,,,,,,1641588.0,0.13,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Nederlandse Waterschapsbank NV,Name of Issuer/Counterparty,,Semi Government,,,,,,1392476.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,New South Wales Treasury Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,25402915.0,2.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,New Zealand Local Government Funding Agency Bond,Name of Issuer/Counterparty,,Semi Government,,,,,,2450100.0,0.19,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Nordea Bank Abp,Name of Issuer/Counterparty,,Corporate,,,,,,10643.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Nordic Investment Bank,Name of Issuer/Counterparty,,Supranational,,,,,,1108729.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Norfina Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,1433007.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Northern Territory Treasury Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,3847153.0,0.31,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,NRW Bank,Name of Issuer/Counterparty,,Semi Government,,,,,,270669.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Oversea-Chinese Banking Corp Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1943744.0,0.15,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Pepper Prime 2025-1 Trust,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,939.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Pepper Residential Securities Trust No. 41,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,441.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Province of Alberta Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,3290195.0,0.26,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Province of British Columbia Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,4045327.0,0.32,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Province of Manitoba Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,2263464.0,0.18,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Province of Ontario Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,1232965.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Province of Quebec Canada,Name of Issuer/Counterparty,,Semi Government,,,,,,2815468.0,0.22,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,PUMA-Series 2017-1,Name of Issuer/Counterparty,,Mortgage Backed,,,,,,3.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Queensland Treasury Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,37809824.0,3.01,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Republic of Austria,Name of Issuer/Counterparty,,Government,,,,,,3850850.0,0.31,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Republic of Finland,Name of Issuer/Counterparty,,Government,,,,,,1061845.0,0.08,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Republic of Indonesia,Name of Issuer/Counterparty,,Semi Government,,,,,,283487.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Republic of Italy,Name of Issuer/Counterparty,,Government,,,,,,13029391.0,1.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Republic of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,371590.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Republic of Lithuania,Name of Issuer/Counterparty,,Government,,,,,,802399.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Republic of Poland,Name of Issuer/Counterparty,,Government,,,,,,1090736.0,0.09,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Republic of Singapore,Name of Issuer/Counterparty,,Government,,,,,,501454.0,0.04,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Romania,Name of Issuer/Counterparty,,Government,,,,,,425020.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Royal Bank of Canada,Name of Issuer/Counterparty,,Corporate,,,,,,211439.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Royal Bank of Canada/London,Name of Issuer/Counterparty,,Corporate,,,,,,293964.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Royal Bank of Canada/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,6495665.0,0.52,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Skandinaviska Enskilda Banken AB,Name of Issuer/Counterparty,,Corporate,,,,,,10576.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Slovak Republic,Name of Issuer/Counterparty,,Government,,,,,,745781.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,South Australian Government Financing Authority,Name of Issuer/Counterparty,,Semi Government,,,,,,4848524.0,0.39,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Sovereign in right of New Zealand,Name of Issuer/Counterparty,,Government,,,,,,11130582.0,0.88,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Standard Chartered Bank/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,375466.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Standard Chartered Bank/Dubai,Name of Issuer/Counterparty,,Corporate,,,,,,293794.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,State of Israel,Name of Issuer/Counterparty,,Government,,,,,,790730.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Sumitomo Mitsui Banking Corp/Brussels,Name of Issuer/Counterparty,,Corporate,,,,,,273974.0,0.02,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Sumitomo Mitsui Banking Corp/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,1305754.0,0.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Svensk Exportkredit AB,Name of Issuer/Counterparty,,Semi Government,,,,,,364002.0,0.03,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Tasmanian Public Finance Corp,Name of Issuer/Counterparty,,Semi Government,,,,,,3008964.0,0.24,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Treasury Corp of Victoria,Name of Issuer/Counterparty,,Semi Government,,,,,,44743018.0,3.56,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,UBS AG/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,16.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,UNEDIC ASSEO,Name of Issuer/Counterparty,,Semi Government,,,,,,32037.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,United Kingdom of Great Britain and Northern Ireland,Name of Issuer/Counterparty,,Government,,,,,,11823196.0,0.94,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,United Mexican States,Name of Issuer/Counterparty,,Government,,,,,,1385774.0,0.11,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,United Overseas Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,736509.0,0.06,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,United States of America,Name of Issuer/Counterparty,,Government,,,,,,101884718.0,8.1,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Westpac Banking Corp,Name of Issuer/Counterparty,,Corporate,,,,,,6489616.0,0.52,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,Fixed Income Private Debt,Name of Issuer/Counterparty,,,,,,,,6551042.0,0.52,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Externally Managed,,,Total,,,,,,,,637726868.0,50.7,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,,,Total,,,,,,,,615846981.0,48.96,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Equity,Listed,,Diebold Nixdorf Inc,Name,,,BPLJQW4,1,United States,,,0.0,,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Equity,Listed,,GenesisCare USA Group Holdings Inc,Name,,,WB1C0DA,720,United States,,,0.0,,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Equity,Listed,,Ses Sa,Name,,,BVPKJ82,1,United States,,,0.0,,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Equity,Listed,,Total,Total,,,,721,,,,0.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Property,Unlisted,Internally Managed,Total,Total,,,,,,,,0.0,0.0,,,,,,,nan,nan
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,220 Park Road Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Arcus Infrastructure Partners,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,B9 PA CMBS Borrower LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,B9 Sapphire Icon Way Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,B9 Sapphire Woodinville Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BADGER MEZZ A LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BADGER TERM BORROWER LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Blackstone,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BOP NE Mezz II LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BRE Jupiter Austin DC III LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BRE Jupiter Foster Commerce LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BRE Jupiter Owner W/NE/MW 1 LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BRE Jupiter Owner W/NE/MW 2 LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BRE Jupiter Southeast FL LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BRE Jupiter TX 1B Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BRE Jupiter WCA LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BRE Jupiter Western B West AZ/CA LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,BREP 9 Sapphire Mezz 1 LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Brookfield,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Caelum Atom Mezzco LTD,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Canary Wharf Holdings (BP4) Limited,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,CI ATL III-GW LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,CI DAL III-V LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,CI DAL I-V LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,CI ORL I-PRU LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,CI SLC III-V LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,CIR III-LeeVista LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2015-1 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2015-4 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2015-5 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2016-10 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2016-2 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2016-3 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2016-5 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2016-7 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2016-8 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-1 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-10 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-14 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-2 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-3 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-4 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-5 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-7 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-8 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2017-9 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-1 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-10 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-11 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-14 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-5 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-6 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-7 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-8 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2018-9 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2019-2A Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2019-2B Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2019-2F Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2019-2H Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin 2019-3 Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,ColFin Cobalt Owner III LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Digital Bridge,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Dostart Debt & Saris Regis,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Harris Partners,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,HIP ColFin Marquis Drive LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Icon 10/375 Industrial Owner Pool 6 Dallas LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Icon 400 Cabot Owner Pool 4 NJ LLC (f/k/a 400 Cabot Drive LLC),Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Icon CW Mezz Alpha NR HoldCo Pool 2 West/Northeast/Midwest LLC (f/k/a CW Mezz Alpha NR L.L.C.),Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Icon IPC TX Property Owner Pool 6 Dallas LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Icon Irvine Owner Pool 2 West/Northeast/Midwest LLC (f/k/a CWC AIrvine GL 57 L.L.C.),Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Icon Owner Pool 1 LA Non-Business Parks LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Icon Owner Pool 1 West/Southwest LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Icon Owner Pool 5 NC/TN LP,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,KSL Capital Partners,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Loonie Dutch Mezzco S.A R.L.,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Neva 2019-2G Industrial Owner LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,NorthPark Management,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Oakhill and Pamlico,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,RC 320 South Canal LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,SAV,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,SGS New Finco Limited,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Western B Southeast GA LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Western Clifton DC LLC,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Western Lehigh Valley DC II LLC (f/k/a IIT Lehigh Valley DC II LLC),Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Western Valley Crossings DC LLC (f/k/a IIT Valley Crossings DC LLC),Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,AGL ENERGY GEAC INCOME STREAM,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,AGL Energy Ltd,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,AGL SCHEDULED PAYMENT OPTION TRANCHE 3,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Pratt Finance Proprietary Limited,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,
+ARDI,Diversified Fixed Interest,Fixed Income,Internally Managed,Fixed Income Private Debt,Visy Packaging Properties Pty Ltd,Name of Issuer/Counterparty,,Asset Backed,,,,,,,,,,,,,,,

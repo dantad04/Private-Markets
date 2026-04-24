@@ -30,6 +30,13 @@ AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID = "australiansuper-stage2-stable-v1"
 AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID = "australiansuper-stage2-conservative-v1"
 AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID = "australiansuper-stage2-balanced-v1"
 AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID = "australiansuper-stage2-high-growth-v1"
+AUSTRALIANSUPER_CASH_MAPPING_VERSION_ID = "australiansuper-stage2-cash-v1"
+AUSTRALIANSUPER_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID = (
+    "australiansuper-stage2-diversified-fixed-interest-v1"
+)
+AUSTRALIANSUPER_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID = "australiansuper-stage2-indexed-diversified-v1"
+AUSTRALIANSUPER_INTERNATIONAL_SHARES_MAPPING_VERSION_ID = "australiansuper-stage2-international-shares-v1"
+AUSTRALIANSUPER_SOCIALLY_AWARE_MAPPING_VERSION_ID = "australiansuper-stage2-socially-aware-v1"
 UNISUPER_MAPPING_VERSION_ID = "unisuper-stage2-v1"
 HOSTPLUS_MAPPING_VERSION_ID = "hostplus-stage2-v1"
 CBUS_MAPPING_VERSION_ID = "cbus-stage2-late-v1"
@@ -85,6 +92,46 @@ def _retarget_taxonomy_notes(
         replace(row, notes=row.notes.replace(from_label, to_label) if row.notes else None)
         for row in taxonomy_rows
     )
+
+
+def _australiansuper_structural_expectations(
+    *,
+    observed_asset_classes: list[str],
+    observed_filters: list[str],
+    observed_name_types: list[str],
+    observed_option_codes: list[str],
+    observed_option_names: list[str],
+) -> dict[str, object]:
+    return {
+        "observed_headers": AUSTRALIANSUPER_REAL_HEADER,
+        "observed_asset_classes": observed_asset_classes,
+        "observed_filters": observed_filters,
+        "observed_name_types": observed_name_types,
+        "observed_option_codes": observed_option_codes,
+        "observed_option_names": observed_option_names,
+    }
+
+
+def _retarget_australiansuper_taxonomy_subset(
+    taxonomy_rows: tuple[ApprovedTaxonomyMappingSeed, ...],
+    *,
+    from_label: str,
+    to_label: str,
+    keys: tuple[tuple[str, str | None, bool], ...],
+) -> tuple[ApprovedTaxonomyMappingSeed, ...]:
+    key_set = set(keys)
+    selected_rows = tuple(
+        row
+        for row in taxonomy_rows
+        if (row.source_asset_class_raw, row.source_filter_raw, row.is_aggregate_default) in key_set
+    )
+    selected_keys = {
+        (row.source_asset_class_raw, row.source_filter_raw, row.is_aggregate_default) for row in selected_rows
+    }
+    missing_keys = key_set.difference(selected_keys)
+    if missing_keys:
+        raise RuntimeError(f"AustralianSuper taxonomy seed is missing expected keys: {sorted(missing_keys)!r}")
+    return _retarget_taxonomy_notes(selected_rows, from_label=from_label, to_label=to_label)
 
 
 AWARE_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
@@ -1080,6 +1127,296 @@ AUSTRALIANSUPER_HIGH_GROWTH_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
+AUSTRALIANSUPER_CASH_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_CASH_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint="c8709ee4a2a5f8667eeb96cd03d2b8a4bf20c9a6a40375bb5707faea8bc40bf3",
+    structural_expectations_json=_australiansuper_structural_expectations(
+        observed_asset_classes=[
+            "Cash",
+            "Fixed Income",
+        ],
+        observed_filters=[
+            "All Assets",
+            "Internally Managed",
+        ],
+        observed_name_types=[
+            "Asset Class",
+            "Currency Exposure",
+            "Kind of Derivatives",
+            "Name of Institution",
+            "Name of Issuer/Counterparty",
+            "Total",
+        ],
+        observed_option_codes=["ARCN"],
+        observed_option_names=["Cash"],
+    ),
+    notes=(
+        "Approved AustralianSuper latest-period Cash slice using the real "
+        "Cash superannuation PHD file and the existing thin fund-specific adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_retarget_australiansuper_taxonomy_subset(
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.taxonomy_rows,
+        from_label="Stable",
+        to_label="Cash",
+        keys=(
+            ("Cash", "All Assets", False),
+            ("Cash", "All Assets", True),
+            ("Fixed Income", "All Assets", False),
+            ("Fixed Income", "Internally Managed", False),
+            ("Fixed Income", "Internally Managed", True),
+        ),
+    ),
+)
+
+
+AUSTRALIANSUPER_DIVERSIFIED_FIXED_INTEREST_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint="4e677e07e263ab29c1181086be08c5499d18d0ddb92780707ec5acd1822d927c",
+    structural_expectations_json=_australiansuper_structural_expectations(
+        observed_asset_classes=[
+            "Cash",
+            "Fixed Income",
+            "Listed Equity",
+            "Private Debt",
+            "Unlisted Property",
+        ],
+        observed_filters=[
+            "All Assets",
+            "Externally Managed",
+            "Fixed Income Private Debt",
+            "Internally Managed",
+            "Listed",
+        ],
+        observed_name_types=[
+            "Asset Class",
+            "Currency Exposure",
+            "Kind of Derivatives",
+            "Name",
+            "Name of Fund Manager",
+            "Name of Institution",
+            "Name of Issuer/Counterparty",
+            "Total",
+        ],
+        observed_option_codes=["ARDI"],
+        observed_option_names=["Diversified Fixed Interest"],
+    ),
+    notes=(
+        "Approved AustralianSuper latest-period Diversified Fixed Interest slice using the real "
+        "Diversified Fixed Interest superannuation PHD file and the existing thin fund-specific adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_retarget_australiansuper_taxonomy_subset(
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.taxonomy_rows,
+        from_label="Stable",
+        to_label="Diversified Fixed Interest",
+        keys=(
+            ("Cash", "All Assets", False),
+            ("Cash", "All Assets", True),
+            ("Fixed Income", "All Assets", False),
+            ("Fixed Income", "Externally Managed", False),
+            ("Fixed Income", "Externally Managed", True),
+            ("Fixed Income", "Internally Managed", False),
+            ("Fixed Income", "Internally Managed", True),
+            ("Listed Equity", "Listed", False),
+            ("Listed Equity", "Listed", True),
+            ("Private Debt", "Fixed Income Private Debt", False),
+            ("Unlisted Property", "Internally Managed", True),
+        ),
+    ),
+)
+
+
+AUSTRALIANSUPER_INDEXED_DIVERSIFIED_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint="36b5d58991b476bd136c81b82aa0eaaa14e48ab7d6642a2fae8dfa5bd550b938",
+    structural_expectations_json=_australiansuper_structural_expectations(
+        observed_asset_classes=[
+            "Cash",
+            "Fixed Income",
+            "Listed Alternatives",
+            "Listed Equity",
+            "Listed Infrastructure",
+            "Listed Property",
+        ],
+        observed_filters=[
+            "All Assets",
+            "Externally Managed",
+            "Internally Managed",
+            "Listed",
+        ],
+        observed_name_types=[
+            "Asset Class",
+            "Currency Exposure",
+            "Kind of Derivatives",
+            "Name",
+            "Name of Fund Manager",
+            "Name of Institution",
+            "Name of Issuer/Counterparty",
+            "Total",
+        ],
+        observed_option_codes=["ARDO"],
+        observed_option_names=["Index Diversified"],
+    ),
+    notes=(
+        "Approved AustralianSuper latest-period Index Diversified slice using the real "
+        "Indexed Diversified superannuation PHD file and the existing thin fund-specific adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_retarget_australiansuper_taxonomy_subset(
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.taxonomy_rows,
+        from_label="Stable",
+        to_label="Index Diversified",
+        keys=(
+            ("Cash", "All Assets", False),
+            ("Cash", "All Assets", True),
+            ("Fixed Income", "All Assets", False),
+            ("Fixed Income", "Externally Managed", False),
+            ("Fixed Income", "Externally Managed", True),
+            ("Fixed Income", "Internally Managed", False),
+            ("Fixed Income", "Internally Managed", True),
+            ("Listed Alternatives", "Listed", False),
+            ("Listed Alternatives", "Listed", True),
+            ("Listed Equity", "Listed", False),
+            ("Listed Equity", "Listed", True),
+            ("Listed Infrastructure", "Listed", False),
+            ("Listed Infrastructure", "Listed", True),
+            ("Listed Property", "Listed", False),
+            ("Listed Property", "Listed", True),
+        ),
+    ),
+)
+
+
+AUSTRALIANSUPER_INTERNATIONAL_SHARES_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint="36b5d58991b476bd136c81b82aa0eaaa14e48ab7d6642a2fae8dfa5bd550b938",
+    structural_expectations_json=_australiansuper_structural_expectations(
+        observed_asset_classes=[
+            "Cash",
+            "Fixed Income",
+            "Listed Alternatives",
+            "Listed Equity",
+            "Listed Infrastructure",
+            "Listed Property",
+        ],
+        observed_filters=[
+            "All Assets",
+            "Externally Managed",
+            "Internally Managed",
+            "Listed",
+        ],
+        observed_name_types=[
+            "Asset Class",
+            "Currency Exposure",
+            "Kind of Derivatives",
+            "Name",
+            "Name of Fund Manager",
+            "Name of Institution",
+            "Name of Issuer/Counterparty",
+            "Total",
+        ],
+        observed_option_codes=["ARIS"],
+        observed_option_names=["International Shares"],
+    ),
+    notes=(
+        "Approved AustralianSuper latest-period International Shares slice using the real "
+        "International Shares superannuation PHD file and the existing thin fund-specific adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_retarget_australiansuper_taxonomy_subset(
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.taxonomy_rows,
+        from_label="Stable",
+        to_label="International Shares",
+        keys=(
+            ("Cash", "All Assets", False),
+            ("Cash", "All Assets", True),
+            ("Fixed Income", "All Assets", False),
+            ("Fixed Income", "Externally Managed", False),
+            ("Fixed Income", "Externally Managed", True),
+            ("Fixed Income", "Internally Managed", False),
+            ("Fixed Income", "Internally Managed", True),
+            ("Listed Alternatives", "Listed", False),
+            ("Listed Alternatives", "Listed", True),
+            ("Listed Equity", "Listed", False),
+            ("Listed Equity", "Listed", True),
+            ("Listed Infrastructure", "Listed", False),
+            ("Listed Infrastructure", "Listed", True),
+            ("Listed Property", "Listed", False),
+            ("Listed Property", "Listed", True),
+        ),
+    ),
+)
+
+
+AUSTRALIANSUPER_SOCIALLY_AWARE_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_SOCIALLY_AWARE_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint="ce02cfbf2d7a1988f1cca2adc7635e0f5914c644e027e1da660824d6922bcaba",
+    structural_expectations_json=_australiansuper_structural_expectations(
+        observed_asset_classes=[
+            "Cash",
+            "Fixed Income",
+            "Listed Equity",
+            "Listed Infrastructure",
+            "Listed Property",
+        ],
+        observed_filters=[
+            "All Assets",
+            "Externally Managed",
+            "Internally Managed",
+            "Listed",
+        ],
+        observed_name_types=[
+            "Asset Class",
+            "Currency Exposure",
+            "Kind of Derivatives",
+            "Name",
+            "Name of Fund Manager",
+            "Name of Institution",
+            "Name of Issuer/Counterparty",
+            "Total",
+        ],
+        observed_option_codes=["ARSB"],
+        observed_option_names=["Socially Aware"],
+    ),
+    notes=(
+        "Approved AustralianSuper latest-period Socially Aware slice using the real "
+        "Socially Aware superannuation PHD file and the existing thin fund-specific adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_retarget_australiansuper_taxonomy_subset(
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.taxonomy_rows,
+        from_label="Stable",
+        to_label="Socially Aware",
+        keys=(
+            ("Cash", "All Assets", False),
+            ("Cash", "All Assets", True),
+            ("Fixed Income", "All Assets", False),
+            ("Fixed Income", "Externally Managed", False),
+            ("Fixed Income", "Externally Managed", True),
+            ("Fixed Income", "Internally Managed", False),
+            ("Fixed Income", "Internally Managed", True),
+            ("Listed Equity", "Listed", False),
+            ("Listed Equity", "Listed", True),
+            ("Listed Infrastructure", "Listed", False),
+            ("Listed Infrastructure", "Listed", True),
+            ("Listed Property", "Listed", False),
+            ("Listed Property", "Listed", True),
+        ),
+    ),
+)
+
+
 UNISUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
     id=UNISUPER_MAPPING_VERSION_ID,
     adapter_key="UniSuperPhdStateMachineAdapter",
@@ -1633,6 +1970,11 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
         AUSTRALIANSUPER_CONSERVATIVE_APPROVED_MAPPING,
         AUSTRALIANSUPER_BALANCED_APPROVED_MAPPING,
         AUSTRALIANSUPER_HIGH_GROWTH_APPROVED_MAPPING,
+        AUSTRALIANSUPER_CASH_APPROVED_MAPPING,
+        AUSTRALIANSUPER_DIVERSIFIED_FIXED_INTEREST_APPROVED_MAPPING,
+        AUSTRALIANSUPER_INDEXED_DIVERSIFIED_APPROVED_MAPPING,
+        AUSTRALIANSUPER_INTERNATIONAL_SHARES_APPROVED_MAPPING,
+        AUSTRALIANSUPER_SOCIALLY_AWARE_APPROVED_MAPPING,
     ),
     UNISUPER_APPROVED_MAPPING.adapter_key: (UNISUPER_APPROVED_MAPPING,),
     HOSTPLUS_APPROVED_MAPPING.adapter_key: (HOSTPLUS_APPROVED_MAPPING,),

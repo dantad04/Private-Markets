@@ -12,9 +12,14 @@ from adapters.base import SourceFileMetadata
 AUSTRALIANSUPER_FIXTURE_DIR = Path("tests/fixtures/real/australiansuper").resolve()
 BALANCED_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Balanced PHD (6).csv"
 HIGH_GROWTH_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "High Growth PHD (2).csv"
+CASH_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Cash PHD (1).csv"
+DIVERSIFIED_FIXED_INTEREST_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Diversified Fixed Interest PHD (1).csv"
+INDEXED_DIVERSIFIED_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Indexed Diversified PHD (1).csv"
+INTERNATIONAL_SHARES_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "International Shares PHD.csv"
 STABLE_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Stable PHD (1).csv"
 CONSERVATIVE_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Conservative PHD (1).csv"
 MEMBER_DIRECT_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Member Direct PHD (1).csv"
+SOCIALLY_AWARE_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Socially Aware PHD.csv"
 
 
 LATEST_PERIOD_BATCH_CASES = (
@@ -23,6 +28,14 @@ LATEST_PERIOD_BATCH_CASES = (
     (CONSERVATIVE_PATH, "Conservative Balanced", 4023, 17),
     (BALANCED_PATH, "Balanced", 3920, 17),
     (HIGH_GROWTH_PATH, "High Growth", 3919, 17),
+)
+
+LATEST_PERIOD_BATCH_2_CASES = (
+    (CASH_PATH, "Cash", 87, 11),
+    (DIVERSIFIED_FIXED_INTEREST_PATH, "Diversified Fixed Interest", 1178, 15),
+    (INDEXED_DIVERSIFIED_PATH, "Index Diversified", 2217, 16),
+    (INTERNATIONAL_SHARES_PATH, "International Shares", 2164, 16),
+    (SOCIALLY_AWARE_PATH, "Socially Aware", 822, 15),
 )
 
 
@@ -62,6 +75,19 @@ class TestAustralianSuperAdapter(unittest.TestCase):
 
     def test_latest_period_first_batch_parses_on_existing_adapter_path(self) -> None:
         for file_path, option_name, expected_rows, expected_skipped_posture_rows in LATEST_PERIOD_BATCH_CASES:
+            with self.subTest(option=option_name):
+                result = self.adapter.parse(make_metadata(file_path), file_path.read_bytes())
+
+                self.assertEqual([option_name], result.structural_metadata["observed_option_names"])
+                self.assertEqual(expected_rows, len(result.holdings))
+                self.assertEqual(
+                    expected_skipped_posture_rows,
+                    result.structural_metadata["skipped_portfolio_posture_rows"],
+                )
+                self.assertFalse(any(record.source_asset_class_raw == "Derivatives" for record in result.holdings))
+
+    def test_latest_period_second_batch_parses_on_existing_adapter_path(self) -> None:
+        for file_path, option_name, expected_rows, expected_skipped_posture_rows in LATEST_PERIOD_BATCH_2_CASES:
             with self.subTest(option=option_name):
                 result = self.adapter.parse(make_metadata(file_path), file_path.read_bytes())
 

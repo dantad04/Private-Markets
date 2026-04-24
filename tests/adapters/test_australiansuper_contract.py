@@ -48,6 +48,41 @@ CONTRACT_CASES = (
         "contract-fixture-australiansuper-high-growth",
         "contract-fixture-australiansuper-high-growth-sha256-placeholder",
     ),
+    (
+        "cash",
+        Path("tests/fixtures/real/australiansuper/Cash PHD (1).csv"),
+        Path("tests/adapters/contracts/australiansuper/cash_canonical_output.json"),
+        "contract-fixture-australiansuper-cash",
+        "contract-fixture-australiansuper-cash-sha256-placeholder",
+    ),
+    (
+        "diversified_fixed_interest",
+        Path("tests/fixtures/real/australiansuper/Diversified Fixed Interest PHD (1).csv"),
+        Path("tests/adapters/contracts/australiansuper/diversified_fixed_interest_canonical_output.json"),
+        "contract-fixture-australiansuper-diversified-fixed-interest",
+        "contract-fixture-australiansuper-diversified-fixed-interest-sha256-placeholder",
+    ),
+    (
+        "indexed_diversified",
+        Path("tests/fixtures/real/australiansuper/Indexed Diversified PHD (1).csv"),
+        Path("tests/adapters/contracts/australiansuper/indexed_diversified_canonical_output.json"),
+        "contract-fixture-australiansuper-indexed-diversified",
+        "contract-fixture-australiansuper-indexed-diversified-sha256-placeholder",
+    ),
+    (
+        "international_shares",
+        Path("tests/fixtures/real/australiansuper/International Shares PHD.csv"),
+        Path("tests/adapters/contracts/australiansuper/international_shares_canonical_output.json"),
+        "contract-fixture-australiansuper-international-shares",
+        "contract-fixture-australiansuper-international-shares-sha256-placeholder",
+    ),
+    (
+        "socially_aware",
+        Path("tests/fixtures/real/australiansuper/Socially Aware PHD.csv"),
+        Path("tests/adapters/contracts/australiansuper/socially_aware_canonical_output.json"),
+        "contract-fixture-australiansuper-socially-aware",
+        "contract-fixture-australiansuper-socially-aware-sha256-placeholder",
+    ),
 )
 
 

@@ -14,9 +14,14 @@ from app.db.models import Base, ReportingPeriod, SchemaReviewQueue, SourceFile
 from app.db.session import get_engine
 from app.ingest.governance import (
     AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_CASH_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_SOCIALLY_AWARE_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID,
 )
 
@@ -27,6 +32,10 @@ STABLE_PATH = FIXTURE_DIR / "Stable PHD (1).csv"
 CONSERVATIVE_PATH = FIXTURE_DIR / "Conservative PHD (1).csv"
 BALANCED_PATH = FIXTURE_DIR / "Balanced PHD (6).csv"
 HIGH_GROWTH_PATH = FIXTURE_DIR / "High Growth PHD (2).csv"
+CASH_PATH = FIXTURE_DIR / "Cash PHD (1).csv"
+DIVERSIFIED_FIXED_INTEREST_PATH = FIXTURE_DIR / "Diversified Fixed Interest PHD (1).csv"
+INDEXED_DIVERSIFIED_PATH = FIXTURE_DIR / "Indexed Diversified PHD (1).csv"
+INTERNATIONAL_SHARES_PATH = FIXTURE_DIR / "International Shares PHD.csv"
 SOCIALLY_AWARE_PATH = FIXTURE_DIR / "Socially Aware PHD.csv"
 
 SOURCE_URLS = {
@@ -35,6 +44,11 @@ SOURCE_URLS = {
     CONSERVATIVE_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/conservative-phd.csv",
     BALANCED_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/balanced-phd.csv",
     HIGH_GROWTH_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/high-growth-phd.csv",
+    CASH_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/cash-phd.csv",
+    DIVERSIFIED_FIXED_INTEREST_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/diversified-fixed-interest-phd.csv",
+    INDEXED_DIVERSIFIED_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/indexed-diversified-phd.csv",
+    INTERNATIONAL_SHARES_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/international-shares-phd.csv",
+    SOCIALLY_AWARE_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/socially-aware-phd.csv",
 }
 
 
@@ -267,20 +281,66 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
                     self.assertEqual(mapping_version_id, source_file.mapping_version_id)
                     self.assertEqual(cumulative_review_items, session.query(SchemaReviewQueue).count())
 
-    def test_admin_ingest_socially_aware_file_remains_review_gated(self) -> None:
-        response = self.client.post(
-            "/admin/ingest/local-file/australiansuper",
-            json={
-                "file_path": str(SOCIALLY_AWARE_PATH),
-                "fund_code": "australiansuper",
-                "fund_name": "AustralianSuper",
-                "reporting_period_id": self.reporting_period_id,
-            },
+    def test_admin_ingest_second_batch_uses_latest_period_mapping_seeds(self) -> None:
+        cases = (
+            (CASH_PATH, SOURCE_URLS[CASH_PATH], AUSTRALIANSUPER_CASH_MAPPING_VERSION_ID, 87, 8),
+            (
+                DIVERSIFIED_FIXED_INTEREST_PATH,
+                SOURCE_URLS[DIVERSIFIED_FIXED_INTEREST_PATH],
+                AUSTRALIANSUPER_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
+                1178,
+                15,
+            ),
+            (
+                INDEXED_DIVERSIFIED_PATH,
+                SOURCE_URLS[INDEXED_DIVERSIFIED_PATH],
+                AUSTRALIANSUPER_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
+                2217,
+                28,
+            ),
+            (
+                INTERNATIONAL_SHARES_PATH,
+                SOURCE_URLS[INTERNATIONAL_SHARES_PATH],
+                AUSTRALIANSUPER_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
+                2164,
+                14,
+            ),
+            (
+                SOCIALLY_AWARE_PATH,
+                SOURCE_URLS[SOCIALLY_AWARE_PATH],
+                AUSTRALIANSUPER_SOCIALLY_AWARE_MAPPING_VERSION_ID,
+                822,
+                44,
+            ),
         )
-        self.assertEqual(409, response.status_code)
-        self.assertIn("AustralianSuperPhdAdapter drift detected", response.json()["detail"])
+
+        cumulative_review_items = 0
+        for file_path, source_url, mapping_version_id, expected_rows, expected_review_items in cases:
+            with self.subTest(file=file_path.name):
+                response = self.client.post(
+                    "/admin/ingest/local-file/australiansuper",
+                    json={
+                        "file_path": str(file_path),
+                        "fund_code": "australiansuper",
+                        "fund_name": "AustralianSuper",
+                        "reporting_period_id": self.reporting_period_id,
+                        "source_url": source_url,
+                    },
+                )
+                self.assertEqual(200, response.status_code)
+                payload = response.json()
+                self.assertEqual(expected_rows, payload["rows_staged"])
+                self.assertEqual(expected_rows, payload["rows_inserted"])
+                cumulative_review_items += expected_review_items
+
+                with self.SessionLocal() as session:
+                    source_file = session.get(SourceFile, payload["source_file_id"])
+                    self.assertEqual("AustralianSuperPhdAdapter", source_file.adapter_key)
+                    self.assertEqual(source_url, source_file.source_url)
+                    self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                    self.assertEqual(cumulative_review_items, session.query(SchemaReviewQueue).count())
 
         with self.SessionLocal() as session:
-            self.assertEqual(1, session.query(SchemaReviewQueue).count())
-            review_item = session.query(SchemaReviewQueue).one()
-            self.assertEqual("schema_drift", review_item.review_reason)
+            source_urls = {source_file.source_url.lower() for source_file in session.query(SourceFile).all()}
+            self.assertFalse(any("australian-shares" in source_url for source_url in source_urls))
+            self.assertFalse(any("retirement" in source_url for source_url in source_urls))

@@ -1,0 +1,99 @@
+Option Code,Option Name,Asset Class,Filter,Sub-Filter,Name,Name Type,Currency,Issuer Type,Security Identifier,Units Held,Location,Address,% Ownership,$ Value,Weighting (%),Actual Currency Exposure (%),Actual Asset Allocation (%),Effect of Derivatives Exposure (%),Classification,Sort Order,Value Range,Geo Latitude,Geo Longitude
+ARCN,Cash,Cash,,,Commonwealth Bank of Australia,Name of Institution,Australia Dollar,,,,,,,949353802.0,12.62,,,,,,,nan,nan
+ARCN,Cash,Cash,,,Australia & New Zealand Banking Group Ltd,Name of Institution,Australia Dollar,,,,,,,58968273.0,0.78,,,,,,,nan,nan
+ARCN,Cash,Cash,,,Royal Bank of Canada/Sydney,Name of Institution,Australia Dollar,,,,,,,53398191.0,0.7,,,,,,,nan,nan
+ARCN,Cash,Cash,,,Australia & New Zealand Banking Group Ltd,Name of Institution,United States Dollar,,,,,,,-906436.0,-0.01,,,,,,,nan,nan
+ARCN,Cash,Cash,,,Commonwealth Bank of Australia,Name of Institution,United States Dollar,,,,,,,-1852138.0,-0.02,,,,,,,nan,nan
+ARCN,Cash,Cash,,,DBS Bank Ltd/Australia,Name of Institution,Australia Dollar,,,,,,,35851120.0,0.48,,,,,,,nan,nan
+ARCN,Cash,Cash,,,Hongkong and Shanghai Banking Corporation Ltd,Name of Institution,Australia Dollar,,,,,,,1983955.0,0.03,,,,,,,nan,nan
+ARCN,Cash,Cash,,,JP Morgan Securities LLC,Name of Institution,Australia Dollar,,,,,,,-2881642.0,-0.04,,,,,,,nan,nan
+ARCN,Cash,Cash,,,JP Morgan Securities LLC,Name of Institution,United States Dollar,,,,,,,7181820.0,0.1,,,,,,,nan,nan
+ARCN,Cash,Cash,,,JP Morgan Securities PLC,Name of Institution,Australia Dollar,,,,,,,375866.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Australia Dollar,,,,,,,12197557.0,0.16,,,,,,,nan,nan
+ARCN,Cash,Cash,,,JPMorgan Chase Bank NA,Name of Institution,Canada Dollar,,,,,,,16.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Cash,,,JPMorgan Chase Bank NA,Name of Institution,United States Dollar,,,,,,,-471689.0,-0.01,,,,,,,nan,nan
+ARCN,Cash,Cash,,,MUFG Bank Ltd/London,Name of Institution,United States Dollar,,,,,,,-123870.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Cash,,,National Australia Bank Ltd,Name of Institution,Australia Dollar,,,,,,,425447023.0,5.64,,,,,,,nan,nan
+ARCN,Cash,Cash,,,Royal Bank of Canada,Name of Institution,United States Dollar,,,,,,,-1080414.0,-0.01,,,,,,,nan,nan
+ARCN,Cash,Cash,,,Sumitomo Mitsui Banking Corp/Sydney,Name of Institution,Australia Dollar,,,,,,,2996841.0,0.04,,,,,,,nan,nan
+ARCN,Cash,Cash,,,Total,Total,,,,,,,,1540438278.0,20.41,,,,,,,nan,nan
+ARCN,Cash,Derivatives,By Asset Class,,Fixed Income,Asset Class,,,,,,,,,,,72.84,-6.44,,,,nan,nan
+ARCN,Cash,Derivatives,By Asset Class,,Cash,Asset Class,,,,,,,,,,,27.16,6.75,,,,nan,nan
+ARCN,Cash,Derivatives,By Asset Class,,Total,Total,,,,,,,,,,,100.0,0.31,,,,nan,nan
+ARCN,Cash,Derivatives,By Currency,,AUD,Currency Exposure,,,,,,,,,,100.0,,0.31,,,,nan,nan
+ARCN,Cash,Derivatives,By Currency,,USD,Currency Exposure,,,,,,,,,,0.0,,,,,,nan,nan
+ARCN,Cash,Derivatives,By Currency,,Currencies of other developed markets,Currency Exposure,,,,,,,,,,0.0,,,,,,nan,nan
+ARCN,Cash,Derivatives,By Currency,,Total,Total,,,,,,,,,,100.0,,0.31,,,,nan,nan
+ARCN,Cash,Derivatives,By Kind,,Futures,Kind of Derivatives,,,,,,,,43034.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Derivatives,By Kind,,Forwards,Kind of Derivatives,,,,,,,,20526232.0,0.27,,,,,,,nan,nan
+ARCN,Cash,Derivatives,By Kind,,Swaps,Kind of Derivatives,,,,,,,,3020818.0,0.04,,,,,,,nan,nan
+ARCN,Cash,Derivatives,By Kind,,,Total,,,,,,,,23590084.0,0.31,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,AMP Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,52608760.0,0.7,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Australia & New Zealand Banking Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,643461569.0,8.53,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Bank of Montreal/London,Name of Issuer/Counterparty,,Corporate,,,,,,-341167.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Bank of Queensland Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,162063009.0,2.15,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Bendigo & Adelaide Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,633616120.0,8.4,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Canadian Imperial Bank of Commerce/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,52765000.0,0.7,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Commonwealth Bank of Australia,Name of Issuer/Counterparty,,Corporate,,,,,,792238729.0,10.5,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Cooperatieve Rabobank UA/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,269320377.0,3.57,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Cooperatieve Rabobank UA/NY,Name of Issuer/Counterparty,,Corporate,,,,,,-190951.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Credit Agricole Corporate & Investment Bank SA/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,58720573.0,0.78,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Credit Agricole Corporate and Investment Bank/London,Name of Issuer/Counterparty,,Corporate,,,,,,-123317.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,DBS Bank Ltd/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,25817953.0,0.34,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Hongkong & Shanghai Banking Corp Ltd-The-/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,6533421.0,0.09,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,ING Bank NV/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,56318093.0,0.75,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Mitsubishi UFJ Trust & Banking Corp/London,Name of Issuer/Counterparty,,Corporate,,,,,,-184078.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Mizuho Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,105306087.0,1.4,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,MUFG Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,-153984.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,MUFG Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,6483363.0,0.09,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,National Australia Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,944359117.0,12.51,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,National Australia Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,-124728.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Norfina Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,130945607.0,1.74,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Oversea-Chinese Banking Corp Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,153676659.0,2.04,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Royal Bank of Canada,Name of Issuer/Counterparty,,Corporate,,,,,,-113864.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Royal Bank of Canada/London,Name of Issuer/Counterparty,,Corporate,,,,,,-187119.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Royal Bank of Canada/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,236786010.0,3.14,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Standard Chartered Bank/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,218193847.0,2.89,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Standard Chartered Bank/Dubai,Name of Issuer/Counterparty,,Corporate,,,,,,-187011.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Sumitomo Mitsui Banking Corp/Brussels,Name of Issuer/Counterparty,,Corporate,,,,,,-154004.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Sumitomo Mitsui Banking Corp/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,230701530.0,3.06,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,United Overseas Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,98134670.0,1.3,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Westpac Banking Corp,Name of Issuer/Counterparty,,Corporate,,,,,,864201461.0,11.45,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,Export-Import Bank of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,-61571.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,NBN Co Ltd,Name of Issuer/Counterparty,,Semi Government,,,,,,241583482.0,3.2,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,All Assets,,European Investment Bank,Name of Issuer/Counterparty,,Supranational,,,,,,-20707.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,AMP Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,52608760.0,0.7,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Australia & New Zealand Banking Group Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,643461569.0,8.53,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Bank of Montreal/London,Name of Issuer/Counterparty,,Corporate,,,,,,-341167.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Bank of Queensland Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,162063009.0,2.15,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Bendigo & Adelaide Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,633616120.0,8.4,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Canadian Imperial Bank of Commerce/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,52765000.0,0.7,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Commonwealth Bank of Australia,Name of Issuer/Counterparty,,Corporate,,,,,,792238729.0,10.5,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Cooperatieve Rabobank UA/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,269320377.0,3.57,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Cooperatieve Rabobank UA/NY,Name of Issuer/Counterparty,,Corporate,,,,,,-190951.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Credit Agricole Corporate & Investment Bank SA/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,58720573.0,0.78,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Credit Agricole Corporate and Investment Bank/London,Name of Issuer/Counterparty,,Corporate,,,,,,-123317.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,DBS Bank Ltd/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,25817953.0,0.34,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,European Investment Bank,Name of Issuer/Counterparty,,Supranational,,,,,,-20707.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Export-Import Bank of Korea,Name of Issuer/Counterparty,,Semi Government,,,,,,-61571.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Hongkong & Shanghai Banking Corp Ltd-The-/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,6533421.0,0.09,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,ING Bank NV/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,56318093.0,0.75,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Mitsubishi UFJ Trust & Banking Corp/London,Name of Issuer/Counterparty,,Corporate,,,,,,-184078.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Mizuho Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,105306087.0,1.4,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,MUFG Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,-153984.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,MUFG Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,6483363.0,0.09,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,National Australia Bank Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,944359117.0,12.51,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,National Australia Bank Ltd/London,Name of Issuer/Counterparty,,Corporate,,,,,,-124728.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,NBN Co Ltd,Name of Issuer/Counterparty,,Semi Government,,,,,,241583482.0,3.2,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Norfina Ltd,Name of Issuer/Counterparty,,Corporate,,,,,,130945607.0,1.74,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Oversea-Chinese Banking Corp Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,153676659.0,2.04,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Royal Bank of Canada,Name of Issuer/Counterparty,,Corporate,,,,,,-113864.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Royal Bank of Canada/London,Name of Issuer/Counterparty,,Corporate,,,,,,-187119.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Royal Bank of Canada/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,236786010.0,3.14,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Standard Chartered Bank/Australia,Name of Issuer/Counterparty,,Corporate,,,,,,218193847.0,2.89,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Standard Chartered Bank/Dubai,Name of Issuer/Counterparty,,Corporate,,,,,,-187011.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Sumitomo Mitsui Banking Corp/Brussels,Name of Issuer/Counterparty,,Corporate,,,,,,-154004.0,0.0,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Sumitomo Mitsui Banking Corp/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,230701530.0,3.06,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,United Overseas Bank Ltd/Sydney,Name of Issuer/Counterparty,,Corporate,,,,,,98134670.0,1.3,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,Westpac Banking Corp,Name of Issuer/Counterparty,,Corporate,,,,,,864201461.0,11.45,,,,,,,nan,nan
+ARCN,Cash,Fixed Income,Internally Managed,,,Total,,,,,,,,5981992938.0,79.27,,,,,,,nan,nan

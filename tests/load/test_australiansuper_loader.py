@@ -23,11 +23,15 @@ from app.db.models import (
 from app.db.session import get_engine
 from app.ingest.governance import (
     AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_CASH_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_SOCIALLY_AWARE_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID,
-    SchemaDriftDetectedError,
 )
 from app.ingest.loader import ingest_australiansuper_local_file
 
@@ -38,6 +42,10 @@ STABLE_PATH = FIXTURE_DIR / "Stable PHD (1).csv"
 CONSERVATIVE_PATH = FIXTURE_DIR / "Conservative PHD (1).csv"
 BALANCED_PATH = FIXTURE_DIR / "Balanced PHD (6).csv"
 HIGH_GROWTH_PATH = FIXTURE_DIR / "High Growth PHD (2).csv"
+CASH_PATH = FIXTURE_DIR / "Cash PHD (1).csv"
+DIVERSIFIED_FIXED_INTEREST_PATH = FIXTURE_DIR / "Diversified Fixed Interest PHD (1).csv"
+INDEXED_DIVERSIFIED_PATH = FIXTURE_DIR / "Indexed Diversified PHD (1).csv"
+INTERNATIONAL_SHARES_PATH = FIXTURE_DIR / "International Shares PHD.csv"
 SOCIALLY_AWARE_PATH = FIXTURE_DIR / "Socially Aware PHD.csv"
 
 SOURCE_URLS = {
@@ -46,6 +54,11 @@ SOURCE_URLS = {
     CONSERVATIVE_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/conservative-phd.csv",
     BALANCED_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/balanced-phd.csv",
     HIGH_GROWTH_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/high-growth-phd.csv",
+    CASH_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/cash-phd.csv",
+    DIVERSIFIED_FIXED_INTEREST_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/diversified-fixed-interest-phd.csv",
+    INDEXED_DIVERSIFIED_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/indexed-diversified-phd.csv",
+    INTERNATIONAL_SHARES_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/international-shares-phd.csv",
+    SOCIALLY_AWARE_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/socially-aware-phd.csv",
 }
 
 LATEST_PERIOD_BATCH_CASES = (
@@ -54,6 +67,28 @@ LATEST_PERIOD_BATCH_CASES = (
     (CONSERVATIVE_PATH, "Conservative Balanced", AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID, 4023, 17, 194),
     (BALANCED_PATH, "Balanced", AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID, 3920, 17, 185),
     (HIGH_GROWTH_PATH, "High Growth", AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID, 3919, 17, 185),
+)
+
+LATEST_PERIOD_BATCH_2_CASES = (
+    (CASH_PATH, "Cash", AUSTRALIANSUPER_CASH_MAPPING_VERSION_ID, 87, 11, 8),
+    (
+        DIVERSIFIED_FIXED_INTEREST_PATH,
+        "Diversified Fixed Interest",
+        AUSTRALIANSUPER_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
+        1178,
+        15,
+        15,
+    ),
+    (INDEXED_DIVERSIFIED_PATH, "Index Diversified", AUSTRALIANSUPER_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID, 2217, 16, 28),
+    (
+        INTERNATIONAL_SHARES_PATH,
+        "International Shares",
+        AUSTRALIANSUPER_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
+        2164,
+        16,
+        14,
+    ),
+    (SOCIALLY_AWARE_PATH, "Socially Aware", AUSTRALIANSUPER_SOCIALLY_AWARE_MAPPING_VERSION_ID, 822, 15, 44),
 )
 
 
@@ -289,23 +324,60 @@ class TestAustralianSuperLoader(unittest.TestCase):
                 & source_filenames
             )
 
-    def test_socially_aware_official_file_remains_review_gated_until_separately_approved(self) -> None:
+    def test_ingest_second_five_file_latest_period_batch(self) -> None:
         reporting_period_id = self._create_reporting_period()
 
         with self.SessionLocal() as session:
-            with self.assertRaises(SchemaDriftDetectedError):
-                ingest_australiansuper_local_file(
+            source_file_ids: list[int] = []
+            for file_path, _option_name, mapping_version_id, expected_rows, _skipped_rows, _review_count in (
+                LATEST_PERIOD_BATCH_2_CASES
+            ):
+                summary = ingest_australiansuper_local_file(
                     session,
                     fund_code="australiansuper",
                     fund_name="AustralianSuper",
-                    file_path=str(SOCIALLY_AWARE_PATH),
+                    file_path=str(file_path),
                     reporting_period_id=reporting_period_id,
+                    source_url=SOURCE_URLS[file_path],
                 )
-            session.commit()
 
-            source_file = session.query(SourceFile).one()
-            self.assertEqual("review_required", source_file.ingest_status)
-            self.assertEqual(0, session.query(Holding).count())
-            self.assertEqual(1, session.query(SchemaReviewQueue).count())
-            review_item = session.query(SchemaReviewQueue).one()
-            self.assertEqual("schema_drift", review_item.review_reason)
+                self.assertEqual(expected_rows, summary.rows_staged)
+                self.assertEqual(expected_rows, summary.rows_inserted)
+                source_file = session.get(SourceFile, summary.source_file_id)
+                self.assertEqual("AustralianSuperPhdAdapter", source_file.adapter_key)
+                self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                self.assertEqual(SOURCE_URLS[file_path], source_file.source_url)
+                source_file_ids.append(summary.source_file_id)
+
+            session.flush()
+
+            holdings_by_option = dict(
+                session.execute(
+                    select(InvestmentOption.source_option_name, func.count(Holding.id))
+                    .join(Holding, Holding.source_option_id == InvestmentOption.id)
+                    .where(Holding.source_file_id.in_(source_file_ids))
+                    .group_by(InvestmentOption.source_option_name)
+                ).all()
+            )
+            self.assertEqual(
+                {
+                    option_name: expected_rows
+                    for _file_path, option_name, _mapping_version_id, expected_rows, _skipped_rows, _review_count in (
+                        LATEST_PERIOD_BATCH_2_CASES
+                    )
+                },
+                holdings_by_option,
+            )
+            self.assertEqual(
+                0,
+                session.query(Holding)
+                .filter(Holding.source_file_id.in_(source_file_ids), Holding.source_asset_class_raw == "Derivatives")
+                .count(),
+            )
+            self.assertEqual(
+                sum(review_count for *_prefix, review_count in LATEST_PERIOD_BATCH_2_CASES),
+                session.query(SchemaReviewQueue).count(),
+            )
+            source_urls = {source_file.source_url.lower() for source_file in session.query(SourceFile).all()}
+            self.assertFalse(any("australian-shares" in source_url for source_url in source_urls))
+            self.assertFalse(any("retirement" in source_url for source_url in source_urls))
