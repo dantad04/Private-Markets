@@ -32,6 +32,8 @@ from app.read_models import (
     EntityResolutionQueueDetailReadModel,
     EntityResolutionQueueHoldingSummary,
     EntityResolutionQueueListItem,
+    MatchedAssetProofReadModel,
+    MatchedAssetProofRowReadModel,
     SchemaReviewQueueDetailReadModel,
     SchemaReviewQueueListItem,
     SourceFileDetailReadModel,
@@ -40,6 +42,7 @@ from app.read_models import (
     SourceFileSummary,
     approve_schema_review_mapping,
     get_entity_resolution_queue_detail,
+    get_australiansuper_stable_matched_asset_proof,
     get_schema_review_queue_detail,
     get_source_file_detail,
     list_entity_resolution_queue_items,
@@ -290,6 +293,80 @@ class SourceFileDetailResponse(BaseModel):
         )
 
 
+class MatchedAssetProofRowResponse(BaseModel):
+    asset_entity_id: int
+    asset_entity_name: str
+    entity_type: str
+    source_fund_code: str
+    source_fund_name: str
+    option_code: str
+    option_name: str
+    reporting_period_end_date: date
+    canonical_asset_class_code: str
+    source_asset_class_raw: str
+    source_subclass_raw: str | None
+    disclosure_completeness: str
+    ownership_pct: str | None
+    value_band_raw: str | None
+    classification_raw: str | None
+    address: str | None
+    location_raw: str | None
+    geo_lat: str | None
+    geo_lng: str | None
+    confidence_score: str | None
+    relationship_source: str
+    source_file_id: int
+    source_row_number: int
+    metadata_attached_from_row_numbers: list[int]
+
+    @classmethod
+    def from_read_model(cls, item: MatchedAssetProofRowReadModel) -> "MatchedAssetProofRowResponse":
+        return cls(
+            asset_entity_id=item.asset_entity_id,
+            asset_entity_name=item.asset_entity_name,
+            entity_type=item.entity_type,
+            source_fund_code=item.source_fund_code,
+            source_fund_name=item.source_fund_name,
+            option_code=item.option_code,
+            option_name=item.option_name,
+            reporting_period_end_date=item.reporting_period_end_date,
+            canonical_asset_class_code=item.canonical_asset_class_code,
+            source_asset_class_raw=item.source_asset_class_raw,
+            source_subclass_raw=item.source_subclass_raw,
+            disclosure_completeness=item.disclosure_completeness,
+            ownership_pct=_decimal_string(item.ownership_pct),
+            value_band_raw=item.value_band_raw,
+            classification_raw=item.classification_raw,
+            address=item.address,
+            location_raw=item.location_raw,
+            geo_lat=_decimal_string(item.geo_lat),
+            geo_lng=_decimal_string(item.geo_lng),
+            confidence_score=_decimal_string(item.confidence_score),
+            relationship_source=item.relationship_source,
+            source_file_id=item.source_file_id,
+            source_row_number=item.source_row_number,
+            metadata_attached_from_row_numbers=item.metadata_attached_from_row_numbers,
+        )
+
+
+class MatchedAssetProofResponse(BaseModel):
+    proof_key: str
+    title: str
+    scope_note: str
+    matched_asset_count: int
+    rows: list[MatchedAssetProofRowResponse]
+
+    @classmethod
+    def from_read_model(cls, item: MatchedAssetProofReadModel) -> "MatchedAssetProofResponse":
+        return cls(
+            proof_key=item.proof_key,
+            title=item.title,
+            scope_note=item.scope_note,
+            matched_asset_count=item.matched_asset_count,
+            rows=[MatchedAssetProofRowResponse.from_read_model(row) for row in item.rows],
+        )
+
+
 class SchemaReviewQueueListItemResponse(BaseModel):
     review_item_id: int
     adapter_key: str
@@ -527,6 +604,18 @@ def admin_source_file_detail(
     if detail is None:
         raise HTTPException(status_code=404, detail="Source file not found")
     return SourceFileDetailResponse.from_read_model(detail)
+
+
+@router.get(
+    "/matched-assets/australiansuper-stable-stage5-proof",
+    response_model=MatchedAssetProofResponse,
+)
+def admin_australiansuper_stable_matched_asset_proof(
+    session: Session = Depends(get_db_session),
+) -> MatchedAssetProofResponse:
+    return MatchedAssetProofResponse.from_read_model(
+        get_australiansuper_stable_matched_asset_proof(session)
+    )
 
 
 @router.get("/entity-resolution-queue", response_model=list[EntityResolutionQueueListItemResponse])

@@ -19,6 +19,7 @@ from app.read_models import (
     get_cross_adapter_holdings_by_name,
     get_entity_resolution_queue_detail,
     get_fund_detail,
+    get_australiansuper_stable_matched_asset_proof,
     get_homepage,
     get_manager_detail,
     get_schema_review_queue_detail,
@@ -246,6 +247,25 @@ def fund_detail_page(
         {
             "page_title": f"Fund Detail {detail.fund_code}",
             "detail": detail,
+        },
+    )
+
+
+@router.get(
+    "/matched-assets/australiansuper-stable-stage5-proof",
+    response_class=HTMLResponse,
+    name="australiansuper_stable_matched_asset_proof_page",
+)
+def australiansuper_stable_matched_asset_proof_page(
+    request: Request,
+    session: Session = Depends(get_db_session),
+) -> HTMLResponse:
+    return _render(
+        request,
+        "matched_asset_proof.html",
+        {
+            "page_title": "AustralianSuper Stable Matched-Asset Proof",
+            "detail": get_australiansuper_stable_matched_asset_proof(session),
         },
     )
 

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ detail.title | e }}</h1>
+
+<p>
+  Bounded Stage 5 matched-asset proof / map precursor. This table is limited to seven exact
+  AustralianSuper Stable source rows and is not a complete property or infrastructure map.
+</p>
+
+<div class="metadata-grid">
+  <strong>proof_key</strong><span><code>{{ detail.proof_key | e }}</code></span>
+  <strong>matched_asset_count</strong><span>{{ detail.matched_asset_count | e }}</span>
+  <strong>scope</strong><span>{{ detail.scope_note | e }}</span>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>asset entity</th>
+      <th>fund / option / period</th>
+      <th>asset class</th>
+      <th>disclosure</th>
+      <th>classification / location</th>
+      <th>coordinates</th>
+      <th>confidence</th>
+      <th>provenance</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in detail.rows %}
+    <tr>
+      <td>
+        <strong>{{ row.asset_entity_name | e }}</strong><br>
+        <code>{{ row.entity_type | e }}</code><br>
+        <small>entity {{ row.asset_entity_id | e }}</small>
+      </td>
+      <td>
+        {{ row.source_fund_name | e }}<br>
+        <code>{{ row.source_fund_code | e }}</code><br>
+        {{ row.option_name | e }} <code>{{ row.option_code | e }}</code><br>
+        <span class="mono">{{ row.reporting_period_end_date.isoformat() | e }}</span>
+      </td>
+      <td>
+        <code>{{ row.canonical_asset_class_code | e }}</code><br>
+        {{ row.source_asset_class_raw | e }}<br>
+        {% if row.source_subclass_raw %}<small>{{ row.source_subclass_raw | e }}</small>{% endif %}
+      </td>
+      <td>
+        <code>{{ row.disclosure_completeness | e }}</code><br>
+        {% if row.ownership_pct is not none %}ownership_pct <span class="mono">{{ row.ownership_pct | e }}</span><br>{% endif %}
+        {% if row.value_band_raw %}value_band_raw <span class="mono">{{ row.value_band_raw | e }}</span>{% endif %}
+      </td>
+      <td>
+        {% if row.classification_raw %}{{ row.classification_raw | e }}<br>{% endif %}
+        {% if row.address %}{{ row.address | e }}<br>{% endif %}
+        {% if row.location_raw %}<code>{{ row.location_raw | e }}</code>{% endif %}
+      </td>
+      <td class="mono">
+        lat {{ row.geo_lat | e }}<br>
+        lng {{ row.geo_lng | e }}
+      </td>
+      <td>
+        <span class="mono">{{ row.confidence_score | e }}</span><br>
+        <code>{{ row.relationship_source | e }}</code>
+      </td>
+      <td>
+        file <span class="mono">{{ row.source_file_id | e }}</span>, row <span class="mono">{{ row.source_row_number | e }}</span>
+        {% if row.metadata_attached_from_row_numbers %}
+        <br><small>metadata_attached_from_row_numbers={{ row.metadata_attached_from_row_numbers | e }}</small>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="8">No matched assets are linked for this bounded proof yet.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

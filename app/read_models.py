@@ -26,6 +26,12 @@ from app.db.models import (
     SourceFile,
     TaxonomyMapping,
 )
+from app.entity_resolution.australiansuper_stable_matched_assets import (
+    AUSTRALIANSUPER_STABLE_MATCHED_ASSET_PROOF_KEY,
+    AUSTRALIANSUPER_STABLE_MATCHED_ASSET_RELATIONSHIP_ROLE,
+    AUSTRALIANSUPER_STABLE_MATCHED_ASSET_SOURCE,
+    AUSTRALIANSUPER_STABLE_MATCHED_ASSET_TARGET_ROW_NUMBERS,
+)
 
 
 @dataclass(frozen=True)
@@ -397,6 +403,43 @@ class FundDetailReadModel:
     latest_reporting_period: date | None
     investment_options: list[FundInvestmentOptionReadModel]
     change_since_prior_reporting_period: FundChangeReadModel
+
+
+@dataclass(frozen=True)
+class MatchedAssetProofRowReadModel:
+    asset_entity_id: int
+    asset_entity_name: str
+    entity_type: str
+    source_fund_code: str
+    source_fund_name: str
+    option_code: str
+    option_name: str
+    reporting_period_end_date: date
+    canonical_asset_class_code: str
+    source_asset_class_raw: str
+    source_subclass_raw: str | None
+    disclosure_completeness: str
+    ownership_pct: Decimal | None
+    value_band_raw: str | None
+    classification_raw: str | None
+    address: str | None
+    location_raw: str | None
+    geo_lat: Decimal | None
+    geo_lng: Decimal | None
+    confidence_score: Decimal | None
+    relationship_source: str
+    source_file_id: int
+    source_row_number: int
+    metadata_attached_from_row_numbers: list[int]
+
+
+@dataclass(frozen=True)
+class MatchedAssetProofReadModel:
+    proof_key: str
+    title: str
+    scope_note: str
+    matched_asset_count: int
+    rows: list[MatchedAssetProofRowReadModel]
 
 
 @dataclass(frozen=True)
@@ -2151,6 +2194,96 @@ def get_fund_detail(
                 else "Change since prior reporting period is not yet exposed on the fund detail slice."
             ),
         ),
+    )
+
+
+def get_australiansuper_stable_matched_asset_proof(session: Session) -> MatchedAssetProofReadModel:
+    rows = session.execute(
+        select(
+            Entity.id.label("asset_entity_id"),
+            Entity.canonical_name.label("asset_entity_name"),
+            Entity.entity_type,
+            Fund.code.label("source_fund_code"),
+            Fund.name.label("source_fund_name"),
+            InvestmentOption.source_option_code.label("option_code"),
+            InvestmentOption.source_option_name.label("option_name"),
+            ReportingPeriod.period_end_date.label("reporting_period_end_date"),
+            CanonicalAssetClass.code.label("canonical_asset_class_code"),
+            Holding.source_asset_class_raw,
+            Holding.source_subclass_raw,
+            Holding.disclosure_completeness,
+            Holding.ownership_pct,
+            Holding.value_band_raw,
+            Holding.classification_raw,
+            Holding.address,
+            Holding.location_raw,
+            Holding.geo_lat,
+            Holding.geo_lng,
+            HoldingRelationship.confidence_score,
+            HoldingRelationship.source.label("relationship_source"),
+            Holding.source_file_id,
+            Holding.source_row_number,
+            Holding.metadata_attached_from_row_numbers,
+        )
+        .join(Holding, Holding.id == HoldingRelationship.holding_id)
+        .join(Entity, Entity.id == HoldingRelationship.related_entity_id)
+        .join(Fund, Fund.id == Holding.source_fund_id)
+        .join(InvestmentOption, InvestmentOption.id == Holding.source_option_id)
+        .join(ReportingPeriod, ReportingPeriod.id == Holding.reporting_period_id)
+        .join(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
+        .join(SourceFile, SourceFile.id == Holding.source_file_id)
+        .where(
+            HoldingRelationship.relationship_role == AUSTRALIANSUPER_STABLE_MATCHED_ASSET_RELATIONSHIP_ROLE,
+            HoldingRelationship.source == AUSTRALIANSUPER_STABLE_MATCHED_ASSET_SOURCE,
+            Holding.source_row_number.in_(AUSTRALIANSUPER_STABLE_MATCHED_ASSET_TARGET_ROW_NUMBERS),
+            Fund.code == "australiansuper",
+            SourceFile.adapter_key == "AustralianSuperPhdAdapter",
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+            InvestmentOption.source_option_code == "ARST",
+            InvestmentOption.source_option_name == "Stable",
+        )
+        .order_by(Holding.source_row_number.asc())
+    ).all()
+
+    proof_rows = [
+        MatchedAssetProofRowReadModel(
+            asset_entity_id=row.asset_entity_id,
+            asset_entity_name=row.asset_entity_name,
+            entity_type=row.entity_type,
+            source_fund_code=row.source_fund_code,
+            source_fund_name=row.source_fund_name,
+            option_code=row.option_code,
+            option_name=row.option_name,
+            reporting_period_end_date=row.reporting_period_end_date,
+            canonical_asset_class_code=row.canonical_asset_class_code,
+            source_asset_class_raw=row.source_asset_class_raw,
+            source_subclass_raw=row.source_subclass_raw,
+            disclosure_completeness=row.disclosure_completeness,
+            ownership_pct=row.ownership_pct,
+            value_band_raw=row.value_band_raw,
+            classification_raw=row.classification_raw,
+            address=row.address,
+            location_raw=row.location_raw,
+            geo_lat=row.geo_lat,
+            geo_lng=row.geo_lng,
+            confidence_score=row.confidence_score,
+            relationship_source=row.relationship_source,
+            source_file_id=row.source_file_id,
+            source_row_number=row.source_row_number,
+            metadata_attached_from_row_numbers=list(row.metadata_attached_from_row_numbers or []),
+        )
+        for row in rows
+    ]
+    return MatchedAssetProofReadModel(
+        proof_key=AUSTRALIANSUPER_STABLE_MATCHED_ASSET_PROOF_KEY,
+        title="AustralianSuper Stable matched-asset proof",
+        scope_note=(
+            "Bounded Stage 5 matched-asset proof / map precursor. This table is limited to seven exact "
+            "AustralianSuper Stable source rows and is not a complete property or infrastructure map."
+        ),
+        matched_asset_count=len(proof_rows),
+        rows=proof_rows,
     )
 
 
