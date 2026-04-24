@@ -12,8 +12,9 @@ with manager-level aggregate exposure.
 - `docs/master-brief.md` remains the ground truth. When in doubt, defer to it.
 - `docs/project-status-through-stage4.md` holds the detailed stage lock-in.
 - Stages 1–4 acceptance criteria are met at stage scope on current `HEAD`.
-- Stage 2 acceptance remains met; Cbus onboarding is contingently deferred
-  pending real sample files and is not a current blocker.
+- Stage 2 acceptance remains met; Cbus High Growth Accumulation Option is now
+  covered by a bounded Stage 2 late-add adapter slice from a verified real
+  file, while further Cbus options / periods remain future onboarding work.
 - Stage 5 is complete at stage-scope acceptance.
 - The current IFM reviewed-ABN work and the Virtual Communities reviewed
   identity reconciliation are accepted as bounded Stage 5 ASIC
@@ -133,8 +134,9 @@ with manager-level aggregate exposure.
 - `docs/master-brief.md` as source of truth, with
   `docs/project-status-through-stage4.md` as the detailed current-state lock-in.
 - Stages 1–4 acceptance at stage scope on current `HEAD`.
-- Stage 2 acceptance, with Cbus onboarding still contingently deferred pending
-  real sample files and not a live blocker.
+- Stage 2 acceptance, with Cbus High Growth now covered by a bounded
+  verified-file late-add adapter slice; further Cbus options / periods remain
+  future onboarding work and are not a live blocker.
 - The canonical holdings schema (§6 of the master brief), including
   `disclosure_completeness` enum, `value_band_raw`, `is_aggregate`, and the
   provenance fields.

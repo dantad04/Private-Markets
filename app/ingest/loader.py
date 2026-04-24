@@ -16,6 +16,8 @@ from adapters.art_qsuper_errors import ArtQsuperAdapterError
 from adapters.aware import AwarePhdAdapter
 from adapters.aware_errors import AwareAdapterError
 from adapters.base import AdapterParseResult, SourceFileMetadata
+from adapters.cbus import CbusPhdAdapter
+from adapters.cbus_errors import CbusAdapterError
 from adapters.hesta import HestaPhdAdapter
 from adapters.hostplus import HostPlusPhdStateMachineAdapter
 from adapters.hostplus_errors import HostPlusAdapterError
@@ -873,6 +875,81 @@ def ingest_hostplus_local_file(
             approved_mapping_version_id = ensure_approved_mapping_seeded(
                 session, adapter_key="HostPlusPhdStateMachineAdapter"
             ).id
+        except Exception:
+            approved_mapping_version_id = None
+        create_schema_review_queue_item(
+            session,
+            source_file=source_file,
+            approved_mapping_version_id=approved_mapping_version_id,
+            review_reason="adapter_parse_failure",
+            observed_schema_fingerprint=None,
+            drift_summary_json={
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+            },
+            raw_bytes=raw_bytes,
+        )
+        session.flush()
+        raise
+    return load_adapter_parse_result(session, metadata, parse_result)
+
+
+def ingest_cbus_local_file(
+    session: Session,
+    *,
+    fund_code: str,
+    fund_name: str,
+    file_path: str,
+    publication_date: date | None = None,
+    reporting_period_id: int | None = None,
+    received_at: datetime | None = None,
+) -> LoadSummary:
+    file_path_obj = Path(file_path)
+    raw_bytes = file_path_obj.read_bytes()
+    checksum = hashlib.sha256(raw_bytes).hexdigest()
+    metadata = register_source_file(
+        session,
+        fund_code=fund_code,
+        fund_name=fund_name,
+        adapter_key="CbusPhdAdapter",
+        source_url=str(file_path_obj),
+        checksum=checksum,
+        received_at=received_at or datetime.now(UTC),
+        reporting_period_id=reporting_period_id,
+        publication_date=publication_date,
+    )
+    source_file = session.get(SourceFile, metadata.source_file_id)
+    try:
+        ensure_approved_mapping_seeded(session, adapter_key="CbusPhdAdapter")
+        parse_result = CbusPhdAdapter().parse(metadata, raw_bytes)
+        approved_mapping_version_id = enforce_approved_mapping(
+            session,
+            source_file=source_file,
+            parse_result=parse_result,
+            raw_bytes=raw_bytes,
+            source_section_raw=None,
+        )
+        review_events = list(parse_result.structural_metadata.get("review_queue_events", []))
+        for event in review_events:
+            create_schema_review_queue_item(
+                session,
+                source_file=source_file,
+                approved_mapping_version_id=approved_mapping_version_id,
+                review_reason=str(event.get("review_reason", "adapter_review")),
+                observed_schema_fingerprint=parse_result.schema_fingerprint,
+                drift_summary_json=dict(event.get("details", {})),
+                raw_bytes=raw_bytes,
+            )
+        if review_events:
+            session.flush()
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError):
+        session.flush()
+        raise
+    except CbusAdapterError as exc:
+        source_file.ingest_status = "review_required"
+        approved_mapping_version_id = None
+        try:
+            approved_mapping_version_id = ensure_approved_mapping_seeded(session, adapter_key="CbusPhdAdapter").id
         except Exception:
             approved_mapping_version_id = None
         create_schema_review_queue_item(

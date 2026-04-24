@@ -7,10 +7,10 @@ Implementation status update:
 - Stage 4 acceptance criteria are met at stage scope on current `HEAD`.
 - Project status is now through Stage 5 acceptance at stage scope. The project
   is not complete; later roadmap work remains.
-- Stage 2 acceptance criteria remain met. The strict caveat is unchanged:
-  roadmap deliverable 9 is still contingently open only because future Cbus
-  onboarding depends on acquiring real sample files. Cbus is not a current
-  implementation blocker.
+- Stage 2 acceptance criteria remain met. Cbus High Growth Accumulation Option
+  is now covered by a bounded Stage 2 late-add adapter slice from a verified
+  real file; any further Cbus option or period remains future onboarding work
+  requiring real-file evidence and mapping approval.
 - Stage 5 is complete at stage-scope acceptance.
 - The IFM reviewed-ABN work remains accepted as a bounded Stage 5 ASIC
   cross-reference proof slice.
@@ -129,8 +129,8 @@ ASIC cross-reference and matched-asset map proof closure work.
 
 1. Do not reopen Stage 4 for more blocker-chasing work unless a real regression
    is found.
-2. Do not treat contingent Cbus onboarding as a live blocker unless real sample
-   files are acquired.
+2. Do not treat further Cbus onboarding as a live blocker unless additional
+   real sample files are acquired.
 3. Do not describe the project as complete; describe it as through Stage 5
    acceptance, with later roadmap work still ahead.
 4. Treat Stage 5 criterion 1 as closed at stage scope under the accepted

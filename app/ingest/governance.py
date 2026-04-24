@@ -11,6 +11,11 @@ from sqlalchemy.orm import Session
 from adapters.base import AdapterParseResult
 from adapters.art_qsuper_mapping import EXPECTED_HEADER as ART_QSUPER_EXPECTED_HEADER
 from adapters.aware_mapping import EXPECTED_TABLE_1_HEADER
+from adapters.cbus_mapping import (
+    EXPECTED_HEADER as CBUS_EXPECTED_HEADER,
+    SECTION_MAPPINGS as CBUS_SECTION_MAPPINGS,
+    TOTAL_SECTION_MAPPINGS as CBUS_TOTAL_SECTION_MAPPINGS,
+)
 from adapters.sunsuper_schema_identity import AUSTRALIANSUPER_REAL_HEADER
 from adapters.sunsuper_schema_mapping import EXPECTED_HEADER as SUNSUPER_SCHEMA_EXPECTED_HEADER
 from app.db.models import AdapterMappingVersion, SchemaReviewQueue, SourceFile, TaxonomyMapping
@@ -25,6 +30,7 @@ AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID = "australiansuper-stage2-stable-v1"
 AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID = "australiansuper-stage2-conservative-v1"
 UNISUPER_MAPPING_VERSION_ID = "unisuper-stage2-v1"
 HOSTPLUS_MAPPING_VERSION_ID = "hostplus-stage2-v1"
+CBUS_MAPPING_VERSION_ID = "cbus-stage2-late-v1"
 
 
 class GovernanceError(Exception):
@@ -1521,6 +1527,54 @@ HOSTPLUS_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
+CBUS_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=CBUS_MAPPING_VERSION_ID,
+    adapter_key="CbusPhdAdapter",
+    schema_fingerprint="841a5229926cf6dc5073eeac34fe7d217560b16feb630f6ce8f01d35c9326be5",
+    structural_expectations_json={
+        "observed_headers": [CBUS_EXPECTED_HEADER],
+        "observed_section_labels": [
+            "ASSETS",
+            "DERIVATIVES",
+            "DERIVATIVES BY ASSET CLASS",
+            "DERIVATIVES BY CURRENCY",
+        ],
+        "observed_tables": [1, 2, 3, 4],
+        "observed_internal_external_values": ["external", "internal"],
+        "observed_asset_classes": sorted(
+            {
+                mapping.source_asset_class_raw
+                for mapping in (*CBUS_SECTION_MAPPINGS.values(), *CBUS_TOTAL_SECTION_MAPPINGS.values())
+            }
+        ),
+        "observed_option_names": ["High Growth Accumulation Option"],
+    },
+    notes=(
+        "Approved Stage 2 late-add Cbus mapping seeded from the verified real "
+        "High Growth Accumulation Option file for 2025-12-31."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=tuple(
+        ApprovedTaxonomyMappingSeed(
+            mapping.source_asset_class_raw,
+            mapping.source_subclass_raw,
+            None,
+            None,
+            mapping.canonical_asset_class_code,
+            mapping.is_aggregate,
+            "aggregate_total" if mapping.is_aggregate else None,
+            (
+                "Cbus Stage 2 late-add aggregate mapping"
+                if mapping.is_aggregate
+                else "Cbus Stage 2 late-add section mapping"
+            ),
+        )
+        for mapping in (*CBUS_SECTION_MAPPINGS.values(), *CBUS_TOTAL_SECTION_MAPPINGS.values())
+    ),
+)
+
+
 APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
     AWARE_APPROVED_MAPPING.adapter_key: (AWARE_APPROVED_MAPPING,),
     ART_QSUPER_APPROVED_MAPPING.adapter_key: (ART_QSUPER_APPROVED_MAPPING,),
@@ -1532,6 +1586,7 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
     ),
     UNISUPER_APPROVED_MAPPING.adapter_key: (UNISUPER_APPROVED_MAPPING,),
     HOSTPLUS_APPROVED_MAPPING.adapter_key: (HOSTPLUS_APPROVED_MAPPING,),
+    CBUS_APPROVED_MAPPING.adapter_key: (CBUS_APPROVED_MAPPING,),
 }
 
 
