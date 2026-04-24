@@ -16,10 +16,14 @@ from app.db.session import get_engine
 REAL_FIXTURE_DIR = Path("tests/fixtures/real/hesta").resolve()
 LATEST_PERIOD_BATCH_CASES = (
     (REAL_FIXTURE_DIR / "Australian-Shares-super-assets.csv", "Australian Shares", 346),
+    (REAL_FIXTURE_DIR / "Balanced-Growth-super-assets.csv", "Balanced Growth", 3050),
+    (REAL_FIXTURE_DIR / "Conservative-super-assets.csv", "Conservative", 2955),
+    (REAL_FIXTURE_DIR / "Diversified-Bonds-super-assets.csv", "Diversified Bonds", 181),
     (REAL_FIXTURE_DIR / "High-Growth-super-assets (1).csv", "High Growth", 2835),
     (REAL_FIXTURE_DIR / "Indexed-Balanced-Growth-super-assets.csv", "Indexed Balanced Growth", 1991),
     (REAL_FIXTURE_DIR / "International-Shares-super-assets.csv", "International Shares", 2456),
     (REAL_FIXTURE_DIR / "Property-and-Infrastructure-super-assets.csv", "Property and Infrastructure", 72),
+    (REAL_FIXTURE_DIR / "Sustainable-Growth-super-assets.csv", "Sustainable Growth", 734),
 )
 
 
@@ -80,9 +84,9 @@ class TestAdminIngestHestaLatestPeriod(unittest.TestCase):
         self.assertEqual(200, detail.status_code)
         detail_payload = detail.json()
         self.assertEqual("hesta", detail_payload["source_file"]["fund_code"])
-        self.assertEqual("Property and Infrastructure", detail_payload["source_file"]["investment_option_name"])
-        self.assertEqual(72, detail_payload["total_rows"])
-        self.assertIn("ownership_only", detail_payload["disclosure_counts"])
+        self.assertEqual("Sustainable Growth", detail_payload["source_file"]["investment_option_name"])
+        self.assertEqual(734, detail_payload["total_rows"])
+        self.assertIn("aggregate_total", detail_payload["disclosure_counts"])
         self.assertEqual(
             detail_payload["holdings"][0]["source_row_number"],
             detail_payload["holdings"][0]["raw_payload_json"][0]["source_row_number"],
@@ -92,8 +96,11 @@ class TestAdminIngestHestaLatestPeriod(unittest.TestCase):
         self.assertEqual(200, entity.status_code)
         entity_payload = entity.json()
         self.assertEqual("IFM Investors Pty Ltd", entity_payload["lookup_name"])
-        self.assertEqual(3, entity_payload["observation_count"])
-        self.assertEqual({"unlisted_equity": 1, "unlisted_infrastructure": 2}, entity_payload["canonical_asset_class_counts"])
+        self.assertEqual(9, entity_payload["observation_count"])
+        self.assertEqual(
+            {"fixed_income": 2, "unlisted_equity": 3, "unlisted_infrastructure": 4},
+            entity_payload["canonical_asset_class_counts"],
+        )
 
         with self.SessionLocal() as session:
             source_urls = {source_file.source_url for source_file in session.query(SourceFile).all()}

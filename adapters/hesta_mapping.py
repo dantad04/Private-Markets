@@ -34,6 +34,8 @@ HESTA_ASSET_CLASS_MAPPINGS: dict[tuple[str, str], AssetClassMappingRule] = {
     _key("Fixed Income"): AssetClassMappingRule("fixed_income", False),
     _key("Fixed Income", "Externally Managed"): AssetClassMappingRule("fixed_income", False),
     _key("Fixed Income", "Internally Managed"): AssetClassMappingRule("fixed_income", False),
+    _key("Fixed Income External Total"): AssetClassMappingRule("fixed_income", True),
+    _key("Fixed Income Internal Total"): AssetClassMappingRule("fixed_income", True),
     _key("Fixed Income Total"): AssetClassMappingRule("fixed_income", True),
     _key("Listed Equity"): AssetClassMappingRule("listed_equity", False),
     _key("Listed Equity Total"): AssetClassMappingRule("listed_equity", True),
@@ -45,6 +47,7 @@ HESTA_ASSET_CLASS_MAPPINGS: dict[tuple[str, str], AssetClassMappingRule] = {
     _key("Unlisted Equity", "Externally Managed"): AssetClassMappingRule("unlisted_equity", False),
     _key("Unlisted Equity External Total"): AssetClassMappingRule("unlisted_equity", True),
     _key("Unlisted Equity Internal Total"): AssetClassMappingRule("unlisted_equity", True),
+    _key("Unlisted Equity Total"): AssetClassMappingRule("unlisted_equity", True),
     _key("Unlisted Infrastructure", "Internally Managed"): AssetClassMappingRule("unlisted_infrastructure", False),
     _key("Unlisted Infrastructure", "Externally Managed"): AssetClassMappingRule("unlisted_infrastructure", False),
     _key("Unlisted Infrastructure External Total"): AssetClassMappingRule("unlisted_infrastructure", True),
@@ -52,6 +55,8 @@ HESTA_ASSET_CLASS_MAPPINGS: dict[tuple[str, str], AssetClassMappingRule] = {
     _key("Unlisted Property", "Internally Managed"): AssetClassMappingRule("unlisted_property", False),
     _key("Unlisted Property", "Externally Managed"): AssetClassMappingRule("unlisted_property", False),
     _key("Unlisted Property Total"): AssetClassMappingRule("unlisted_property", True),
+    _key("Unlisted Alternatives", "Externally Managed"): AssetClassMappingRule("alternatives", False),
+    _key("Unlisted Alternatives Total"): AssetClassMappingRule("alternatives", True),
 }
 
 

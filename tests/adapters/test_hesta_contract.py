@@ -26,6 +26,27 @@ CONTRACT_CASES = (
         "contract-fixture-hesta-australian-shares-sha256-placeholder",
     ),
     (
+        "balanced_growth",
+        Path("tests/fixtures/real/hesta/Balanced-Growth-super-assets.csv"),
+        Path("tests/adapters/contracts/hesta/balanced_growth_canonical_output.json"),
+        "contract-fixture-hesta-balanced-growth",
+        "contract-fixture-hesta-balanced-growth-sha256-placeholder",
+    ),
+    (
+        "conservative",
+        Path("tests/fixtures/real/hesta/Conservative-super-assets.csv"),
+        Path("tests/adapters/contracts/hesta/conservative_canonical_output.json"),
+        "contract-fixture-hesta-conservative",
+        "contract-fixture-hesta-conservative-sha256-placeholder",
+    ),
+    (
+        "diversified_bonds",
+        Path("tests/fixtures/real/hesta/Diversified-Bonds-super-assets.csv"),
+        Path("tests/adapters/contracts/hesta/diversified_bonds_canonical_output.json"),
+        "contract-fixture-hesta-diversified-bonds",
+        "contract-fixture-hesta-diversified-bonds-sha256-placeholder",
+    ),
+    (
         "high_growth",
         Path("tests/fixtures/real/hesta/High-Growth-super-assets (1).csv"),
         Path("tests/adapters/contracts/hesta/high_growth_canonical_output.json"),
@@ -52,6 +73,13 @@ CONTRACT_CASES = (
         Path("tests/adapters/contracts/hesta/property_and_infrastructure_canonical_output.json"),
         "contract-fixture-hesta-property-and-infrastructure",
         "contract-fixture-hesta-property-and-infrastructure-sha256-placeholder",
+    ),
+    (
+        "sustainable_growth",
+        Path("tests/fixtures/real/hesta/Sustainable-Growth-super-assets.csv"),
+        Path("tests/adapters/contracts/hesta/sustainable_growth_canonical_output.json"),
+        "contract-fixture-hesta-sustainable-growth",
+        "contract-fixture-hesta-sustainable-growth-sha256-placeholder",
     ),
 )
 

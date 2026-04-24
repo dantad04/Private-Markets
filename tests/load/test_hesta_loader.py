@@ -22,24 +22,26 @@ from tests.hesta_fixture import EXPECTED_TOTAL_ROWS, FIXTURE_PATH
 
 REAL_FIXTURE_DIR = Path("tests/fixtures/real/hesta").resolve()
 AUSTRALIAN_SHARES_PATH = REAL_FIXTURE_DIR / "Australian-Shares-super-assets.csv"
+BALANCED_GROWTH_PATH = REAL_FIXTURE_DIR / "Balanced-Growth-super-assets.csv"
+CONSERVATIVE_PATH = REAL_FIXTURE_DIR / "Conservative-super-assets.csv"
+DIVERSIFIED_BONDS_PATH = REAL_FIXTURE_DIR / "Diversified-Bonds-super-assets.csv"
 HIGH_GROWTH_PATH = REAL_FIXTURE_DIR / "High-Growth-super-assets (1).csv"
 INDEXED_BALANCED_GROWTH_PATH = REAL_FIXTURE_DIR / "Indexed-Balanced-Growth-super-assets.csv"
 INTERNATIONAL_SHARES_PATH = REAL_FIXTURE_DIR / "International-Shares-super-assets.csv"
 PROPERTY_AND_INFRASTRUCTURE_PATH = REAL_FIXTURE_DIR / "Property-and-Infrastructure-super-assets.csv"
+SUSTAINABLE_GROWTH_PATH = REAL_FIXTURE_DIR / "Sustainable-Growth-super-assets.csv"
 
 LATEST_PERIOD_BATCH_CASES = (
     (AUSTRALIAN_SHARES_PATH, "Australian Shares", 346),
+    (BALANCED_GROWTH_PATH, "Balanced Growth", 3050),
+    (CONSERVATIVE_PATH, "Conservative", 2955),
+    (DIVERSIFIED_BONDS_PATH, "Diversified Bonds", 181),
     (HIGH_GROWTH_PATH, "High Growth", 2835),
     (INDEXED_BALANCED_GROWTH_PATH, "Indexed Balanced Growth", 1991),
     (INTERNATIONAL_SHARES_PATH, "International Shares", 2456),
     (PROPERTY_AND_INFRASTRUCTURE_PATH, "Property and Infrastructure", 72),
+    (SUSTAINABLE_GROWTH_PATH, "Sustainable Growth", 734),
 )
-HELD_BACK_FILENAMES = {
-    "Balanced-Growth-super-assets.csv",
-    "Conservative-super-assets.csv",
-    "Diversified-Bonds-super-assets.csv",
-    "Sustainable-Growth-super-assets.csv",
-}
 
 
 class TestHestaLoader(unittest.TestCase):
@@ -194,4 +196,7 @@ class TestHestaLoader(unittest.TestCase):
             source_urls = {source_file.source_url for source_file in session.query(SourceFile).all()}
             self.assertFalse(any("derivatives" in source_url for source_url in source_urls))
             source_filenames = {Path(source_url).name for source_url in source_urls}
-            self.assertTrue(source_filenames.isdisjoint(HELD_BACK_FILENAMES))
+            self.assertEqual(
+                {fixture_path.name for fixture_path, _expected_option, _expected_rows in LATEST_PERIOD_BATCH_CASES},
+                source_filenames,
+            )
