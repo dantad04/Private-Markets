@@ -102,11 +102,19 @@ with manager-level aggregate exposure.
   alias-level variant only.
 - The correct next slice is Brandon Capital Partners straight reviewed identity
   enrichment in place.
-- Those proof slices do **not** mean Stage 5 acceptance criterion 1 is met at
-  stage scope.
-- No property or infrastructure map work has started in this proof slice.
-- The first Stage 5 implementation boundary is ASIC cross-reference proof work,
-  not property or infrastructure map work.
+- The S2Search Australia Pty Ltd and Validly Pty Ltd ASIC cross-reference batch
+  is accepted.
+- Stage 5 acceptance criterion 1 is now met at stage scope: the accepted
+  status/runbook checkpoint is 18 populated ASIC cross-reference entities
+  including IFM.
+- Stage 5 overall remains open because the property/infrastructure map
+  criterion remains outstanding.
+- No property or infrastructure map work has started.
+- No Stage 6 or public-markets work has started.
+- The next bounded task is a no-code Stage 5 criterion-2
+  property/infrastructure map preflight.
+- The 18-count checkpoint is recorded only in status/runbook context; it does
+  not rewrite the master brief's qualitative Stage 5 acceptance criterion.
 - Do not reopen Stages 2, 3, or 4 unless you find a real regression.
 - Do not broaden a Stage 5 task beyond one bounded brief-aligned slice.
 
@@ -124,9 +132,10 @@ with manager-level aggregate exposure.
 - Hesta Stage 1. Do not touch unless a real bug appears.
 - Aware and ART-QSuper frozen contract fixtures. Regenerate only via the
   documented `--confirm` workflow with a recorded reason.
-- Current sequencing position: Stage 5 starts with bounded ASIC
-  cross-reference proof work. Do not jump ahead to the property or
-  infrastructure map as the first Stage 5 slice.
+- Current sequencing position: Stage 5 criterion 1 is closed at stage scope;
+  the remaining Stage 5 work begins with a no-code property/infrastructure map
+  preflight. Do not start map implementation, Stage 6, or public-markets work
+  without a separate bounded task.
 
 ## What can change, with discipline
 

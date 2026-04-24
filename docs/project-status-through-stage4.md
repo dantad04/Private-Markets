@@ -1,6 +1,6 @@
 # Project Status Through Stage 4
 
-Date: 2026-04-23
+Date: 2026-04-24
 
 Implementation status update:
 
@@ -98,9 +98,19 @@ Implementation status update:
   alias-level variant only.
 - The correct next slice is Brandon Capital Partners straight reviewed identity
   enrichment in place.
-- Stage 5 acceptance criterion 1 is still not met at stage scope.
-- The first Stage 5 implementation boundary is ASIC cross-reference proof work,
-  not property/infrastructure map work.
+- The S2Search Australia Pty Ltd and Validly Pty Ltd ASIC cross-reference batch
+  is accepted.
+- Stage 5 acceptance criterion 1 is now met at stage scope: the accepted
+  status/runbook checkpoint is 18 populated ASIC cross-reference entities
+  including IFM.
+- Stage 5 overall remains open because the property/infrastructure map
+  criterion remains outstanding.
+- No property or infrastructure map work has started.
+- No Stage 6 or public-markets work has started.
+- The next bounded task is a no-code Stage 5 criterion-2
+  property/infrastructure map preflight.
+- The 18-count checkpoint is recorded only in status/runbook context; it does
+  not rewrite the master brief's qualitative Stage 5 acceptance criterion.
 
 ## Locked sequencing position
 
@@ -113,17 +123,24 @@ search, homepage, and manager-page closure work.
    files are acquired.
 3. Do not describe the project as complete; describe it as through Stage 4
    acceptance, with later roadmap work still ahead.
-4. Begin Stage 5 with a bounded ASIC cross-reference proof slice.
-5. Keep the property/infrastructure map as a later Stage 5 slice, after the
-   first ASIC proof boundary is established.
+4. Treat Stage 5 criterion 1 as closed at stage scope under the accepted
+   status/runbook checkpoint of 18 populated ASIC cross-reference entities
+   including IFM.
+5. Do not describe Stage 5 overall as complete until the
+   property/infrastructure map criterion is met.
+6. Make the next bounded task a no-code Stage 5 criterion-2
+   property/infrastructure map preflight before any map implementation work.
 
-## Why the next slice is not the map
+## Why the next slice is a preflight
 
 The master brief keeps both ASIC enrichment and the property/infrastructure map
-inside Stage 5, but they are not the same first move.
+inside Stage 5. ASIC criterion 1 is now closed at stage scope; the remaining
+Stage 5 criterion is the map surface itself.
 
-1. ASIC cross-reference is the first Stage 5 acceptance anchor.
-2. The property/infrastructure map remains a flagship Stage 5 surface, but it
-   should not become the first post-Stage-4 implementation jump.
-3. This sequencing avoids scope balloon into enrichment, mapping, and broader
-   discovery all at once.
+1. The 18-count checkpoint is an accepted status/runbook record, not a
+   permanent rewrite of the master brief's qualitative criterion.
+2. The property/infrastructure map remains open and must display matched assets
+   with clear confidence and provenance before Stage 5 can close overall.
+3. The safest next move is a no-code preflight that inventories source rows,
+   geo/address fields, matching tables, read models, and UI/API surfaces before
+   any implementation work.
