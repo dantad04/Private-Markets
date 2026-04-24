@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
@@ -14,6 +15,42 @@ from adapters.hostplus_errors import HostPlusFileIdentityError
 
 REAL_FIXTURE_PATH = Path("tests/fixtures/real/Host-PlusHigh Growth.csv").resolve()
 EXTRACT_FIXTURE_PATH = Path("tests/fixtures/hostplus_real_extract.csv").resolve()
+HOSTPLUS_FIXTURE_DIR = Path("tests/fixtures/real/hostplus").resolve()
+AUSTRALIAN_SHARES_PATH = HOSTPLUS_FIXTURE_DIR / "australian-shares.csv"
+AUSTRALIAN_SHARES_INDEXED_PATH = HOSTPLUS_FIXTURE_DIR / "australian-shares-indexed.csv"
+CASH_PATH = HOSTPLUS_FIXTURE_DIR / "cash.csv"
+INDEXED_HIGH_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-high-growth.csv"
+INTERNATIONAL_SHARES_PATH = HOSTPLUS_FIXTURE_DIR / "international-shares.csv"
+SRI_HIGH_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "sri-high-growth.csv"
+
+LATEST_PERIOD_BATCH_CASES = (
+    (AUSTRALIAN_SHARES_PATH, "HC Australian Shares - Class A Option", 343, Counter({"value_only": 339, "aggregate_total": 4})),
+    (
+        AUSTRALIAN_SHARES_INDEXED_PATH,
+        "HC Australian Shares - Indexed - Class A Option",
+        215,
+        Counter({"value_only": 212, "aggregate_total": 3}),
+    ),
+    (CASH_PATH, "HC Cash - Class A Option", 5, Counter({"value_only": 3, "aggregate_total": 2})),
+    (
+        INDEXED_HIGH_GROWTH_PATH,
+        "HC Indexed High Growth - Class A Option",
+        2531,
+        Counter({"value_only": 2525, "aggregate_total": 4, "name_only": 2}),
+    ),
+    (
+        INTERNATIONAL_SHARES_PATH,
+        "HC International Shares - Class A Option",
+        2856,
+        Counter({"value_only": 2823, "name_only": 29, "aggregate_total": 4}),
+    ),
+    (
+        SRI_HIGH_GROWTH_PATH,
+        "HC SRI High Growth - Class A Option",
+        565,
+        Counter({"value_only": 560, "aggregate_total": 4, "name_only": 1}),
+    ),
+)
 
 
 def make_metadata(source_file_id: str = "fixture-hostplus") -> SourceFileMetadata:
@@ -144,3 +181,27 @@ class TestHostPlusAdapterRealExtract(unittest.TestCase):
                 if first.startswith("Held directly"):
                     variants[first] = variants.get(first, 0) + 1
         self.assertEqual({"Held directly or by associated entities or by PSTs": 2}, variants)
+
+    def test_latest_period_mapping_only_batch_parses_without_parser_changes(self) -> None:
+        for fixture_path, option_name, expected_rows, expected_completeness in LATEST_PERIOD_BATCH_CASES:
+            with self.subTest(option=option_name):
+                result = self.adapter.parse(make_metadata(fixture_path.name), fixture_path.read_bytes())
+
+                self.assertEqual([option_name], result.structural_metadata["observed_option_names"])
+                self.assertEqual(expected_rows, len(result.holdings))
+                self.assertEqual({"2": 5, "3": 7, "4": 4}, result.structural_metadata["table_rows_excluded"])
+                self.assertEqual(16, sum(result.structural_metadata["table_rows_excluded"].values()))
+                self.assertEqual(3, result.structural_metadata["encoding_replacement_count"])
+                self.assertEqual(expected_completeness, Counter(record.disclosure_completeness for record in result.holdings))
+                self.assertNotIn("Fixed Income", result.structural_metadata["observed_asset_classes"])
+                self.assertNotIn("Unlisted Property", result.structural_metadata["observed_asset_classes"])
+                self.assertNotIn("Unlisted Infrastructure", result.structural_metadata["observed_asset_classes"])
+                self.assertFalse(
+                    any(
+                        record.source_asset_class_raw in {"Fixed Income", "Unlisted Property", "Unlisted Infrastructure"}
+                        for record in result.holdings
+                    )
+                )
+                self.assertFalse(
+                    any(record.raw_name in {"Forwards", "Futures", "Swaps", "AUD"} for record in result.holdings)
+                )

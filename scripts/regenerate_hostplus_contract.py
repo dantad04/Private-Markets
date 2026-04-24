@@ -14,6 +14,46 @@ from adapters.hostplus import HostPlusPhdStateMachineAdapter
 
 FIXTURE_PATH = Path("tests/fixtures/hostplus_real_extract.csv")
 OUTPUT_PATH = Path("tests/adapters/contracts/hostplus/canonical_output.json")
+HOSTPLUS_FIXTURE_DIR = Path("tests/fixtures/real/hostplus")
+CONTRACT_CASES = (
+    (FIXTURE_PATH, OUTPUT_PATH, "contract-fixture-hostplus", "contract-fixture-hostplus-sha256-placeholder"),
+    (
+        HOSTPLUS_FIXTURE_DIR / "australian-shares.csv",
+        Path("tests/adapters/contracts/hostplus/australian_shares_canonical_output.json"),
+        "contract-fixture-hostplus-australian-shares",
+        "contract-fixture-hostplus-australian-shares-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "australian-shares-indexed.csv",
+        Path("tests/adapters/contracts/hostplus/australian_shares_indexed_canonical_output.json"),
+        "contract-fixture-hostplus-australian-shares-indexed",
+        "contract-fixture-hostplus-australian-shares-indexed-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "cash.csv",
+        Path("tests/adapters/contracts/hostplus/cash_canonical_output.json"),
+        "contract-fixture-hostplus-cash",
+        "contract-fixture-hostplus-cash-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "indexed-high-growth.csv",
+        Path("tests/adapters/contracts/hostplus/indexed_high_growth_canonical_output.json"),
+        "contract-fixture-hostplus-indexed-high-growth",
+        "contract-fixture-hostplus-indexed-high-growth-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "international-shares.csv",
+        Path("tests/adapters/contracts/hostplus/international_shares_canonical_output.json"),
+        "contract-fixture-hostplus-international-shares",
+        "contract-fixture-hostplus-international-shares-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "sri-high-growth.csv",
+        Path("tests/adapters/contracts/hostplus/sri_high_growth_canonical_output.json"),
+        "contract-fixture-hostplus-sri-high-growth",
+        "contract-fixture-hostplus-sri-high-growth-sha256-placeholder",
+    ),
+)
 WARNING_TEXT = "THIS REWRITES THE STAGE 2 HOST-PLUS CONTRACT. COMMIT THE CHANGE WITH AN EXPLICIT MESSAGE EXPLAINING WHY."
 
 
@@ -23,14 +63,14 @@ def build_parser() -> ArgumentParser:
     return parser
 
 
-def make_contract_metadata() -> SourceFileMetadata:
+def make_contract_metadata(*, fixture_path: Path, source_file_id: str, checksum: str) -> SourceFileMetadata:
     return SourceFileMetadata(
-        source_file_id="contract-fixture-hostplus",
+        source_file_id=source_file_id,
         fund_id="hostplus",
         suspected_adapter_key="HostPlusPhdStateMachineAdapter",
         reporting_period_id=1,
-        source_url=str(FIXTURE_PATH),
-        checksum="contract-fixture-hostplus-sha256-placeholder",
+        source_url=str(fixture_path),
+        checksum=checksum,
         received_at=datetime(2026, 1, 1, 0, 0, 0),
         reporting_period_end_date=date(2025, 12, 31),
     )
@@ -94,11 +134,20 @@ def main() -> int:
         print("Refusing to rewrite without --confirm.", file=sys.stderr)
         return 1
 
-    result = HostPlusPhdStateMachineAdapter().parse(make_contract_metadata(), FIXTURE_PATH.read_bytes())
-    payload = serialise_parse_result(result)
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Wrote {OUTPUT_PATH}")
+    adapter = HostPlusPhdStateMachineAdapter()
+    for fixture_path, output_path, source_file_id, checksum in CONTRACT_CASES:
+        result = adapter.parse(
+            make_contract_metadata(
+                fixture_path=fixture_path,
+                source_file_id=source_file_id,
+                checksum=checksum,
+            ),
+            fixture_path.read_bytes(),
+        )
+        payload = serialise_parse_result(result)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"Wrote {output_path}")
     return 0
 
 

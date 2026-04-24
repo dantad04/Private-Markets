@@ -10,12 +10,65 @@ from sqlalchemy.orm import sessionmaker
 
 from app.api.admin import get_db_session
 from app.api.app import create_app
-from app.db.models import Base, ReportingPeriod, SourceFile
+from app.db.models import Base, Holding, ReportingPeriod, SourceFile
 from app.db.session import get_engine
-from app.ingest.governance import HOSTPLUS_MAPPING_VERSION_ID
+from app.ingest.governance import (
+    HOSTPLUS_AUSTRALIAN_SHARES_INDEXED_MAPPING_VERSION_ID,
+    HOSTPLUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID,
+    HOSTPLUS_CASH_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_HIGH_GROWTH_MAPPING_VERSION_ID,
+    HOSTPLUS_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
+    HOSTPLUS_MAPPING_VERSION_ID,
+    HOSTPLUS_SRI_HIGH_GROWTH_MAPPING_VERSION_ID,
+)
 
 
 FIXTURE_PATH = Path("tests/fixtures/hostplus_real_extract.csv").resolve()
+HOSTPLUS_FIXTURE_DIR = Path("tests/fixtures/real/hostplus").resolve()
+AUSTRALIAN_SHARES_PATH = HOSTPLUS_FIXTURE_DIR / "australian-shares.csv"
+AUSTRALIAN_SHARES_INDEXED_PATH = HOSTPLUS_FIXTURE_DIR / "australian-shares-indexed.csv"
+CASH_PATH = HOSTPLUS_FIXTURE_DIR / "cash.csv"
+INDEXED_HIGH_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-high-growth.csv"
+INTERNATIONAL_SHARES_PATH = HOSTPLUS_FIXTURE_DIR / "international-shares.csv"
+SRI_HIGH_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "sri-high-growth.csv"
+
+SOURCE_URLS = {
+    AUSTRALIAN_SHARES_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Australian%20Shares.csv",
+    AUSTRALIAN_SHARES_INDEXED_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Australian%20Shares%20-%20Indexed.csv",
+    CASH_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Cash.csv",
+    INDEXED_HIGH_GROWTH_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20High%20Growth.csv",
+    INTERNATIONAL_SHARES_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/International%20Shares.csv",
+    SRI_HIGH_GROWTH_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Socially%20Responsible%20Investment%20(SRI)%20-%20High%20Growth.csv",
+}
+
+BATCH_CASES = (
+    (AUSTRALIAN_SHARES_PATH, SOURCE_URLS[AUSTRALIAN_SHARES_PATH], HOSTPLUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID, 343),
+    (
+        AUSTRALIAN_SHARES_INDEXED_PATH,
+        SOURCE_URLS[AUSTRALIAN_SHARES_INDEXED_PATH],
+        HOSTPLUS_AUSTRALIAN_SHARES_INDEXED_MAPPING_VERSION_ID,
+        215,
+    ),
+    (CASH_PATH, SOURCE_URLS[CASH_PATH], HOSTPLUS_CASH_MAPPING_VERSION_ID, 5),
+    (
+        INDEXED_HIGH_GROWTH_PATH,
+        SOURCE_URLS[INDEXED_HIGH_GROWTH_PATH],
+        HOSTPLUS_INDEXED_HIGH_GROWTH_MAPPING_VERSION_ID,
+        2531,
+    ),
+    (
+        INTERNATIONAL_SHARES_PATH,
+        SOURCE_URLS[INTERNATIONAL_SHARES_PATH],
+        HOSTPLUS_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
+        2856,
+    ),
+    (
+        SRI_HIGH_GROWTH_PATH,
+        SOURCE_URLS[SRI_HIGH_GROWTH_PATH],
+        HOSTPLUS_SRI_HIGH_GROWTH_MAPPING_VERSION_ID,
+        565,
+    ),
+)
 
 
 class TestAdminHostPlusIngestEndpoint(unittest.TestCase):
@@ -108,3 +161,41 @@ class TestAdminHostPlusIngestEndpoint(unittest.TestCase):
             {"AUD", "USD"},
             {row["currency_raw"] for row in entity_detail.json()["observations"] if row["currency_raw"] in {"AUD", "USD"}},
         )
+
+    def test_admin_ingest_latest_period_batch_uses_mapping_seeds_and_source_urls(self) -> None:
+        for file_path, source_url, mapping_version_id, expected_rows in BATCH_CASES:
+            with self.subTest(file=file_path.name):
+                response = self.client.post(
+                    "/admin/ingest/local-file/hostplus",
+                    json={
+                        "file_path": str(file_path),
+                        "fund_code": "hostplus",
+                        "fund_name": "Hostplus",
+                        "reporting_period_id": self.reporting_period_id,
+                        "source_url": source_url,
+                    },
+                )
+                self.assertEqual(200, response.status_code)
+                payload = response.json()
+                self.assertEqual(expected_rows, payload["rows_staged"])
+                self.assertEqual(expected_rows, payload["rows_inserted"])
+                self.assertEqual(0, payload["rows_skipped_existing"])
+                self.assertEqual(
+                    ["Decoded Host-Plus source using UTF-8 errors='replace'; replacement_count=3"],
+                    payload["warnings"],
+                )
+
+                with self.SessionLocal() as session:
+                    source_file = session.get(SourceFile, payload["source_file_id"])
+                    self.assertEqual("HostPlusPhdStateMachineAdapter", source_file.adapter_key)
+                    self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                    self.assertEqual(source_url, source_file.source_url)
+                    self.assertEqual(3, source_file.encoding_replacement_count)
+
+        with self.SessionLocal() as session:
+            self.assertEqual(sum(case[3] for case in BATCH_CASES), session.query(Holding).count())
+            source_urls = {source_file.source_url for source_file in session.query(SourceFile).all()}
+            self.assertEqual({case[1] for case in BATCH_CASES}, source_urls)
+            self.assertFalse(any(source_url.endswith("/High%20Growth.csv") for source_url in source_urls))
+            self.assertFalse(any("Defined%20Benefit" in source_url for source_url in source_urls))
+            self.assertFalse(any("retirement" in source_url.casefold() or "pension" in source_url.casefold() for source_url in source_urls))

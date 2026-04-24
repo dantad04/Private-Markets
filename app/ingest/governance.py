@@ -39,6 +39,12 @@ AUSTRALIANSUPER_INTERNATIONAL_SHARES_MAPPING_VERSION_ID = "australiansuper-stage
 AUSTRALIANSUPER_SOCIALLY_AWARE_MAPPING_VERSION_ID = "australiansuper-stage2-socially-aware-v1"
 UNISUPER_MAPPING_VERSION_ID = "unisuper-stage2-v1"
 HOSTPLUS_MAPPING_VERSION_ID = "hostplus-stage2-v1"
+HOSTPLUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID = "hostplus-stage2-australian-shares-v1"
+HOSTPLUS_AUSTRALIAN_SHARES_INDEXED_MAPPING_VERSION_ID = "hostplus-stage2-australian-shares-indexed-v1"
+HOSTPLUS_CASH_MAPPING_VERSION_ID = "hostplus-stage2-cash-v1"
+HOSTPLUS_INDEXED_HIGH_GROWTH_MAPPING_VERSION_ID = "hostplus-stage2-indexed-high-growth-v1"
+HOSTPLUS_INTERNATIONAL_SHARES_MAPPING_VERSION_ID = "hostplus-stage2-international-shares-v1"
+HOSTPLUS_SRI_HIGH_GROWTH_MAPPING_VERSION_ID = "hostplus-stage2-sri-high-growth-v1"
 CBUS_MAPPING_VERSION_ID = "cbus-stage2-late-v1"
 CBUS_PROPERTY_MAPPING_VERSION_ID = "cbus-stage2-property-v1"
 CBUS_OVERSEAS_SHARES_MAPPING_VERSION_ID = "cbus-stage2-overseas-shares-v1"
@@ -2061,6 +2067,262 @@ HOSTPLUS_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
+HOSTPLUS_ASSET_ALLOCATION_HEADER = [
+    "ASSET CLASS",
+    "",
+    "",
+    "ACTUAL ASSET ALLOCATION (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+    "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+]
+HOSTPLUS_CURRENCY_EXPOSURE_HEADER = [
+    "CURRENCY EXPOSURE",
+    "",
+    "",
+    "ACTUAL CURRENCY EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+    "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+]
+HOSTPLUS_DERIVATIVE_KIND_HEADER = ["KIND OF DERIVATIVE", "", "", "VALUE (AUD)", "WEIGHTING (%)"]
+HOSTPLUS_MANAGER_VALUE_HEADER = ["NAME OF FUND MANAGER", "", "", "VALUE (AUD)", "WEIGHTING (%)"]
+HOSTPLUS_CASH_HEADER = ["NAME OF INSTITUTION", "CURRENCY", "", "VALUE (AUD)", "WEIGHTING (%)"]
+HOSTPLUS_LISTED_SECURITY_HEADER = [
+    "NAME/KIND OF INVESTMENT ITEM",
+    "SECURITY IDENTIFIER",
+    "UNITS HELD",
+    "VALUE (AUD)",
+    "WEIGHTING (%)",
+]
+HOSTPLUS_STANDARD_POSTURE_HEADERS = [
+    HOSTPLUS_ASSET_ALLOCATION_HEADER,
+    HOSTPLUS_CURRENCY_EXPOSURE_HEADER,
+    HOSTPLUS_DERIVATIVE_KIND_HEADER,
+]
+HOSTPLUS_CASH_ONLY_HEADERS = [*HOSTPLUS_STANDARD_POSTURE_HEADERS, HOSTPLUS_CASH_HEADER]
+HOSTPLUS_CASH_LISTED_HEADERS = [*HOSTPLUS_CASH_ONLY_HEADERS, HOSTPLUS_LISTED_SECURITY_HEADER]
+HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_HEADERS = [
+    *HOSTPLUS_STANDARD_POSTURE_HEADERS,
+    HOSTPLUS_MANAGER_VALUE_HEADER,
+    HOSTPLUS_CASH_HEADER,
+    HOSTPLUS_LISTED_SECURITY_HEADER,
+]
+HOSTPLUS_DERIVATIVE_TABLES = [1, 2, 3, 4]
+
+
+def _hostplus_structural_expectations(
+    *,
+    observed_headers: list[list[str]],
+    observed_section_labels: list[str],
+    observed_internal_external_values: list[str],
+    observed_asset_classes: list[str],
+    observed_option_names: list[str],
+) -> dict[str, object]:
+    return {
+        "observed_headers": observed_headers,
+        "observed_section_labels": observed_section_labels,
+        "observed_tables": HOSTPLUS_DERIVATIVE_TABLES,
+        "observed_internal_external_values": observed_internal_external_values,
+        "observed_asset_classes": observed_asset_classes,
+        "observed_option_names": observed_option_names,
+    }
+
+
+def _hostplus_taxonomy_subset(
+    keys: tuple[tuple[str, str | None, bool], ...],
+) -> tuple[ApprovedTaxonomyMappingSeed, ...]:
+    key_set = set(keys)
+    selected_rows = tuple(
+        row
+        for row in HOSTPLUS_APPROVED_MAPPING.taxonomy_rows
+        if (row.source_asset_class_raw, row.source_filter_raw, row.is_aggregate_default) in key_set
+    )
+    selected_keys = {
+        (row.source_asset_class_raw, row.source_filter_raw, row.is_aggregate_default) for row in selected_rows
+    }
+    missing_keys = key_set.difference(selected_keys)
+    if missing_keys:
+        raise RuntimeError(f"Hostplus taxonomy seed is missing expected keys: {sorted(missing_keys)!r}")
+    return selected_rows
+
+
+HOSTPLUS_CASH_TAXONOMY_KEYS = (
+    ("Cash", None, False),
+    ("Cash", None, True),
+    ("TOTAL INVESTMENT ITEMS", None, True),
+)
+HOSTPLUS_CASH_LISTED_TAXONOMY_KEYS = (
+    *HOSTPLUS_CASH_TAXONOMY_KEYS,
+    ("Listed Equity", None, False),
+    ("Listed Equity", None, True),
+)
+HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS = (
+    *HOSTPLUS_CASH_LISTED_TAXONOMY_KEYS,
+    ("Unlisted Equity", "Externally Managed", False),
+    ("Unlisted Equity", "Externally Managed", True),
+)
+
+
+def _hostplus_latest_period_mapping_seed(
+    *,
+    id: str,
+    schema_fingerprint: str,
+    option_name: str,
+    file_label: str,
+    observed_headers: list[list[str]],
+    observed_section_labels: list[str],
+    observed_internal_external_values: list[str],
+    observed_asset_classes: list[str],
+    taxonomy_keys: tuple[tuple[str, str | None, bool], ...],
+) -> ApprovedAdapterMappingSeed:
+    return ApprovedAdapterMappingSeed(
+        id=id,
+        adapter_key="HostPlusPhdStateMachineAdapter",
+        schema_fingerprint=schema_fingerprint,
+        structural_expectations_json=_hostplus_structural_expectations(
+            observed_headers=observed_headers,
+            observed_section_labels=observed_section_labels,
+            observed_internal_external_values=observed_internal_external_values,
+            observed_asset_classes=observed_asset_classes,
+            observed_option_names=[option_name],
+        ),
+        notes=(
+            f"Approved Hostplus latest-period {option_name} slice using the real "
+            f"{file_label} accumulation investment-holdings file and the existing HostPlus adapter."
+        ),
+        approved_by="repo-seed",
+        approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+        taxonomy_rows=_hostplus_taxonomy_subset(taxonomy_keys),
+    )
+
+
+HOSTPLUS_AUSTRALIAN_SHARES_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID,
+    schema_fingerprint="f978d4ad543d86d51a7c30bfcbfb10f5b6f29ea2fc6d5c15efb0311cdd863daa",
+    option_name="HC Australian Shares - Class A Option",
+    file_label="Australian Shares",
+    observed_headers=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_HEADERS,
+    observed_section_labels=[
+        "CASH",
+        "HOSTPLUS",
+        "LISTED EQUITY",
+        "TABLE 1",
+        "TABLE 2",
+        "TABLE 3",
+        "TABLE 4",
+        "TOTAL INVESTMENT ITEMS",
+        "UNLISTED EQUITY",
+    ],
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=["Cash", "Listed Equity", "Unlisted Equity"],
+    taxonomy_keys=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_AUSTRALIAN_SHARES_INDEXED_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_AUSTRALIAN_SHARES_INDEXED_MAPPING_VERSION_ID,
+    schema_fingerprint="391cfe11f4117768bd93c29a92552d84f79eda3a087e83caac193f1e545f54bc",
+    option_name="HC Australian Shares - Indexed - Class A Option",
+    file_label="Australian Shares - Indexed",
+    observed_headers=HOSTPLUS_CASH_LISTED_HEADERS,
+    observed_section_labels=[
+        "CASH",
+        "HOSTPLUS",
+        "LISTED EQUITY",
+        "TABLE 1",
+        "TABLE 2",
+        "TABLE 3",
+        "TABLE 4",
+        "TOTAL INVESTMENT ITEMS",
+    ],
+    observed_internal_external_values=[],
+    observed_asset_classes=["Cash", "Listed Equity"],
+    taxonomy_keys=HOSTPLUS_CASH_LISTED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_CASH_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_CASH_MAPPING_VERSION_ID,
+    schema_fingerprint="a1850bba70a07c90e7b1fb618fdb3e456f7dd76ccacff1a82c2784e8f8e5814e",
+    option_name="HC Cash - Class A Option",
+    file_label="Cash",
+    observed_headers=HOSTPLUS_CASH_ONLY_HEADERS,
+    observed_section_labels=[
+        "CASH",
+        "HOSTPLUS",
+        "TABLE 1",
+        "TABLE 2",
+        "TABLE 3",
+        "TABLE 4",
+        "TOTAL INVESTMENT ITEMS",
+    ],
+    observed_internal_external_values=[],
+    observed_asset_classes=["Cash"],
+    taxonomy_keys=HOSTPLUS_CASH_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_INDEXED_HIGH_GROWTH_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_INDEXED_HIGH_GROWTH_MAPPING_VERSION_ID,
+    schema_fingerprint="f978d4ad543d86d51a7c30bfcbfb10f5b6f29ea2fc6d5c15efb0311cdd863daa",
+    option_name="HC Indexed High Growth - Class A Option",
+    file_label="Indexed High Growth",
+    observed_headers=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_HEADERS,
+    observed_section_labels=[
+        "CASH",
+        "HOSTPLUS",
+        "LISTED EQUITY",
+        "TABLE 1",
+        "TABLE 2",
+        "TABLE 3",
+        "TABLE 4",
+        "TOTAL INVESTMENT ITEMS",
+        "UNLISTED EQUITY",
+    ],
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=["Cash", "Listed Equity", "Unlisted Equity"],
+    taxonomy_keys=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_INTERNATIONAL_SHARES_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
+    schema_fingerprint="f978d4ad543d86d51a7c30bfcbfb10f5b6f29ea2fc6d5c15efb0311cdd863daa",
+    option_name="HC International Shares - Class A Option",
+    file_label="International Shares",
+    observed_headers=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_HEADERS,
+    observed_section_labels=[
+        "CASH",
+        "HOSTPLUS",
+        "LISTED EQUITY",
+        "TABLE 1",
+        "TABLE 2",
+        "TABLE 3",
+        "TABLE 4",
+        "TOTAL INVESTMENT ITEMS",
+        "UNLISTED EQUITY",
+    ],
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=["Cash", "Listed Equity", "Unlisted Equity"],
+    taxonomy_keys=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_SRI_HIGH_GROWTH_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_SRI_HIGH_GROWTH_MAPPING_VERSION_ID,
+    schema_fingerprint="f978d4ad543d86d51a7c30bfcbfb10f5b6f29ea2fc6d5c15efb0311cdd863daa",
+    option_name="HC SRI High Growth - Class A Option",
+    file_label="Socially Responsible Investment (SRI) - High Growth",
+    observed_headers=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_HEADERS,
+    observed_section_labels=[
+        "CASH",
+        "HOSTPLUS",
+        "LISTED EQUITY",
+        "TABLE 1",
+        "TABLE 2",
+        "TABLE 3",
+        "TABLE 4",
+        "TOTAL INVESTMENT ITEMS",
+        "UNLISTED EQUITY",
+    ],
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=["Cash", "Listed Equity", "Unlisted Equity"],
+    taxonomy_keys=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS,
+)
+
+
 CBUS_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
     id=CBUS_MAPPING_VERSION_ID,
     adapter_key="CbusPhdAdapter",
@@ -2385,7 +2647,15 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
         AUSTRALIANSUPER_SOCIALLY_AWARE_APPROVED_MAPPING,
     ),
     UNISUPER_APPROVED_MAPPING.adapter_key: (UNISUPER_APPROVED_MAPPING,),
-    HOSTPLUS_APPROVED_MAPPING.adapter_key: (HOSTPLUS_APPROVED_MAPPING,),
+    HOSTPLUS_APPROVED_MAPPING.adapter_key: (
+        HOSTPLUS_APPROVED_MAPPING,
+        HOSTPLUS_AUSTRALIAN_SHARES_APPROVED_MAPPING,
+        HOSTPLUS_AUSTRALIAN_SHARES_INDEXED_APPROVED_MAPPING,
+        HOSTPLUS_CASH_APPROVED_MAPPING,
+        HOSTPLUS_INDEXED_HIGH_GROWTH_APPROVED_MAPPING,
+        HOSTPLUS_INTERNATIONAL_SHARES_APPROVED_MAPPING,
+        HOSTPLUS_SRI_HIGH_GROWTH_APPROVED_MAPPING,
+    ),
     CBUS_APPROVED_MAPPING.adapter_key: (
         CBUS_APPROVED_MAPPING,
         CBUS_PROPERTY_APPROVED_MAPPING,

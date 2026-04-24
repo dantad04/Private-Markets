@@ -1,0 +1,394 @@
+{
+  "holdings": [
+    {
+      "source_file_id": "contract-fixture-hostplus-cash",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_CASH_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Cash - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": false,
+      "raw_name": "Citigroup Inc",
+      "value_aud": "-31120594",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "-0.0152",
+      "currency_raw": "AUD",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 8,
+      "source_row_hash": "96d1c06cc741bba5a30c86cd6787720c919c59836d49db58b92818cc18aa6018",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Citigroup Inc",
+            "AUD",
+            "",
+            "-31,120,594",
+            "-1.52%"
+          ],
+          "source_row_number": 8
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-cash",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_CASH_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Cash - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": false,
+      "raw_name": "Commonwealth Bank",
+      "value_aud": "1243437491",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.6072",
+      "currency_raw": "AUD",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 9,
+      "source_row_hash": "e7e36121be4eb748be0943abbb93bae7ebad8f29125037864d8d6b57a9af5b69",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Commonwealth Bank",
+            "AUD",
+            "",
+            "1,243,437,491",
+            "60.72%"
+          ],
+          "source_row_number": 9
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-cash",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_CASH_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Cash - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": false,
+      "raw_name": "ME Bank",
+      "value_aud": "835402441",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.408",
+      "currency_raw": "AUD",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 10,
+      "source_row_hash": "88bbcc47f1c202d1fb9b0e581cae7844c5cb28a0e825bbc81e0db8e97d5ba059",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "ME Bank",
+            "AUD",
+            "",
+            "835,402,441",
+            "40.80%"
+          ],
+          "source_row_number": 10
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-cash",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_CASH_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Cash - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": true,
+      "raw_name": "TOTAL",
+      "value_aud": "2047719338",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "1",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "aggregate_total",
+      "source_row_number": 11,
+      "source_row_hash": "381e62b9ec9341760b41149ab830d78b83c46ac2986f713111508359b82a4bd0",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Total",
+            "",
+            "",
+            "2,047,719,338",
+            "100.00%"
+          ],
+          "source_row_number": 11
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-cash",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_CASH_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Cash - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "TOTAL INVESTMENT ITEMS",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "multi_asset_other",
+      "is_aggregate": true,
+      "raw_name": "TOTAL INVESTMENT ITEMS",
+      "value_aud": "2047719338",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "1",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "aggregate_total",
+      "source_row_number": 12,
+      "source_row_hash": "1767f87864e08ec855e2684d8f708cfaa8435986411a7b43b75bad2ee7d371cc",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Total Investment Items",
+            "",
+            "",
+            "2,047,719,338",
+            "100.00%"
+          ],
+          "source_row_number": 12
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    }
+  ],
+  "structural_metadata": {
+    "aggregate_rows_emitted": 2,
+    "encoding_replacement_count": 3,
+    "holdings_rows_emitted": 5,
+    "observed_asset_classes": [
+      "Cash"
+    ],
+    "observed_headers": [
+      [
+        "ASSET CLASS",
+        "",
+        "",
+        "ACTUAL ASSET ALLOCATION (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+        "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)"
+      ],
+      [
+        "CURRENCY EXPOSURE",
+        "",
+        "",
+        "ACTUAL CURRENCY EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+        "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)"
+      ],
+      [
+        "KIND OF DERIVATIVE",
+        "",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ],
+      [
+        "NAME OF INSTITUTION",
+        "CURRENCY",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ]
+    ],
+    "observed_internal_external_values": [],
+    "observed_investment_statuses": {},
+    "observed_option_names": [
+      "HC Cash - Class A Option"
+    ],
+    "observed_options": [
+      "HOSTPLUS_HC_CASH_CLASS_A_OPTION"
+    ],
+    "observed_reporting_dates": [
+      "2025-12-31"
+    ],
+    "observed_scope_modifiers": [],
+    "observed_section_labels": [
+      "CASH",
+      "HOSTPLUS",
+      "TABLE 1",
+      "TABLE 2",
+      "TABLE 3",
+      "TABLE 4",
+      "TOTAL INVESTMENT ITEMS"
+    ],
+    "observed_tables": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "options_processed": 1,
+    "review_queue_events": [],
+    "rows_emitted_by_option": {
+      "HC Cash - Class A Option": 5
+    },
+    "rows_emitted_by_option_asset_class": {
+      "HC Cash - Class A Option": {
+        "Cash": 4,
+        "TOTAL INVESTMENT ITEMS": 1
+      }
+    },
+    "scope_modifier_counts": {},
+    "scope_variant_examples": {},
+    "source_encoding": "utf-8-replace",
+    "table_rows_excluded": {
+      "2": 5,
+      "3": 7,
+      "4": 4
+    }
+  },
+  "parse_statistics": {
+    "aggregate_rows_emitted": 2,
+    "canonical_asset_class_counts": {
+      "cash": 4,
+      "multi_asset_other": 1
+    },
+    "disclosure_completeness_counts": {
+      "aggregate_total": 2,
+      "value_only": 3
+    },
+    "encoding_replacement_count": 3,
+    "holdings_rows_emitted": 5,
+    "observed_asset_classes": [
+      "Cash"
+    ],
+    "observed_headers": [
+      [
+        "ASSET CLASS",
+        "",
+        "",
+        "ACTUAL ASSET ALLOCATION (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+        "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)"
+      ],
+      [
+        "CURRENCY EXPOSURE",
+        "",
+        "",
+        "ACTUAL CURRENCY EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+        "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)"
+      ],
+      [
+        "KIND OF DERIVATIVE",
+        "",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ],
+      [
+        "NAME OF INSTITUTION",
+        "CURRENCY",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ]
+    ],
+    "observed_internal_external_values": [],
+    "observed_investment_statuses": {},
+    "observed_option_names": [
+      "HC Cash - Class A Option"
+    ],
+    "observed_options": [
+      "HOSTPLUS_HC_CASH_CLASS_A_OPTION"
+    ],
+    "observed_reporting_dates": [
+      "2025-12-31"
+    ],
+    "observed_scope_modifiers": [],
+    "observed_section_labels": [
+      "CASH",
+      "HOSTPLUS",
+      "TABLE 1",
+      "TABLE 2",
+      "TABLE 3",
+      "TABLE 4",
+      "TOTAL INVESTMENT ITEMS"
+    ],
+    "observed_tables": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "options_processed": 1,
+    "review_queue_events": [],
+    "rows_emitted_by_option": {
+      "HC Cash - Class A Option": 5
+    },
+    "rows_emitted_by_option_asset_class": {
+      "HC Cash - Class A Option": {
+        "Cash": 4,
+        "TOTAL INVESTMENT ITEMS": 1
+      }
+    },
+    "scope_modifier_counts": {},
+    "scope_variant_examples": {},
+    "source_encoding": "utf-8-replace",
+    "table_rows_excluded": {
+      "2": 5,
+      "3": 7,
+      "4": 4
+    }
+  },
+  "schema_fingerprint": "a1850bba70a07c90e7b1fb618fdb3e456f7dd76ccacff1a82c2784e8f8e5814e",
+  "adapter_warnings": [
+    "Decoded Host-Plus source using UTF-8 errors='replace'; replacement_count=3"
+  ]
+}

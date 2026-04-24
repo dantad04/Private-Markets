@@ -14,16 +14,62 @@ from adapters.hostplus import HostPlusPhdStateMachineAdapter
 
 FIXTURE_PATH = Path("tests/fixtures/hostplus_real_extract.csv")
 CONTRACT_PATH = Path("tests/adapters/contracts/hostplus/canonical_output.json")
+HOSTPLUS_FIXTURE_DIR = Path("tests/fixtures/real/hostplus")
+CONTRACT_CASES = (
+    ("high_growth", FIXTURE_PATH, CONTRACT_PATH, "contract-fixture-hostplus", "contract-fixture-hostplus-sha256-placeholder"),
+    (
+        "australian_shares",
+        HOSTPLUS_FIXTURE_DIR / "australian-shares.csv",
+        Path("tests/adapters/contracts/hostplus/australian_shares_canonical_output.json"),
+        "contract-fixture-hostplus-australian-shares",
+        "contract-fixture-hostplus-australian-shares-sha256-placeholder",
+    ),
+    (
+        "australian_shares_indexed",
+        HOSTPLUS_FIXTURE_DIR / "australian-shares-indexed.csv",
+        Path("tests/adapters/contracts/hostplus/australian_shares_indexed_canonical_output.json"),
+        "contract-fixture-hostplus-australian-shares-indexed",
+        "contract-fixture-hostplus-australian-shares-indexed-sha256-placeholder",
+    ),
+    (
+        "cash",
+        HOSTPLUS_FIXTURE_DIR / "cash.csv",
+        Path("tests/adapters/contracts/hostplus/cash_canonical_output.json"),
+        "contract-fixture-hostplus-cash",
+        "contract-fixture-hostplus-cash-sha256-placeholder",
+    ),
+    (
+        "indexed_high_growth",
+        HOSTPLUS_FIXTURE_DIR / "indexed-high-growth.csv",
+        Path("tests/adapters/contracts/hostplus/indexed_high_growth_canonical_output.json"),
+        "contract-fixture-hostplus-indexed-high-growth",
+        "contract-fixture-hostplus-indexed-high-growth-sha256-placeholder",
+    ),
+    (
+        "international_shares",
+        HOSTPLUS_FIXTURE_DIR / "international-shares.csv",
+        Path("tests/adapters/contracts/hostplus/international_shares_canonical_output.json"),
+        "contract-fixture-hostplus-international-shares",
+        "contract-fixture-hostplus-international-shares-sha256-placeholder",
+    ),
+    (
+        "sri_high_growth",
+        HOSTPLUS_FIXTURE_DIR / "sri-high-growth.csv",
+        Path("tests/adapters/contracts/hostplus/sri_high_growth_canonical_output.json"),
+        "contract-fixture-hostplus-sri-high-growth",
+        "contract-fixture-hostplus-sri-high-growth-sha256-placeholder",
+    ),
+)
 
 
-def make_contract_metadata() -> SourceFileMetadata:
+def make_contract_metadata(*, fixture_path: Path, source_file_id: str, checksum: str) -> SourceFileMetadata:
     return SourceFileMetadata(
-        source_file_id="contract-fixture-hostplus",
+        source_file_id=source_file_id,
         fund_id="hostplus",
         suspected_adapter_key="HostPlusPhdStateMachineAdapter",
         reporting_period_id=1,
-        source_url=str(FIXTURE_PATH),
-        checksum="contract-fixture-hostplus-sha256-placeholder",
+        source_url=str(fixture_path),
+        checksum=checksum,
         received_at=datetime(2026, 1, 1, 0, 0, 0),
         reporting_period_end_date=date(2025, 12, 31),
     )
@@ -80,23 +126,33 @@ def serialise_parse_result(result: AdapterParseResult) -> dict[str, object]:
     }
 
 
-def load_committed_contract() -> dict[str, object]:
-    return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+def load_committed_contract(contract_path: Path) -> dict[str, object]:
+    return json.loads(contract_path.read_text(encoding="utf-8"))
 
 
 class TestHostPlusFrozenContract(unittest.TestCase):
     maxDiff = None
 
-    def test_hostplus_fixture_matches_frozen_contract(self) -> None:
-        result = HostPlusPhdStateMachineAdapter().parse(make_contract_metadata(), FIXTURE_PATH.read_bytes())
-        actual = serialise_parse_result(result)
-        expected = load_committed_contract()
+    def test_hostplus_fixtures_match_frozen_contracts(self) -> None:
+        adapter = HostPlusPhdStateMachineAdapter()
+        for label, fixture_path, contract_path, source_file_id, checksum in CONTRACT_CASES:
+            with self.subTest(contract=label):
+                result = adapter.parse(
+                    make_contract_metadata(
+                        fixture_path=fixture_path,
+                        source_file_id=source_file_id,
+                        checksum=checksum,
+                    ),
+                    fixture_path.read_bytes(),
+                )
+                actual = serialise_parse_result(result)
+                expected = load_committed_contract(contract_path)
 
-        if actual != expected:
-            self.fail(_build_contract_mismatch_message(expected, actual))
+                if actual != expected:
+                    self.fail(_build_contract_mismatch_message(label, expected, actual))
 
 
-def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[str, object]) -> str:
+def _build_contract_mismatch_message(label: str, expected: dict[str, object], actual: dict[str, object]) -> str:
     mismatches: list[str] = []
 
     for key in ("schema_fingerprint", "adapter_warnings", "structural_metadata", "parse_statistics"):
@@ -143,4 +199,4 @@ def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[s
     if row_mismatches:
         mismatches.append("first mismatched holdings:\n" + "\n\n".join(row_mismatches))
 
-    return "Frozen Host-Plus contract drift detected.\n\n" + "\n\n".join(mismatches)
+    return f"Frozen Host-Plus contract drift detected for {label}.\n\n" + "\n\n".join(mismatches)

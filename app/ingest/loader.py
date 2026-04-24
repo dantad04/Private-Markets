@@ -822,6 +822,7 @@ def ingest_hostplus_local_file(
     publication_date: date | None = None,
     reporting_period_id: int | None = None,
     received_at: datetime | None = None,
+    source_url: str | None = None,
 ) -> LoadSummary:
     file_path_obj = Path(file_path)
     raw_bytes = file_path_obj.read_bytes()
@@ -831,7 +832,7 @@ def ingest_hostplus_local_file(
         fund_code=fund_code,
         fund_name=fund_name,
         adapter_key="HostPlusPhdStateMachineAdapter",
-        source_url=str(file_path_obj),
+        source_url=source_url or str(file_path_obj),
         checksum=checksum,
         received_at=received_at or datetime.now(UTC),
         reporting_period_id=reporting_period_id,
