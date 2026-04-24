@@ -77,7 +77,7 @@ class TestMatchedAssetProofApiAndUi(unittest.TestCase):
             detail = get_australiansuper_stable_matched_asset_proof(session)
 
         self.assertEqual("australiansuper-stable-stage5-proof", detail.proof_key)
-        self.assertIn("map precursor", detail.scope_note)
+        self.assertIn("map rendering proof", detail.scope_note)
         self.assertEqual(7, detail.matched_asset_count)
         self.assertEqual(
             [3368, 3369, 3375, 3425, 3445, 3453, 3484],
@@ -92,7 +92,7 @@ class TestMatchedAssetProofApiAndUi(unittest.TestCase):
 
         payload = response.json()
         self.assertEqual(7, payload["matched_asset_count"])
-        self.assertIn("Bounded Stage 5 matched-asset proof", payload["scope_note"])
+        self.assertIn("Bounded Stage 5 matched-asset map rendering proof", payload["scope_note"])
 
         rows = payload["rows"]
         self.assertEqual(
@@ -126,19 +126,39 @@ class TestMatchedAssetProofApiAndUi(unittest.TestCase):
         self.assertEqual("Seaport", nsw_ports["classification_raw"])
         self.assertEqual([3990], nsw_ports["metadata_attached_from_row_numbers"])
 
-    def test_admin_ui_renders_the_table_first_proof_without_map_claims(self) -> None:
+    def test_admin_ui_renders_the_map_proof_and_existing_table(self) -> None:
         response = self.client.get("/admin/ui/matched-assets/australiansuper-stable-stage5-proof")
         self.assertEqual(200, response.status_code)
 
         self.assertIn("AustralianSuper Stable matched-asset proof", response.text)
-        self.assertIn("Bounded Stage 5 matched-asset proof / map precursor", response.text)
-        self.assertIn("not a complete property or infrastructure map", response.text)
-        self.assertIn("1200 W Carroll", response.text)
-        self.assertIn("Perth Airport", response.text)
+        self.assertIn("Bounded Stage 5 matched-asset map rendering proof", response.text)
+        self.assertIn("not complete property or infrastructure coverage", response.text)
+        self.assertIn("Seven-row coordinate plot", response.text)
+        self.assertIn("data-map-panel=\"australiansuper-stable-stage5-proof\"", response.text)
+        self.assertEqual(7, response.text.count("data-map-point=\"australiansuper-stable-stage5-proof\""))
+        self.assertEqual(7, response.text.count("data-map-point-card=\"australiansuper-stable-stage5-proof\""))
+        self.assertEqual(7, response.text.count("data-proof-table-row=\"australiansuper-stable-stage5-proof\""))
+        for asset_name in [
+            "1200 W Carroll",
+            "1300 W Carroll",
+            "Ala Moana Shopping Centre",
+            "Kingswood",
+            "NSW Ports",
+            "Perth Airport",
+            "Wollert",
+        ]:
+            self.assertIn(asset_name, response.text)
         self.assertIn("property_asset", response.text)
         self.assertIn("infrastructure_asset", response.text)
         self.assertIn("lat", response.text)
         self.assertIn("lng", response.text)
+        self.assertIn("data-confidence-score=\"1.00000\"", response.text)
+        self.assertIn("confidence <span class=\"mono\">1.00000</span>", response.text)
         self.assertIn(AUSTRALIANSUPER_STABLE_MATCHED_ASSET_SOURCE, response.text)
         self.assertIn("file", response.text)
         self.assertIn("row <span class=\"mono\">3368</span>", response.text)
+        self.assertNotIn("Conservative", response.text)
+        self.assertNotIn("Aware", response.text)
+        self.assertNotIn("Hostplus", response.text)
+        self.assertNotIn("UniSuper", response.text)
+        self.assertNotIn("Hesta", response.text)

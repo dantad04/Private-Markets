@@ -2279,8 +2279,8 @@ def get_australiansuper_stable_matched_asset_proof(session: Session) -> MatchedA
         proof_key=AUSTRALIANSUPER_STABLE_MATCHED_ASSET_PROOF_KEY,
         title="AustralianSuper Stable matched-asset proof",
         scope_note=(
-            "Bounded Stage 5 matched-asset proof / map precursor. This table is limited to seven exact "
-            "AustralianSuper Stable source rows and is not a complete property or infrastructure map."
+            "Bounded Stage 5 matched-asset map rendering proof. This page is limited to seven exact "
+            "AustralianSuper Stable source rows and is not complete property or infrastructure coverage."
         ),
         matched_asset_count=len(proof_rows),
         rows=proof_rows,

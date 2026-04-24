@@ -1,10 +1,120 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+  .matched-map-panel {
+    margin: 18px 0 22px;
+    padding: 18px;
+    border: 1px solid var(--rule);
+    background: rgba(255, 252, 247, 0.9);
+    box-shadow: var(--shadow);
+  }
+  .matched-map-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 12px;
+  }
+  .matched-map-heading h2 {
+    margin: 0;
+    font-family: var(--display-font);
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .matched-map-note {
+    margin: 0;
+    max-width: 58ch;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+  .matched-map-shell {
+    display: grid;
+    grid-template-columns: minmax(420px, 1.6fr) minmax(260px, 0.9fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .matched-map-svg {
+    width: 100%;
+    min-height: 360px;
+    border: 1px solid var(--rule);
+    background: #f9f7f1;
+  }
+  .matched-map-label {
+    fill: var(--ink-muted);
+    font-family: var(--mono-font);
+    font-size: 16px;
+  }
+  .matched-map-axis {
+    stroke: #c9bba9;
+    stroke-width: 1;
+  }
+  .matched-map-point circle {
+    fill: #b54d2e;
+    stroke: #fffaf3;
+    stroke-width: 4;
+  }
+  .matched-map-point--infrastructure_asset circle {
+    fill: #315f72;
+  }
+  .matched-map-point-list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .matched-map-point-card {
+    border: 1px solid var(--rule);
+    background: rgba(255, 255, 255, 0.64);
+    padding: 10px;
+  }
+  .matched-map-point-card strong {
+    display: block;
+  }
+  .matched-map-point-card small {
+    display: block;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .matched-map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 0.84rem;
+  }
+  .matched-map-legend span::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #b54d2e;
+  }
+  .matched-map-legend .matched-map-legend-infrastructure::before {
+    background: #315f72;
+  }
+  @media (max-width: 920px) {
+    .matched-map-shell {
+      grid-template-columns: 1fr;
+    }
+    .matched-map-svg {
+      min-height: 300px;
+    }
+  }
+</style>
+
 <h1>{{ detail.title | e }}</h1>
 
 <p>
-  Bounded Stage 5 matched-asset proof / map precursor. This table is limited to seven exact
-  AustralianSuper Stable source rows and is not a complete property or infrastructure map.
+  Bounded Stage 5 matched-asset map rendering proof. This page is limited to seven exact
+  AustralianSuper Stable source rows and is not complete property or infrastructure coverage.
 </p>
 
 <div class="metadata-grid">
@@ -12,6 +122,80 @@
   <strong>matched_asset_count</strong><span>{{ detail.matched_asset_count | e }}</span>
   <strong>scope</strong><span>{{ detail.scope_note | e }}</span>
 </div>
+
+{% set map_rows = detail.rows | selectattr("geo_lat", "ne", none) | selectattr("geo_lng", "ne", none) | list %}
+<section class="matched-map-panel" aria-labelledby="matched-map-heading">
+  <div class="matched-map-heading">
+    <h2 id="matched-map-heading">Seven-row coordinate plot</h2>
+    <p class="matched-map-note">
+      Bounded seven-row map proof using stored latitude/longitude only. No geocoding, browser location,
+      tile provider, external map service, cross-option matching, or cross-fund matching is used here.
+    </p>
+  </div>
+  <div class="matched-map-shell">
+    <div>
+      <svg
+        class="matched-map-svg"
+        role="img"
+        aria-label="Coordinate plot for seven AustralianSuper Stable matched assets"
+        viewBox="0 0 1000 520"
+        data-map-panel="australiansuper-stable-stage5-proof"
+      >
+        <rect x="40" y="30" width="920" height="430" fill="#fffaf3" stroke="#d4c8ba"></rect>
+        <line class="matched-map-axis" x1="40" y1="245" x2="960" y2="245"></line>
+        <line class="matched-map-axis" x1="500" y1="30" x2="500" y2="460"></line>
+        <line class="matched-map-axis" x1="40" y1="137.5" x2="960" y2="137.5"></line>
+        <line class="matched-map-axis" x1="40" y1="352.5" x2="960" y2="352.5"></line>
+        <text class="matched-map-label" x="54" y="58">global coordinate plot</text>
+        <text class="matched-map-label" x="54" y="478">west</text>
+        <text class="matched-map-label" x="910" y="478">east</text>
+        <text class="matched-map-label" x="508" y="58">0 longitude</text>
+        <text class="matched-map-label" x="54" y="239">equator</text>
+        {% for row in map_rows %}
+        {% set x = 40 + (((row.geo_lng + 180) / 360) * 920) %}
+        {% set y = 30 + (((90 - row.geo_lat) / 180) * 430) %}
+        <g
+          class="matched-map-point matched-map-point--{{ row.entity_type | e }}"
+          data-map-point="australiansuper-stable-stage5-proof"
+          data-asset-name="{{ row.asset_entity_name | e }}"
+          data-entity-type="{{ row.entity_type | e }}"
+          data-classification-raw="{{ row.classification_raw | e }}"
+          data-address="{{ row.address | default('', true) | e }}"
+          data-location-raw="{{ row.location_raw | default('', true) | e }}"
+          data-geo-lat="{{ row.geo_lat | e }}"
+          data-geo-lng="{{ row.geo_lng | e }}"
+          data-confidence-score="{{ row.confidence_score | e }}"
+          data-source-row-number="{{ row.source_row_number | e }}"
+          aria-label="{{ row.asset_entity_name | e }} {{ row.entity_type | e }} source row {{ row.source_row_number | e }}"
+          transform="translate({{ x }}, {{ y }})"
+        >
+          <title>
+            {{ row.asset_entity_name | e }}; {{ row.entity_type | e }}; {{ row.classification_raw | default("unclassified", true) | e }};
+            {{ row.address | default(row.location_raw, true) | e }}; lat {{ row.geo_lat | e }}; lng {{ row.geo_lng | e }};
+            confidence {{ row.confidence_score | e }}; source row {{ row.source_row_number | e }}
+          </title>
+          <circle r="10"></circle>
+        </g>
+        {% endfor %}
+      </svg>
+      <div class="matched-map-legend" aria-label="Map point legend">
+        <span>property_asset</span>
+        <span class="matched-map-legend-infrastructure">infrastructure_asset</span>
+      </div>
+    </div>
+    <ol class="matched-map-point-list" aria-label="Plotted matched assets">
+      {% for row in map_rows %}
+      <li class="matched-map-point-card" data-map-point-card="australiansuper-stable-stage5-proof">
+        <strong>{{ row.asset_entity_name | e }}</strong>
+        <small><code>{{ row.entity_type | e }}</code> · {{ row.classification_raw | default("unclassified", true) | e }}</small>
+        <small>{{ row.address | default(row.location_raw, true) | e }}</small>
+        <small>lat <span class="mono">{{ row.geo_lat | e }}</span> · lng <span class="mono">{{ row.geo_lng | e }}</span></small>
+        <small>confidence <span class="mono">{{ row.confidence_score | e }}</span> · source row <span class="mono">{{ row.source_row_number | e }}</span></small>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
 
 <table>
   <thead>
@@ -28,7 +212,7 @@
   </thead>
   <tbody>
     {% for row in detail.rows %}
-    <tr>
+    <tr data-proof-table-row="australiansuper-stable-stage5-proof">
       <td>
         <strong>{{ row.asset_entity_name | e }}</strong><br>
         <code>{{ row.entity_type | e }}</code><br>
