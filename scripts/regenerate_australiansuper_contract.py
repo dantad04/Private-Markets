@@ -31,6 +31,18 @@ CONTRACT_CASES = (
         "contract-fixture-australiansuper-conservative",
         "contract-fixture-australiansuper-conservative-sha256-placeholder",
     ),
+    (
+        Path("tests/fixtures/real/australiansuper/Balanced PHD (6).csv"),
+        Path("tests/adapters/contracts/australiansuper/balanced_canonical_output.json"),
+        "contract-fixture-australiansuper-balanced",
+        "contract-fixture-australiansuper-balanced-sha256-placeholder",
+    ),
+    (
+        Path("tests/fixtures/real/australiansuper/High Growth PHD (2).csv"),
+        Path("tests/adapters/contracts/australiansuper/high_growth_canonical_output.json"),
+        "contract-fixture-australiansuper-high-growth",
+        "contract-fixture-australiansuper-high-growth-sha256-placeholder",
+    ),
 )
 WARNING_TEXT = (
     "THIS REWRITES THE STAGE 2 AUSTRALIANSUPER CONTRACTS. COMMIT THE CHANGE WITH AN EXPLICIT "

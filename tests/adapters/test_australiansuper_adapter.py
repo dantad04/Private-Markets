@@ -10,9 +10,20 @@ from adapters.base import SourceFileMetadata
 
 
 AUSTRALIANSUPER_FIXTURE_DIR = Path("tests/fixtures/real/australiansuper").resolve()
+BALANCED_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Balanced PHD (6).csv"
+HIGH_GROWTH_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "High Growth PHD (2).csv"
 STABLE_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Stable PHD (1).csv"
 CONSERVATIVE_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Conservative PHD (1).csv"
 MEMBER_DIRECT_PATH = AUSTRALIANSUPER_FIXTURE_DIR / "Member Direct PHD (1).csv"
+
+
+LATEST_PERIOD_BATCH_CASES = (
+    (MEMBER_DIRECT_PATH, "Member Direct", 564, 0),
+    (STABLE_PATH, "Stable", 4023, 17),
+    (CONSERVATIVE_PATH, "Conservative Balanced", 4023, 17),
+    (BALANCED_PATH, "Balanced", 3920, 17),
+    (HIGH_GROWTH_PATH, "High Growth", 3919, 17),
+)
 
 
 def make_metadata(
@@ -48,6 +59,19 @@ class TestAustralianSuperAdapter(unittest.TestCase):
         self.assertEqual("high", result.structural_metadata["fund_identity_assessment"]["confidence"])
         self.assertEqual(564, len(result.holdings))
         self.assertEqual(7, sum(1 for record in result.holdings if record.is_aggregate))
+
+    def test_latest_period_first_batch_parses_on_existing_adapter_path(self) -> None:
+        for file_path, option_name, expected_rows, expected_skipped_posture_rows in LATEST_PERIOD_BATCH_CASES:
+            with self.subTest(option=option_name):
+                result = self.adapter.parse(make_metadata(file_path), file_path.read_bytes())
+
+                self.assertEqual([option_name], result.structural_metadata["observed_option_names"])
+                self.assertEqual(expected_rows, len(result.holdings))
+                self.assertEqual(
+                    expected_skipped_posture_rows,
+                    result.structural_metadata["skipped_portfolio_posture_rows"],
+                )
+                self.assertFalse(any(record.source_asset_class_raw == "Derivatives" for record in result.holdings))
 
     def test_member_direct_option_name_can_verify_identity_without_path_signal(self) -> None:
         result = self.adapter.parse(

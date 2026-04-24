@@ -28,6 +28,8 @@ AUSTRALIANSUPER_MEMBER_DIRECT_MAPPING_VERSION_ID = "australiansuper-stage2-v1"
 AUSTRALIANSUPER_MAPPING_VERSION_ID = AUSTRALIANSUPER_MEMBER_DIRECT_MAPPING_VERSION_ID
 AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID = "australiansuper-stage2-stable-v1"
 AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID = "australiansuper-stage2-conservative-v1"
+AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID = "australiansuper-stage2-balanced-v1"
+AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID = "australiansuper-stage2-high-growth-v1"
 UNISUPER_MAPPING_VERSION_ID = "unisuper-stage2-v1"
 HOSTPLUS_MAPPING_VERSION_ID = "hostplus-stage2-v1"
 CBUS_MAPPING_VERSION_ID = "cbus-stage2-late-v1"
@@ -1032,6 +1034,52 @@ AUSTRALIANSUPER_CONSERVATIVE_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
+AUSTRALIANSUPER_BALANCED_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint=AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.schema_fingerprint,
+    structural_expectations_json={
+        **AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.structural_expectations_json,
+        "observed_option_codes": ["ARBA"],
+        "observed_option_names": ["Balanced"],
+    },
+    notes=(
+        "Approved AustralianSuper latest-period Balanced slice using the real "
+        "Balanced superannuation PHD file and the existing thin fund-specific adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_retarget_taxonomy_notes(
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.taxonomy_rows,
+        from_label="Stable",
+        to_label="Balanced",
+    ),
+)
+
+
+AUSTRALIANSUPER_HIGH_GROWTH_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID,
+    adapter_key="AustralianSuperPhdAdapter",
+    schema_fingerprint=AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.schema_fingerprint,
+    structural_expectations_json={
+        **AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.structural_expectations_json,
+        "observed_option_codes": ["ARHG"],
+        "observed_option_names": ["High Growth"],
+    },
+    notes=(
+        "Approved AustralianSuper latest-period High Growth slice using the real "
+        "High Growth superannuation PHD file and the existing thin fund-specific adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_retarget_taxonomy_notes(
+        AUSTRALIANSUPER_STABLE_APPROVED_MAPPING.taxonomy_rows,
+        from_label="Stable",
+        to_label="High Growth",
+    ),
+)
+
+
 UNISUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
     id=UNISUPER_MAPPING_VERSION_ID,
     adapter_key="UniSuperPhdStateMachineAdapter",
@@ -1583,6 +1631,8 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
         AUSTRALIANSUPER_APPROVED_MAPPING,
         AUSTRALIANSUPER_STABLE_APPROVED_MAPPING,
         AUSTRALIANSUPER_CONSERVATIVE_APPROVED_MAPPING,
+        AUSTRALIANSUPER_BALANCED_APPROVED_MAPPING,
+        AUSTRALIANSUPER_HIGH_GROWTH_APPROVED_MAPPING,
     ),
     UNISUPER_APPROVED_MAPPING.adapter_key: (UNISUPER_APPROVED_MAPPING,),
     HOSTPLUS_APPROVED_MAPPING.adapter_key: (HOSTPLUS_APPROVED_MAPPING,),

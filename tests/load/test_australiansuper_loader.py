@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import sessionmaker
 
 from app.db.models import (
@@ -14,6 +14,7 @@ from app.db.models import (
     Base,
     CanonicalAssetClass,
     Holding,
+    InvestmentOption,
     ReportingPeriod,
     SchemaReviewQueue,
     SourceFile,
@@ -21,7 +22,9 @@ from app.db.models import (
 )
 from app.db.session import get_engine
 from app.ingest.governance import (
+    AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID,
     SchemaDriftDetectedError,
@@ -33,7 +36,25 @@ FIXTURE_DIR = Path("tests/fixtures/real/australiansuper").resolve()
 MEMBER_DIRECT_PATH = FIXTURE_DIR / "Member Direct PHD (1).csv"
 STABLE_PATH = FIXTURE_DIR / "Stable PHD (1).csv"
 CONSERVATIVE_PATH = FIXTURE_DIR / "Conservative PHD (1).csv"
+BALANCED_PATH = FIXTURE_DIR / "Balanced PHD (6).csv"
+HIGH_GROWTH_PATH = FIXTURE_DIR / "High Growth PHD (2).csv"
 SOCIALLY_AWARE_PATH = FIXTURE_DIR / "Socially Aware PHD.csv"
+
+SOURCE_URLS = {
+    MEMBER_DIRECT_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/member-direct-phd.csv",
+    STABLE_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/stable-phd.csv",
+    CONSERVATIVE_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/conservative-phd.csv",
+    BALANCED_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/balanced-phd.csv",
+    HIGH_GROWTH_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/high-growth-phd.csv",
+}
+
+LATEST_PERIOD_BATCH_CASES = (
+    (MEMBER_DIRECT_PATH, "Member Direct", AUSTRALIANSUPER_MAPPING_VERSION_ID, 564, 0, 0),
+    (STABLE_PATH, "Stable", AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID, 4023, 17, 194),
+    (CONSERVATIVE_PATH, "Conservative Balanced", AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID, 4023, 17, 194),
+    (BALANCED_PATH, "Balanced", AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID, 3920, 17, 185),
+    (HIGH_GROWTH_PATH, "High Growth", AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID, 3919, 17, 185),
+)
 
 
 class TestAustralianSuperLoader(unittest.TestCase):
@@ -70,6 +91,7 @@ class TestAustralianSuperLoader(unittest.TestCase):
                 fund_name="AustralianSuper",
                 file_path=str(MEMBER_DIRECT_PATH),
                 reporting_period_id=reporting_period_id,
+                source_url=SOURCE_URLS[MEMBER_DIRECT_PATH],
             )
             session.commit()
 
@@ -79,6 +101,7 @@ class TestAustralianSuperLoader(unittest.TestCase):
 
             source_file = session.get(SourceFile, summary.source_file_id)
             self.assertEqual("AustralianSuperPhdAdapter", source_file.adapter_key)
+            self.assertEqual(SOURCE_URLS[MEMBER_DIRECT_PATH], source_file.source_url)
             self.assertEqual(AUSTRALIANSUPER_MAPPING_VERSION_ID, source_file.mapping_version_id)
             self.assertEqual(564, session.query(Holding).count())
             self.assertIsNotNone(session.get(AdapterMappingVersion, AUSTRALIANSUPER_MAPPING_VERSION_ID))
@@ -126,6 +149,7 @@ class TestAustralianSuperLoader(unittest.TestCase):
                 fund_name="AustralianSuper",
                 file_path=str(STABLE_PATH),
                 reporting_period_id=reporting_period_id,
+                source_url=SOURCE_URLS[STABLE_PATH],
             )
             session.commit()
 
@@ -135,6 +159,7 @@ class TestAustralianSuperLoader(unittest.TestCase):
 
             source_file = session.get(SourceFile, summary.source_file_id)
             self.assertEqual("loaded", source_file.ingest_status)
+            self.assertEqual(SOURCE_URLS[STABLE_PATH], source_file.source_url)
             self.assertEqual(AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID, source_file.mapping_version_id)
             self.assertEqual(4023, session.query(Holding).count())
             self.assertIsNotNone(session.get(AdapterMappingVersion, AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID))
@@ -170,6 +195,7 @@ class TestAustralianSuperLoader(unittest.TestCase):
                 fund_name="AustralianSuper",
                 file_path=str(CONSERVATIVE_PATH),
                 reporting_period_id=reporting_period_id,
+                source_url=SOURCE_URLS[CONSERVATIVE_PATH],
             )
             session.commit()
 
@@ -179,6 +205,7 @@ class TestAustralianSuperLoader(unittest.TestCase):
 
             source_file = session.get(SourceFile, summary.source_file_id)
             self.assertEqual("loaded", source_file.ingest_status)
+            self.assertEqual(SOURCE_URLS[CONSERVATIVE_PATH], source_file.source_url)
             self.assertEqual(AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID, source_file.mapping_version_id)
             self.assertEqual(4023, session.query(Holding).count())
             self.assertIsNotNone(session.get(AdapterMappingVersion, AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID))
@@ -194,6 +221,73 @@ class TestAustralianSuperLoader(unittest.TestCase):
             self.assertEqual([3368, 3877], [entry["source_row_number"] for entry in merged_row.raw_payload_json])
 
             self.assertEqual(0, session.query(Holding).filter(Holding.source_asset_class_raw == "Derivatives").count())
+
+    def test_ingest_first_five_file_latest_period_batch(self) -> None:
+        reporting_period_id = self._create_reporting_period()
+
+        with self.SessionLocal() as session:
+            source_file_ids: list[int] = []
+            for file_path, _option_name, mapping_version_id, expected_rows, _skipped_rows, _review_count in (
+                LATEST_PERIOD_BATCH_CASES
+            ):
+                summary = ingest_australiansuper_local_file(
+                    session,
+                    fund_code="australiansuper",
+                    fund_name="AustralianSuper",
+                    file_path=str(file_path),
+                    reporting_period_id=reporting_period_id,
+                    source_url=SOURCE_URLS[file_path],
+                )
+
+                self.assertEqual(expected_rows, summary.rows_staged)
+                self.assertEqual(expected_rows, summary.rows_inserted)
+                source_file = session.get(SourceFile, summary.source_file_id)
+                self.assertEqual("AustralianSuperPhdAdapter", source_file.adapter_key)
+                self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                self.assertEqual(SOURCE_URLS[file_path], source_file.source_url)
+                source_file_ids.append(summary.source_file_id)
+
+            session.flush()
+
+            holdings_by_option = dict(
+                session.execute(
+                    select(InvestmentOption.source_option_name, func.count(Holding.id))
+                    .join(Holding, Holding.source_option_id == InvestmentOption.id)
+                    .where(Holding.source_file_id.in_(source_file_ids))
+                    .group_by(InvestmentOption.source_option_name)
+                ).all()
+            )
+            self.assertEqual(
+                {
+                    option_name: expected_rows
+                    for _file_path, option_name, _mapping_version_id, expected_rows, _skipped_rows, _review_count in (
+                        LATEST_PERIOD_BATCH_CASES
+                    )
+                },
+                holdings_by_option,
+            )
+            self.assertEqual(
+                0,
+                session.query(Holding)
+                .filter(Holding.source_file_id.in_(source_file_ids), Holding.source_asset_class_raw == "Derivatives")
+                .count(),
+            )
+            self.assertEqual(
+                sum(review_count for *_prefix, review_count in LATEST_PERIOD_BATCH_CASES),
+                session.query(SchemaReviewQueue).count(),
+            )
+            source_filenames = {Path(source_file.source_url).name for source_file in session.query(SourceFile).all()}
+            self.assertFalse(
+                {
+                    "cash-phd.csv",
+                    "diversified-fixed-interest-phd.csv",
+                    "indexed-diversified-phd.csv",
+                    "international-shares-phd.csv",
+                    "socially-aware-phd.csv",
+                    "australian-shares-phd.csv",
+                }
+                & source_filenames
+            )
 
     def test_socially_aware_official_file_remains_review_gated_until_separately_approved(self) -> None:
         reporting_period_id = self._create_reporting_period()

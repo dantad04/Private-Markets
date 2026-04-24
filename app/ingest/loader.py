@@ -652,6 +652,7 @@ def ingest_australiansuper_local_file(
     reporting_period_id: int | None,
     publication_date: date | None = None,
     received_at: datetime | None = None,
+    source_url: str | None = None,
 ) -> LoadSummary:
     if reporting_period_id is None:
         raise MissingReportingPeriodRegistrationError(
@@ -666,7 +667,7 @@ def ingest_australiansuper_local_file(
         fund_code=fund_code,
         fund_name=fund_name,
         adapter_key="AustralianSuperPhdAdapter",
-        source_url=str(file_path_obj),
+        source_url=source_url or str(file_path_obj),
         checksum=checksum,
         received_at=received_at or datetime.now(UTC),
         reporting_period_id=reporting_period_id,

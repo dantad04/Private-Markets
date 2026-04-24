@@ -112,6 +112,7 @@ class AdminAustralianSuperIngestRequest(BaseModel):
     fund_name: str = Field(..., description="Human-readable fund name")
     publication_date: date | None = None
     reporting_period_id: int | None = None
+    source_url: str | None = None
 
 
 class AdminUniSuperIngestRequest(BaseModel):
@@ -839,6 +840,7 @@ def ingest_australiansuper_local_file_endpoint(
             file_path=payload.file_path,
             publication_date=payload.publication_date,
             reporting_period_id=payload.reporting_period_id,
+            source_url=payload.source_url,
         )
     except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError) as exc:
         session.commit()

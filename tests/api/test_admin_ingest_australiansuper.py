@@ -13,7 +13,9 @@ from app.api.app import create_app
 from app.db.models import Base, ReportingPeriod, SchemaReviewQueue, SourceFile
 from app.db.session import get_engine
 from app.ingest.governance import (
+    AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID,
+    AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_MAPPING_VERSION_ID,
     AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID,
 )
@@ -23,7 +25,17 @@ FIXTURE_DIR = Path("tests/fixtures/real/australiansuper").resolve()
 MEMBER_DIRECT_PATH = FIXTURE_DIR / "Member Direct PHD (1).csv"
 STABLE_PATH = FIXTURE_DIR / "Stable PHD (1).csv"
 CONSERVATIVE_PATH = FIXTURE_DIR / "Conservative PHD (1).csv"
+BALANCED_PATH = FIXTURE_DIR / "Balanced PHD (6).csv"
+HIGH_GROWTH_PATH = FIXTURE_DIR / "High Growth PHD (2).csv"
 SOCIALLY_AWARE_PATH = FIXTURE_DIR / "Socially Aware PHD.csv"
+
+SOURCE_URLS = {
+    MEMBER_DIRECT_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/member-direct-phd.csv",
+    STABLE_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/stable-phd.csv",
+    CONSERVATIVE_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/conservative-phd.csv",
+    BALANCED_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/balanced-phd.csv",
+    HIGH_GROWTH_PATH: "https://www.australiansuper.com/-/media/australian-super/files/investments/phd/superannuation/high-growth-phd.csv",
+}
 
 
 class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
@@ -73,6 +85,7 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
                 "fund_code": "australiansuper",
                 "fund_name": "AustralianSuper",
                 "reporting_period_id": self.reporting_period_id,
+                "source_url": SOURCE_URLS[MEMBER_DIRECT_PATH],
             },
         )
         self.assertEqual(200, response.status_code)
@@ -83,6 +96,7 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
         with self.SessionLocal() as session:
             source_file = session.get(SourceFile, payload["source_file_id"])
             self.assertEqual("AustralianSuperPhdAdapter", source_file.adapter_key)
+            self.assertEqual(SOURCE_URLS[MEMBER_DIRECT_PATH], source_file.source_url)
             self.assertEqual(AUSTRALIANSUPER_MAPPING_VERSION_ID, source_file.mapping_version_id)
             self.assertEqual(0, session.query(SchemaReviewQueue).count())
 
@@ -141,6 +155,7 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
                 "fund_code": "australiansuper",
                 "fund_name": "AustralianSuper",
                 "reporting_period_id": self.reporting_period_id,
+                "source_url": SOURCE_URLS[STABLE_PATH],
             },
         )
         self.assertEqual(200, response.status_code)
@@ -150,6 +165,7 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
 
         with self.SessionLocal() as session:
             source_file = session.get(SourceFile, payload["source_file_id"])
+            self.assertEqual(SOURCE_URLS[STABLE_PATH], source_file.source_url)
             self.assertEqual(AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID, source_file.mapping_version_id)
             self.assertEqual(194, session.query(SchemaReviewQueue).count())
 
@@ -180,6 +196,7 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
                 "fund_code": "australiansuper",
                 "fund_name": "AustralianSuper",
                 "reporting_period_id": self.reporting_period_id,
+                "source_url": SOURCE_URLS[CONSERVATIVE_PATH],
             },
         )
         self.assertEqual(200, response.status_code)
@@ -189,6 +206,7 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
 
         with self.SessionLocal() as session:
             source_file = session.get(SourceFile, payload["source_file_id"])
+            self.assertEqual(SOURCE_URLS[CONSERVATIVE_PATH], source_file.source_url)
             self.assertEqual(AUSTRALIANSUPER_CONSERVATIVE_MAPPING_VERSION_ID, source_file.mapping_version_id)
             self.assertEqual(194, session.query(SchemaReviewQueue).count())
 
@@ -210,6 +228,44 @@ class TestAdminAustralianSuperIngestEndpoint(unittest.TestCase):
         self.assertEqual(200, admin_ui_detail.status_code)
         self.assertIn("1200 W Carroll", admin_ui_detail.text)
         self.assertIn("metadata_attached_from_row_numbers=[3877]", admin_ui_detail.text)
+
+    def test_admin_ingest_balanced_and_high_growth_use_latest_period_mapping_seeds(self) -> None:
+        cases = (
+            (BALANCED_PATH, SOURCE_URLS[BALANCED_PATH], AUSTRALIANSUPER_BALANCED_MAPPING_VERSION_ID, 3920, 185),
+            (
+                HIGH_GROWTH_PATH,
+                SOURCE_URLS[HIGH_GROWTH_PATH],
+                AUSTRALIANSUPER_HIGH_GROWTH_MAPPING_VERSION_ID,
+                3919,
+                185,
+            ),
+        )
+
+        cumulative_review_items = 0
+        for file_path, source_url, mapping_version_id, expected_rows, expected_review_items in cases:
+            with self.subTest(file=file_path.name):
+                response = self.client.post(
+                    "/admin/ingest/local-file/australiansuper",
+                    json={
+                        "file_path": str(file_path),
+                        "fund_code": "australiansuper",
+                        "fund_name": "AustralianSuper",
+                        "reporting_period_id": self.reporting_period_id,
+                        "source_url": source_url,
+                    },
+                )
+                self.assertEqual(200, response.status_code)
+                payload = response.json()
+                self.assertEqual(expected_rows, payload["rows_staged"])
+                self.assertEqual(expected_rows, payload["rows_inserted"])
+                cumulative_review_items += expected_review_items
+
+                with self.SessionLocal() as session:
+                    source_file = session.get(SourceFile, payload["source_file_id"])
+                    self.assertEqual("AustralianSuperPhdAdapter", source_file.adapter_key)
+                    self.assertEqual(source_url, source_file.source_url)
+                    self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                    self.assertEqual(cumulative_review_items, session.query(SchemaReviewQueue).count())
 
     def test_admin_ingest_socially_aware_file_remains_review_gated(self) -> None:
         response = self.client.post(
