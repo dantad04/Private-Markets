@@ -122,6 +122,8 @@ class TestHomepage(unittest.TestCase):
         self.assertIn("Funds", response.text)
         self.assertIn("Managers", response.text)
         self.assertIn("/admin/ui/search", response.text)
+        self.assertIn("Matched-asset proof", response.text)
+        self.assertIn("/admin/ui/matched-assets/australiansuper-stable-stage5-proof", response.text)
         self.assertIn("Search is the homepage's lead action", response.text)
 
     def test_homepage_renders_honest_current_period_strip(self) -> None:
@@ -140,7 +142,11 @@ class TestHomepage(unittest.TestCase):
         self.assertIn("IFM Investors Pty Ltd", response.text)
         self.assertIn(f"/admin/ui/companies/{self.industry_super_entity_id}", response.text)
         self.assertIn(f"/admin/ui/managers/{self.ifm_entity_id}", response.text)
-        self.assertIn("Property and infrastructure map", response.text)
-        self.assertIn("Coming later", response.text)
-        self.assertIn("Stage 5", response.text)
+        self.assertIn("AustralianSuper Stable matched-asset map proof", response.text)
+        self.assertIn("/admin/ui/matched-assets/australiansuper-stable-stage5-proof", response.text)
+        self.assertIn("Seven-row proof live", response.text)
+        self.assertIn("not comprehensive national, cross-fund, or Cbus map coverage", response.text)
+        self.assertIn("confidence, and source-row provenance", response.text)
+        self.assertNotIn("mapped asset surface lands in Stage 5", response.text)
+        self.assertNotIn("Coming later", response.text)
         self.assertIn("Disclosure completeness is the core rule of the product", response.text)

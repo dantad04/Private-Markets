@@ -102,8 +102,8 @@
             <h2 class="section-title">Start with the product's strongest surfaces</h2>
           </div>
           <p class="section-note">
-            These links stay anchored to existing Stage 4 pages. The property and infrastructure map keeps its homepage slot,
-            but the actual mapped surface remains explicitly staged later.
+            These links stay anchored to existing stored truth. The property and infrastructure entry points to the bounded
+            seven-row map proof, not comprehensive national, cross-fund, or Cbus map coverage.
           </p>
         </div>
         <div class="feature-grid">
@@ -131,8 +131,12 @@
             <a class="feature-link" href="{{ request.url_for('fund_detail_page', fund_code=entry.fund_code) | e }}">
               {{ (entry.cta_label or "Open fund") | e }}
             </a>
+            {% elif entry.result_kind == "matched_asset_proof" %}
+            <a class="feature-link" href="{{ request.url_for('australiansuper_stable_matched_asset_proof_page') | e }}">
+              {{ (entry.cta_label or "Open matched-asset proof") | e }}
+            </a>
             {% else %}
-            <p class="quiet-note quiet-note--spaced">Homepage slot retained; mapped asset surface lands in Stage 5.</p>
+            <p class="quiet-note quiet-note--spaced">Homepage slot retained; no linked surface is available yet.</p>
             {% endif %}
           </article>
           {% endfor %}

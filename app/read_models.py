@@ -2552,17 +2552,18 @@ def get_homepage(session: Session) -> HomepageReadModel:
             ),
             HomepageFeatureEntryReadModel(
                 kicker="Mapped property and infrastructure assets",
-                title="Property and infrastructure map",
+                title="AustralianSuper Stable matched-asset map proof",
                 deck=(
-                    "Geo-coordinates, addresses, and classification-rich rows already exist in stored truth, "
-                    "but the dedicated mapped asset surface is staged to Stage 5."
+                    "A bounded seven-row AustralianSuper Stable map proof now displays matched property and "
+                    "infrastructure assets with coordinates, confidence, and source-row provenance. It is not "
+                    "comprehensive national, cross-fund, or Cbus map coverage."
                 ),
-                result_kind="coming_later",
+                result_kind="matched_asset_proof",
                 entity_id=None,
                 fund_code=None,
                 search_query=None,
-                cta_label=None,
-                status_label="Coming later",
+                cta_label="Open matched-asset proof",
+                status_label="Seven-row proof live",
             ),
         ],
         editorial_note=(
