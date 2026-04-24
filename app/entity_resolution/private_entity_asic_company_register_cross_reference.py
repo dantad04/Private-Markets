@@ -67,6 +67,10 @@ from app.entity_resolution.roc_capital_seed import (
     ROC_CAPITAL_REVIEWED_ABN,
     ensure_roc_capital_seed,
 )
+from app.entity_resolution.s2search_australia_seed import (
+    S2SEARCH_AUSTRALIA_CANONICAL_NAME,
+    ensure_s2search_australia_seed,
+)
 from app.entity_resolution.stafford_capital_partners_seed import (
     STAFFORD_CAPITAL_PARTNERS_CANONICAL_NAME,
     STAFFORD_CAPITAL_PARTNERS_REGISTERED_NAME_ON_ABR,
@@ -82,6 +86,10 @@ from app.entity_resolution.square_peg_capital_seed import (
 from app.entity_resolution.vermont_aus_holdco_seed import (
     VERMONT_AUS_HOLDCO_CANONICAL_NAME,
     ensure_vermont_aus_holdco_seed,
+)
+from app.entity_resolution.validly_seed import (
+    VALIDLY_CANONICAL_NAME,
+    ensure_validly_seed,
 )
 from app.entity_resolution.wellington_management_australia_seed import (
     WELLINGTON_MANAGEMENT_AUSTRALIA_CANONICAL_NAME,
@@ -163,6 +171,18 @@ MARRON_GROUP_HOLDINGS_ACN = "631 941 403"
 MARRON_GROUP_HOLDINGS_ASIC_REGISTRATION_DATE = date(2019, 2, 27)
 MARRON_GROUP_HOLDINGS_ASIC_NEXT_REVIEW_DATE = date(2027, 2, 27)
 MARRON_GROUP_HOLDINGS_ASIC_REVIEWED_AT = date(2026, 4, 24)
+
+S2SEARCH_AUSTRALIA_ABN = "11 660 091 074"
+S2SEARCH_AUSTRALIA_ACN = "660 091 074"
+S2SEARCH_AUSTRALIA_ASIC_REGISTRATION_DATE = date(2022, 6, 13)
+S2SEARCH_AUSTRALIA_ASIC_NEXT_REVIEW_DATE = date(2026, 6, 13)
+S2SEARCH_AUSTRALIA_ASIC_REVIEWED_AT = date(2026, 4, 24)
+
+VALIDLY_ABN = "80 660 129 939"
+VALIDLY_ACN = "660 129 939"
+VALIDLY_ASIC_REGISTRATION_DATE = date(2022, 6, 13)
+VALIDLY_ASIC_NEXT_REVIEW_DATE = date(2026, 6, 13)
+VALIDLY_ASIC_REVIEWED_AT = date(2026, 4, 24)
 
 
 @dataclass(frozen=True)
@@ -339,6 +359,28 @@ MARRON_GROUP_HOLDINGS_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
     reviewed_at=MARRON_GROUP_HOLDINGS_ASIC_REVIEWED_AT,
 )
 
+S2SEARCH_AUSTRALIA_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=S2SEARCH_AUSTRALIA_CANONICAL_NAME,
+    entity_type="company",
+    reviewed_abn=S2SEARCH_AUSTRALIA_ABN,
+    registered_name=None,
+    acn=S2SEARCH_AUSTRALIA_ACN,
+    registration_date=S2SEARCH_AUSTRALIA_ASIC_REGISTRATION_DATE,
+    next_review_date=S2SEARCH_AUSTRALIA_ASIC_NEXT_REVIEW_DATE,
+    reviewed_at=S2SEARCH_AUSTRALIA_ASIC_REVIEWED_AT,
+)
+
+VALIDLY_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=VALIDLY_CANONICAL_NAME,
+    entity_type="company",
+    reviewed_abn=VALIDLY_ABN,
+    registered_name=None,
+    acn=VALIDLY_ACN,
+    registration_date=VALIDLY_ASIC_REGISTRATION_DATE,
+    next_review_date=VALIDLY_ASIC_NEXT_REVIEW_DATE,
+    reviewed_at=VALIDLY_ASIC_REVIEWED_AT,
+)
+
 
 def ensure_private_entity_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
     ensure_brandon_capital_partners_seed(session)
@@ -412,6 +454,16 @@ def ensure_marron_group_holdings_asic_company_register_cross_reference_subset(se
     ensure_marron_group_holdings_seed(session)
 
     return (ensure_marron_group_holdings_asic_company_register_cross_reference(session),)
+
+
+def ensure_s2search_validly_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_s2search_australia_seed(session)
+    ensure_validly_seed(session)
+
+    return (
+        ensure_s2search_australia_asic_company_register_cross_reference(session),
+        ensure_validly_asic_company_register_cross_reference(session),
+    )
 
 
 def ensure_brandon_capital_partners_asic_company_register_cross_reference(session) -> Entity:
@@ -516,6 +568,20 @@ def ensure_marron_group_holdings_asic_company_register_cross_reference(session) 
     return _ensure_entity_asic_company_register_cross_reference(
         session,
         cross_reference=MARRON_GROUP_HOLDINGS_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_s2search_australia_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=S2SEARCH_AUSTRALIA_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_validly_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=VALIDLY_ASIC_CROSS_REFERENCE,
     )
 
 

@@ -12,6 +12,26 @@ from sqlalchemy.orm import sessionmaker
 from app.db.models import Base, Entity, EntityAlias, Holding, ReportingPeriod
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
+from app.entity_resolution.private_entity_asic_company_register_cross_reference import (
+    ASIC_COMPANY_STATUS_REGISTERED,
+    ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES,
+    ASIC_REVIEWED_BY,
+    ASIC_REVIEW_SOURCE,
+    S2SEARCH_AUSTRALIA_ABN,
+    S2SEARCH_AUSTRALIA_ACN,
+    S2SEARCH_AUSTRALIA_ASIC_CROSS_REFERENCE,
+    S2SEARCH_AUSTRALIA_ASIC_NEXT_REVIEW_DATE,
+    S2SEARCH_AUSTRALIA_ASIC_REGISTRATION_DATE,
+    S2SEARCH_AUSTRALIA_ASIC_REVIEWED_AT,
+    VALIDLY_ABN,
+    VALIDLY_ACN,
+    VALIDLY_ASIC_CROSS_REFERENCE,
+    VALIDLY_ASIC_NEXT_REVIEW_DATE,
+    VALIDLY_ASIC_REGISTRATION_DATE,
+    VALIDLY_ASIC_REVIEWED_AT,
+    ensure_s2search_australia_asic_company_register_cross_reference,
+    ensure_validly_asic_company_register_cross_reference,
+)
 from app.entity_resolution.s2search_australia_seed import (
     S2SEARCH_AUSTRALIA_CANONICAL_NAME,
     S2SEARCH_AUSTRALIA_NOTES,
@@ -281,6 +301,300 @@ class TestS2SearchValidlySeed(unittest.TestCase):
                 self.assertIsNone(detail.asic_review_source)
                 self.assertIsNone(detail.asic_reviewed_by)
                 self.assertIsNone(detail.asic_reviewed_at)
+
+                self.assertEqual(2, len(detail.observations))
+                observations_by_option = {row.option_name: row for row in detail.observations}
+                self.assertEqual({"Conservative Balanced", "Stable"}, set(observations_by_option))
+
+                stable_observation = observations_by_option["Stable"]
+                self.assertEqual("australiansuper", stable_observation.fund_code)
+                self.assertEqual(expectation.canonical_name, stable_observation.raw_name)
+                self.assertEqual("name_only", stable_observation.disclosure_completeness)
+                self.assertIsNone(stable_observation.ownership_pct)
+                self.assertIsNone(stable_observation.value_aud)
+                self.assertEqual("unlisted_equity", stable_observation.canonical_asset_class_code)
+                self.assertEqual("Private Equity", stable_observation.source_asset_class_raw)
+                self.assertEqual("Private Equity", stable_observation.source_subclass_raw)
+                self.assertEqual("Linked", stable_observation.confidence_label)
+
+                conservative_observation = observations_by_option["Conservative Balanced"]
+                self.assertEqual("australiansuper", conservative_observation.fund_code)
+                self.assertEqual(expectation.canonical_name, conservative_observation.raw_name)
+                self.assertEqual("name_only", conservative_observation.disclosure_completeness)
+                self.assertIsNone(conservative_observation.ownership_pct)
+                self.assertIsNone(conservative_observation.value_aud)
+                self.assertEqual("unlisted_equity", conservative_observation.canonical_asset_class_code)
+                self.assertEqual("Private Equity", conservative_observation.source_asset_class_raw)
+                self.assertEqual("Private Equity", conservative_observation.source_subclass_raw)
+                self.assertEqual("Linked", conservative_observation.confidence_label)
+
+
+class TestS2SearchValidlyAsicCrossReference(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.tempdir = tempfile.TemporaryDirectory()
+        cls.database_url = f"sqlite:///{Path(cls.tempdir.name) / 's2search_validly_asic_seed.db'}"
+        cls.engine = get_engine(cls.database_url)
+        Base.metadata.create_all(cls.engine)
+        cls.SessionLocal = sessionmaker(bind=cls.engine, autoflush=False, autocommit=False, future=True)
+        cls.expectations_by_name = {expectation.canonical_name: expectation for expectation in EXPECTATIONS}
+
+        with cls.SessionLocal() as session:
+            period = ReportingPeriod(
+                period_end_date=date(2025, 12, 31),
+                disclosure_due_date=date(2026, 3, 31),
+                label="2025-12-31",
+                source_cycle="semi_annual",
+            )
+            session.add(period)
+            session.flush()
+
+            ingest_australiansuper_local_file(
+                session,
+                fund_code="australiansuper",
+                fund_name="AustralianSuper",
+                file_path=str(AUSTRALIANSUPER_STABLE_FIXTURE_PATH),
+                reporting_period_id=period.id,
+            )
+            ingest_australiansuper_local_file(
+                session,
+                fund_code="australiansuper",
+                fund_name="AustralianSuper",
+                file_path=str(AUSTRALIANSUPER_CONSERVATIVE_FIXTURE_PATH),
+                reporting_period_id=period.id,
+            )
+
+            cls.pre_seed_signatures = {
+                expectation.canonical_name: TestS2SearchValidlySeed._load_signatures(session, expectation.canonical_name)
+                for expectation in EXPECTATIONS
+            }
+            cls.pre_seed_null_entity_counts = {
+                expectation.canonical_name: session.scalar(
+                    select(func.count(Holding.id)).where(
+                        Holding.raw_name == expectation.canonical_name,
+                        Holding.entity_id.is_(None),
+                    )
+                )
+                for expectation in EXPECTATIONS
+            }
+
+            s2search_entity = ensure_s2search_australia_seed(session)
+            validly_entity = ensure_validly_seed(session)
+            ensure_s2search_australia_asic_company_register_cross_reference(session)
+            ensure_validly_asic_company_register_cross_reference(session)
+            cls.entity_ids = {
+                S2SEARCH_AUSTRALIA_CANONICAL_NAME: s2search_entity.id,
+                VALIDLY_CANONICAL_NAME: validly_entity.id,
+            }
+            cls.period_id = period.id
+            cls.first_resolution_summary = resolve_entities_deterministically(session, reporting_period_id=period.id)
+            session.commit()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.engine.dispose()
+        cls.tempdir.cleanup()
+
+    def test_canonical_company_seed_persists_asic_cross_reference_without_abr_review_layer(self) -> None:
+        expected_asic_fields = {
+            S2SEARCH_AUSTRALIA_CANONICAL_NAME: (
+                S2SEARCH_AUSTRALIA_ABN,
+                S2SEARCH_AUSTRALIA_ACN,
+                S2SEARCH_AUSTRALIA_ASIC_REGISTRATION_DATE,
+                S2SEARCH_AUSTRALIA_ASIC_NEXT_REVIEW_DATE,
+                S2SEARCH_AUSTRALIA_ASIC_CROSS_REFERENCE.record_url,
+                S2SEARCH_AUSTRALIA_ASIC_REVIEWED_AT,
+            ),
+            VALIDLY_CANONICAL_NAME: (
+                VALIDLY_ABN,
+                VALIDLY_ACN,
+                VALIDLY_ASIC_REGISTRATION_DATE,
+                VALIDLY_ASIC_NEXT_REVIEW_DATE,
+                VALIDLY_ASIC_CROSS_REFERENCE.record_url,
+                VALIDLY_ASIC_REVIEWED_AT,
+            ),
+        }
+
+        with self.SessionLocal() as session:
+            for expectation in EXPECTATIONS:
+                entity = session.get(Entity, self.entity_ids[expectation.canonical_name])
+                self.assertIsNotNone(entity)
+                assert entity is not None
+
+                expected_abn, expected_acn, expected_registration_date, expected_next_review_date, expected_record_url, expected_reviewed_at = expected_asic_fields[expectation.canonical_name]
+
+                self.assertEqual(expectation.canonical_name, entity.canonical_name)
+                self.assertEqual("company", entity.entity_type)
+                self.assertEqual(expected_abn, entity.abn)
+                self.assertIsNone(entity.abn_review_source)
+                self.assertIsNone(entity.registered_name_on_abr)
+                self.assertEqual(expected_acn, entity.acn)
+                self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, entity.asic_company_status)
+                self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, entity.asic_company_type)
+                self.assertEqual(expected_registration_date, entity.asic_registration_date)
+                self.assertEqual(expected_next_review_date, entity.asic_next_review_date)
+                self.assertEqual(expected_record_url, entity.asic_record_url)
+                self.assertEqual(ASIC_REVIEW_SOURCE, entity.asic_review_source)
+                self.assertEqual(ASIC_REVIEWED_BY, entity.asic_reviewed_by)
+                self.assertEqual(expected_reviewed_at, entity.asic_reviewed_at)
+                self.assertEqual("AU", entity.country_code)
+                self.assertTrue(entity.is_australian_entity)
+                self.assertIsNone(entity.confidence_tier)
+                self.assertEqual(expectation.notes, entity.notes)
+
+                aliases = session.scalars(
+                    select(EntityAlias.alias)
+                    .where(EntityAlias.entity_id == entity.id)
+                    .order_by(EntityAlias.alias.asc())
+                ).all()
+                self.assertEqual(
+                    [alias for alias, _is_preferred in expectation.observed_aliases],
+                    aliases,
+                )
+
+    def test_seed_is_idempotent_and_reapplies_only_s2search_and_validly_asic_fields(self) -> None:
+        with self.SessionLocal() as session:
+            first_s2search = ensure_s2search_australia_seed(session)
+            second_s2search = ensure_s2search_australia_seed(session)
+            first_validly = ensure_validly_seed(session)
+            second_validly = ensure_validly_seed(session)
+            ensure_s2search_australia_asic_company_register_cross_reference(session)
+            ensure_s2search_australia_asic_company_register_cross_reference(session)
+            ensure_validly_asic_company_register_cross_reference(session)
+            ensure_validly_asic_company_register_cross_reference(session)
+            session.commit()
+
+            self.assertEqual(first_s2search.id, second_s2search.id)
+            self.assertEqual(first_validly.id, second_validly.id)
+
+            expected_asic_fields = {
+                S2SEARCH_AUSTRALIA_CANONICAL_NAME: (
+                    S2SEARCH_AUSTRALIA_ABN,
+                    S2SEARCH_AUSTRALIA_ACN,
+                    S2SEARCH_AUSTRALIA_ASIC_CROSS_REFERENCE.record_url,
+                    S2SEARCH_AUSTRALIA_ASIC_REVIEWED_AT,
+                ),
+                VALIDLY_CANONICAL_NAME: (
+                    VALIDLY_ABN,
+                    VALIDLY_ACN,
+                    VALIDLY_ASIC_CROSS_REFERENCE.record_url,
+                    VALIDLY_ASIC_REVIEWED_AT,
+                ),
+            }
+
+            for expectation in EXPECTATIONS:
+                self.assertEqual(
+                    1,
+                    session.scalar(
+                        select(func.count(Entity.id)).where(
+                            Entity.canonical_name == expectation.canonical_name
+                        )
+                    ),
+                )
+                self.assertEqual(
+                    len(expectation.observed_aliases),
+                    session.scalar(
+                        select(func.count(EntityAlias.id)).where(
+                            EntityAlias.entity_id == self.entity_ids[expectation.canonical_name]
+                        )
+                    ),
+                )
+
+                entity = session.get(Entity, self.entity_ids[expectation.canonical_name])
+                self.assertIsNotNone(entity)
+                assert entity is not None
+                expected_abn, expected_acn, expected_record_url, expected_reviewed_at = expected_asic_fields[expectation.canonical_name]
+                self.assertEqual(expected_abn, entity.abn)
+                self.assertIsNone(entity.abn_review_source)
+                self.assertIsNone(entity.registered_name_on_abr)
+                self.assertEqual(expected_acn, entity.acn)
+                self.assertEqual(expected_record_url, entity.asic_record_url)
+                self.assertEqual(ASIC_REVIEW_SOURCE, entity.asic_review_source)
+                self.assertEqual(expected_reviewed_at, entity.asic_reviewed_at)
+                self.assertIsNone(entity.confidence_tier)
+
+    def test_exact_name_resolution_links_both_companies_and_company_detail_stays_honest_with_asic_only_slice(self) -> None:
+        expected_asic_fields = {
+            S2SEARCH_AUSTRALIA_CANONICAL_NAME: (
+                S2SEARCH_AUSTRALIA_ABN,
+                S2SEARCH_AUSTRALIA_ACN,
+                S2SEARCH_AUSTRALIA_ASIC_REGISTRATION_DATE,
+                S2SEARCH_AUSTRALIA_ASIC_NEXT_REVIEW_DATE,
+                S2SEARCH_AUSTRALIA_ASIC_CROSS_REFERENCE.record_url,
+                S2SEARCH_AUSTRALIA_ASIC_REVIEWED_AT,
+            ),
+            VALIDLY_CANONICAL_NAME: (
+                VALIDLY_ABN,
+                VALIDLY_ACN,
+                VALIDLY_ASIC_REGISTRATION_DATE,
+                VALIDLY_ASIC_NEXT_REVIEW_DATE,
+                VALIDLY_ASIC_CROSS_REFERENCE.record_url,
+                VALIDLY_ASIC_REVIEWED_AT,
+            ),
+        }
+
+        with self.SessionLocal() as session:
+            self.assertEqual(4, self.first_resolution_summary.exact_name_auto_links)
+            self.assertEqual(0, self.first_resolution_summary.exact_name_ambiguities_queued)
+            self.assertEqual(0, self.first_resolution_summary.exact_name_candidates_rejected_due_to_scope_conflict)
+
+            for expectation in EXPECTATIONS:
+                rows = session.scalars(
+                    select(Holding)
+                    .where(Holding.raw_name == expectation.canonical_name)
+                    .order_by(Holding.source_file_id.asc(), Holding.source_row_number.asc())
+                ).all()
+
+                self.assertEqual(2, len(rows))
+                self.assertEqual(2, self.pre_seed_null_entity_counts[expectation.canonical_name])
+                self.assertTrue(
+                    all(
+                        holding.entity_id == self.entity_ids[expectation.canonical_name]
+                        for holding in rows
+                    )
+                )
+                self.assertEqual(
+                    self.pre_seed_signatures[expectation.canonical_name],
+                    TestS2SearchValidlySeed._load_signatures(session, expectation.canonical_name),
+                )
+
+            second_summary = resolve_entities_deterministically(session, reporting_period_id=self.period_id)
+            session.commit()
+
+            self.assertEqual(0, second_summary.exact_name_auto_links)
+            self.assertEqual(4, second_summary.holdings_skipped_prelinked)
+
+            for expectation in EXPECTATIONS:
+                detail = get_company_detail(
+                    session,
+                    entity_id=self.entity_ids[expectation.canonical_name],
+                )
+                self.assertIsNotNone(detail)
+                assert detail is not None
+
+                expected_abn, expected_acn, expected_registration_date, expected_next_review_date, expected_record_url, expected_reviewed_at = expected_asic_fields[expectation.canonical_name]
+
+                self.assertEqual(expectation.canonical_name, detail.canonical_name)
+                self.assertEqual("company", detail.entity_type)
+                self.assertEqual([expectation.canonical_name], detail.aliases)
+                self.assertEqual([expectation.canonical_name], detail.matched_raw_names)
+                self.assertEqual(2, detail.observation_count)
+                self.assertEqual(1, detail.fund_count)
+                self.assertEqual(date(2025, 12, 31), detail.latest_reporting_period)
+                self.assertTrue(detail.history_is_limited)
+                self.assertEqual("Linked", detail.entity_confidence_label)
+                self.assertEqual(expected_abn, detail.abn)
+                self.assertIsNone(detail.abn_review_source)
+                self.assertIsNone(detail.registered_name_on_abr)
+                self.assertEqual(expected_acn, detail.acn)
+                self.assertEqual(ASIC_COMPANY_STATUS_REGISTERED, detail.asic_company_status)
+                self.assertEqual(ASIC_COMPANY_TYPE_PROPRIETARY_LIMITED_BY_SHARES, detail.asic_company_type)
+                self.assertEqual(expected_registration_date, detail.asic_registration_date)
+                self.assertEqual(expected_next_review_date, detail.asic_next_review_date)
+                self.assertEqual(expected_record_url, detail.asic_record_url)
+                self.assertEqual(ASIC_REVIEW_SOURCE, detail.asic_review_source)
+                self.assertEqual(ASIC_REVIEWED_BY, detail.asic_reviewed_by)
+                self.assertEqual(expected_reviewed_at, detail.asic_reviewed_at)
 
                 self.assertEqual(2, len(detail.observations))
                 observations_by_option = {row.option_name: row for row in detail.observations}
