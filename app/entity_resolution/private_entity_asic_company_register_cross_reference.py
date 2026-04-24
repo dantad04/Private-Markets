@@ -53,6 +53,10 @@ from app.entity_resolution.industry_super_holdings_seed import (
     INDUSTRY_SUPER_HOLDINGS_REVIEWED_ABN,
     ensure_industry_super_holdings_seed,
 )
+from app.entity_resolution.marron_group_holdings_seed import (
+    MARRON_GROUP_HOLDINGS_CANONICAL_NAME,
+    ensure_marron_group_holdings_seed,
+)
 from app.entity_resolution.myriota_seed import (
     MYRIOTA_CANONICAL_NAME,
     ensure_myriota_seed,
@@ -153,6 +157,12 @@ ATHENA_FINANCIAL_ACN = "619 535 545"
 ATHENA_FINANCIAL_ASIC_REGISTRATION_DATE = date(2017, 6, 5)
 ATHENA_FINANCIAL_ASIC_NEXT_REVIEW_DATE = date(2026, 6, 5)
 ATHENA_FINANCIAL_ASIC_REVIEWED_AT = date(2026, 4, 24)
+
+MARRON_GROUP_HOLDINGS_ABN = "71 631 941 403"
+MARRON_GROUP_HOLDINGS_ACN = "631 941 403"
+MARRON_GROUP_HOLDINGS_ASIC_REGISTRATION_DATE = date(2019, 2, 27)
+MARRON_GROUP_HOLDINGS_ASIC_NEXT_REVIEW_DATE = date(2027, 2, 27)
+MARRON_GROUP_HOLDINGS_ASIC_REVIEWED_AT = date(2026, 4, 24)
 
 
 @dataclass(frozen=True)
@@ -318,6 +328,17 @@ ATHENA_FINANCIAL_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
     reviewed_at=ATHENA_FINANCIAL_ASIC_REVIEWED_AT,
 )
 
+MARRON_GROUP_HOLDINGS_ASIC_CROSS_REFERENCE = AsicCompanyRegisterCrossReference(
+    canonical_name=MARRON_GROUP_HOLDINGS_CANONICAL_NAME,
+    entity_type="company",
+    reviewed_abn=MARRON_GROUP_HOLDINGS_ABN,
+    registered_name=None,
+    acn=MARRON_GROUP_HOLDINGS_ACN,
+    registration_date=MARRON_GROUP_HOLDINGS_ASIC_REGISTRATION_DATE,
+    next_review_date=MARRON_GROUP_HOLDINGS_ASIC_NEXT_REVIEW_DATE,
+    reviewed_at=MARRON_GROUP_HOLDINGS_ASIC_REVIEWED_AT,
+)
+
 
 def ensure_private_entity_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
     ensure_brandon_capital_partners_seed(session)
@@ -385,6 +406,12 @@ def ensure_athena_financial_asic_company_register_cross_reference_subset(session
     ensure_athena_financial_seed(session)
 
     return (ensure_athena_financial_asic_company_register_cross_reference(session),)
+
+
+def ensure_marron_group_holdings_asic_company_register_cross_reference_subset(session) -> tuple[Entity, ...]:
+    ensure_marron_group_holdings_seed(session)
+
+    return (ensure_marron_group_holdings_asic_company_register_cross_reference(session),)
 
 
 def ensure_brandon_capital_partners_asic_company_register_cross_reference(session) -> Entity:
@@ -482,6 +509,13 @@ def ensure_athena_financial_asic_company_register_cross_reference(session) -> En
     return _ensure_entity_asic_company_register_cross_reference(
         session,
         cross_reference=ATHENA_FINANCIAL_ASIC_CROSS_REFERENCE,
+    )
+
+
+def ensure_marron_group_holdings_asic_company_register_cross_reference(session) -> Entity:
+    return _ensure_entity_asic_company_register_cross_reference(
+        session,
+        cross_reference=MARRON_GROUP_HOLDINGS_ASIC_CROSS_REFERENCE,
     )
 
 
