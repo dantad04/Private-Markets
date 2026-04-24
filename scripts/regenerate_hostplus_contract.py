@@ -53,6 +53,48 @@ CONTRACT_CASES = (
         "contract-fixture-hostplus-sri-high-growth",
         "contract-fixture-hostplus-sri-high-growth-sha256-placeholder",
     ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "balanced.csv",
+        Path("tests/adapters/contracts/hostplus/balanced_canonical_output.json"),
+        "contract-fixture-hostplus-balanced",
+        "contract-fixture-hostplus-balanced-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "conservative.csv",
+        Path("tests/adapters/contracts/hostplus/conservative_canonical_output.json"),
+        "contract-fixture-hostplus-conservative",
+        "contract-fixture-hostplus-conservative-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "defensive.csv",
+        Path("tests/adapters/contracts/hostplus/defensive_canonical_output.json"),
+        "contract-fixture-hostplus-defensive",
+        "contract-fixture-hostplus-defensive-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "growth.csv",
+        Path("tests/adapters/contracts/hostplus/growth_canonical_output.json"),
+        "contract-fixture-hostplus-growth",
+        "contract-fixture-hostplus-growth-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "stable.csv",
+        Path("tests/adapters/contracts/hostplus/stable_canonical_output.json"),
+        "contract-fixture-hostplus-stable",
+        "contract-fixture-hostplus-stable-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "sri-balanced.csv",
+        Path("tests/adapters/contracts/hostplus/sri_balanced_canonical_output.json"),
+        "contract-fixture-hostplus-sri-balanced",
+        "contract-fixture-hostplus-sri-balanced-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "sri-defensive.csv",
+        Path("tests/adapters/contracts/hostplus/sri_defensive_canonical_output.json"),
+        "contract-fixture-hostplus-sri-defensive",
+        "contract-fixture-hostplus-sri-defensive-sha256-placeholder",
+    ),
 )
 WARNING_TEXT = "THIS REWRITES THE STAGE 2 HOST-PLUS CONTRACT. COMMIT THE CHANGE WITH AN EXPLICIT MESSAGE EXPLAINING WHY."
 

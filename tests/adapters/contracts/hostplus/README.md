@@ -38,6 +38,21 @@ These files intentionally exercise only the existing Hostplus Table 1
 Unlisted Property, and Unlisted Infrastructure sections remain out of scope for
 this contract batch.
 
+The core diversified adapter-extension fixtures cover:
+
+1. `HC Balanced - Class A Option`
+2. `HC Conservative - Class A Option`
+3. `HC Defensive - Class A Option`
+4. `HC Growth - Class A Option`
+5. `HC Stable - Class A Option`
+6. `HC SRI - Class A Option`
+7. `HC SRI Defensive - Class A Option`
+
+These files exercise explicit Hostplus Table 1 handling for `Fixed Income`,
+`Unlisted Property`, `Unlisted Infrastructure`, the address-backed property
+header, and the observed `Unlisted Alternatives` section that otherwise would
+be misclassified under the prior section.
+
 ## Why the extract is the whole file
 
 Unlike UniSuper, this real file already is a single narrow option slice. The

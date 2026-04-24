@@ -45,6 +45,13 @@ HOSTPLUS_CASH_MAPPING_VERSION_ID = "hostplus-stage2-cash-v1"
 HOSTPLUS_INDEXED_HIGH_GROWTH_MAPPING_VERSION_ID = "hostplus-stage2-indexed-high-growth-v1"
 HOSTPLUS_INTERNATIONAL_SHARES_MAPPING_VERSION_ID = "hostplus-stage2-international-shares-v1"
 HOSTPLUS_SRI_HIGH_GROWTH_MAPPING_VERSION_ID = "hostplus-stage2-sri-high-growth-v1"
+HOSTPLUS_BALANCED_MAPPING_VERSION_ID = "hostplus-stage2-balanced-v1"
+HOSTPLUS_CONSERVATIVE_MAPPING_VERSION_ID = "hostplus-stage2-conservative-v1"
+HOSTPLUS_DEFENSIVE_MAPPING_VERSION_ID = "hostplus-stage2-defensive-v1"
+HOSTPLUS_GROWTH_MAPPING_VERSION_ID = "hostplus-stage2-growth-v1"
+HOSTPLUS_STABLE_MAPPING_VERSION_ID = "hostplus-stage2-stable-v1"
+HOSTPLUS_SRI_BALANCED_MAPPING_VERSION_ID = "hostplus-stage2-sri-balanced-v1"
+HOSTPLUS_SRI_DEFENSIVE_MAPPING_VERSION_ID = "hostplus-stage2-sri-defensive-v1"
 CBUS_MAPPING_VERSION_ID = "cbus-stage2-late-v1"
 CBUS_PROPERTY_MAPPING_VERSION_ID = "cbus-stage2-property-v1"
 CBUS_OVERSEAS_SHARES_MAPPING_VERSION_ID = "cbus-stage2-overseas-shares-v1"
@@ -2091,6 +2098,20 @@ HOSTPLUS_LISTED_SECURITY_HEADER = [
     "VALUE (AUD)",
     "WEIGHTING (%)",
 ]
+HOSTPLUS_OWNERSHIP_HEADER = [
+    "NAME/KIND OF INVESTMENT ITEM",
+    "",
+    "% OWNERSHIP",
+    "VALUE (AUD)",
+    "WEIGHTING (%)",
+]
+HOSTPLUS_PROPERTY_ADDRESS_HEADER = [
+    "NAME/KIND OF INVESTMENT ITEM",
+    "ADDRESS",
+    "% OF PROPERTY HELD",
+    "VALUE (AUD)",
+    "WEIGHTING (%)",
+]
 HOSTPLUS_STANDARD_POSTURE_HEADERS = [
     HOSTPLUS_ASSET_ALLOCATION_HEADER,
     HOSTPLUS_CURRENCY_EXPOSURE_HEADER,
@@ -2104,7 +2125,192 @@ HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_HEADERS = [
     HOSTPLUS_CASH_HEADER,
     HOSTPLUS_LISTED_SECURITY_HEADER,
 ]
+HOSTPLUS_CORE_DIVERSIFIED_HEADERS = [
+    *HOSTPLUS_STANDARD_POSTURE_HEADERS,
+    HOSTPLUS_MANAGER_VALUE_HEADER,
+    HOSTPLUS_CASH_HEADER,
+    HOSTPLUS_OWNERSHIP_HEADER,
+    HOSTPLUS_PROPERTY_ADDRESS_HEADER,
+    HOSTPLUS_LISTED_SECURITY_HEADER,
+]
+HOSTPLUS_CORE_DIVERSIFIED_NO_ADDRESS_HEADERS = [
+    *HOSTPLUS_STANDARD_POSTURE_HEADERS,
+    HOSTPLUS_MANAGER_VALUE_HEADER,
+    HOSTPLUS_CASH_HEADER,
+    HOSTPLUS_OWNERSHIP_HEADER,
+    HOSTPLUS_LISTED_SECURITY_HEADER,
+]
 HOSTPLUS_DERIVATIVE_TABLES = [1, 2, 3, 4]
+
+HOSTPLUS_CORE_DIVERSIFIED_SECTION_LABELS = [
+    "CASH",
+    "FIXED INCOME",
+    "HOSTPLUS",
+    "LISTED EQUITY",
+    "TABLE 1",
+    "TABLE 2",
+    "TABLE 3",
+    "TABLE 4",
+    "TOTAL INVESTMENT ITEMS",
+    "UNLISTED ALTERNATIVES",
+    "UNLISTED EQUITY",
+    "UNLISTED INFRASTRUCTURE",
+    "UNLISTED PROPERTY",
+]
+HOSTPLUS_SRI_DEFENSIVE_SECTION_LABELS = [
+    "CASH",
+    "FIXED INCOME",
+    "HOSTPLUS",
+    "LISTED EQUITY",
+    "TABLE 1",
+    "TABLE 2",
+    "TABLE 3",
+    "TABLE 4",
+    "TOTAL INVESTMENT ITEMS",
+    "UNLISTED ALTERNATIVES",
+    "UNLISTED INFRASTRUCTURE",
+    "UNLISTED PROPERTY",
+]
+HOSTPLUS_CORE_DIVERSIFIED_ASSET_CLASSES = [
+    "Cash",
+    "Fixed Income",
+    "Listed Equity",
+    "Unlisted Alternatives",
+    "Unlisted Equity",
+    "Unlisted Infrastructure",
+    "Unlisted Property",
+]
+HOSTPLUS_SRI_DEFENSIVE_ASSET_CLASSES = [
+    "Cash",
+    "Fixed Income",
+    "Listed Equity",
+    "Unlisted Alternatives",
+    "Unlisted Infrastructure",
+    "Unlisted Property",
+]
+
+HOSTPLUS_CORE_TAXONOMY_ROWS = HOSTPLUS_APPROVED_MAPPING.taxonomy_rows + (
+    ApprovedTaxonomyMappingSeed(
+        "Fixed Income",
+        "Externally Managed",
+        None,
+        None,
+        "fixed_income",
+        False,
+        None,
+        "Table 1 externally managed fixed-income manager row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Fixed Income",
+        "Externally Managed",
+        None,
+        None,
+        "fixed_income",
+        True,
+        "aggregate_total",
+        "Externally managed fixed-income total row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Property",
+        "Internally Managed",
+        None,
+        None,
+        "unlisted_property",
+        False,
+        None,
+        "Table 1 internally managed address-backed unlisted-property row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Property",
+        "Internally Managed",
+        None,
+        None,
+        "unlisted_property",
+        True,
+        "aggregate_total",
+        "Internally managed unlisted-property total row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Property",
+        "Externally Managed",
+        None,
+        None,
+        "unlisted_property",
+        False,
+        None,
+        "Table 1 externally managed unlisted-property manager row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Property",
+        "Externally Managed",
+        None,
+        None,
+        "unlisted_property",
+        True,
+        "aggregate_total",
+        "Externally managed unlisted-property total row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Infrastructure",
+        "Internally Managed",
+        None,
+        None,
+        "unlisted_infrastructure",
+        False,
+        None,
+        "Table 1 internally managed unlisted-infrastructure ownership row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Infrastructure",
+        "Internally Managed",
+        None,
+        None,
+        "unlisted_infrastructure",
+        True,
+        "aggregate_total",
+        "Internally managed unlisted-infrastructure total row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Infrastructure",
+        "Externally Managed",
+        None,
+        None,
+        "unlisted_infrastructure",
+        False,
+        None,
+        "Table 1 externally managed unlisted-infrastructure manager row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Infrastructure",
+        "Externally Managed",
+        None,
+        None,
+        "unlisted_infrastructure",
+        True,
+        "aggregate_total",
+        "Externally managed unlisted-infrastructure total row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Alternatives",
+        "Externally Managed",
+        None,
+        None,
+        "alternatives",
+        False,
+        None,
+        "Table 1 externally managed unlisted-alternatives manager row",
+    ),
+    ApprovedTaxonomyMappingSeed(
+        "Unlisted Alternatives",
+        "Externally Managed",
+        None,
+        None,
+        "alternatives",
+        True,
+        "aggregate_total",
+        "Externally managed unlisted-alternatives total row",
+    ),
+)
 
 
 def _hostplus_structural_expectations(
@@ -2131,7 +2337,7 @@ def _hostplus_taxonomy_subset(
     key_set = set(keys)
     selected_rows = tuple(
         row
-        for row in HOSTPLUS_APPROVED_MAPPING.taxonomy_rows
+        for row in HOSTPLUS_CORE_TAXONOMY_ROWS
         if (row.source_asset_class_raw, row.source_filter_raw, row.is_aggregate_default) in key_set
     )
     selected_keys = {
@@ -2157,6 +2363,28 @@ HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS = (
     *HOSTPLUS_CASH_LISTED_TAXONOMY_KEYS,
     ("Unlisted Equity", "Externally Managed", False),
     ("Unlisted Equity", "Externally Managed", True),
+)
+HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS = (
+    *HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS,
+    ("Fixed Income", "Externally Managed", False),
+    ("Fixed Income", "Externally Managed", True),
+    ("Unlisted Equity", "Internally Managed", False),
+    ("Unlisted Equity", "Internally Managed", True),
+    ("Unlisted Property", "Internally Managed", False),
+    ("Unlisted Property", "Internally Managed", True),
+    ("Unlisted Property", "Externally Managed", False),
+    ("Unlisted Property", "Externally Managed", True),
+    ("Unlisted Infrastructure", "Internally Managed", False),
+    ("Unlisted Infrastructure", "Internally Managed", True),
+    ("Unlisted Infrastructure", "Externally Managed", False),
+    ("Unlisted Infrastructure", "Externally Managed", True),
+    ("Unlisted Alternatives", "Externally Managed", False),
+    ("Unlisted Alternatives", "Externally Managed", True),
+)
+HOSTPLUS_SRI_DEFENSIVE_TAXONOMY_KEYS = tuple(
+    key
+    for key in HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS
+    if key[0] != "Unlisted Equity"
 )
 
 
@@ -2185,7 +2413,7 @@ def _hostplus_latest_period_mapping_seed(
         ),
         notes=(
             f"Approved Hostplus latest-period {option_name} slice using the real "
-            f"{file_label} accumulation investment-holdings file and the existing HostPlus adapter."
+            f"{file_label} accumulation investment-holdings file and the HostPlus adapter path."
         ),
         approved_by="repo-seed",
         approved_at=datetime(2026, 4, 24, tzinfo=UTC),
@@ -2320,6 +2548,90 @@ HOSTPLUS_SRI_HIGH_GROWTH_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed
     observed_internal_external_values=["Externally Managed"],
     observed_asset_classes=["Cash", "Listed Equity", "Unlisted Equity"],
     taxonomy_keys=HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_BALANCED_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_BALANCED_MAPPING_VERSION_ID,
+    schema_fingerprint="f0881cb1c2f42598964aa427d09fe6d0f290420d4410ef9018e17b8d73e672a3",
+    option_name="HC Balanced - Class A Option",
+    file_label="Balanced",
+    observed_headers=HOSTPLUS_CORE_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_CORE_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed", "Internally Managed"],
+    observed_asset_classes=HOSTPLUS_CORE_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_CONSERVATIVE_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_CONSERVATIVE_MAPPING_VERSION_ID,
+    schema_fingerprint="f0881cb1c2f42598964aa427d09fe6d0f290420d4410ef9018e17b8d73e672a3",
+    option_name="HC Conservative - Class A Option",
+    file_label="Conservative",
+    observed_headers=HOSTPLUS_CORE_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_CORE_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed", "Internally Managed"],
+    observed_asset_classes=HOSTPLUS_CORE_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_DEFENSIVE_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_DEFENSIVE_MAPPING_VERSION_ID,
+    schema_fingerprint="f0881cb1c2f42598964aa427d09fe6d0f290420d4410ef9018e17b8d73e672a3",
+    option_name="HC Defensive - Class A Option",
+    file_label="Defensive",
+    observed_headers=HOSTPLUS_CORE_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_CORE_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed", "Internally Managed"],
+    observed_asset_classes=HOSTPLUS_CORE_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_GROWTH_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_GROWTH_MAPPING_VERSION_ID,
+    schema_fingerprint="f0881cb1c2f42598964aa427d09fe6d0f290420d4410ef9018e17b8d73e672a3",
+    option_name="HC Growth - Class A Option",
+    file_label="Growth",
+    observed_headers=HOSTPLUS_CORE_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_CORE_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed", "Internally Managed"],
+    observed_asset_classes=HOSTPLUS_CORE_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_STABLE_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_STABLE_MAPPING_VERSION_ID,
+    schema_fingerprint="f0881cb1c2f42598964aa427d09fe6d0f290420d4410ef9018e17b8d73e672a3",
+    option_name="HC Stable - Class A Option",
+    file_label="Stable",
+    observed_headers=HOSTPLUS_CORE_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_CORE_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed", "Internally Managed"],
+    observed_asset_classes=HOSTPLUS_CORE_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_SRI_BALANCED_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_SRI_BALANCED_MAPPING_VERSION_ID,
+    schema_fingerprint="8bb0ef80490cbe4b73a7034aa97e45a21c93fa153d1f79f1e7e63bce22bc4f45",
+    option_name="HC SRI - Class A Option",
+    file_label="Socially Responsible Investment (SRI) - Balanced",
+    observed_headers=HOSTPLUS_CORE_DIVERSIFIED_NO_ADDRESS_HEADERS,
+    observed_section_labels=HOSTPLUS_CORE_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed", "Internally Managed"],
+    observed_asset_classes=HOSTPLUS_CORE_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_SRI_DEFENSIVE_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_SRI_DEFENSIVE_MAPPING_VERSION_ID,
+    schema_fingerprint="fe388b8c16abbc59edf7918c026818bdef95d45d918ccf0ab0839eefd35612c1",
+    option_name="HC SRI Defensive - Class A Option",
+    file_label="Socially Responsible Investment (SRI) - Defensive",
+    observed_headers=HOSTPLUS_CORE_DIVERSIFIED_NO_ADDRESS_HEADERS,
+    observed_section_labels=HOSTPLUS_SRI_DEFENSIVE_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed", "Internally Managed"],
+    observed_asset_classes=HOSTPLUS_SRI_DEFENSIVE_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_SRI_DEFENSIVE_TAXONOMY_KEYS,
 )
 
 
@@ -2655,6 +2967,13 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
         HOSTPLUS_INDEXED_HIGH_GROWTH_APPROVED_MAPPING,
         HOSTPLUS_INTERNATIONAL_SHARES_APPROVED_MAPPING,
         HOSTPLUS_SRI_HIGH_GROWTH_APPROVED_MAPPING,
+        HOSTPLUS_BALANCED_APPROVED_MAPPING,
+        HOSTPLUS_CONSERVATIVE_APPROVED_MAPPING,
+        HOSTPLUS_DEFENSIVE_APPROVED_MAPPING,
+        HOSTPLUS_GROWTH_APPROVED_MAPPING,
+        HOSTPLUS_STABLE_APPROVED_MAPPING,
+        HOSTPLUS_SRI_BALANCED_APPROVED_MAPPING,
+        HOSTPLUS_SRI_DEFENSIVE_APPROVED_MAPPING,
     ),
     CBUS_APPROVED_MAPPING.adapter_key: (
         CBUS_APPROVED_MAPPING,

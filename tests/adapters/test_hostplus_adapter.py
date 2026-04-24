@@ -10,7 +10,7 @@ import unittest
 
 from adapters.base import SourceFileMetadata
 from adapters.hostplus import HostPlusPhdStateMachineAdapter
-from adapters.hostplus_errors import HostPlusFileIdentityError
+from adapters.hostplus_errors import HostPlusFileIdentityError, HostPlusUnknownSectionError
 
 
 REAL_FIXTURE_PATH = Path("tests/fixtures/real/Host-PlusHigh Growth.csv").resolve()
@@ -22,6 +22,13 @@ CASH_PATH = HOSTPLUS_FIXTURE_DIR / "cash.csv"
 INDEXED_HIGH_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-high-growth.csv"
 INTERNATIONAL_SHARES_PATH = HOSTPLUS_FIXTURE_DIR / "international-shares.csv"
 SRI_HIGH_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "sri-high-growth.csv"
+BALANCED_PATH = HOSTPLUS_FIXTURE_DIR / "balanced.csv"
+CONSERVATIVE_PATH = HOSTPLUS_FIXTURE_DIR / "conservative.csv"
+DEFENSIVE_PATH = HOSTPLUS_FIXTURE_DIR / "defensive.csv"
+GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "growth.csv"
+STABLE_PATH = HOSTPLUS_FIXTURE_DIR / "stable.csv"
+SRI_BALANCED_PATH = HOSTPLUS_FIXTURE_DIR / "sri-balanced.csv"
+SRI_DEFENSIVE_PATH = HOSTPLUS_FIXTURE_DIR / "sri-defensive.csv"
 
 LATEST_PERIOD_BATCH_CASES = (
     (AUSTRALIAN_SHARES_PATH, "HC Australian Shares - Class A Option", 343, Counter({"value_only": 339, "aggregate_total": 4})),
@@ -49,6 +56,141 @@ LATEST_PERIOD_BATCH_CASES = (
         "HC SRI High Growth - Class A Option",
         565,
         Counter({"value_only": 560, "aggregate_total": 4, "name_only": 1}),
+    ),
+)
+
+CORE_DIVERSIFIED_BATCH_CASES = (
+    (
+        BALANCED_PATH,
+        "HC Balanced - Class A Option",
+        3308,
+        Counter({"value_only": 3253, "name_only": 30, "ownership_only": 14, "aggregate_total": 11}),
+        Counter(
+            {
+                "Listed Equity": 3118,
+                "Cash": 75,
+                "Unlisted Equity": 46,
+                "Unlisted Property": 24,
+                "Unlisted Infrastructure": 20,
+                "Fixed Income": 17,
+                "Unlisted Alternatives": 7,
+                "TOTAL INVESTMENT ITEMS": 1,
+            }
+        ),
+        5,
+    ),
+    (
+        CONSERVATIVE_PATH,
+        "HC Conservative - Class A Option",
+        3308,
+        Counter({"value_only": 3249, "name_only": 34, "ownership_only": 14, "aggregate_total": 11}),
+        Counter(
+            {
+                "Listed Equity": 3118,
+                "Cash": 75,
+                "Unlisted Equity": 46,
+                "Unlisted Property": 24,
+                "Unlisted Infrastructure": 20,
+                "Fixed Income": 17,
+                "Unlisted Alternatives": 7,
+                "TOTAL INVESTMENT ITEMS": 1,
+            }
+        ),
+        5,
+    ),
+    (
+        DEFENSIVE_PATH,
+        "HC Defensive - Class A Option",
+        3274,
+        Counter({"value_only": 3120, "name_only": 132, "ownership_only": 12, "aggregate_total": 10}),
+        Counter(
+            {
+                "Listed Equity": 3118,
+                "Cash": 75,
+                "Unlisted Property": 24,
+                "Unlisted Infrastructure": 20,
+                "Fixed Income": 17,
+                "Unlisted Equity": 12,
+                "Unlisted Alternatives": 7,
+                "TOTAL INVESTMENT ITEMS": 1,
+            }
+        ),
+        5,
+    ),
+    (
+        GROWTH_PATH,
+        "HC Growth - Class A Option",
+        3285,
+        Counter({"value_only": 3230, "name_only": 30, "ownership_only": 14, "aggregate_total": 11}),
+        Counter(
+            {
+                "Listed Equity": 3118,
+                "Cash": 57,
+                "Unlisted Equity": 46,
+                "Unlisted Property": 24,
+                "Unlisted Infrastructure": 20,
+                "Fixed Income": 12,
+                "Unlisted Alternatives": 7,
+                "TOTAL INVESTMENT ITEMS": 1,
+            }
+        ),
+        5,
+    ),
+    (
+        STABLE_PATH,
+        "HC Stable - Class A Option",
+        3308,
+        Counter({"value_only": 3246, "name_only": 37, "ownership_only": 14, "aggregate_total": 11}),
+        Counter(
+            {
+                "Listed Equity": 3118,
+                "Cash": 75,
+                "Unlisted Equity": 46,
+                "Unlisted Property": 24,
+                "Unlisted Infrastructure": 20,
+                "Fixed Income": 17,
+                "Unlisted Alternatives": 7,
+                "TOTAL INVESTMENT ITEMS": 1,
+            }
+        ),
+        5,
+    ),
+    (
+        SRI_BALANCED_PATH,
+        "HC SRI - Class A Option",
+        597,
+        Counter({"value_only": 584, "aggregate_total": 9, "ownership_only": 4}),
+        Counter(
+            {
+                "Listed Equity": 536,
+                "Cash": 36,
+                "Unlisted Equity": 9,
+                "Unlisted Infrastructure": 9,
+                "Fixed Income": 2,
+                "Unlisted Property": 2,
+                "Unlisted Alternatives": 2,
+                "TOTAL INVESTMENT ITEMS": 1,
+            }
+        ),
+        0,
+    ),
+    (
+        SRI_DEFENSIVE_PATH,
+        "HC SRI Defensive - Class A Option",
+        588,
+        Counter({"value_only": 574, "aggregate_total": 8, "ownership_only": 4, "name_only": 2}),
+        Counter(
+            {
+                "Listed Equity": 536,
+                "Cash": 36,
+                "Unlisted Infrastructure": 9,
+                "Fixed Income": 2,
+                "Unlisted Property": 2,
+                "Unlisted Alternatives": 2,
+                "TOTAL INVESTMENT ITEMS": 1,
+            }
+        ),
+        0,
     ),
 )
 
@@ -88,6 +230,11 @@ class TestHostPlusAdapterRealExtract(unittest.TestCase):
         with self.assertRaises(HostPlusFileIdentityError) as ctx:
             self.adapter.parse(make_metadata("fixture-hostplus-missing-marker"), mutated)
         self.assertIn("HOSTPLUS", str(ctx.exception))
+
+    def test_unknown_blank_table_1_section_does_not_emit_under_prior_section(self) -> None:
+        mutated = mutate_extract(lambda rows: rows.insert(7, ["Mystery Private Bucket", "", "", "", ""]))
+        with self.assertRaises(HostPlusUnknownSectionError):
+            self.adapter.parse(make_metadata("fixture-hostplus-unknown-table1-section"), mutated)
 
     def test_single_option_recognition_matches_extract_readme(self) -> None:
         self.assertEqual(["HC High Growth - Class A Option"], self.result.structural_metadata["observed_option_names"])
@@ -205,3 +352,41 @@ class TestHostPlusAdapterRealExtract(unittest.TestCase):
                 self.assertFalse(
                     any(record.raw_name in {"Forwards", "Futures", "Swaps", "AUD"} for record in result.holdings)
                 )
+
+    def test_core_diversified_batch_recognises_private_market_sections_explicitly(self) -> None:
+        expected_private_sections = {"Fixed Income", "Unlisted Property", "Unlisted Infrastructure"}
+        section_label_names = {
+            "Fixed Income",
+            "Unlisted Property",
+            "Unlisted Infrastructure",
+            "Unlisted Alternatives",
+        }
+        for (
+            fixture_path,
+            option_name,
+            expected_rows,
+            expected_completeness,
+            expected_asset_counts,
+            expected_address_rows,
+        ) in CORE_DIVERSIFIED_BATCH_CASES:
+            with self.subTest(option=option_name):
+                result = self.adapter.parse(make_metadata(fixture_path.name), fixture_path.read_bytes())
+
+                self.assertEqual([option_name], result.structural_metadata["observed_option_names"])
+                self.assertEqual(expected_rows, len(result.holdings))
+                self.assertEqual({"2": 5, "3": 7, "4": 4}, result.structural_metadata["table_rows_excluded"])
+                self.assertEqual(16, sum(result.structural_metadata["table_rows_excluded"].values()))
+                self.assertEqual(3, result.structural_metadata["encoding_replacement_count"])
+                self.assertTrue(expected_private_sections.issubset(result.structural_metadata["observed_asset_classes"]))
+                self.assertEqual(expected_completeness, Counter(record.disclosure_completeness for record in result.holdings))
+                self.assertEqual(expected_asset_counts, Counter(record.source_asset_class_raw for record in result.holdings))
+                self.assertEqual(expected_address_rows, sum(1 for record in result.holdings if record.address_raw))
+                self.assertFalse(any(record.raw_name in section_label_names for record in result.holdings))
+                self.assertFalse(
+                    any(record.raw_name in {"Forwards", "Futures", "Swaps", "AUD"} for record in result.holdings)
+                )
+                for record in result.holdings:
+                    if record.address_raw:
+                        self.assertEqual("Unlisted Property", record.source_asset_class_raw)
+                        self.assertIsNone(record.geo_lat)
+                        self.assertIsNone(record.geo_lng)

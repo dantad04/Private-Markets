@@ -27,8 +27,12 @@ MANAGEMENT_STYLE_RE = re.compile(r"^(internally|externally)\s+managed$", re.IGNO
 NULL_TOKENS = {"", "N/A", "NAN"}
 TABLE_1_ASSET_CLASSES = {
     "Cash": "cash",
+    "Fixed Income": "fixed_income",
     "Listed Equity": "listed_equity",
+    "Unlisted Alternatives": "alternatives",
     "Unlisted Equity": "unlisted_equity",
+    "Unlisted Infrastructure": "unlisted_infrastructure",
+    "Unlisted Property": "unlisted_property",
 }
 SCOPE_VARIANT_TO_CANONICAL = {
     "Held directly or by associated entities or by PSTs": "held_direct_or_associated_or_psts",
@@ -133,16 +137,15 @@ class HostPlusPhdStateMachineAdapter:
             if first_cell.startswith("Portfolio Holdings Information for Investment Option"):
                 continue
 
-            if first_cell in TABLE_1_ASSET_CLASSES:
-                if state.current_table == 1:
-                    state.current_asset_class = first_cell
-                    state.current_scope_modifier = None
-                    state.current_scope_modifier_raw = None
-                    state.current_management_style = None
-                    state.current_header_signature = None
-                    observed_asset_classes.add(first_cell)
-                    observed_section_labels.add(first_cell.upper())
-                    continue
+            if state.current_table == 1 and first_cell in TABLE_1_ASSET_CLASSES:
+                state.current_asset_class = first_cell
+                state.current_scope_modifier = None
+                state.current_scope_modifier_raw = None
+                state.current_management_style = None
+                state.current_header_signature = None
+                observed_asset_classes.add(first_cell)
+                observed_section_labels.add(first_cell.upper())
+                continue
 
             if first_cell == "Total Investment Items":
                 if state.current_option_name is None or state.current_option_code is None:
@@ -217,6 +220,8 @@ class HostPlusPhdStateMachineAdapter:
 
             if state.current_table != 1:
                 raise HostPlusMalformedRowError(row_number, "data row encountered outside TABLE 1-4 context")
+            if first_cell and not any(cleaned_row[1:]):
+                raise HostPlusUnknownSectionError(row_number, first_cell)
             if state.current_asset_class is None:
                 raise HostPlusUnknownSectionError(row_number, "missing active asset-class section before data row")
             if state.current_header_signature is None:
@@ -356,6 +361,7 @@ class HostPlusPhdStateMachineAdapter:
         currency_raw: str | None = None
         security_identifier_value: str | None = None
         security_identifier_type: str | None = None
+        address_raw: str | None = None
 
         if signature == "cash":
             currency_raw = cleaned_row[1] or None
@@ -365,6 +371,9 @@ class HostPlusPhdStateMachineAdapter:
             units = _parse_numeric(cleaned_row[2], row_number, "UNITS HELD")
         elif signature == "ownership":
             ownership_pct = _parse_percent(cleaned_row[2], row_number, "% OWNERSHIP")
+        elif signature == "property_address":
+            address_raw = cleaned_row[1] or None
+            ownership_pct = _parse_percent(cleaned_row[2], row_number, "% OF PROPERTY HELD")
         elif signature == "manager_value_only":
             pass
         else:
@@ -392,6 +401,7 @@ class HostPlusPhdStateMachineAdapter:
             currency_raw=currency_raw,
             security_identifier_value=security_identifier_value,
             security_identifier_type=security_identifier_type,
+            address_raw=address_raw,
             disclosure_completeness=disclosure_completeness,
         )
 
@@ -414,6 +424,7 @@ class HostPlusPhdStateMachineAdapter:
         security_identifier_value: str | None,
         security_identifier_type: str | None,
         disclosure_completeness: str,
+        address_raw: str | None = None,
         source_subclass_raw_override: str | None | object = ...,
         classification_raw_override: str | None | object = ...,
     ) -> SourceNormalisedHoldingRecord:
@@ -451,7 +462,7 @@ class HostPlusPhdStateMachineAdapter:
             currency_raw=currency_raw,
             security_identifier_value=security_identifier_value,
             security_identifier_type=security_identifier_type,
-            address_raw=None,
+            address_raw=address_raw,
             geo_lat=None,
             geo_lng=None,
             classification_raw=state.current_scope_modifier if classification_raw_override is ... else classification_raw_override,
@@ -517,6 +528,8 @@ def _detect_header_signature(cells: list[str], *, current_table: int | None) -> 
             return "listed_security"
         if first in {"NAME/KIND OF INVESTMENT ITEM", "NAME /KIND OF INVESTMENT ITEM"} and normalised[2] == "% OWNERSHIP":
             return "ownership"
+        if first in {"NAME/KIND OF INVESTMENT ITEM", "NAME /KIND OF INVESTMENT ITEM"} and normalised[1] == "ADDRESS" and normalised[2] == "% OF PROPERTY HELD":
+            return "property_address"
         if first == "NAME OF FUND MANAGER" and normalised[3] == "VALUE (AUD)":
             return "manager_value_only"
     if current_table == 2 and first == "KIND OF DERIVATIVE":
