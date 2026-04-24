@@ -29,6 +29,13 @@ GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "growth.csv"
 STABLE_PATH = HOSTPLUS_FIXTURE_DIR / "stable.csv"
 SRI_BALANCED_PATH = HOSTPLUS_FIXTURE_DIR / "sri-balanced.csv"
 SRI_DEFENSIVE_PATH = HOSTPLUS_FIXTURE_DIR / "sri-defensive.csv"
+BONDS_PATH = HOSTPLUS_FIXTURE_DIR / "bonds.csv"
+BONDS_INDEXED_PATH = HOSTPLUS_FIXTURE_DIR / "bonds-indexed.csv"
+INDEXED_BALANCED_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-balanced.csv"
+INDEXED_CONSERVATIVE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-conservative.csv"
+INDEXED_DEFENSIVE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-defensive.csv"
+INDEXED_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-growth.csv"
+INDEXED_STABLE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-stable.csv"
 
 LATEST_PERIOD_BATCH_CASES = (
     (AUSTRALIAN_SHARES_PATH, "HC Australian Shares - Class A Option", 343, Counter({"value_only": 339, "aggregate_total": 4})),
@@ -191,6 +198,58 @@ CORE_DIVERSIFIED_BATCH_CASES = (
             }
         ),
         0,
+    ),
+)
+
+RESIDUAL_SUPER_BATCH_CASES = (
+    (
+        BONDS_PATH,
+        "HC Bonds - Class A Option",
+        13,
+        Counter({"value_only": 8, "aggregate_total": 3, "name_only": 2}),
+        Counter({"Cash": 6, "Fixed Income": 6, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        BONDS_INDEXED_PATH,
+        "HC Bonds - Indexed - Class A Option",
+        5,
+        Counter({"aggregate_total": 3, "value_only": 2}),
+        Counter({"Cash": 2, "Fixed Income": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_BALANCED_PATH,
+        "HC Indexed Balanced - Class A Option",
+        2536,
+        Counter({"value_only": 2529, "aggregate_total": 5, "name_only": 2}),
+        Counter({"Listed Equity": 2495, "Cash": 36, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_CONSERVATIVE_PATH,
+        "HC Indexed Conservative - Class A Option",
+        2536,
+        Counter({"value_only": 2528, "aggregate_total": 5, "name_only": 3}),
+        Counter({"Listed Equity": 2495, "Cash": 36, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_DEFENSIVE_PATH,
+        "HC Indexed Defensive - Class A Option",
+        2536,
+        Counter({"value_only": 2528, "aggregate_total": 5, "name_only": 3}),
+        Counter({"Listed Equity": 2495, "Cash": 36, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_GROWTH_PATH,
+        "HC Indexed Growth - Class A Option",
+        2533,
+        Counter({"value_only": 2526, "aggregate_total": 5, "name_only": 2}),
+        Counter({"Listed Equity": 2495, "Cash": 33, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_STABLE_PATH,
+        "HC Indexed Stable - Class A Option",
+        2536,
+        Counter({"value_only": 2528, "aggregate_total": 5, "name_only": 3}),
+        Counter({"Listed Equity": 2495, "Cash": 36, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
     ),
 )
 
@@ -390,3 +449,32 @@ class TestHostPlusAdapterRealExtract(unittest.TestCase):
                         self.assertEqual("Unlisted Property", record.source_asset_class_raw)
                         self.assertIsNone(record.geo_lat)
                         self.assertIsNone(record.geo_lng)
+
+    def test_residual_super_batch_parses_through_accepted_adapter_path(self) -> None:
+        allowed_asset_classes = {"Cash", "Fixed Income", "Listed Equity", "Unlisted Equity"}
+        section_label_names = {
+            "Fixed Income",
+            "Unlisted Property",
+            "Unlisted Infrastructure",
+            "Unlisted Alternatives",
+        }
+        for fixture_path, option_name, expected_rows, expected_completeness, expected_asset_counts in (
+            RESIDUAL_SUPER_BATCH_CASES
+        ):
+            with self.subTest(option=option_name):
+                result = self.adapter.parse(make_metadata(fixture_path.name), fixture_path.read_bytes())
+
+                self.assertEqual([option_name], result.structural_metadata["observed_option_names"])
+                self.assertEqual(expected_rows, len(result.holdings))
+                self.assertEqual({"2": 5, "3": 7, "4": 4}, result.structural_metadata["table_rows_excluded"])
+                self.assertEqual(16, sum(result.structural_metadata["table_rows_excluded"].values()))
+                self.assertEqual(3, result.structural_metadata["encoding_replacement_count"])
+                self.assertEqual(expected_completeness, Counter(record.disclosure_completeness for record in result.holdings))
+                self.assertEqual(expected_asset_counts, Counter(record.source_asset_class_raw for record in result.holdings))
+                self.assertTrue(set(result.structural_metadata["observed_asset_classes"]).issubset(allowed_asset_classes))
+                self.assertFalse(any(record.raw_name in section_label_names for record in result.holdings))
+                self.assertFalse(any(record.address_raw for record in result.holdings))
+                self.assertFalse(any(record.geo_lat is not None or record.geo_lng is not None for record in result.holdings))
+                self.assertFalse(
+                    any(record.raw_name in {"Forwards", "Futures", "Swaps", "AUD"} for record in result.holdings)
+                )

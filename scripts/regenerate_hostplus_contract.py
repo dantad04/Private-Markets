@@ -95,6 +95,48 @@ CONTRACT_CASES = (
         "contract-fixture-hostplus-sri-defensive",
         "contract-fixture-hostplus-sri-defensive-sha256-placeholder",
     ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "bonds.csv",
+        Path("tests/adapters/contracts/hostplus/bonds_canonical_output.json"),
+        "contract-fixture-hostplus-bonds",
+        "contract-fixture-hostplus-bonds-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "bonds-indexed.csv",
+        Path("tests/adapters/contracts/hostplus/bonds_indexed_canonical_output.json"),
+        "contract-fixture-hostplus-bonds-indexed",
+        "contract-fixture-hostplus-bonds-indexed-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "indexed-balanced.csv",
+        Path("tests/adapters/contracts/hostplus/indexed_balanced_canonical_output.json"),
+        "contract-fixture-hostplus-indexed-balanced",
+        "contract-fixture-hostplus-indexed-balanced-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "indexed-conservative.csv",
+        Path("tests/adapters/contracts/hostplus/indexed_conservative_canonical_output.json"),
+        "contract-fixture-hostplus-indexed-conservative",
+        "contract-fixture-hostplus-indexed-conservative-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "indexed-defensive.csv",
+        Path("tests/adapters/contracts/hostplus/indexed_defensive_canonical_output.json"),
+        "contract-fixture-hostplus-indexed-defensive",
+        "contract-fixture-hostplus-indexed-defensive-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "indexed-growth.csv",
+        Path("tests/adapters/contracts/hostplus/indexed_growth_canonical_output.json"),
+        "contract-fixture-hostplus-indexed-growth",
+        "contract-fixture-hostplus-indexed-growth-sha256-placeholder",
+    ),
+    (
+        HOSTPLUS_FIXTURE_DIR / "indexed-stable.csv",
+        Path("tests/adapters/contracts/hostplus/indexed_stable_canonical_output.json"),
+        "contract-fixture-hostplus-indexed-stable",
+        "contract-fixture-hostplus-indexed-stable-sha256-placeholder",
+    ),
 )
 WARNING_TEXT = "THIS REWRITES THE STAGE 2 HOST-PLUS CONTRACT. COMMIT THE CHANGE WITH AN EXPLICIT MESSAGE EXPLAINING WHY."
 

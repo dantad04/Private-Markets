@@ -16,11 +16,18 @@ from app.ingest.governance import (
     HOSTPLUS_AUSTRALIAN_SHARES_INDEXED_MAPPING_VERSION_ID,
     HOSTPLUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID,
     HOSTPLUS_BALANCED_MAPPING_VERSION_ID,
+    HOSTPLUS_BONDS_INDEXED_MAPPING_VERSION_ID,
+    HOSTPLUS_BONDS_MAPPING_VERSION_ID,
     HOSTPLUS_CASH_MAPPING_VERSION_ID,
     HOSTPLUS_CONSERVATIVE_MAPPING_VERSION_ID,
     HOSTPLUS_DEFENSIVE_MAPPING_VERSION_ID,
     HOSTPLUS_GROWTH_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_BALANCED_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_CONSERVATIVE_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_DEFENSIVE_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_GROWTH_MAPPING_VERSION_ID,
     HOSTPLUS_INDEXED_HIGH_GROWTH_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_STABLE_MAPPING_VERSION_ID,
     HOSTPLUS_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
     HOSTPLUS_MAPPING_VERSION_ID,
     HOSTPLUS_SRI_BALANCED_MAPPING_VERSION_ID,
@@ -45,6 +52,13 @@ GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "growth.csv"
 STABLE_PATH = HOSTPLUS_FIXTURE_DIR / "stable.csv"
 SRI_BALANCED_PATH = HOSTPLUS_FIXTURE_DIR / "sri-balanced.csv"
 SRI_DEFENSIVE_PATH = HOSTPLUS_FIXTURE_DIR / "sri-defensive.csv"
+BONDS_PATH = HOSTPLUS_FIXTURE_DIR / "bonds.csv"
+BONDS_INDEXED_PATH = HOSTPLUS_FIXTURE_DIR / "bonds-indexed.csv"
+INDEXED_BALANCED_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-balanced.csv"
+INDEXED_CONSERVATIVE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-conservative.csv"
+INDEXED_DEFENSIVE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-defensive.csv"
+INDEXED_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-growth.csv"
+INDEXED_STABLE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-stable.csv"
 
 SOURCE_URLS = {
     AUSTRALIAN_SHARES_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Australian%20Shares.csv",
@@ -60,6 +74,13 @@ SOURCE_URLS = {
     STABLE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Stable.csv",
     SRI_BALANCED_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Socially%20Responsible%20Investment%20(SRI)%20-%20Balanced.csv",
     SRI_DEFENSIVE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Socially%20Responsible%20Investment%20(SRI)%20-%20Defensive.csv",
+    BONDS_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Bonds.csv",
+    BONDS_INDEXED_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Bonds%20-%20Indexed.csv",
+    INDEXED_BALANCED_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Balanced.csv",
+    INDEXED_CONSERVATIVE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Conservative.csv",
+    INDEXED_DEFENSIVE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Defensive.csv",
+    INDEXED_GROWTH_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Growth.csv",
+    INDEXED_STABLE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Stable.csv",
 }
 
 BATCH_CASES = (
@@ -99,6 +120,21 @@ CORE_DIVERSIFIED_CASES = (
     (STABLE_PATH, SOURCE_URLS[STABLE_PATH], HOSTPLUS_STABLE_MAPPING_VERSION_ID, 3308, 5),
     (SRI_BALANCED_PATH, SOURCE_URLS[SRI_BALANCED_PATH], HOSTPLUS_SRI_BALANCED_MAPPING_VERSION_ID, 597, 0),
     (SRI_DEFENSIVE_PATH, SOURCE_URLS[SRI_DEFENSIVE_PATH], HOSTPLUS_SRI_DEFENSIVE_MAPPING_VERSION_ID, 588, 0),
+)
+
+RESIDUAL_SUPER_CASES = (
+    (BONDS_PATH, SOURCE_URLS[BONDS_PATH], HOSTPLUS_BONDS_MAPPING_VERSION_ID, 13),
+    (BONDS_INDEXED_PATH, SOURCE_URLS[BONDS_INDEXED_PATH], HOSTPLUS_BONDS_INDEXED_MAPPING_VERSION_ID, 5),
+    (INDEXED_BALANCED_PATH, SOURCE_URLS[INDEXED_BALANCED_PATH], HOSTPLUS_INDEXED_BALANCED_MAPPING_VERSION_ID, 2536),
+    (
+        INDEXED_CONSERVATIVE_PATH,
+        SOURCE_URLS[INDEXED_CONSERVATIVE_PATH],
+        HOSTPLUS_INDEXED_CONSERVATIVE_MAPPING_VERSION_ID,
+        2536,
+    ),
+    (INDEXED_DEFENSIVE_PATH, SOURCE_URLS[INDEXED_DEFENSIVE_PATH], HOSTPLUS_INDEXED_DEFENSIVE_MAPPING_VERSION_ID, 2536),
+    (INDEXED_GROWTH_PATH, SOURCE_URLS[INDEXED_GROWTH_PATH], HOSTPLUS_INDEXED_GROWTH_MAPPING_VERSION_ID, 2533),
+    (INDEXED_STABLE_PATH, SOURCE_URLS[INDEXED_STABLE_PATH], HOSTPLUS_INDEXED_STABLE_MAPPING_VERSION_ID, 2536),
 )
 
 
@@ -295,5 +331,71 @@ class TestAdminHostPlusIngestEndpoint(unittest.TestCase):
             self.assertEqual({case[1] for case in CORE_DIVERSIFIED_CASES}, source_urls)
             self.assertFalse(any(source_url.endswith("/High%20Growth.csv") for source_url in source_urls))
             self.assertFalse(any("Bonds" in source_url or "Indexed" in source_url for source_url in source_urls))
+            self.assertFalse(any("Defined%20Benefit" in source_url for source_url in source_urls))
+            self.assertFalse(any("retirement" in source_url.casefold() or "pension" in source_url.casefold() for source_url in source_urls))
+
+    def test_admin_ingest_residual_super_batch_uses_completion_mapping_seeds(self) -> None:
+        source_file_ids: list[int] = []
+        for file_path, source_url, mapping_version_id, expected_rows in RESIDUAL_SUPER_CASES:
+            with self.subTest(file=file_path.name):
+                response = self.client.post(
+                    "/admin/ingest/local-file/hostplus",
+                    json={
+                        "file_path": str(file_path),
+                        "fund_code": "hostplus",
+                        "fund_name": "Hostplus",
+                        "reporting_period_id": self.reporting_period_id,
+                        "source_url": source_url,
+                    },
+                )
+                self.assertEqual(200, response.status_code)
+                payload = response.json()
+                self.assertEqual(expected_rows, payload["rows_staged"])
+                self.assertEqual(expected_rows, payload["rows_inserted"])
+                self.assertEqual(0, payload["rows_skipped_existing"])
+                self.assertEqual(
+                    ["Decoded Host-Plus source using UTF-8 errors='replace'; replacement_count=3"],
+                    payload["warnings"],
+                )
+
+                with self.SessionLocal() as session:
+                    source_file = session.get(SourceFile, payload["source_file_id"])
+                    self.assertEqual("HostPlusPhdStateMachineAdapter", source_file.adapter_key)
+                    self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                    self.assertEqual(source_url, source_file.source_url)
+                    self.assertEqual(3, source_file.encoding_replacement_count)
+                    self.assertEqual(
+                        0,
+                        session.query(Holding)
+                        .filter(Holding.source_file_id == payload["source_file_id"], Holding.address.is_not(None))
+                        .count(),
+                    )
+                source_file_ids.append(payload["source_file_id"])
+
+        with self.SessionLocal() as session:
+            self.assertEqual(sum(case[3] for case in RESIDUAL_SUPER_CASES), session.query(Holding).count())
+            self.assertEqual(
+                0,
+                session.query(Holding)
+                .filter(
+                    Holding.source_file_id.in_(source_file_ids),
+                    Holding.raw_name.in_(["Forwards", "Futures", "Swaps", "AUD"]),
+                )
+                .count(),
+            )
+            self.assertEqual(
+                0,
+                session.query(Holding)
+                .filter(
+                    Holding.source_file_id.in_(source_file_ids),
+                    Holding.source_asset_class_raw.in_(
+                        ["Unlisted Property", "Unlisted Infrastructure", "Unlisted Alternatives"]
+                    ),
+                )
+                .count(),
+            )
+            source_urls = {source_file.source_url for source_file in session.query(SourceFile).all()}
+            self.assertEqual({case[1] for case in RESIDUAL_SUPER_CASES}, source_urls)
+            self.assertFalse(any(source_url.endswith("/High%20Growth.csv") for source_url in source_urls))
             self.assertFalse(any("Defined%20Benefit" in source_url for source_url in source_urls))
             self.assertFalse(any("retirement" in source_url.casefold() or "pension" in source_url.casefold() for source_url in source_urls))

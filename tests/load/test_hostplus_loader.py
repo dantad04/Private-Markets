@@ -27,11 +27,18 @@ from app.ingest.governance import (
     HOSTPLUS_AUSTRALIAN_SHARES_INDEXED_MAPPING_VERSION_ID,
     HOSTPLUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID,
     HOSTPLUS_BALANCED_MAPPING_VERSION_ID,
+    HOSTPLUS_BONDS_INDEXED_MAPPING_VERSION_ID,
+    HOSTPLUS_BONDS_MAPPING_VERSION_ID,
     HOSTPLUS_CASH_MAPPING_VERSION_ID,
     HOSTPLUS_CONSERVATIVE_MAPPING_VERSION_ID,
     HOSTPLUS_DEFENSIVE_MAPPING_VERSION_ID,
     HOSTPLUS_GROWTH_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_BALANCED_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_CONSERVATIVE_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_DEFENSIVE_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_GROWTH_MAPPING_VERSION_ID,
     HOSTPLUS_INDEXED_HIGH_GROWTH_MAPPING_VERSION_ID,
+    HOSTPLUS_INDEXED_STABLE_MAPPING_VERSION_ID,
     HOSTPLUS_INTERNATIONAL_SHARES_MAPPING_VERSION_ID,
     HOSTPLUS_SRI_BALANCED_MAPPING_VERSION_ID,
     HOSTPLUS_SRI_DEFENSIVE_MAPPING_VERSION_ID,
@@ -56,6 +63,13 @@ GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "growth.csv"
 STABLE_PATH = HOSTPLUS_FIXTURE_DIR / "stable.csv"
 SRI_BALANCED_PATH = HOSTPLUS_FIXTURE_DIR / "sri-balanced.csv"
 SRI_DEFENSIVE_PATH = HOSTPLUS_FIXTURE_DIR / "sri-defensive.csv"
+BONDS_PATH = HOSTPLUS_FIXTURE_DIR / "bonds.csv"
+BONDS_INDEXED_PATH = HOSTPLUS_FIXTURE_DIR / "bonds-indexed.csv"
+INDEXED_BALANCED_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-balanced.csv"
+INDEXED_CONSERVATIVE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-conservative.csv"
+INDEXED_DEFENSIVE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-defensive.csv"
+INDEXED_GROWTH_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-growth.csv"
+INDEXED_STABLE_PATH = HOSTPLUS_FIXTURE_DIR / "indexed-stable.csv"
 
 SOURCE_URLS = {
     AUSTRALIAN_SHARES_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Australian%20Shares.csv",
@@ -71,6 +85,13 @@ SOURCE_URLS = {
     STABLE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Stable.csv",
     SRI_BALANCED_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Socially%20Responsible%20Investment%20(SRI)%20-%20Balanced.csv",
     SRI_DEFENSIVE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Socially%20Responsible%20Investment%20(SRI)%20-%20Defensive.csv",
+    BONDS_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Bonds.csv",
+    BONDS_INDEXED_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Bonds%20-%20Indexed.csv",
+    INDEXED_BALANCED_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Balanced.csv",
+    INDEXED_CONSERVATIVE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Conservative.csv",
+    INDEXED_DEFENSIVE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Defensive.csv",
+    INDEXED_GROWTH_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Growth.csv",
+    INDEXED_STABLE_PATH: "https://hostplus.com.au/content/dam/hostplus-program/site/resources/investments/investment-holdings/accumulation-investment-holdings/Indexed%20Stable.csv",
 }
 
 LATEST_PERIOD_BATCH_CASES = (
@@ -257,6 +278,65 @@ CORE_DIVERSIFIED_BATCH_CASES = (
             }
         ),
         0,
+    ),
+)
+
+RESIDUAL_SUPER_BATCH_CASES = (
+    (
+        BONDS_PATH,
+        "HC Bonds - Class A Option",
+        HOSTPLUS_BONDS_MAPPING_VERSION_ID,
+        13,
+        Counter({"value_only": 8, "aggregate_total": 3, "name_only": 2}),
+        Counter({"Cash": 6, "Fixed Income": 6, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        BONDS_INDEXED_PATH,
+        "HC Bonds - Indexed - Class A Option",
+        HOSTPLUS_BONDS_INDEXED_MAPPING_VERSION_ID,
+        5,
+        Counter({"aggregate_total": 3, "value_only": 2}),
+        Counter({"Cash": 2, "Fixed Income": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_BALANCED_PATH,
+        "HC Indexed Balanced - Class A Option",
+        HOSTPLUS_INDEXED_BALANCED_MAPPING_VERSION_ID,
+        2536,
+        Counter({"value_only": 2529, "aggregate_total": 5, "name_only": 2}),
+        Counter({"Listed Equity": 2495, "Cash": 36, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_CONSERVATIVE_PATH,
+        "HC Indexed Conservative - Class A Option",
+        HOSTPLUS_INDEXED_CONSERVATIVE_MAPPING_VERSION_ID,
+        2536,
+        Counter({"value_only": 2528, "aggregate_total": 5, "name_only": 3}),
+        Counter({"Listed Equity": 2495, "Cash": 36, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_DEFENSIVE_PATH,
+        "HC Indexed Defensive - Class A Option",
+        HOSTPLUS_INDEXED_DEFENSIVE_MAPPING_VERSION_ID,
+        2536,
+        Counter({"value_only": 2528, "aggregate_total": 5, "name_only": 3}),
+        Counter({"Listed Equity": 2495, "Cash": 36, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_GROWTH_PATH,
+        "HC Indexed Growth - Class A Option",
+        HOSTPLUS_INDEXED_GROWTH_MAPPING_VERSION_ID,
+        2533,
+        Counter({"value_only": 2526, "aggregate_total": 5, "name_only": 2}),
+        Counter({"Listed Equity": 2495, "Cash": 33, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
+    ),
+    (
+        INDEXED_STABLE_PATH,
+        "HC Indexed Stable - Class A Option",
+        HOSTPLUS_INDEXED_STABLE_MAPPING_VERSION_ID,
+        2536,
+        Counter({"value_only": 2528, "aggregate_total": 5, "name_only": 3}),
+        Counter({"Listed Equity": 2495, "Cash": 36, "Fixed Income": 2, "Unlisted Equity": 2, "TOTAL INVESTMENT ITEMS": 1}),
     ),
 )
 
@@ -522,6 +602,118 @@ class TestHostPlusLoader(unittest.TestCase):
             self.assertEqual({SOURCE_URLS[file_path] for file_path, *_rest in CORE_DIVERSIFIED_BATCH_CASES}, source_urls)
             self.assertFalse(any(source_url.endswith("/High%20Growth.csv") for source_url in source_urls))
             self.assertFalse(any("Bonds" in source_url or "Indexed" in source_url for source_url in source_urls))
+            self.assertFalse(any("Defined%20Benefit" in source_url for source_url in source_urls))
+            self.assertFalse(any("retirement" in source_url.casefold() or "pension" in source_url.casefold() for source_url in source_urls))
+
+    def test_ingest_residual_super_completion_batch_files(self) -> None:
+        reporting_period_id = self._create_reporting_period()
+
+        with self.SessionLocal() as session:
+            source_file_ids: list[int] = []
+            for (
+                file_path,
+                option_name,
+                mapping_version_id,
+                expected_rows,
+                expected_completeness,
+                expected_asset_counts,
+            ) in RESIDUAL_SUPER_BATCH_CASES:
+                summary = ingest_hostplus_local_file(
+                    session,
+                    fund_code="hostplus",
+                    fund_name="Hostplus",
+                    file_path=str(file_path),
+                    reporting_period_id=reporting_period_id,
+                    source_url=SOURCE_URLS[file_path],
+                )
+
+                self.assertEqual(expected_rows, summary.rows_staged)
+                self.assertEqual(expected_rows, summary.rows_inserted)
+                self.assertEqual(0, summary.rows_skipped_existing)
+                self.assertEqual(
+                    ["Decoded Host-Plus source using UTF-8 errors='replace'; replacement_count=3"],
+                    summary.warnings,
+                )
+                source_file = session.get(SourceFile, summary.source_file_id)
+                self.assertEqual("HostPlusPhdStateMachineAdapter", source_file.adapter_key)
+                self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                self.assertEqual(SOURCE_URLS[file_path], source_file.source_url)
+                self.assertEqual(3, source_file.encoding_replacement_count)
+                option = session.get(InvestmentOption, summary.investment_option_id)
+                self.assertEqual(option_name, option.source_option_name)
+                source_file_ids.append(summary.source_file_id)
+
+                option_counts = Counter(
+                    row[0]
+                    for row in session.execute(
+                        select(Holding.disclosure_completeness).where(
+                            Holding.source_file_id == summary.source_file_id
+                        )
+                    ).all()
+                )
+                asset_counts = Counter(
+                    row[0]
+                    for row in session.execute(
+                        select(Holding.source_asset_class_raw).where(
+                            Holding.source_file_id == summary.source_file_id
+                        )
+                    ).all()
+                )
+                self.assertEqual(expected_completeness, option_counts)
+                self.assertEqual(expected_asset_counts, asset_counts)
+                self.assertEqual(
+                    0,
+                    session.query(Holding)
+                    .filter(Holding.source_file_id == summary.source_file_id, Holding.address.is_not(None))
+                    .count(),
+                )
+
+            session.commit()
+
+            self.assertEqual(sum(case[3] for case in RESIDUAL_SUPER_BATCH_CASES), session.query(Holding).count())
+            self.assertEqual(0, session.query(SchemaReviewQueue).count())
+            self.assertEqual(
+                0,
+                session.query(Holding)
+                .filter(
+                    Holding.source_file_id.in_(source_file_ids),
+                    Holding.raw_name.in_(["Forwards", "Futures", "Swaps", "AUD"]),
+                )
+                .count(),
+            )
+            self.assertEqual(
+                0,
+                session.query(Holding)
+                .filter(
+                    Holding.source_file_id.in_(source_file_ids),
+                    Holding.raw_name.in_(
+                        ["Fixed Income", "Unlisted Property", "Unlisted Infrastructure", "Unlisted Alternatives"]
+                    ),
+                )
+                .count(),
+            )
+            self.assertFalse(
+                session.query(Holding)
+                .filter(
+                    Holding.source_file_id.in_(source_file_ids),
+                    Holding.source_asset_class_raw.in_(
+                        ["Unlisted Property", "Unlisted Infrastructure", "Unlisted Alternatives"]
+                    ),
+                )
+                .first()
+            )
+            self.assertFalse(
+                session.query(Holding)
+                .filter(
+                    Holding.source_file_id.in_(source_file_ids),
+                    Holding.geo_lat.is_not(None) | Holding.geo_lng.is_not(None),
+                )
+                .first()
+            )
+
+            source_urls = {source_file.source_url for source_file in session.query(SourceFile).all()}
+            self.assertEqual({SOURCE_URLS[file_path] for file_path, *_rest in RESIDUAL_SUPER_BATCH_CASES}, source_urls)
+            self.assertFalse(any(source_url.endswith("/High%20Growth.csv") for source_url in source_urls))
             self.assertFalse(any("Defined%20Benefit" in source_url for source_url in source_urls))
             self.assertFalse(any("retirement" in source_url.casefold() or "pension" in source_url.casefold() for source_url in source_urls))
 

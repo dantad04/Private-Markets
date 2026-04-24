@@ -52,6 +52,13 @@ HOSTPLUS_GROWTH_MAPPING_VERSION_ID = "hostplus-stage2-growth-v1"
 HOSTPLUS_STABLE_MAPPING_VERSION_ID = "hostplus-stage2-stable-v1"
 HOSTPLUS_SRI_BALANCED_MAPPING_VERSION_ID = "hostplus-stage2-sri-balanced-v1"
 HOSTPLUS_SRI_DEFENSIVE_MAPPING_VERSION_ID = "hostplus-stage2-sri-defensive-v1"
+HOSTPLUS_BONDS_MAPPING_VERSION_ID = "hostplus-stage2-bonds-v1"
+HOSTPLUS_BONDS_INDEXED_MAPPING_VERSION_ID = "hostplus-stage2-bonds-indexed-v1"
+HOSTPLUS_INDEXED_BALANCED_MAPPING_VERSION_ID = "hostplus-stage2-indexed-balanced-v1"
+HOSTPLUS_INDEXED_CONSERVATIVE_MAPPING_VERSION_ID = "hostplus-stage2-indexed-conservative-v1"
+HOSTPLUS_INDEXED_DEFENSIVE_MAPPING_VERSION_ID = "hostplus-stage2-indexed-defensive-v1"
+HOSTPLUS_INDEXED_GROWTH_MAPPING_VERSION_ID = "hostplus-stage2-indexed-growth-v1"
+HOSTPLUS_INDEXED_STABLE_MAPPING_VERSION_ID = "hostplus-stage2-indexed-stable-v1"
 CBUS_MAPPING_VERSION_ID = "cbus-stage2-late-v1"
 CBUS_PROPERTY_MAPPING_VERSION_ID = "cbus-stage2-property-v1"
 CBUS_OVERSEAS_SHARES_MAPPING_VERSION_ID = "cbus-stage2-overseas-shares-v1"
@@ -2125,6 +2132,17 @@ HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_HEADERS = [
     HOSTPLUS_CASH_HEADER,
     HOSTPLUS_LISTED_SECURITY_HEADER,
 ]
+HOSTPLUS_CASH_FIXED_INCOME_HEADERS = [
+    *HOSTPLUS_STANDARD_POSTURE_HEADERS,
+    HOSTPLUS_MANAGER_VALUE_HEADER,
+    HOSTPLUS_CASH_HEADER,
+]
+HOSTPLUS_INDEXED_DIVERSIFIED_HEADERS = [
+    *HOSTPLUS_STANDARD_POSTURE_HEADERS,
+    HOSTPLUS_MANAGER_VALUE_HEADER,
+    HOSTPLUS_CASH_HEADER,
+    HOSTPLUS_LISTED_SECURITY_HEADER,
+]
 HOSTPLUS_CORE_DIVERSIFIED_HEADERS = [
     *HOSTPLUS_STANDARD_POSTURE_HEADERS,
     HOSTPLUS_MANAGER_VALUE_HEADER,
@@ -2142,6 +2160,28 @@ HOSTPLUS_CORE_DIVERSIFIED_NO_ADDRESS_HEADERS = [
 ]
 HOSTPLUS_DERIVATIVE_TABLES = [1, 2, 3, 4]
 
+HOSTPLUS_CASH_FIXED_INCOME_SECTION_LABELS = [
+    "CASH",
+    "FIXED INCOME",
+    "HOSTPLUS",
+    "TABLE 1",
+    "TABLE 2",
+    "TABLE 3",
+    "TABLE 4",
+    "TOTAL INVESTMENT ITEMS",
+]
+HOSTPLUS_INDEXED_DIVERSIFIED_SECTION_LABELS = [
+    "CASH",
+    "FIXED INCOME",
+    "HOSTPLUS",
+    "LISTED EQUITY",
+    "TABLE 1",
+    "TABLE 2",
+    "TABLE 3",
+    "TABLE 4",
+    "TOTAL INVESTMENT ITEMS",
+    "UNLISTED EQUITY",
+]
 HOSTPLUS_CORE_DIVERSIFIED_SECTION_LABELS = [
     "CASH",
     "FIXED INCOME",
@@ -2170,6 +2210,13 @@ HOSTPLUS_SRI_DEFENSIVE_SECTION_LABELS = [
     "UNLISTED ALTERNATIVES",
     "UNLISTED INFRASTRUCTURE",
     "UNLISTED PROPERTY",
+]
+HOSTPLUS_CASH_FIXED_INCOME_ASSET_CLASSES = ["Cash", "Fixed Income"]
+HOSTPLUS_INDEXED_DIVERSIFIED_ASSET_CLASSES = [
+    "Cash",
+    "Fixed Income",
+    "Listed Equity",
+    "Unlisted Equity",
 ]
 HOSTPLUS_CORE_DIVERSIFIED_ASSET_CLASSES = [
     "Cash",
@@ -2363,6 +2410,16 @@ HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS = (
     *HOSTPLUS_CASH_LISTED_TAXONOMY_KEYS,
     ("Unlisted Equity", "Externally Managed", False),
     ("Unlisted Equity", "Externally Managed", True),
+)
+HOSTPLUS_CASH_FIXED_INCOME_TAXONOMY_KEYS = (
+    *HOSTPLUS_CASH_TAXONOMY_KEYS,
+    ("Fixed Income", "Externally Managed", False),
+    ("Fixed Income", "Externally Managed", True),
+)
+HOSTPLUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS = (
+    *HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS,
+    ("Fixed Income", "Externally Managed", False),
+    ("Fixed Income", "Externally Managed", True),
 )
 HOSTPLUS_CORE_DIVERSIFIED_TAXONOMY_KEYS = (
     *HOSTPLUS_CASH_LISTED_EXTERNAL_UNLISTED_TAXONOMY_KEYS,
@@ -2632,6 +2689,90 @@ HOSTPLUS_SRI_DEFENSIVE_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
     observed_internal_external_values=["Externally Managed", "Internally Managed"],
     observed_asset_classes=HOSTPLUS_SRI_DEFENSIVE_ASSET_CLASSES,
     taxonomy_keys=HOSTPLUS_SRI_DEFENSIVE_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_BONDS_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_BONDS_MAPPING_VERSION_ID,
+    schema_fingerprint="dcb2a3bb6fa9b1a078aa847322020850204ab3c6d9692bc10f424d237b22680b",
+    option_name="HC Bonds - Class A Option",
+    file_label="Bonds",
+    observed_headers=HOSTPLUS_CASH_FIXED_INCOME_HEADERS,
+    observed_section_labels=HOSTPLUS_CASH_FIXED_INCOME_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=HOSTPLUS_CASH_FIXED_INCOME_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_CASH_FIXED_INCOME_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_BONDS_INDEXED_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_BONDS_INDEXED_MAPPING_VERSION_ID,
+    schema_fingerprint="dcb2a3bb6fa9b1a078aa847322020850204ab3c6d9692bc10f424d237b22680b",
+    option_name="HC Bonds - Indexed - Class A Option",
+    file_label="Bonds - Indexed",
+    observed_headers=HOSTPLUS_CASH_FIXED_INCOME_HEADERS,
+    observed_section_labels=HOSTPLUS_CASH_FIXED_INCOME_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=HOSTPLUS_CASH_FIXED_INCOME_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_CASH_FIXED_INCOME_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_INDEXED_BALANCED_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_INDEXED_BALANCED_MAPPING_VERSION_ID,
+    schema_fingerprint="ccd2d62ce91037b3a7fe5083d225c00adb252409daaa6613c9277f49c17b8133",
+    option_name="HC Indexed Balanced - Class A Option",
+    file_label="Indexed Balanced",
+    observed_headers=HOSTPLUS_INDEXED_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_INDEXED_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=HOSTPLUS_INDEXED_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_INDEXED_CONSERVATIVE_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_INDEXED_CONSERVATIVE_MAPPING_VERSION_ID,
+    schema_fingerprint="ccd2d62ce91037b3a7fe5083d225c00adb252409daaa6613c9277f49c17b8133",
+    option_name="HC Indexed Conservative - Class A Option",
+    file_label="Indexed Conservative",
+    observed_headers=HOSTPLUS_INDEXED_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_INDEXED_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=HOSTPLUS_INDEXED_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_INDEXED_DEFENSIVE_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_INDEXED_DEFENSIVE_MAPPING_VERSION_ID,
+    schema_fingerprint="ccd2d62ce91037b3a7fe5083d225c00adb252409daaa6613c9277f49c17b8133",
+    option_name="HC Indexed Defensive - Class A Option",
+    file_label="Indexed Defensive",
+    observed_headers=HOSTPLUS_INDEXED_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_INDEXED_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=HOSTPLUS_INDEXED_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_INDEXED_GROWTH_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_INDEXED_GROWTH_MAPPING_VERSION_ID,
+    schema_fingerprint="ccd2d62ce91037b3a7fe5083d225c00adb252409daaa6613c9277f49c17b8133",
+    option_name="HC Indexed Growth - Class A Option",
+    file_label="Indexed Growth",
+    observed_headers=HOSTPLUS_INDEXED_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_INDEXED_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=HOSTPLUS_INDEXED_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+HOSTPLUS_INDEXED_STABLE_APPROVED_MAPPING = _hostplus_latest_period_mapping_seed(
+    id=HOSTPLUS_INDEXED_STABLE_MAPPING_VERSION_ID,
+    schema_fingerprint="ccd2d62ce91037b3a7fe5083d225c00adb252409daaa6613c9277f49c17b8133",
+    option_name="HC Indexed Stable - Class A Option",
+    file_label="Indexed Stable",
+    observed_headers=HOSTPLUS_INDEXED_DIVERSIFIED_HEADERS,
+    observed_section_labels=HOSTPLUS_INDEXED_DIVERSIFIED_SECTION_LABELS,
+    observed_internal_external_values=["Externally Managed"],
+    observed_asset_classes=HOSTPLUS_INDEXED_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=HOSTPLUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS,
 )
 
 
@@ -2974,6 +3115,13 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
         HOSTPLUS_STABLE_APPROVED_MAPPING,
         HOSTPLUS_SRI_BALANCED_APPROVED_MAPPING,
         HOSTPLUS_SRI_DEFENSIVE_APPROVED_MAPPING,
+        HOSTPLUS_BONDS_APPROVED_MAPPING,
+        HOSTPLUS_BONDS_INDEXED_APPROVED_MAPPING,
+        HOSTPLUS_INDEXED_BALANCED_APPROVED_MAPPING,
+        HOSTPLUS_INDEXED_CONSERVATIVE_APPROVED_MAPPING,
+        HOSTPLUS_INDEXED_DEFENSIVE_APPROVED_MAPPING,
+        HOSTPLUS_INDEXED_GROWTH_APPROVED_MAPPING,
+        HOSTPLUS_INDEXED_STABLE_APPROVED_MAPPING,
     ),
     CBUS_APPROVED_MAPPING.adapter_key: (
         CBUS_APPROVED_MAPPING,

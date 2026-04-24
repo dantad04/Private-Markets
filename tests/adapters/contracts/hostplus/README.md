@@ -53,6 +53,20 @@ These files exercise explicit Hostplus Table 1 handling for `Fixed Income`,
 header, and the observed `Unlisted Alternatives` section that otherwise would
 be misclassified under the prior section.
 
+The residual Superannuation/Accumulation completion fixtures cover:
+
+1. `HC Bonds - Class A Option`
+2. `HC Bonds - Indexed - Class A Option`
+3. `HC Indexed Balanced - Class A Option`
+4. `HC Indexed Conservative - Class A Option`
+5. `HC Indexed Defensive - Class A Option`
+6. `HC Indexed Growth - Class A Option`
+7. `HC Indexed Stable - Class A Option`
+
+These files use the accepted Hostplus adapter path without additional parser
+changes. They exercise `Cash`, `Fixed Income`, `Listed Equity`, and `Unlisted
+Equity` only, while still excluding Tables 2-4 posture rows.
+
 ## Why the extract is the whole file
 
 Unlike UniSuper, this real file already is a single narrow option slice. The

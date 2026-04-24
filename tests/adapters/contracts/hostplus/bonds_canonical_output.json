@@ -1,0 +1,772 @@
+{
+  "holdings": [
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": false,
+      "raw_name": "Citigroup Inc",
+      "value_aud": "672014",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.0032",
+      "currency_raw": "AUD",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 8,
+      "source_row_hash": "d4bd25c6cac60d4ce678d69df8a02b03452b362e29ac788e69b5d70b9c0d00a2",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Citigroup Inc",
+            "AUD",
+            "",
+            "672,014",
+            "0.32%"
+          ],
+          "source_row_number": 8
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": false,
+      "raw_name": "Citigroup Inc",
+      "value_aud": "44",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0",
+      "currency_raw": "GBP",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 9,
+      "source_row_hash": "5fc80a9754f4704534db170a08456b0b288f33e5ba93af4901afd91f19f9363b",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Citigroup Inc",
+            "GBP",
+            "",
+            "44",
+            "0.00%"
+          ],
+          "source_row_number": 9
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": false,
+      "raw_name": "Citigroup Inc",
+      "value_aud": "734440",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.0035",
+      "currency_raw": "USD",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 10,
+      "source_row_hash": "193c2cc11d37b137c61bd2ea9e78d0169a173d6a3a10fc84efd0af1d7f0a1686",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Citigroup Inc",
+            "USD",
+            "",
+            "734,440",
+            "0.35%"
+          ],
+          "source_row_number": 10
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": false,
+      "raw_name": "JP Morgan Chase",
+      "value_aud": null,
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0",
+      "currency_raw": "EUR",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "name_only",
+      "source_row_number": 11,
+      "source_row_hash": "21d21199ed9aa7c3360e1cccc58574551bbaf5b06a4ccc476851a9219e2cd043",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "JP Morgan Chase",
+            "EUR",
+            "",
+            "",
+            "0.00%"
+          ],
+          "source_row_number": 11
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": false,
+      "raw_name": "JP Morgan Chase",
+      "value_aud": "135171",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.0006",
+      "currency_raw": "USD",
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 12,
+      "source_row_hash": "aed9864cbc9f5e43a99bc55b16eee92f16267aa99a407745617ccf8ea0bdb687",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "JP Morgan Chase",
+            "USD",
+            "",
+            "135,171",
+            "0.06%"
+          ],
+          "source_row_number": 12
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Cash",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "cash",
+      "is_aggregate": true,
+      "raw_name": "TOTAL",
+      "value_aud": "1541668",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.0074",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "aggregate_total",
+      "source_row_number": 13,
+      "source_row_hash": "893efe55b6bcab8459a2e1f39a8e82de026271fac0b6dfc326a810d0515277b6",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Total",
+            "",
+            "",
+            "1,541,668",
+            "0.74%"
+          ],
+          "source_row_number": 13
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Fixed Income",
+      "source_subclass_raw": "Externally Managed",
+      "canonical_asset_class_code": "fixed_income",
+      "is_aggregate": false,
+      "raw_name": "BlackRock Investment Management (Australia) Ltd",
+      "value_aud": "70454123",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.3379",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": "held_direct_or_associated_or_psts",
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 19,
+      "source_row_hash": "08470ae4094251f3871d2283143b7b53bc31521481c74db728e7725a86c76528",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "BlackRock Investment Management (Australia) Ltd",
+            "",
+            "",
+            "70,454,123",
+            "33.79%"
+          ],
+          "source_row_number": 19
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Fixed Income",
+      "source_subclass_raw": "Externally Managed",
+      "canonical_asset_class_code": "fixed_income",
+      "is_aggregate": false,
+      "raw_name": "Citigroup Transition Team",
+      "value_aud": null,
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": "held_direct_or_associated_or_psts",
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "name_only",
+      "source_row_number": 20,
+      "source_row_hash": "311e62bad2ccbffbd594435eb5e6e6e2a2c6bbdcba2737f71965a79034213930",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Citigroup Transition Team",
+            "",
+            "",
+            "",
+            "0.00%"
+          ],
+          "source_row_number": 20
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Fixed Income",
+      "source_subclass_raw": "Externally Managed",
+      "canonical_asset_class_code": "fixed_income",
+      "is_aggregate": false,
+      "raw_name": "IFM Investors Pty Ltd",
+      "value_aud": "66774748",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.3202",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": "held_direct_or_associated_or_psts",
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 21,
+      "source_row_hash": "4f8b457af77e269dc060a0ff3a4bf385ee852d7719cb475c1581c085b1b6b9ff",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "IFM Investors Pty Ltd",
+            "",
+            "",
+            "66,774,748",
+            "32.02%"
+          ],
+          "source_row_number": 21
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Fixed Income",
+      "source_subclass_raw": "Externally Managed",
+      "canonical_asset_class_code": "fixed_income",
+      "is_aggregate": false,
+      "raw_name": "Loomis Sayles & Company",
+      "value_aud": "20259267",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.0972",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": "held_direct_or_associated_or_psts",
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 22,
+      "source_row_hash": "dc246d370c545664b889226c7d30d1c4a59c6f1a517222f6d63789535c357822",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Loomis Sayles & Company",
+            "",
+            "",
+            "20,259,267",
+            "9.72%"
+          ],
+          "source_row_number": 22
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Fixed Income",
+      "source_subclass_raw": "Externally Managed",
+      "canonical_asset_class_code": "fixed_income",
+      "is_aggregate": false,
+      "raw_name": "Pimco Investment Management",
+      "value_aud": "48799318",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.234",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": "held_direct_or_associated_or_psts",
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "value_only",
+      "source_row_number": 23,
+      "source_row_hash": "6a23bf03f193d111ae04d85014bdcc2086030c7621d1117a2aa9ecc1b5266f86",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Pimco Investment Management",
+            "",
+            "",
+            "48,799,318",
+            "23.40%"
+          ],
+          "source_row_number": 23
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "Fixed Income",
+      "source_subclass_raw": "Externally Managed",
+      "canonical_asset_class_code": "fixed_income",
+      "is_aggregate": true,
+      "raw_name": "TOTAL",
+      "value_aud": "206287456",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.9892",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": "held_direct_or_associated_or_psts",
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "aggregate_total",
+      "source_row_number": 24,
+      "source_row_hash": "bf73b7159c0266385965444dabb1cc3d1d64833c805d9a0e523a6a5e2bb2146e",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Total",
+            "",
+            "",
+            "206,287,456",
+            "98.92%"
+          ],
+          "source_row_number": 24
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    },
+    {
+      "source_file_id": "contract-fixture-hostplus-bonds",
+      "source_fund_id": "hostplus",
+      "source_option_code": "HOSTPLUS_HC_BONDS_CLASS_A_OPTION",
+      "source_option_name_raw": "HC Bonds - Class A Option",
+      "reporting_period_date": "2025-12-31",
+      "source_asset_class_raw": "TOTAL INVESTMENT ITEMS",
+      "source_subclass_raw": null,
+      "canonical_asset_class_code": "multi_asset_other",
+      "is_aggregate": true,
+      "raw_name": "TOTAL INVESTMENT ITEMS",
+      "value_aud": "207829124",
+      "ownership_pct": null,
+      "units": null,
+      "weighting_pct": "0.9966",
+      "currency_raw": null,
+      "security_identifier_value": null,
+      "security_identifier_type": null,
+      "address_raw": null,
+      "geo_lat": null,
+      "geo_lng": null,
+      "classification_raw": null,
+      "location_raw": null,
+      "value_band_raw": null,
+      "disclosure_completeness": "aggregate_total",
+      "source_row_number": 25,
+      "source_row_hash": "eee0c7bd0892776ac5263231d91c89bfec2d5048ba6076a3a3a9998e1d060b67",
+      "raw_payload_json": [
+        {
+          "payload": [
+            "Total Investment Items",
+            "",
+            "",
+            "207,829,124",
+            "99.66%"
+          ],
+          "source_row_number": 25
+        }
+      ],
+      "parse_warning_flags": [],
+      "metadata_attached_from_row_numbers": []
+    }
+  ],
+  "structural_metadata": {
+    "aggregate_rows_emitted": 3,
+    "encoding_replacement_count": 3,
+    "holdings_rows_emitted": 13,
+    "observed_asset_classes": [
+      "Cash",
+      "Fixed Income"
+    ],
+    "observed_headers": [
+      [
+        "ASSET CLASS",
+        "",
+        "",
+        "ACTUAL ASSET ALLOCATION (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+        "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)"
+      ],
+      [
+        "CURRENCY EXPOSURE",
+        "",
+        "",
+        "ACTUAL CURRENCY EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+        "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)"
+      ],
+      [
+        "KIND OF DERIVATIVE",
+        "",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ],
+      [
+        "NAME OF FUND MANAGER",
+        "",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ],
+      [
+        "NAME OF INSTITUTION",
+        "CURRENCY",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ]
+    ],
+    "observed_internal_external_values": [
+      "Externally Managed"
+    ],
+    "observed_investment_statuses": {
+      "Investment in non?associated entities;": 1
+    },
+    "observed_option_names": [
+      "HC Bonds - Class A Option"
+    ],
+    "observed_options": [
+      "HOSTPLUS_HC_BONDS_CLASS_A_OPTION"
+    ],
+    "observed_reporting_dates": [
+      "2025-12-31"
+    ],
+    "observed_scope_modifiers": [
+      "Held directly or by associated entities or by PSTs"
+    ],
+    "observed_section_labels": [
+      "CASH",
+      "FIXED INCOME",
+      "HOSTPLUS",
+      "TABLE 1",
+      "TABLE 2",
+      "TABLE 3",
+      "TABLE 4",
+      "TOTAL INVESTMENT ITEMS"
+    ],
+    "observed_tables": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "options_processed": 1,
+    "review_queue_events": [],
+    "rows_emitted_by_option": {
+      "HC Bonds - Class A Option": 13
+    },
+    "rows_emitted_by_option_asset_class": {
+      "HC Bonds - Class A Option": {
+        "Cash": 6,
+        "Fixed Income": 6,
+        "TOTAL INVESTMENT ITEMS": 1
+      }
+    },
+    "scope_modifier_counts": {
+      "Held directly or by associated entities or by PSTs": 1
+    },
+    "scope_variant_examples": {
+      "Held directly or by associated entities or by PSTs": 19
+    },
+    "source_encoding": "utf-8-replace",
+    "table_rows_excluded": {
+      "2": 5,
+      "3": 7,
+      "4": 4
+    }
+  },
+  "parse_statistics": {
+    "aggregate_rows_emitted": 3,
+    "canonical_asset_class_counts": {
+      "cash": 6,
+      "fixed_income": 6,
+      "multi_asset_other": 1
+    },
+    "disclosure_completeness_counts": {
+      "aggregate_total": 3,
+      "name_only": 2,
+      "value_only": 8
+    },
+    "encoding_replacement_count": 3,
+    "holdings_rows_emitted": 13,
+    "observed_asset_classes": [
+      "Cash",
+      "Fixed Income"
+    ],
+    "observed_headers": [
+      [
+        "ASSET CLASS",
+        "",
+        "",
+        "ACTUAL ASSET ALLOCATION (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+        "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)"
+      ],
+      [
+        "CURRENCY EXPOSURE",
+        "",
+        "",
+        "ACTUAL CURRENCY EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)",
+        "EFFECT OF DERIVATIVES EXPOSURE (% OF ASSETS (INCLUDING DERIVATIVES) IN THE INVESTMENT OPTION)"
+      ],
+      [
+        "KIND OF DERIVATIVE",
+        "",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ],
+      [
+        "NAME OF FUND MANAGER",
+        "",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ],
+      [
+        "NAME OF INSTITUTION",
+        "CURRENCY",
+        "",
+        "VALUE (AUD)",
+        "WEIGHTING (%)"
+      ]
+    ],
+    "observed_internal_external_values": [
+      "Externally Managed"
+    ],
+    "observed_investment_statuses": {
+      "Investment in non?associated entities;": 1
+    },
+    "observed_option_names": [
+      "HC Bonds - Class A Option"
+    ],
+    "observed_options": [
+      "HOSTPLUS_HC_BONDS_CLASS_A_OPTION"
+    ],
+    "observed_reporting_dates": [
+      "2025-12-31"
+    ],
+    "observed_scope_modifiers": [
+      "Held directly or by associated entities or by PSTs"
+    ],
+    "observed_section_labels": [
+      "CASH",
+      "FIXED INCOME",
+      "HOSTPLUS",
+      "TABLE 1",
+      "TABLE 2",
+      "TABLE 3",
+      "TABLE 4",
+      "TOTAL INVESTMENT ITEMS"
+    ],
+    "observed_tables": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "options_processed": 1,
+    "review_queue_events": [],
+    "rows_emitted_by_option": {
+      "HC Bonds - Class A Option": 13
+    },
+    "rows_emitted_by_option_asset_class": {
+      "HC Bonds - Class A Option": {
+        "Cash": 6,
+        "Fixed Income": 6,
+        "TOTAL INVESTMENT ITEMS": 1
+      }
+    },
+    "scope_modifier_counts": {
+      "Held directly or by associated entities or by PSTs": 1
+    },
+    "scope_variant_examples": {
+      "Held directly or by associated entities or by PSTs": 19
+    },
+    "source_encoding": "utf-8-replace",
+    "table_rows_excluded": {
+      "2": 5,
+      "3": 7,
+      "4": 4
+    }
+  },
+  "schema_fingerprint": "dcb2a3bb6fa9b1a078aa847322020850204ab3c6d9692bc10f424d237b22680b",
+  "adapter_warnings": [
+    "Decoded Host-Plus source using UTF-8 errors='replace'; replacement_count=3"
+  ]
+}
