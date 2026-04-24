@@ -14,6 +14,49 @@ from adapters.cbus_errors import CbusFileIdentityError, CbusHeaderMismatchError
 
 
 FIXTURE_PATH = Path("tests/fixtures/real/cbus/super-high-growth__1_.csv").resolve()
+PROPERTY_PATH = Path("tests/fixtures/real/cbus/super-property__1_.csv").resolve()
+OVERSEAS_SHARES_PATH = Path("tests/fixtures/real/cbus/super-overseas-shares.csv").resolve()
+AUSTRALIAN_SHARES_PATH = Path("tests/fixtures/real/cbus/super-australian-shares__1_.csv").resolve()
+CASH_PATH = Path("tests/fixtures/real/cbus/super-cash.csv").resolve()
+
+BATCH_1_CASES = (
+    (
+        PROPERTY_PATH,
+        "Property Accumulation Option",
+        106,
+        {"2": 3, "3": 5, "4": 5},
+        Counter({"fully_disclosed": 46, "value_only": 37, "ownership_only": 16, "aggregate_total": 7}),
+        58,
+        16,
+    ),
+    (
+        OVERSEAS_SHARES_PATH,
+        "Overseas Shares Accumulation Option",
+        1421,
+        {"2": 4, "3": 6, "4": 4},
+        Counter({"fully_disclosed": 1367, "value_only": 46, "aggregate_total": 6, "name_only": 2}),
+        14,
+        0,
+    ),
+    (
+        AUSTRALIAN_SHARES_PATH,
+        "Australian Shares Accumulation Option",
+        353,
+        {"2": 4, "3": 6, "4": 4},
+        Counter({"fully_disclosed": 316, "value_only": 29, "aggregate_total": 6, "name_only": 2}),
+        36,
+        0,
+    ),
+    (
+        CASH_PATH,
+        "Cash Accumulation Option",
+        16,
+        {"3": 3},
+        Counter({"value_only": 13, "aggregate_total": 3}),
+        0,
+        0,
+    ),
+)
 
 
 def make_metadata(source_file_id: str = "fixture-cbus") -> SourceFileMetadata:
@@ -137,6 +180,49 @@ class TestCbusAdapterRealFile(unittest.TestCase):
             self.rows[2195].address_raw,
         )
         self.assertEqual("Newmarket, Randwick, 162 Barker St, Randwick", self.rows[2196].address_raw)
+
+    def test_latest_period_batch_1_files_parse_without_adapter_changes(self) -> None:
+        for (
+            fixture_path,
+            option_name,
+            expected_rows,
+            expected_skipped_rows,
+            expected_completeness,
+            expected_property_infrastructure_rows,
+            expected_address_backed_property_infrastructure_rows,
+        ) in BATCH_1_CASES:
+            with self.subTest(option=option_name):
+                result = self.adapter.parse(make_metadata(fixture_path.name), fixture_path.read_bytes())
+
+                self.assertEqual([option_name], result.structural_metadata["observed_option_names"])
+                self.assertEqual(2025, result.holdings[0].reporting_period_date.year)
+                self.assertEqual(expected_rows, len(result.holdings))
+                self.assertEqual(expected_skipped_rows, result.structural_metadata["table_rows_skipped_by_table"])
+                self.assertNotIn("Futures", [record.raw_name for record in result.holdings])
+                self.assertNotIn("FX Forwards", [record.raw_name for record in result.holdings])
+                self.assertNotIn("Derivatives TOTAL", [record.source_asset_class_raw for record in result.holdings])
+                self.assertEqual(
+                    expected_completeness,
+                    Counter(record.disclosure_completeness for record in result.holdings),
+                )
+
+                property_infrastructure_rows = [
+                    record
+                    for record in result.holdings
+                    if record.canonical_asset_class_code
+                    in {
+                        "listed_property",
+                        "unlisted_property",
+                        "listed_infrastructure",
+                        "unlisted_infrastructure",
+                    }
+                    and not record.is_aggregate
+                ]
+                self.assertEqual(expected_property_infrastructure_rows, len(property_infrastructure_rows))
+                self.assertEqual(
+                    expected_address_backed_property_infrastructure_rows,
+                    len([record for record in property_infrastructure_rows if record.address_raw]),
+                )
 
 
 if __name__ == "__main__":

@@ -1,1 +1,2 @@
 tests/fixtures/real/australiansuper/*.csv -whitespace
+tests/fixtures/real/cbus/*.csv -whitespace

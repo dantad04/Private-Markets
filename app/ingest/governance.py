@@ -40,6 +40,10 @@ AUSTRALIANSUPER_SOCIALLY_AWARE_MAPPING_VERSION_ID = "australiansuper-stage2-soci
 UNISUPER_MAPPING_VERSION_ID = "unisuper-stage2-v1"
 HOSTPLUS_MAPPING_VERSION_ID = "hostplus-stage2-v1"
 CBUS_MAPPING_VERSION_ID = "cbus-stage2-late-v1"
+CBUS_PROPERTY_MAPPING_VERSION_ID = "cbus-stage2-property-v1"
+CBUS_OVERSEAS_SHARES_MAPPING_VERSION_ID = "cbus-stage2-overseas-shares-v1"
+CBUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID = "cbus-stage2-australian-shares-v1"
+CBUS_CASH_MAPPING_VERSION_ID = "cbus-stage2-cash-v1"
 
 
 class GovernanceError(Exception):
@@ -132,6 +136,60 @@ def _retarget_australiansuper_taxonomy_subset(
     if missing_keys:
         raise RuntimeError(f"AustralianSuper taxonomy seed is missing expected keys: {sorted(missing_keys)!r}")
     return _retarget_taxonomy_notes(selected_rows, from_label=from_label, to_label=to_label)
+
+
+def _cbus_structural_expectations(
+    *,
+    observed_section_labels: list[str],
+    observed_tables: list[int],
+    observed_internal_external_values: list[str],
+    observed_asset_classes: list[str],
+    observed_option_names: list[str],
+) -> dict[str, object]:
+    return {
+        "observed_headers": [CBUS_EXPECTED_HEADER],
+        "observed_section_labels": observed_section_labels,
+        "observed_tables": observed_tables,
+        "observed_internal_external_values": observed_internal_external_values,
+        "observed_asset_classes": observed_asset_classes,
+        "observed_option_names": observed_option_names,
+    }
+
+
+def _cbus_taxonomy_subset(
+    keys: tuple[tuple[str, str | None, bool], ...],
+) -> tuple[ApprovedTaxonomyMappingSeed, ...]:
+    section_mappings = (*CBUS_SECTION_MAPPINGS.values(), *CBUS_TOTAL_SECTION_MAPPINGS.values())
+    key_set = set(keys)
+    selected_mappings = tuple(
+        mapping
+        for mapping in section_mappings
+        if (mapping.source_asset_class_raw, mapping.source_subclass_raw, mapping.is_aggregate) in key_set
+    )
+    selected_keys = {
+        (mapping.source_asset_class_raw, mapping.source_subclass_raw, mapping.is_aggregate)
+        for mapping in selected_mappings
+    }
+    missing_keys = key_set.difference(selected_keys)
+    if missing_keys:
+        raise RuntimeError(f"Cbus taxonomy seed is missing expected keys: {sorted(missing_keys)!r}")
+    return tuple(
+        ApprovedTaxonomyMappingSeed(
+            mapping.source_asset_class_raw,
+            mapping.source_subclass_raw,
+            None,
+            None,
+            mapping.canonical_asset_class_code,
+            mapping.is_aggregate,
+            "aggregate_total" if mapping.is_aggregate else None,
+            (
+                "Cbus latest-period batch aggregate mapping"
+                if mapping.is_aggregate
+                else "Cbus latest-period batch section mapping"
+            ),
+        )
+        for mapping in selected_mappings
+    )
 
 
 AWARE_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
@@ -1960,6 +2018,205 @@ CBUS_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
+CBUS_PROPERTY_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=CBUS_PROPERTY_MAPPING_VERSION_ID,
+    adapter_key="CbusPhdAdapter",
+    schema_fingerprint="7467faa747caab4c5ea8df86a593d52b833e6f0afe21e6844d80c0905f87129c",
+    structural_expectations_json=_cbus_structural_expectations(
+        observed_section_labels=[
+            "ASSETS",
+            "DERIVATIVES",
+            "DERIVATIVES BY ASSET CLASS",
+            "DERIVATIVES BY CURRENCY",
+        ],
+        observed_tables=[1, 2, 3, 4],
+        observed_internal_external_values=["external", "internal"],
+        observed_asset_classes=[
+            "Cash",
+            "Cash TOTAL",
+            "Fixed income internal",
+            "Fixed income internal TOTAL",
+            "Listed equities",
+            "Listed equities TOTAL",
+            "Listed property",
+            "Listed property TOTAL",
+            "Table 1 TOTAL",
+            "Unlisted property external",
+            "Unlisted property external TOTAL",
+            "Unlisted property internal",
+            "Unlisted property internal TOTAL",
+        ],
+        observed_option_names=["Property Accumulation Option"],
+    ),
+    notes=(
+        "Approved Cbus latest-period Property Accumulation Option slice using the real "
+        "super-property file and the existing Cbus adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_cbus_taxonomy_subset(
+        (
+            ("Cash", None, False),
+            ("Cash TOTAL", None, True),
+            ("Fixed income internal", "internal", False),
+            ("Fixed income internal TOTAL", "internal", True),
+            ("Listed equities", None, False),
+            ("Listed equities TOTAL", None, True),
+            ("Listed property", None, False),
+            ("Listed property TOTAL", None, True),
+            ("Table 1 TOTAL", None, True),
+            ("Unlisted property external", "external", False),
+            ("Unlisted property external TOTAL", "external", True),
+            ("Unlisted property internal", "internal", False),
+            ("Unlisted property internal TOTAL", "internal", True),
+        )
+    ),
+)
+
+
+CBUS_OVERSEAS_SHARES_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=CBUS_OVERSEAS_SHARES_MAPPING_VERSION_ID,
+    adapter_key="CbusPhdAdapter",
+    schema_fingerprint="d8760fe22f4b77ca6277b075572bc70c25ae571959cb22d56db94a714fd90fe5",
+    structural_expectations_json=_cbus_structural_expectations(
+        observed_section_labels=[
+            "ASSETS",
+            "DERIVATIVES",
+            "DERIVATIVES BY ASSET CLASS",
+            "DERIVATIVES BY CURRENCY",
+        ],
+        observed_tables=[1, 2, 3, 4],
+        observed_internal_external_values=["internal"],
+        observed_asset_classes=[
+            "Cash",
+            "Cash TOTAL",
+            "Fixed income internal",
+            "Fixed income internal TOTAL",
+            "Listed equities",
+            "Listed equities TOTAL",
+            "Listed infrastructure",
+            "Listed infrastructure TOTAL",
+            "Listed property",
+            "Listed property TOTAL",
+            "Table 1 TOTAL",
+        ],
+        observed_option_names=["Overseas Shares Accumulation Option"],
+    ),
+    notes=(
+        "Approved Cbus latest-period Overseas Shares Accumulation Option slice using the real "
+        "super-overseas-shares file and the existing Cbus adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_cbus_taxonomy_subset(
+        (
+            ("Cash", None, False),
+            ("Cash TOTAL", None, True),
+            ("Fixed income internal", "internal", False),
+            ("Fixed income internal TOTAL", "internal", True),
+            ("Listed equities", None, False),
+            ("Listed equities TOTAL", None, True),
+            ("Listed infrastructure", None, False),
+            ("Listed infrastructure TOTAL", None, True),
+            ("Listed property", None, False),
+            ("Listed property TOTAL", None, True),
+            ("Table 1 TOTAL", None, True),
+        )
+    ),
+)
+
+
+CBUS_AUSTRALIAN_SHARES_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=CBUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID,
+    adapter_key="CbusPhdAdapter",
+    schema_fingerprint="b8c3709009e1961ff26ee0e5308b4f89075c1e9773b2aee5a4bd4c0fc6dabe8f",
+    structural_expectations_json=_cbus_structural_expectations(
+        observed_section_labels=[
+            "ASSETS",
+            "DERIVATIVES",
+            "DERIVATIVES BY ASSET CLASS",
+            "DERIVATIVES BY CURRENCY",
+        ],
+        observed_tables=[1, 2, 3, 4],
+        observed_internal_external_values=["internal"],
+        observed_asset_classes=[
+            "Cash",
+            "Cash TOTAL",
+            "Fixed income internal",
+            "Fixed income internal TOTAL",
+            "Listed equities",
+            "Listed equities TOTAL",
+            "Listed infrastructure",
+            "Listed infrastructure TOTAL",
+            "Listed property",
+            "Listed property TOTAL",
+            "Table 1 TOTAL",
+        ],
+        observed_option_names=["Australian Shares Accumulation Option"],
+    ),
+    notes=(
+        "Approved Cbus latest-period Australian Shares Accumulation Option slice using the real "
+        "super-australian-shares file and the existing Cbus adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_cbus_taxonomy_subset(
+        (
+            ("Cash", None, False),
+            ("Cash TOTAL", None, True),
+            ("Fixed income internal", "internal", False),
+            ("Fixed income internal TOTAL", "internal", True),
+            ("Listed equities", None, False),
+            ("Listed equities TOTAL", None, True),
+            ("Listed infrastructure", None, False),
+            ("Listed infrastructure TOTAL", None, True),
+            ("Listed property", None, False),
+            ("Listed property TOTAL", None, True),
+            ("Table 1 TOTAL", None, True),
+        )
+    ),
+)
+
+
+CBUS_CASH_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=CBUS_CASH_MAPPING_VERSION_ID,
+    adapter_key="CbusPhdAdapter",
+    schema_fingerprint="4095ce686aede74a79434129cc120e1a6f1ac700778e599909b584a6543e47e4",
+    structural_expectations_json=_cbus_structural_expectations(
+        observed_section_labels=[
+            "ASSETS",
+            "DERIVATIVES",
+            "DERIVATIVES BY ASSET CLASS",
+        ],
+        observed_tables=[1, 2, 3],
+        observed_internal_external_values=["internal"],
+        observed_asset_classes=[
+            "Cash",
+            "Cash TOTAL",
+            "Fixed income internal",
+            "Fixed income internal TOTAL",
+            "Table 1 TOTAL",
+        ],
+        observed_option_names=["Cash Accumulation Option"],
+    ),
+    notes=(
+        "Approved Cbus latest-period Cash Accumulation Option slice using the real "
+        "super-cash file and the existing Cbus adapter."
+    ),
+    approved_by="repo-seed",
+    approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+    taxonomy_rows=_cbus_taxonomy_subset(
+        (
+            ("Cash", None, False),
+            ("Cash TOTAL", None, True),
+            ("Fixed income internal", "internal", False),
+            ("Fixed income internal TOTAL", "internal", True),
+            ("Table 1 TOTAL", None, True),
+        )
+    ),
+)
+
+
 APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
     AWARE_APPROVED_MAPPING.adapter_key: (AWARE_APPROVED_MAPPING,),
     ART_QSUPER_APPROVED_MAPPING.adapter_key: (ART_QSUPER_APPROVED_MAPPING,),
@@ -1978,7 +2235,13 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
     ),
     UNISUPER_APPROVED_MAPPING.adapter_key: (UNISUPER_APPROVED_MAPPING,),
     HOSTPLUS_APPROVED_MAPPING.adapter_key: (HOSTPLUS_APPROVED_MAPPING,),
-    CBUS_APPROVED_MAPPING.adapter_key: (CBUS_APPROVED_MAPPING,),
+    CBUS_APPROVED_MAPPING.adapter_key: (
+        CBUS_APPROVED_MAPPING,
+        CBUS_PROPERTY_APPROVED_MAPPING,
+        CBUS_OVERSEAS_SHARES_APPROVED_MAPPING,
+        CBUS_AUSTRALIAN_SHARES_APPROVED_MAPPING,
+        CBUS_CASH_APPROVED_MAPPING,
+    ),
 }
 
 

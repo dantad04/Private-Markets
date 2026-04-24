@@ -1,0 +1,23 @@
+Portfolio Holdings Information for Investment Option: Cash Accumulation Option - Assets - 31 December 2025,,,,,,,,,,,,,
+Section,Table Order,Security Name,Portfolio Name,Manager Name,Issuer,Institution,Security Identifier,Ownership%,Address,Local Currency,Units Held,Market Value,Weight
+Cash,01,,,,,AUSTRALIA & NEW ZEALAND BANKING GROUP LTD,,,,AUD,,804677295.82,49.996 %
+Cash,01,,,,,COMMONWEALTH BANK OF AUSTRALIA,,,,AUD,, 86525361.76,5.3760 %
+Cash,01,,,,,DBS BANK LTD/AUSTRALIA,,,,AUD,, 14414373.91,0.8956 %
+Cash,01,,,,,JPMORGAN CHASE & CO,,,,AUD,, 40037524.28,2.4876 %
+Cash,01,,,,,MITSUBISHI UFJ FINANCIAL GROUP INC,,,,AUD,, 36142713.22,2.2456 %
+Cash,01,,,,,NATIONAL AUSTRALIA BANK LTD,,,,AUD,,        0.00,0.0000 %
+Cash,01,,,,,SUNCORP GROUP LTD,,,,AUD,, 21765963.85,1.3524 %
+Cash TOTAL,01.5,,,,,,,,,,,1003563232.8,62.353 %
+Fixed income internal,02,,,,AUSTRALIA & NEW ZEALAND BANKING GROUP LTD,,,,,,,171287757.75,10.642 %
+Fixed income internal,02,,,,BANK OF QUEENSLAND,,,,,,, 42528835.28,2.6424 %
+Fixed income internal,02,,,,BENDIGO AND ADELAIDE BANK,,,,,,, 70844970.84,4.4017 %
+Fixed income internal,02,,,,COMMONWEALTH BANK OF AUSTRALIA,,,,,,, 57083531.70,3.5467 %
+Fixed income internal,02,,,,NATIONAL AUSTRALIA BANK LTD,,,,,,,135653093.76,8.4284 %
+Fixed income internal,02,,,,WESTPAC BANKING CORP,,,,,,,128522889.50,7.9853 %
+Fixed income internal TOTAL,02.5,,,,,,,,,,,605921078.83,37.647 %
+Table 1 TOTAL,15.9,,,,,,,,,,,1609484311.7,100.00 %
+Portfolio Holdings Information for Investment Option: Cash Accumulation Option - Derivatives,,,,,,,,,,,,,
+Portfolio Holdings Information for Investment Option: Cash Accumulation Option - Derivatives by Asset Class,,,,,,,,,,,,,
+Asset Class,Actual Asset Allocation (incl derivs),Derivatives Exposure Effect,,,,,,,,,,,
+Fixed income,37.647 %,0.0000 %,,,,,,,,,,,
+Cash,62.353 %,0.0000 %,,,,,,,,,,,

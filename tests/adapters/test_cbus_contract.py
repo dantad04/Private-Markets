@@ -12,18 +12,58 @@ from adapters.base import AdapterParseResult, SourceFileMetadata
 from adapters.cbus import CbusPhdAdapter
 
 
-FIXTURE_PATH = Path("tests/fixtures/real/cbus/super-high-growth__1_.csv")
-CONTRACT_PATH = Path("tests/adapters/contracts/cbus/canonical_output.json")
+CONTRACT_CASES = (
+    (
+        "high_growth",
+        Path("tests/fixtures/real/cbus/super-high-growth__1_.csv"),
+        Path("tests/adapters/contracts/cbus/canonical_output.json"),
+        "contract-fixture-cbus",
+        "contract-fixture-cbus-sha256-placeholder",
+    ),
+    (
+        "property",
+        Path("tests/fixtures/real/cbus/super-property__1_.csv"),
+        Path("tests/adapters/contracts/cbus/property_canonical_output.json"),
+        "contract-fixture-cbus-property",
+        "contract-fixture-cbus-property-sha256-placeholder",
+    ),
+    (
+        "overseas_shares",
+        Path("tests/fixtures/real/cbus/super-overseas-shares.csv"),
+        Path("tests/adapters/contracts/cbus/overseas_shares_canonical_output.json"),
+        "contract-fixture-cbus-overseas-shares",
+        "contract-fixture-cbus-overseas-shares-sha256-placeholder",
+    ),
+    (
+        "australian_shares",
+        Path("tests/fixtures/real/cbus/super-australian-shares__1_.csv"),
+        Path("tests/adapters/contracts/cbus/australian_shares_canonical_output.json"),
+        "contract-fixture-cbus-australian-shares",
+        "contract-fixture-cbus-australian-shares-sha256-placeholder",
+    ),
+    (
+        "cash",
+        Path("tests/fixtures/real/cbus/super-cash.csv"),
+        Path("tests/adapters/contracts/cbus/cash_canonical_output.json"),
+        "contract-fixture-cbus-cash",
+        "contract-fixture-cbus-cash-sha256-placeholder",
+    ),
+)
 
 
-def make_contract_metadata() -> SourceFileMetadata:
+def make_contract_metadata(
+    *,
+    fixture_path: Path,
+    source_file_id: str,
+    checksum: str,
+) -> SourceFileMetadata:
     return SourceFileMetadata(
-        source_file_id="contract-fixture-cbus",
+        source_file_id=source_file_id,
         fund_id="cbus",
         suspected_adapter_key="CbusPhdAdapter",
         reporting_period_id=None,
-        source_url=str(FIXTURE_PATH),
-        checksum="contract-fixture-cbus-sha256-placeholder",
+        source_url=str(fixture_path),
+        checksum=checksum,
         received_at=datetime(2026, 4, 24, 0, 0, 0),
     )
 
@@ -79,20 +119,29 @@ def serialise_parse_result(result: AdapterParseResult) -> dict[str, object]:
     }
 
 
-def load_committed_contract() -> dict[str, object]:
-    return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+def load_committed_contract(contract_path: Path) -> dict[str, object]:
+    return json.loads(contract_path.read_text(encoding="utf-8"))
 
 
 class TestCbusFrozenContract(unittest.TestCase):
     maxDiff = None
 
-    def test_cbus_fixture_matches_frozen_contract(self) -> None:
-        result = CbusPhdAdapter().parse(make_contract_metadata(), FIXTURE_PATH.read_bytes())
-        actual = serialise_parse_result(result)
-        expected = load_committed_contract()
+    def test_cbus_fixtures_match_frozen_contracts(self) -> None:
+        for label, fixture_path, contract_path, source_file_id, checksum in CONTRACT_CASES:
+            with self.subTest(label=label):
+                result = CbusPhdAdapter().parse(
+                    make_contract_metadata(
+                        fixture_path=fixture_path,
+                        source_file_id=source_file_id,
+                        checksum=checksum,
+                    ),
+                    fixture_path.read_bytes(),
+                )
+                actual = serialise_parse_result(result)
+                expected = load_committed_contract(contract_path)
 
-        if actual != expected:
-            self.fail(_build_contract_mismatch_message(expected, actual))
+                if actual != expected:
+                    self.fail(_build_contract_mismatch_message(expected, actual))
 
 
 def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[str, object]) -> str:
