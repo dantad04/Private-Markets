@@ -10,20 +10,65 @@ import unittest
 
 from adapters.base import AdapterParseResult, SourceFileMetadata, SourceNormalisedHoldingRecord
 from adapters.hesta import HestaPhdAdapter
-from tests.hesta_fixture import FIXTURE_PATH
+CONTRACT_CASES = (
+    (
+        "synthetic_high_growth",
+        Path("tests/fixtures/hesta_synthetic_high_growth_contract.csv"),
+        Path("tests/adapters/contracts/hesta/canonical_output.json"),
+        "contract-fixture-hesta",
+        "contract-fixture-sha256-placeholder",
+    ),
+    (
+        "australian_shares",
+        Path("tests/fixtures/real/hesta/Australian-Shares-super-assets.csv"),
+        Path("tests/adapters/contracts/hesta/australian_shares_canonical_output.json"),
+        "contract-fixture-hesta-australian-shares",
+        "contract-fixture-hesta-australian-shares-sha256-placeholder",
+    ),
+    (
+        "high_growth",
+        Path("tests/fixtures/real/hesta/High-Growth-super-assets (1).csv"),
+        Path("tests/adapters/contracts/hesta/high_growth_canonical_output.json"),
+        "contract-fixture-hesta-high-growth",
+        "contract-fixture-hesta-high-growth-sha256-placeholder",
+    ),
+    (
+        "indexed_balanced_growth",
+        Path("tests/fixtures/real/hesta/Indexed-Balanced-Growth-super-assets.csv"),
+        Path("tests/adapters/contracts/hesta/indexed_balanced_growth_canonical_output.json"),
+        "contract-fixture-hesta-indexed-balanced-growth",
+        "contract-fixture-hesta-indexed-balanced-growth-sha256-placeholder",
+    ),
+    (
+        "international_shares",
+        Path("tests/fixtures/real/hesta/International-Shares-super-assets.csv"),
+        Path("tests/adapters/contracts/hesta/international_shares_canonical_output.json"),
+        "contract-fixture-hesta-international-shares",
+        "contract-fixture-hesta-international-shares-sha256-placeholder",
+    ),
+    (
+        "property_and_infrastructure",
+        Path("tests/fixtures/real/hesta/Property-and-Infrastructure-super-assets.csv"),
+        Path("tests/adapters/contracts/hesta/property_and_infrastructure_canonical_output.json"),
+        "contract-fixture-hesta-property-and-infrastructure",
+        "contract-fixture-hesta-property-and-infrastructure-sha256-placeholder",
+    ),
+)
 
 
-CONTRACT_PATH = Path("tests/adapters/contracts/hesta/canonical_output.json")
-
-
-def make_contract_metadata() -> SourceFileMetadata:
+def make_contract_metadata(
+    *,
+    fixture_path: Path,
+    source_file_id: str,
+    checksum: str,
+) -> SourceFileMetadata:
     return SourceFileMetadata(
-        source_file_id="contract-fixture-hesta",
+        source_file_id=source_file_id,
         fund_id="hesta",
         suspected_adapter_key="HestaPhdAdapter",
         reporting_period_id=None,
-        source_url=str(FIXTURE_PATH),
-        checksum="contract-fixture-sha256-placeholder",
+        source_url=str(fixture_path),
+        checksum=checksum,
         received_at=datetime(2026, 1, 1, 0, 0, 0),
     )
 
@@ -80,23 +125,33 @@ def serialise_parse_result(result: AdapterParseResult) -> dict[str, object]:
     }
 
 
-def load_committed_contract() -> dict[str, object]:
-    return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+def load_committed_contract(contract_path: Path) -> dict[str, object]:
+    return json.loads(contract_path.read_text(encoding="utf-8"))
 
 
 class TestHestaFrozenContract(unittest.TestCase):
     maxDiff = None
 
-    def test_hesta_fixture_matches_frozen_contract(self) -> None:
-        result = HestaPhdAdapter().parse(make_contract_metadata(), FIXTURE_PATH.read_bytes())
-        actual = serialise_parse_result(result)
-        expected = load_committed_contract()
+    def test_hesta_fixtures_match_frozen_contracts(self) -> None:
+        adapter = HestaPhdAdapter()
+        for label, fixture_path, contract_path, source_file_id, checksum in CONTRACT_CASES:
+            with self.subTest(contract=label):
+                result = adapter.parse(
+                    make_contract_metadata(
+                        fixture_path=fixture_path,
+                        source_file_id=source_file_id,
+                        checksum=checksum,
+                    ),
+                    fixture_path.read_bytes(),
+                )
+                actual = serialise_parse_result(result)
+                expected = load_committed_contract(contract_path)
 
-        if actual != expected:
-            self.fail(_build_contract_mismatch_message(expected, actual))
+                if actual != expected:
+                    self.fail(_build_contract_mismatch_message(label, expected, actual))
 
 
-def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[str, object]) -> str:
+def _build_contract_mismatch_message(label: str, expected: dict[str, object], actual: dict[str, object]) -> str:
     mismatches: list[str] = []
 
     for key in ("schema_fingerprint", "adapter_warnings", "structural_metadata", "parse_statistics"):
@@ -105,8 +160,8 @@ def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[s
                 difflib.unified_diff(
                     json.dumps(expected.get(key), indent=2, ensure_ascii=False, sort_keys=True).splitlines(),
                     json.dumps(actual.get(key), indent=2, ensure_ascii=False, sort_keys=True).splitlines(),
-                    fromfile=f"expected.{key}",
-                    tofile=f"actual.{key}",
+                    fromfile=f"expected.{label}.{key}",
+                    tofile=f"actual.{label}.{key}",
                     lineterm="",
                 )
             )
@@ -143,4 +198,4 @@ def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[s
     if row_mismatches:
         mismatches.append("first mismatched holdings:\n" + "\n\n".join(row_mismatches))
 
-    return "Frozen Hesta contract drift detected.\n\n" + "\n\n".join(mismatches)
+    return f"Frozen Hesta contract drift detected for {label}.\n\n" + "\n\n".join(mismatches)

@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 from adapters.base import SourceFileMetadata
 from adapters.hesta import HestaPhdAdapter
-from app.db.models import Base, Holding, ReportingPeriod, SourceFile
+from app.db.models import Base, Holding, InvestmentOption, ReportingPeriod, SourceFile
 from app.db.session import get_engine
 from app.ingest.loader import (
     ReportingPeriodMismatchError,
@@ -18,6 +18,28 @@ from app.ingest.loader import (
     register_source_file,
 )
 from tests.hesta_fixture import EXPECTED_TOTAL_ROWS, FIXTURE_PATH
+
+
+REAL_FIXTURE_DIR = Path("tests/fixtures/real/hesta").resolve()
+AUSTRALIAN_SHARES_PATH = REAL_FIXTURE_DIR / "Australian-Shares-super-assets.csv"
+HIGH_GROWTH_PATH = REAL_FIXTURE_DIR / "High-Growth-super-assets (1).csv"
+INDEXED_BALANCED_GROWTH_PATH = REAL_FIXTURE_DIR / "Indexed-Balanced-Growth-super-assets.csv"
+INTERNATIONAL_SHARES_PATH = REAL_FIXTURE_DIR / "International-Shares-super-assets.csv"
+PROPERTY_AND_INFRASTRUCTURE_PATH = REAL_FIXTURE_DIR / "Property-and-Infrastructure-super-assets.csv"
+
+LATEST_PERIOD_BATCH_CASES = (
+    (AUSTRALIAN_SHARES_PATH, "Australian Shares", 346),
+    (HIGH_GROWTH_PATH, "High Growth", 2835),
+    (INDEXED_BALANCED_GROWTH_PATH, "Indexed Balanced Growth", 1991),
+    (INTERNATIONAL_SHARES_PATH, "International Shares", 2456),
+    (PROPERTY_AND_INFRASTRUCTURE_PATH, "Property and Infrastructure", 72),
+)
+HELD_BACK_FILENAMES = {
+    "Balanced-Growth-super-assets.csv",
+    "Conservative-super-assets.csv",
+    "Diversified-Bonds-super-assets.csv",
+    "Sustainable-Growth-super-assets.csv",
+}
 
 
 class TestHestaLoader(unittest.TestCase):
@@ -136,3 +158,40 @@ class TestHestaLoader(unittest.TestCase):
             self.assertEqual(1, first_source_file.version_number)
             self.assertEqual(2, second_source_file.version_number)
             self.assertEqual(EXPECTED_TOTAL_ROWS * 2, session.query(Holding).count())
+
+    def test_latest_period_parser_compatible_real_files_load_only_accepted_batch(self) -> None:
+        with self.SessionLocal() as session:
+            for fixture_path, expected_option, expected_rows in LATEST_PERIOD_BATCH_CASES:
+                summary = ingest_hesta_local_file(
+                    session,
+                    fund_code="hesta",
+                    fund_name="HESTA",
+                    file_path=str(fixture_path),
+                )
+
+                source_file = session.get(SourceFile, summary.source_file_id)
+                option = session.get(InvestmentOption, summary.investment_option_id)
+                period = session.get(ReportingPeriod, summary.reporting_period_id)
+
+                self.assertEqual(expected_rows, summary.rows_staged)
+                self.assertEqual(expected_rows, summary.rows_inserted)
+                self.assertEqual(0, summary.rows_skipped_existing)
+                self.assertEqual(str(fixture_path), source_file.source_url)
+                self.assertEqual(64, len(source_file.checksum))
+                self.assertEqual(expected_option, option.source_option_name)
+                self.assertEqual(date(2025, 12, 31), period.period_end_date)
+
+            session.commit()
+
+        expected_total_rows = sum(expected_rows for _fixture_path, _expected_option, expected_rows in LATEST_PERIOD_BATCH_CASES)
+        with self.SessionLocal() as session:
+            self.assertEqual(expected_total_rows, session.query(Holding).count())
+            self.assertEqual(len(LATEST_PERIOD_BATCH_CASES), session.query(SourceFile).count())
+            self.assertEqual(
+                {expected_option for _fixture_path, expected_option, _expected_rows in LATEST_PERIOD_BATCH_CASES},
+                {option.source_option_name for option in session.query(InvestmentOption).all()},
+            )
+            source_urls = {source_file.source_url for source_file in session.query(SourceFile).all()}
+            self.assertFalse(any("derivatives" in source_url for source_url in source_urls))
+            source_filenames = {Path(source_url).name for source_url in source_urls}
+            self.assertTrue(source_filenames.isdisjoint(HELD_BACK_FILENAMES))
