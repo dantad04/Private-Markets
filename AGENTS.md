@@ -14,7 +14,7 @@ with manager-level aggregate exposure.
 - Stages 1–4 acceptance criteria are met at stage scope on current `HEAD`.
 - Stage 2 acceptance remains met; Cbus onboarding is contingently deferred
   pending real sample files and is not a current blocker.
-- Stage 5 is the active implementation stage.
+- Stage 5 is complete at stage-scope acceptance.
 - The current IFM reviewed-ABN work and the Virtual Communities reviewed
   identity reconciliation are accepted as bounded Stage 5 ASIC
   cross-reference proof slices.
@@ -107,16 +107,26 @@ with manager-level aggregate exposure.
 - Stage 5 acceptance criterion 1 is now met at stage scope: the accepted
   status/runbook checkpoint is 18 populated ASIC cross-reference entities
   including IFM.
-- Stage 5 overall remains open because the property/infrastructure map
-  criterion remains outstanding.
-- No property or infrastructure map work has started.
+- Stage 5 acceptance criterion 2 is now met at stage scope: the accepted
+  bounded proof is the seven-row AustralianSuper Stable matched-asset map
+  route at `/admin/ui/matched-assets/australiansuper-stable-stage5-proof`.
+- The accepted criterion-2 proof uses a server-rendered SVG coordinate plot,
+  an adjacent seven-item plotted-asset list, and the retained provenance table
+  to display exactly seven matched property/infrastructure assets with visible
+  confidence and source-row provenance.
+- The criterion-2 proof uses no geocoding, no external map provider, no
+  cross-option matching, and no cross-fund matching.
+- The criterion-2 proof is a bounded Stage 5 acceptance proof; it is not
+  complete national, super-fund-wide, property, or infrastructure map coverage.
+- Stage 5 overall is now complete at stage-scope acceptance.
 - No Stage 6 or public-markets work has started.
-- The next bounded task is a no-code Stage 5 criterion-2
-  property/infrastructure map preflight.
 - The 18-count checkpoint is recorded only in status/runbook context; it does
   not rewrite the master brief's qualitative Stage 5 acceptance criterion.
+- The seven-row map-proof checkpoint is recorded only in status/runbook context;
+  it does not rewrite the master brief's qualitative Stage 5 acceptance
+  criterion or claim comprehensive map coverage.
 - Do not reopen Stages 2, 3, or 4 unless you find a real regression.
-- Do not broaden a Stage 5 task beyond one bounded brief-aligned slice.
+- Do not broaden future roadmap work beyond one bounded brief-aligned slice.
 
 ## What is frozen
 
@@ -132,9 +142,8 @@ with manager-level aggregate exposure.
 - Hesta Stage 1. Do not touch unless a real bug appears.
 - Aware and ART-QSuper frozen contract fixtures. Regenerate only via the
   documented `--confirm` workflow with a recorded reason.
-- Current sequencing position: Stage 5 criterion 1 is closed at stage scope;
-  the remaining Stage 5 work begins with a no-code property/infrastructure map
-  preflight. Do not start map implementation, Stage 6, or public-markets work
+- Current sequencing position: Stage 5 is complete at stage-scope acceptance.
+  Do not start Stage 6, public-markets work, or product-grade map expansion
   without a separate bounded task.
 
 ## What can change, with discipline

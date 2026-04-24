@@ -1,17 +1,17 @@
-# Project Status Through Stage 4
+# Project Status Through Stage 5
 
 Date: 2026-04-24
 
 Implementation status update:
 
-- Stage 4 acceptance criteria are now met at stage scope on current `HEAD`.
-- Project status is through Stage 4 acceptance. The project is not complete;
-  later roadmap work remains.
+- Stage 4 acceptance criteria are met at stage scope on current `HEAD`.
+- Project status is now through Stage 5 acceptance at stage scope. The project
+  is not complete; later roadmap work remains.
 - Stage 2 acceptance criteria remain met. The strict caveat is unchanged:
   roadmap deliverable 9 is still contingently open only because future Cbus
   onboarding depends on acquiring real sample files. Cbus is not a current
   implementation blocker.
-- Stage 5 is now the active implementation stage.
+- Stage 5 is complete at stage-scope acceptance.
 - The IFM reviewed-ABN work remains accepted as a bounded Stage 5 ASIC
   cross-reference proof slice.
 - Virtual Communities is now reconciled and reviewed as an accepted bounded
@@ -103,44 +103,56 @@ Implementation status update:
 - Stage 5 acceptance criterion 1 is now met at stage scope: the accepted
   status/runbook checkpoint is 18 populated ASIC cross-reference entities
   including IFM.
-- Stage 5 overall remains open because the property/infrastructure map
-  criterion remains outstanding.
-- No property or infrastructure map work has started.
+- Stage 5 acceptance criterion 2 is now met at stage scope: the accepted
+  bounded proof is the seven-row AustralianSuper Stable matched-asset map
+  route at `/admin/ui/matched-assets/australiansuper-stable-stage5-proof`.
+- The accepted criterion-2 proof uses a server-rendered SVG coordinate plot,
+  an adjacent seven-item plotted-asset list, and the retained provenance table
+  to display exactly seven matched property/infrastructure assets with visible
+  confidence and source-row provenance.
+- The criterion-2 proof uses no geocoding, no external map provider, no
+  cross-option matching, and no cross-fund matching.
+- The criterion-2 proof is a bounded Stage 5 acceptance proof; it is not
+  complete national, super-fund-wide, property, or infrastructure map coverage.
+- Stage 5 overall is now complete at stage-scope acceptance.
 - No Stage 6 or public-markets work has started.
-- The next bounded task is a no-code Stage 5 criterion-2
-  property/infrastructure map preflight.
 - The 18-count checkpoint is recorded only in status/runbook context; it does
   not rewrite the master brief's qualitative Stage 5 acceptance criterion.
+- The seven-row map-proof checkpoint is recorded only in status/runbook context;
+  it does not rewrite the master brief's qualitative Stage 5 acceptance
+  criterion or claim comprehensive map coverage.
 
 ## Locked sequencing position
 
-This note records the current master-plan position after the bounded Stage 4
-search, homepage, and manager-page closure work.
+This note records the current master-plan position after the bounded Stage 5
+ASIC cross-reference and matched-asset map proof closure work.
 
 1. Do not reopen Stage 4 for more blocker-chasing work unless a real regression
    is found.
 2. Do not treat contingent Cbus onboarding as a live blocker unless real sample
    files are acquired.
-3. Do not describe the project as complete; describe it as through Stage 4
+3. Do not describe the project as complete; describe it as through Stage 5
    acceptance, with later roadmap work still ahead.
 4. Treat Stage 5 criterion 1 as closed at stage scope under the accepted
    status/runbook checkpoint of 18 populated ASIC cross-reference entities
    including IFM.
-5. Do not describe Stage 5 overall as complete until the
-   property/infrastructure map criterion is met.
-6. Make the next bounded task a no-code Stage 5 criterion-2
-   property/infrastructure map preflight before any map implementation work.
+5. Treat Stage 5 criterion 2 as closed at stage scope under the accepted
+   seven-row AustralianSuper Stable matched-asset map rendering proof.
+6. Treat Stage 5 overall as complete at stage-scope acceptance.
+7. Do not start Stage 6, public-markets work, or product-grade map expansion
+   without a separate bounded task.
 
-## Why the next slice is a preflight
+## Why Stage 5 is complete at stage scope
 
 The master brief keeps both ASIC enrichment and the property/infrastructure map
-inside Stage 5. ASIC criterion 1 is now closed at stage scope; the remaining
-Stage 5 criterion is the map surface itself.
+inside Stage 5. Both have now been accepted at stage scope.
 
 1. The 18-count checkpoint is an accepted status/runbook record, not a
    permanent rewrite of the master brief's qualitative criterion.
-2. The property/infrastructure map remains open and must display matched assets
-   with clear confidence and provenance before Stage 5 can close overall.
-3. The safest next move is a no-code preflight that inventories source rows,
-   geo/address fields, matching tables, read models, and UI/API surfaces before
-   any implementation work.
+2. The seven-row AustralianSuper Stable map proof displays matched
+   property/infrastructure assets on a server-rendered SVG coordinate plot with
+   visible confidence and source-row provenance.
+3. The map proof uses no geocoding or external map provider and does not claim
+   complete national, super-fund-wide, property, or infrastructure map
+   coverage.
+4. Future product-grade map expansion remains separate roadmap work.
