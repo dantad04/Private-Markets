@@ -18,6 +18,12 @@ PROPERTY_PATH = Path("tests/fixtures/real/cbus/super-property__1_.csv").resolve(
 OVERSEAS_SHARES_PATH = Path("tests/fixtures/real/cbus/super-overseas-shares.csv").resolve()
 AUSTRALIAN_SHARES_PATH = Path("tests/fixtures/real/cbus/super-australian-shares__1_.csv").resolve()
 CASH_PATH = Path("tests/fixtures/real/cbus/super-cash.csv").resolve()
+GROWTH_PATH = Path("tests/fixtures/real/cbus/super-growth__1_.csv").resolve()
+CONSERVATIVE_PATH = Path("tests/fixtures/real/cbus/super-conservative.csv").resolve()
+GROWTH_PLUS_PATH = Path("tests/fixtures/real/cbus/super-growth-plus.csv").resolve()
+CONSERVATIVE_GROWTH_PATH = Path("tests/fixtures/real/cbus/super-conservative-growth.csv").resolve()
+DIVERSIFIED_FIXED_INTEREST_PATH = Path("tests/fixtures/real/cbus/super-diversified-fixed-interest.csv").resolve()
+INDEXED_DIVERSIFIED_PATH = Path("tests/fixtures/real/cbus/super-indexed-diversified.csv").resolve()
 
 BATCH_1_CASES = (
     (
@@ -53,6 +59,63 @@ BATCH_1_CASES = (
         16,
         {"3": 3},
         Counter({"value_only": 13, "aggregate_total": 3}),
+        0,
+        0,
+    ),
+)
+
+BATCH_2_CASES = (
+    (
+        GROWTH_PATH,
+        "Growth Accumulation Option",
+        2281,
+        {"2": 5, "3": 7, "4": 5},
+        Counter({"fully_disclosed": 2068, "value_only": 141, "ownership_only": 36, "name_only": 21, "aggregate_total": 15}),
+        140,
+        29,
+    ),
+    (
+        CONSERVATIVE_PATH,
+        "Conservative Accumulation Option",
+        2279,
+        {"2": 5, "3": 7, "4": 5},
+        Counter({"fully_disclosed": 2061, "value_only": 138, "ownership_only": 36, "name_only": 29, "aggregate_total": 15}),
+        140,
+        29,
+    ),
+    (
+        GROWTH_PLUS_PATH,
+        "Growth Plus Accumulation Option",
+        2278,
+        {"2": 5, "3": 7, "4": 5},
+        Counter({"fully_disclosed": 2068, "value_only": 138, "ownership_only": 36, "name_only": 21, "aggregate_total": 15}),
+        140,
+        29,
+    ),
+    (
+        CONSERVATIVE_GROWTH_PATH,
+        "Conservative Growth Accumulation Option",
+        2251,
+        {"2": 5, "3": 7, "4": 5},
+        Counter({"fully_disclosed": 2068, "value_only": 116, "ownership_only": 32, "name_only": 21, "aggregate_total": 14}),
+        140,
+        29,
+    ),
+    (
+        DIVERSIFIED_FIXED_INTEREST_PATH,
+        "Diversified Fixed Interest Accumulation Option",
+        74,
+        {"2": 5, "3": 4, "4": 4},
+        Counter({"value_only": 50, "name_only": 19, "aggregate_total": 5}),
+        0,
+        0,
+    ),
+    (
+        INDEXED_DIVERSIFIED_PATH,
+        "Indexed Diversified Accumulation Option",
+        44,
+        {"2": 2, "3": 4, "4": 2},
+        Counter({"value_only": 30, "fully_disclosed": 7, "aggregate_total": 5, "name_only": 2}),
         0,
         0,
     ),
@@ -205,6 +268,61 @@ class TestCbusAdapterRealFile(unittest.TestCase):
                     expected_completeness,
                     Counter(record.disclosure_completeness for record in result.holdings),
                 )
+
+                property_infrastructure_rows = [
+                    record
+                    for record in result.holdings
+                    if record.canonical_asset_class_code
+                    in {
+                        "listed_property",
+                        "unlisted_property",
+                        "listed_infrastructure",
+                        "unlisted_infrastructure",
+                    }
+                    and not record.is_aggregate
+                ]
+                self.assertEqual(expected_property_infrastructure_rows, len(property_infrastructure_rows))
+                self.assertEqual(
+                    expected_address_backed_property_infrastructure_rows,
+                    len([record for record in property_infrastructure_rows if record.address_raw]),
+                )
+
+    def test_latest_period_batch_2_files_parse_with_fixed_income_external_label_tolerance(self) -> None:
+        for (
+            fixture_path,
+            option_name,
+            expected_rows,
+            expected_skipped_rows,
+            expected_completeness,
+            expected_property_infrastructure_rows,
+            expected_address_backed_property_infrastructure_rows,
+        ) in BATCH_2_CASES:
+            with self.subTest(option=option_name):
+                result = self.adapter.parse(make_metadata(fixture_path.name), fixture_path.read_bytes())
+
+                self.assertEqual([option_name], result.structural_metadata["observed_option_names"])
+                self.assertEqual("2025-12-31", result.holdings[0].reporting_period_date.isoformat())
+                self.assertEqual(expected_rows, len(result.holdings))
+                self.assertEqual(expected_skipped_rows, result.structural_metadata["table_rows_skipped_by_table"])
+                self.assertNotIn("Futures", [record.raw_name for record in result.holdings])
+                self.assertNotIn("FX Forwards", [record.raw_name for record in result.holdings])
+                self.assertNotIn("Derivatives TOTAL", [record.source_asset_class_raw for record in result.holdings])
+                self.assertEqual(
+                    expected_completeness,
+                    Counter(record.disclosure_completeness for record in result.holdings),
+                )
+
+                fixed_income_external_rows = [
+                    record
+                    for record in result.holdings
+                    if record.raw_payload_json[0] == "Fixed income external" and not record.is_aggregate
+                ]
+                self.assertTrue(fixed_income_external_rows)
+                self.assertEqual(
+                    {"Fixed Income External"},
+                    {record.source_asset_class_raw for record in fixed_income_external_rows},
+                )
+                self.assertEqual({"external"}, {record.source_subclass_raw for record in fixed_income_external_rows})
 
                 property_infrastructure_rows = [
                     record

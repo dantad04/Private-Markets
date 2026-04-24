@@ -44,6 +44,12 @@ CBUS_PROPERTY_MAPPING_VERSION_ID = "cbus-stage2-property-v1"
 CBUS_OVERSEAS_SHARES_MAPPING_VERSION_ID = "cbus-stage2-overseas-shares-v1"
 CBUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID = "cbus-stage2-australian-shares-v1"
 CBUS_CASH_MAPPING_VERSION_ID = "cbus-stage2-cash-v1"
+CBUS_GROWTH_MAPPING_VERSION_ID = "cbus-stage2-growth-v1"
+CBUS_CONSERVATIVE_MAPPING_VERSION_ID = "cbus-stage2-conservative-v1"
+CBUS_GROWTH_PLUS_MAPPING_VERSION_ID = "cbus-stage2-growth-plus-v1"
+CBUS_CONSERVATIVE_GROWTH_MAPPING_VERSION_ID = "cbus-stage2-conservative-growth-v1"
+CBUS_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID = "cbus-stage2-diversified-fixed-interest-v1"
+CBUS_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID = "cbus-stage2-indexed-diversified-v1"
 
 
 class GovernanceError(Exception):
@@ -189,6 +195,91 @@ def _cbus_taxonomy_subset(
             ),
         )
         for mapping in selected_mappings
+    )
+
+
+CBUS_DERIVATIVE_SECTION_LABELS = [
+    "ASSETS",
+    "DERIVATIVES",
+    "DERIVATIVES BY ASSET CLASS",
+    "DERIVATIVES BY CURRENCY",
+]
+CBUS_DERIVATIVE_TABLES = [1, 2, 3, 4]
+CBUS_ALL_TAXONOMY_KEYS = tuple(
+    sorted(
+        {
+            (mapping.source_asset_class_raw, mapping.source_subclass_raw, mapping.is_aggregate)
+            for mapping in (*CBUS_SECTION_MAPPINGS.values(), *CBUS_TOTAL_SECTION_MAPPINGS.values())
+        }
+    )
+)
+CBUS_ALL_ASSET_CLASSES = sorted({key[0] for key in CBUS_ALL_TAXONOMY_KEYS})
+CBUS_CONSERVATIVE_GROWTH_TAXONOMY_KEYS = tuple(
+    key
+    for key in CBUS_ALL_TAXONOMY_KEYS
+    if key
+    not in {
+        ("Unlisted equities internal", "internal", False),
+        ("Unlisted equities internal TOTAL", "internal", True),
+    }
+)
+CBUS_CONSERVATIVE_GROWTH_ASSET_CLASSES = sorted({key[0] for key in CBUS_CONSERVATIVE_GROWTH_TAXONOMY_KEYS})
+CBUS_DIVERSIFIED_FIXED_INTEREST_TAXONOMY_KEYS = (
+    ("Cash", None, False),
+    ("Cash TOTAL", None, True),
+    ("Fixed Income External", "external", False),
+    ("Fixed income external TOTAL", "external", True),
+    ("Fixed income internal", "internal", False),
+    ("Fixed income internal TOTAL", "internal", True),
+    ("Fixed income internal(PRIVATE DEBT)", "internal", False),
+    ("Table 1 TOTAL", None, True),
+    ("Unlisted equities external", "external", False),
+    ("Unlisted equities external TOTAL", "external", True),
+)
+CBUS_DIVERSIFIED_FIXED_INTEREST_ASSET_CLASSES = sorted(
+    {key[0] for key in CBUS_DIVERSIFIED_FIXED_INTEREST_TAXONOMY_KEYS}
+)
+CBUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS = (
+    ("Cash", None, False),
+    ("Cash TOTAL", None, True),
+    ("Fixed Income External", "external", False),
+    ("Fixed income external TOTAL", "external", True),
+    ("Fixed income internal", "internal", False),
+    ("Fixed income internal TOTAL", "internal", True),
+    ("Listed equities", None, False),
+    ("Listed equities TOTAL", None, True),
+    ("Table 1 TOTAL", None, True),
+)
+CBUS_INDEXED_DIVERSIFIED_ASSET_CLASSES = sorted({key[0] for key in CBUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS})
+
+
+def _cbus_latest_period_mapping_seed(
+    *,
+    id: str,
+    schema_fingerprint: str,
+    option_name: str,
+    file_label: str,
+    observed_asset_classes: list[str],
+    taxonomy_keys: tuple[tuple[str, str | None, bool], ...],
+) -> ApprovedAdapterMappingSeed:
+    return ApprovedAdapterMappingSeed(
+        id=id,
+        adapter_key="CbusPhdAdapter",
+        schema_fingerprint=schema_fingerprint,
+        structural_expectations_json=_cbus_structural_expectations(
+            observed_section_labels=CBUS_DERIVATIVE_SECTION_LABELS,
+            observed_tables=CBUS_DERIVATIVE_TABLES,
+            observed_internal_external_values=["external", "internal"],
+            observed_asset_classes=observed_asset_classes,
+            observed_option_names=[option_name],
+        ),
+        notes=(
+            f"Approved Cbus latest-period {option_name} slice using the real "
+            f"{file_label} file and the existing Cbus adapter."
+        ),
+        approved_by="repo-seed",
+        approved_at=datetime(2026, 4, 24, tzinfo=UTC),
+        taxonomy_rows=_cbus_taxonomy_subset(taxonomy_keys),
     )
 
 
@@ -2217,6 +2308,66 @@ CBUS_CASH_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
 )
 
 
+CBUS_GROWTH_APPROVED_MAPPING = _cbus_latest_period_mapping_seed(
+    id=CBUS_GROWTH_MAPPING_VERSION_ID,
+    schema_fingerprint="b90228d09a180d22d7b603b7951131fbd01446f54c9514f02a202f4a4fb77fb8",
+    option_name="Growth Accumulation Option",
+    file_label="super-growth",
+    observed_asset_classes=CBUS_ALL_ASSET_CLASSES,
+    taxonomy_keys=CBUS_ALL_TAXONOMY_KEYS,
+)
+
+
+CBUS_CONSERVATIVE_APPROVED_MAPPING = _cbus_latest_period_mapping_seed(
+    id=CBUS_CONSERVATIVE_MAPPING_VERSION_ID,
+    schema_fingerprint="9852980c2690efbfae2fbaf189b3949f7956d208bbb9ac084ecd50f524691522",
+    option_name="Conservative Accumulation Option",
+    file_label="super-conservative",
+    observed_asset_classes=CBUS_ALL_ASSET_CLASSES,
+    taxonomy_keys=CBUS_ALL_TAXONOMY_KEYS,
+)
+
+
+CBUS_GROWTH_PLUS_APPROVED_MAPPING = _cbus_latest_period_mapping_seed(
+    id=CBUS_GROWTH_PLUS_MAPPING_VERSION_ID,
+    schema_fingerprint="7c9d6d613a86b99f04c24ade6ae63e85958a11330be5cd0c78e707bf93b5a248",
+    option_name="Growth Plus Accumulation Option",
+    file_label="super-growth-plus",
+    observed_asset_classes=CBUS_ALL_ASSET_CLASSES,
+    taxonomy_keys=CBUS_ALL_TAXONOMY_KEYS,
+)
+
+
+CBUS_CONSERVATIVE_GROWTH_APPROVED_MAPPING = _cbus_latest_period_mapping_seed(
+    id=CBUS_CONSERVATIVE_GROWTH_MAPPING_VERSION_ID,
+    schema_fingerprint="17bc53ff12437979f5c84f858899e44772ccc05090f5bdbb8f7bfa158387c01d",
+    option_name="Conservative Growth Accumulation Option",
+    file_label="super-conservative-growth",
+    observed_asset_classes=CBUS_CONSERVATIVE_GROWTH_ASSET_CLASSES,
+    taxonomy_keys=CBUS_CONSERVATIVE_GROWTH_TAXONOMY_KEYS,
+)
+
+
+CBUS_DIVERSIFIED_FIXED_INTEREST_APPROVED_MAPPING = _cbus_latest_period_mapping_seed(
+    id=CBUS_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
+    schema_fingerprint="76f06bfa840aed629f7a5ff6bed86bad51f51d1d2b5ad96f7f394c39e8d1b233",
+    option_name="Diversified Fixed Interest Accumulation Option",
+    file_label="super-diversified-fixed-interest",
+    observed_asset_classes=CBUS_DIVERSIFIED_FIXED_INTEREST_ASSET_CLASSES,
+    taxonomy_keys=CBUS_DIVERSIFIED_FIXED_INTEREST_TAXONOMY_KEYS,
+)
+
+
+CBUS_INDEXED_DIVERSIFIED_APPROVED_MAPPING = _cbus_latest_period_mapping_seed(
+    id=CBUS_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
+    schema_fingerprint="d26612e0769f0d6c93ff9f3ee0d119d57cb2a59e80e39beb9d8b75eab7ff572f",
+    option_name="Indexed Diversified Accumulation Option",
+    file_label="super-indexed-diversified",
+    observed_asset_classes=CBUS_INDEXED_DIVERSIFIED_ASSET_CLASSES,
+    taxonomy_keys=CBUS_INDEXED_DIVERSIFIED_TAXONOMY_KEYS,
+)
+
+
 APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
     AWARE_APPROVED_MAPPING.adapter_key: (AWARE_APPROVED_MAPPING,),
     ART_QSUPER_APPROVED_MAPPING.adapter_key: (ART_QSUPER_APPROVED_MAPPING,),
@@ -2241,6 +2392,12 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
         CBUS_OVERSEAS_SHARES_APPROVED_MAPPING,
         CBUS_AUSTRALIAN_SHARES_APPROVED_MAPPING,
         CBUS_CASH_APPROVED_MAPPING,
+        CBUS_GROWTH_APPROVED_MAPPING,
+        CBUS_CONSERVATIVE_APPROVED_MAPPING,
+        CBUS_GROWTH_PLUS_APPROVED_MAPPING,
+        CBUS_CONSERVATIVE_GROWTH_APPROVED_MAPPING,
+        CBUS_DIVERSIFIED_FIXED_INTEREST_APPROVED_MAPPING,
+        CBUS_INDEXED_DIVERSIFIED_APPROVED_MAPPING,
     ),
 }
 

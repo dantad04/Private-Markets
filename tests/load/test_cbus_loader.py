@@ -24,6 +24,12 @@ from app.db.session import get_engine
 from app.ingest.governance import (
     CBUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID,
     CBUS_CASH_MAPPING_VERSION_ID,
+    CBUS_CONSERVATIVE_GROWTH_MAPPING_VERSION_ID,
+    CBUS_CONSERVATIVE_MAPPING_VERSION_ID,
+    CBUS_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
+    CBUS_GROWTH_MAPPING_VERSION_ID,
+    CBUS_GROWTH_PLUS_MAPPING_VERSION_ID,
+    CBUS_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
     CBUS_MAPPING_VERSION_ID,
     CBUS_OVERSEAS_SHARES_MAPPING_VERSION_ID,
     CBUS_PROPERTY_MAPPING_VERSION_ID,
@@ -36,12 +42,24 @@ PROPERTY_PATH = Path("tests/fixtures/real/cbus/super-property__1_.csv").resolve(
 OVERSEAS_SHARES_PATH = Path("tests/fixtures/real/cbus/super-overseas-shares.csv").resolve()
 AUSTRALIAN_SHARES_PATH = Path("tests/fixtures/real/cbus/super-australian-shares__1_.csv").resolve()
 CASH_PATH = Path("tests/fixtures/real/cbus/super-cash.csv").resolve()
+GROWTH_PATH = Path("tests/fixtures/real/cbus/super-growth__1_.csv").resolve()
+CONSERVATIVE_PATH = Path("tests/fixtures/real/cbus/super-conservative.csv").resolve()
+GROWTH_PLUS_PATH = Path("tests/fixtures/real/cbus/super-growth-plus.csv").resolve()
+CONSERVATIVE_GROWTH_PATH = Path("tests/fixtures/real/cbus/super-conservative-growth.csv").resolve()
+DIVERSIFIED_FIXED_INTEREST_PATH = Path("tests/fixtures/real/cbus/super-diversified-fixed-interest.csv").resolve()
+INDEXED_DIVERSIFIED_PATH = Path("tests/fixtures/real/cbus/super-indexed-diversified.csv").resolve()
 
 SOURCE_URLS = {
     PROPERTY_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-property.csv",
     OVERSEAS_SHARES_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-overseas-shares.csv",
     AUSTRALIAN_SHARES_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-australian-shares.csv",
     CASH_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-cash.csv",
+    GROWTH_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-growth.csv",
+    CONSERVATIVE_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-conservative.csv",
+    GROWTH_PLUS_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-growth-plus.csv",
+    CONSERVATIVE_GROWTH_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-conservative-growth.csv",
+    DIVERSIFIED_FIXED_INTEREST_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-diversified-fixed-interest.csv",
+    INDEXED_DIVERSIFIED_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-indexed-diversified.csv",
 }
 
 BATCH_1_CASES = (
@@ -57,6 +75,39 @@ BATCH_1_CASES = (
         0,
     ),
     (CASH_PATH, "Cash Accumulation Option", CBUS_CASH_MAPPING_VERSION_ID, 16, 3, 0, 0),
+)
+
+BATCH_2_CASES = (
+    (GROWTH_PATH, "Growth Accumulation Option", CBUS_GROWTH_MAPPING_VERSION_ID, 2281, 17, 140, 29),
+    (CONSERVATIVE_PATH, "Conservative Accumulation Option", CBUS_CONSERVATIVE_MAPPING_VERSION_ID, 2279, 17, 140, 29),
+    (GROWTH_PLUS_PATH, "Growth Plus Accumulation Option", CBUS_GROWTH_PLUS_MAPPING_VERSION_ID, 2278, 17, 140, 29),
+    (
+        CONSERVATIVE_GROWTH_PATH,
+        "Conservative Growth Accumulation Option",
+        CBUS_CONSERVATIVE_GROWTH_MAPPING_VERSION_ID,
+        2251,
+        17,
+        140,
+        29,
+    ),
+    (
+        DIVERSIFIED_FIXED_INTEREST_PATH,
+        "Diversified Fixed Interest Accumulation Option",
+        CBUS_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
+        74,
+        13,
+        0,
+        0,
+    ),
+    (
+        INDEXED_DIVERSIFIED_PATH,
+        "Indexed Diversified Accumulation Option",
+        CBUS_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
+        44,
+        8,
+        0,
+        0,
+    ),
 )
 
 
@@ -268,6 +319,93 @@ class TestCbusLoader(unittest.TestCase):
             self.assertFalse(any("super-growth" in source_url for source_url in source_urls))
             self.assertFalse(any("super-diversified-fixed-interest" in source_url for source_url in source_urls))
             self.assertFalse(any("super-indexed-diversified" in source_url for source_url in source_urls))
+            self.assertFalse(any("retirement" in source_url or "pension" in source_url for source_url in source_urls))
+
+    def test_ingest_cbus_latest_period_batch_2_files(self) -> None:
+        with self.SessionLocal() as session:
+            source_file_ids: list[int] = []
+            for (
+                file_path,
+                option_name,
+                mapping_version_id,
+                expected_rows,
+                _expected_skips,
+                _expected_property_infrastructure_rows,
+                _expected_address_backed_property_infrastructure_rows,
+            ) in BATCH_2_CASES:
+                summary = ingest_cbus_local_file(
+                    session,
+                    fund_code="cbus",
+                    fund_name="Cbus",
+                    file_path=str(file_path),
+                    source_url=SOURCE_URLS[file_path],
+                )
+
+                self.assertEqual(expected_rows, summary.rows_staged)
+                self.assertEqual(expected_rows, summary.rows_inserted)
+                source_file = session.get(SourceFile, summary.source_file_id)
+                self.assertEqual("CbusPhdAdapter", source_file.adapter_key)
+                self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                self.assertEqual(SOURCE_URLS[file_path], source_file.source_url)
+                option = session.get(InvestmentOption, summary.investment_option_id)
+                self.assertEqual(option_name, option.source_option_name)
+                period = session.get(ReportingPeriod, summary.reporting_period_id)
+                self.assertEqual(date(2025, 12, 31), period.period_end_date)
+                source_file_ids.append(summary.source_file_id)
+
+            session.commit()
+
+            self.assertEqual(sum(case[3] for case in BATCH_2_CASES), session.query(Holding).count())
+            self.assertEqual(0, session.query(SchemaReviewQueue).count())
+            self.assertEqual(
+                0,
+                session.query(Holding)
+                .filter(Holding.source_file_id.in_(source_file_ids), Holding.source_asset_class_raw == "Derivatives")
+                .count(),
+            )
+            self.assertFalse(
+                session.query(Holding)
+                .filter(
+                    Holding.source_file_id.in_(source_file_ids),
+                    Holding.raw_name.in_(["Futures", "FX Forwards", "Derivatives TOTAL", "AUD"]),
+                )
+                .first()
+            )
+
+            for (
+                _file_path,
+                option_name,
+                _mapping_version_id,
+                expected_rows,
+                _expected_skips,
+                expected_property_infrastructure_rows,
+                expected_address_backed_property_infrastructure_rows,
+            ) in BATCH_2_CASES:
+                option = session.scalar(
+                    select(InvestmentOption).where(InvestmentOption.source_option_name == option_name)
+                )
+                option_holdings = session.scalars(select(Holding).where(Holding.source_option_id == option.id)).all()
+                self.assertEqual(expected_rows, len(option_holdings))
+                property_infrastructure_rows = [
+                    holding
+                    for holding in option_holdings
+                    if session.get(CanonicalAssetClass, holding.canonical_asset_class_id).code
+                    in {
+                        "listed_property",
+                        "unlisted_property",
+                        "listed_infrastructure",
+                        "unlisted_infrastructure",
+                    }
+                    and not holding.is_aggregate
+                ]
+                self.assertEqual(expected_property_infrastructure_rows, len(property_infrastructure_rows))
+                self.assertEqual(
+                    expected_address_backed_property_infrastructure_rows,
+                    len([holding for holding in property_infrastructure_rows if holding.address]),
+                )
+
+            source_urls = {source_file.source_url.lower() for source_file in session.query(SourceFile).all()}
+            self.assertFalse(any("super-high-growth" in source_url for source_url in source_urls))
             self.assertFalse(any("retirement" in source_url or "pension" in source_url for source_url in source_urls))
 
 

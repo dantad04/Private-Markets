@@ -10,6 +10,12 @@ The contracts are generated from:
 - `tests/fixtures/real/cbus/super-overseas-shares.csv`
 - `tests/fixtures/real/cbus/super-australian-shares__1_.csv`
 - `tests/fixtures/real/cbus/super-cash.csv`
+- `tests/fixtures/real/cbus/super-growth__1_.csv`
+- `tests/fixtures/real/cbus/super-conservative.csv`
+- `tests/fixtures/real/cbus/super-growth-plus.csv`
+- `tests/fixtures/real/cbus/super-conservative-growth.csv`
+- `tests/fixtures/real/cbus/super-diversified-fixed-interest.csv`
+- `tests/fixtures/real/cbus/super-indexed-diversified.csv`
 
 They freeze the approved 31 December 2025 slices: Table 1 holdings are emitted,
 derivative/posture tables are skipped, section labels drive name-column

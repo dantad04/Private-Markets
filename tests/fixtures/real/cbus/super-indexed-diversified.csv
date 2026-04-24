@@ -1,0 +1,57 @@
+Portfolio Holdings Information for Investment Option: Indexed Diversified Accumulation Option - Assets - 31 December 2025,,,,,,,,,,,,,
+Section,Table Order,Security Name,Portfolio Name,Manager Name,Issuer,Institution,Security Identifier,Ownership%,Address,Local Currency,Units Held,Market Value,Weight
+Cash,01,,,,,AUSTRALIA & NEW ZEALAND BANKING GROUP LTD,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,BANK OF AMERICA CORP,,,,AUD,,        0.00,0.0000 %
+Cash,01,,,,,BNP PARIBAS SA,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,CITIGROUP INC,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,COMMONWEALTH BANK OF AUSTRALIA,,,,AUD,,  1063183.11,0.5745 %
+Cash,01,,,,,DBS BANK LTD/AUSTRALIA,,,,AUD,,   177117.07,0.0957 %
+Cash,01,,,,,DEUTSCHE BANK,,,,AUD,,        0.00,0.0000 %
+Cash,01,,,,,GOLDMAN SACHS GROUP INC/THE,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,HONG KONG AND SHANGHAI BANKING CORPORATION,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,HSBC HOLDINGS PLC,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,JPMORGAN CHASE & CO,,,,AUD,,   482501.75,0.2607 %
+Cash,01,,,,,JPMORGAN CHASE & CO,,,,EUR,,,0.0000 %
+Cash,01,,,,,JPMORGAN CHASE & CO,,,,GBP,,,0.0000 %
+Cash,01,,,,,JPMORGAN CHASE & CO,,,,PLN,,        0.00,0.0000 %
+Cash,01,,,,,JPMORGAN CHASE & CO,,,,USD,,      -20.13,-0.000 %
+Cash,01,,,,,MACQUARIE GROUP LTD,,,,AUD,,        1.32,0.0000 %
+Cash,01,,,,,MITSUBISHI UFJ FINANCIAL GROUP INC,,,,AUD,,   444104.73,0.2400 %
+Cash,01,,,,,MORGAN STANLEY,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,MORGAN STANLEY,,,,USD,,        0.00,0.0000 %
+Cash,01,,,,,NATIONAL AUSTRALIA BANK LTD,,,,AUD,,        0.00,0.0000 %
+Cash,01,,,,,ROYAL BANK OF CANADA,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,SOCIETE GENERALE SA,,,,AUD,,       -0.00,0.0000 %
+Cash,01,,,,,SUNCORP GROUP LTD,,,,AUD,,   267449.97,0.1445 %
+Cash,01,,,,,UBS GROUP AG,,,,AUD,,        0.00,0.0000 %
+Cash,01,,,,,WESTPAC BANKING CORP,,,,AUD,,       -0.00,0.0000 %
+Cash TOTAL,01.5,,,,,,,,,,,  2434337.82,1.3153 %
+Fixed income internal,02,,,,AUSTRALIA & NEW ZEALAND BANKING GROUP LTD,,,,,,,  2104703.72,1.1372 %
+Fixed income internal,02,,,,BANK OF QUEENSLAND,,,,,,,   522574.40,0.2824 %
+Fixed income internal,02,,,,BENDIGO AND ADELAIDE BANK,,,,,,,   870509.81,0.4704 %
+Fixed income internal,02,,,,COMMONWEALTH BANK OF AUSTRALIA,,,,,,,   701415.70,0.3790 %
+Fixed income internal,02,,,,NATIONAL AUSTRALIA BANK LTD,,,,,,,  1666841.67,0.9006 %
+Fixed income internal,02,,,,WESTPAC BANKING CORP,,,,,,,  1579229.06,0.8533 %
+Fixed income internal TOTAL,02.5,,,,,,,,,,,  7445274.36,4.0229 %
+Fixed income external,03,,,Blackrock,,,,,,,, 36581992.90,19.766 %
+Fixed income external TOTAL,03.5,,,,,,,,,,, 36581992.90,19.766 %
+Listed equities,04,AVZ MINERALS LTD,,,,,B23G0B9,,,,    24709.61,      247.10,0.0001 %
+Listed equities,04,ESG MINERALS LTD COMMON STOCK AUD,,,,,XD5A081,,,,      933.00,      212.71,0.0001 %
+Listed equities,04,ISHARES HEDGED INTERNATIONAL EQUITY INDEX FUND,,,,,AU60BLK44777,,,, 21726392.38, 38713954.41,20.918 %
+Listed equities,04,ISHARES WHOLESALE AUSTRALIAN EQUITY INDEX FUND,,,,,AU60BGL00058,,,, 28059041.08, 59537665.56,32.170 %
+Listed equities,04,ISHARES WHOLESALE INTERNATIONAL EQUITY INDEX FUND,,,,,AU60BGL01049,,,,  1324723.87, 40357533.90,21.806 %
+Listed equities,04,LEO LITHIUM LTD COMMON STOCK AUD,,,,,BPX2X20,,,,    11404.28,      672.85,0.0004 %
+Listed equities,04,PPK MINING EQUIPMENT HIRE PTY LTD COMMON STOCK AUD,,,,,,,,,      447.95,       80.27,0.0000 %
+Listed equities TOTAL,04.5,,,,,,,,,,,138610366.80,74.895 %
+Table 1 TOTAL,15.9,,,,,,,,,,,185071971.89,100.00 %
+Portfolio Holdings Information for Investment Option: Indexed Diversified Accumulation Option - Derivatives,,,,,,,,,,,,,
+FX Spots,16,,,,,,,,,,,,0.0000 %
+Derivatives TOTAL,16.5,,,,,,,,,,,,0.0000 %
+Portfolio Holdings Information for Investment Option: Indexed Diversified Accumulation Option - Derivatives by Asset Class,,,,,,,,,,,,,
+Asset Class,Actual Asset Allocation (incl derivs),Derivatives Exposure Effect,,,,,,,,,,,
+Cash,1.3154 %,0.0000 %,,,,,,,,,,,
+Fixed income,23.789 %,0.0000 %,,,,,,,,,,,
+Equities,74.895 %,0.0000 %,,,,,,,,,,,
+Portfolio Holdings Information for Investment Option: Indexed Diversified Accumulation Option - Derivatives by Currency,,,,,,,,,,,,,
+Currency,Actual Currency Exposure (including derivatives),Derivatives Exposure Effect,,,,,,,,,,,
+AUD,100.00 %,0.00 %,,,,,,,,,,,

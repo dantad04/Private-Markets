@@ -183,6 +183,16 @@ TOTAL_SECTION_MAPPINGS = {
     "Table 1 TOTAL": CbusSectionMapping("Table 1 TOTAL", "multi_asset_other", None, None, is_aggregate=True),
 }
 
+SECTION_LABEL_ALIASES = {
+    "Fixed income external": "Fixed Income External",
+}
+
 
 def lookup_section_mapping(section_label: str) -> CbusSectionMapping | None:
-    return SECTION_MAPPINGS.get(section_label) or TOTAL_SECTION_MAPPINGS.get(section_label)
+    direct_mapping = SECTION_MAPPINGS.get(section_label) or TOTAL_SECTION_MAPPINGS.get(section_label)
+    if direct_mapping is not None:
+        return direct_mapping
+    alias = SECTION_LABEL_ALIASES.get(section_label)
+    if alias is None:
+        return None
+    return SECTION_MAPPINGS.get(alias) or TOTAL_SECTION_MAPPINGS.get(alias)

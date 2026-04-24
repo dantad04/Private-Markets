@@ -48,6 +48,48 @@ CONTRACT_CASES = (
         "contract-fixture-cbus-cash",
         "contract-fixture-cbus-cash-sha256-placeholder",
     ),
+    (
+        "growth",
+        Path("tests/fixtures/real/cbus/super-growth__1_.csv"),
+        Path("tests/adapters/contracts/cbus/growth_canonical_output.json"),
+        "contract-fixture-cbus-growth",
+        "contract-fixture-cbus-growth-sha256-placeholder",
+    ),
+    (
+        "conservative",
+        Path("tests/fixtures/real/cbus/super-conservative.csv"),
+        Path("tests/adapters/contracts/cbus/conservative_canonical_output.json"),
+        "contract-fixture-cbus-conservative",
+        "contract-fixture-cbus-conservative-sha256-placeholder",
+    ),
+    (
+        "growth_plus",
+        Path("tests/fixtures/real/cbus/super-growth-plus.csv"),
+        Path("tests/adapters/contracts/cbus/growth_plus_canonical_output.json"),
+        "contract-fixture-cbus-growth-plus",
+        "contract-fixture-cbus-growth-plus-sha256-placeholder",
+    ),
+    (
+        "conservative_growth",
+        Path("tests/fixtures/real/cbus/super-conservative-growth.csv"),
+        Path("tests/adapters/contracts/cbus/conservative_growth_canonical_output.json"),
+        "contract-fixture-cbus-conservative-growth",
+        "contract-fixture-cbus-conservative-growth-sha256-placeholder",
+    ),
+    (
+        "diversified_fixed_interest",
+        Path("tests/fixtures/real/cbus/super-diversified-fixed-interest.csv"),
+        Path("tests/adapters/contracts/cbus/diversified_fixed_interest_canonical_output.json"),
+        "contract-fixture-cbus-diversified-fixed-interest",
+        "contract-fixture-cbus-diversified-fixed-interest-sha256-placeholder",
+    ),
+    (
+        "indexed_diversified",
+        Path("tests/fixtures/real/cbus/super-indexed-diversified.csv"),
+        Path("tests/adapters/contracts/cbus/indexed_diversified_canonical_output.json"),
+        "contract-fixture-cbus-indexed-diversified",
+        "contract-fixture-cbus-indexed-diversified-sha256-placeholder",
+    ),
 )
 
 

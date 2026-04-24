@@ -14,6 +14,12 @@ from app.db.session import get_engine
 from app.ingest.governance import (
     CBUS_AUSTRALIAN_SHARES_MAPPING_VERSION_ID,
     CBUS_CASH_MAPPING_VERSION_ID,
+    CBUS_CONSERVATIVE_GROWTH_MAPPING_VERSION_ID,
+    CBUS_CONSERVATIVE_MAPPING_VERSION_ID,
+    CBUS_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
+    CBUS_GROWTH_MAPPING_VERSION_ID,
+    CBUS_GROWTH_PLUS_MAPPING_VERSION_ID,
+    CBUS_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
     CBUS_MAPPING_VERSION_ID,
     CBUS_OVERSEAS_SHARES_MAPPING_VERSION_ID,
     CBUS_PROPERTY_MAPPING_VERSION_ID,
@@ -25,12 +31,24 @@ PROPERTY_PATH = Path("tests/fixtures/real/cbus/super-property__1_.csv").resolve(
 OVERSEAS_SHARES_PATH = Path("tests/fixtures/real/cbus/super-overseas-shares.csv").resolve()
 AUSTRALIAN_SHARES_PATH = Path("tests/fixtures/real/cbus/super-australian-shares__1_.csv").resolve()
 CASH_PATH = Path("tests/fixtures/real/cbus/super-cash.csv").resolve()
+GROWTH_PATH = Path("tests/fixtures/real/cbus/super-growth__1_.csv").resolve()
+CONSERVATIVE_PATH = Path("tests/fixtures/real/cbus/super-conservative.csv").resolve()
+GROWTH_PLUS_PATH = Path("tests/fixtures/real/cbus/super-growth-plus.csv").resolve()
+CONSERVATIVE_GROWTH_PATH = Path("tests/fixtures/real/cbus/super-conservative-growth.csv").resolve()
+DIVERSIFIED_FIXED_INTEREST_PATH = Path("tests/fixtures/real/cbus/super-diversified-fixed-interest.csv").resolve()
+INDEXED_DIVERSIFIED_PATH = Path("tests/fixtures/real/cbus/super-indexed-diversified.csv").resolve()
 
 SOURCE_URLS = {
     PROPERTY_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-property.csv",
     OVERSEAS_SHARES_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-overseas-shares.csv",
     AUSTRALIAN_SHARES_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-australian-shares.csv",
     CASH_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-cash.csv",
+    GROWTH_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-growth.csv",
+    CONSERVATIVE_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-conservative.csv",
+    GROWTH_PLUS_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-growth-plus.csv",
+    CONSERVATIVE_GROWTH_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-conservative-growth.csv",
+    DIVERSIFIED_FIXED_INTEREST_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-diversified-fixed-interest.csv",
+    INDEXED_DIVERSIFIED_PATH: "https://www.cbussuper.com.au/content/dam/cbus/files/governance/investment-holdings/super-indexed-diversified.csv",
 }
 
 BATCH_1_CASES = (
@@ -43,6 +61,30 @@ BATCH_1_CASES = (
         353,
     ),
     (CASH_PATH, SOURCE_URLS[CASH_PATH], CBUS_CASH_MAPPING_VERSION_ID, 16),
+)
+
+BATCH_2_CASES = (
+    (GROWTH_PATH, SOURCE_URLS[GROWTH_PATH], CBUS_GROWTH_MAPPING_VERSION_ID, 2281),
+    (CONSERVATIVE_PATH, SOURCE_URLS[CONSERVATIVE_PATH], CBUS_CONSERVATIVE_MAPPING_VERSION_ID, 2279),
+    (GROWTH_PLUS_PATH, SOURCE_URLS[GROWTH_PLUS_PATH], CBUS_GROWTH_PLUS_MAPPING_VERSION_ID, 2278),
+    (
+        CONSERVATIVE_GROWTH_PATH,
+        SOURCE_URLS[CONSERVATIVE_GROWTH_PATH],
+        CBUS_CONSERVATIVE_GROWTH_MAPPING_VERSION_ID,
+        2251,
+    ),
+    (
+        DIVERSIFIED_FIXED_INTEREST_PATH,
+        SOURCE_URLS[DIVERSIFIED_FIXED_INTEREST_PATH],
+        CBUS_DIVERSIFIED_FIXED_INTEREST_MAPPING_VERSION_ID,
+        74,
+    ),
+    (
+        INDEXED_DIVERSIFIED_PATH,
+        SOURCE_URLS[INDEXED_DIVERSIFIED_PATH],
+        CBUS_INDEXED_DIVERSIFIED_MAPPING_VERSION_ID,
+        44,
+    ),
 )
 
 
@@ -140,6 +182,37 @@ class TestAdminCbusIngestEndpoint(unittest.TestCase):
 
         with self.SessionLocal() as session:
             self.assertEqual(sum(case[3] for case in BATCH_1_CASES), session.query(Holding).count())
+            source_urls = {source_file.source_url.lower() for source_file in session.query(SourceFile).all()}
+            self.assertFalse(any("super-high-growth" in source_url for source_url in source_urls))
+            self.assertFalse(any("retirement" in source_url or "pension" in source_url for source_url in source_urls))
+
+    def test_admin_ingest_latest_period_batch_2_uses_mapping_seeds(self) -> None:
+        for file_path, source_url, mapping_version_id, expected_rows in BATCH_2_CASES:
+            with self.subTest(file=file_path.name):
+                response = self.client.post(
+                    "/admin/ingest/local-file/cbus",
+                    json={
+                        "file_path": str(file_path),
+                        "fund_code": "cbus",
+                        "fund_name": "Cbus",
+                        "source_url": source_url,
+                    },
+                )
+                self.assertEqual(200, response.status_code)
+                payload = response.json()
+                self.assertEqual(expected_rows, payload["rows_staged"])
+                self.assertEqual(expected_rows, payload["rows_inserted"])
+                self.assertEqual(0, payload["rows_skipped_existing"])
+
+                with self.SessionLocal() as session:
+                    source_file = session.get(SourceFile, payload["source_file_id"])
+                    self.assertEqual("CbusPhdAdapter", source_file.adapter_key)
+                    self.assertEqual(mapping_version_id, source_file.mapping_version_id)
+                    self.assertEqual(source_url, source_file.source_url)
+                    self.assertEqual(0, source_file.encoding_replacement_count)
+
+        with self.SessionLocal() as session:
+            self.assertEqual(sum(case[3] for case in BATCH_2_CASES), session.query(Holding).count())
             source_urls = {source_file.source_url.lower() for source_file in session.query(SourceFile).all()}
             self.assertFalse(any("super-high-growth" in source_url for source_url in source_urls))
             self.assertFalse(any("retirement" in source_url or "pension" in source_url for source_url in source_urls))
