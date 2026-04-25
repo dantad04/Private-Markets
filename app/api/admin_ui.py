@@ -169,13 +169,15 @@ def cross_adapter_lookup(
 def search_page(
     request: Request,
     q: str = Query(""),
-    kind: Literal["all", "company", "fund", "manager"] = Query("all"),
+    result_type: Literal["all", "company", "fund", "manager"] = Query("all", alias="type"),
+    kind: Literal["all", "company", "fund", "manager"] | None = Query(None, include_in_schema=False),
     session: Session = Depends(get_db_session),
 ) -> HTMLResponse:
     lookup_query = q.strip()
+    active_kind = result_type if result_type != "all" or kind is None else kind
     search = None
     if lookup_query:
-        search = search_entities_and_funds(session, query=lookup_query, kind=kind)
+        search = search_entities_and_funds(session, query=lookup_query, kind=active_kind)
 
     return _render(
         request,
@@ -183,7 +185,7 @@ def search_page(
         {
             "page_title": "Search",
             "query": lookup_query,
-            "active_kind": kind,
+            "active_kind": active_kind,
             "search": search,
             "search_kind_options": SEARCH_KIND_OPTIONS,
             "lookup_performed": bool(lookup_query),

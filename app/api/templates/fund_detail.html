@@ -142,7 +142,7 @@
                     </td>
                     <td class="num mono">{{ bucket.observation_count | e }}</td>
                     <td class="num mono">{{ bucket.precise_value_row_count | e }}</td>
-                    <td class="num mono">{{ bucket.precise_value_aud_total | e }}</td>
+                    <td class="num mono" title="{{ bucket.precise_value_aud_total | e }}">{{ bucket.precise_value_aud_total | aud_compact }}</td>
                   </tr>
                   {% endfor %}
                 {% else %}
@@ -205,8 +205,8 @@
                     <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
                     {% endif %}
                   </td>
-                  <td class="num mono">{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
-                  <td class="num mono">{{ row.value_aud if row.value_aud is not none else "" }}</td>
+                  <td class="num mono" title="{{ row.ownership_pct if row.ownership_pct is not none else '' }}">{{ row.ownership_pct | pct_compact }}</td>
+                  <td class="num mono" title="{{ row.value_aud if row.value_aud is not none else '' }}">{{ row.value_aud | aud_compact }}</td>
                   <td>
                     <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
                       {{ row.confidence_label | e }}
@@ -274,7 +274,7 @@
                     <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
                     {% endif %}
                   </td>
-                  <td class="num mono">{{ row.value_aud if row.value_aud is not none else "" }}</td>
+                  <td class="num mono" title="{{ row.value_aud if row.value_aud is not none else '' }}">{{ row.value_aud | aud_compact }}</td>
                   <td>
                     <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
                       {{ row.confidence_label | e }}

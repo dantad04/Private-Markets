@@ -285,6 +285,9 @@ class ManagerDetailResponse(BaseModel):
     fund_count: int
     latest_reporting_period: date | None
     observations: list[ManagerObservationResponse]
+    manager_role_rows: list[ManagerObservationResponse]
+    direct_holding_rows: list[ManagerObservationResponse]
+    issuer_role_rows: list[ManagerObservationResponse]
 
     @classmethod
     def from_read_model(cls, item: ManagerDetailReadModel) -> "ManagerDetailResponse":
@@ -302,6 +305,9 @@ class ManagerDetailResponse(BaseModel):
             fund_count=item.fund_count,
             latest_reporting_period=item.latest_reporting_period,
             observations=[ManagerObservationResponse.from_read_model(row) for row in item.observations],
+            manager_role_rows=[ManagerObservationResponse.from_read_model(row) for row in item.manager_role_rows],
+            direct_holding_rows=[ManagerObservationResponse.from_read_model(row) for row in item.direct_holding_rows],
+            issuer_role_rows=[ManagerObservationResponse.from_read_model(row) for row in item.issuer_role_rows],
         )
 
 
@@ -376,6 +382,9 @@ class CompanyDetailResponse(BaseModel):
     resolution_scope_note: str
     period_history: list[CompanyPeriodHistoryResponse]
     observations: list[CompanyObservationResponse]
+    manager_role_rows: list[CompanyObservationResponse]
+    direct_holding_rows: list[CompanyObservationResponse]
+    issuer_role_rows: list[CompanyObservationResponse]
 
     @classmethod
     def from_read_model(cls, item: CompanyDetailReadModel) -> "CompanyDetailResponse":
@@ -396,6 +405,9 @@ class CompanyDetailResponse(BaseModel):
             resolution_scope_note=item.resolution_scope_note,
             period_history=[CompanyPeriodHistoryResponse.from_read_model(row) for row in item.period_history],
             observations=[CompanyObservationResponse.from_read_model(row) for row in item.observations],
+            manager_role_rows=[CompanyObservationResponse.from_read_model(row) for row in item.manager_role_rows],
+            direct_holding_rows=[CompanyObservationResponse.from_read_model(row) for row in item.direct_holding_rows],
+            issuer_role_rows=[CompanyObservationResponse.from_read_model(row) for row in item.issuer_role_rows],
         )
 
 

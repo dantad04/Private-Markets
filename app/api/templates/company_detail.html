@@ -43,13 +43,20 @@
 
   <div class="company-layout">
     <main class="company-main">
-      <section class="section-block">
+      {% set role_sections = [
+        {"heading": "Disclosed as manager", "rows": detail.manager_role_rows},
+        {"heading": "Disclosed as held entity", "rows": detail.direct_holding_rows},
+        {"heading": "Disclosed as issuer", "rows": detail.issuer_role_rows}
+      ] %}
+      {% for section in role_sections %}
+      {% if section.rows %}
+      <section class="section-block entity-role-section">
         <div class="section-heading">
           <div>
-            <p class="section-kicker">Current holdings view</p>
+            <p class="section-kicker">Entity role group</p>
             <h2 class="section-title">
-              Observed holdings
-              <span class="section-count">{{ detail.primary_observations | length }} rows</span>
+              {{ section.heading | e }}
+              <span class="section-count">{{ section.rows | length }} rows</span>
             </h2>
           </div>
           <p class="section-note">
@@ -58,7 +65,17 @@
           </p>
         </div>
         <div class="table-shell">
-          <table class="dense-table">
+          <table class="dense-table entity-role-table">
+            <colgroup>
+              <col class="entity-role-table__fund">
+              <col class="entity-role-table__name">
+              <col class="entity-role-table__exposure">
+              <col class="entity-role-table__ownership">
+              <col class="entity-role-table__value">
+              <col class="entity-role-table__confidence">
+              <col class="entity-role-table__period">
+              <col class="entity-role-table__provenance">
+            </colgroup>
             <thead>
               <tr>
                 <th>Holder</th>
@@ -72,14 +89,14 @@
               </tr>
             </thead>
             <tbody>
-              {% for row in detail.primary_observations %}
+              {% for row in section.rows %}
               <tr>
-                <td>
+                <td class="wrap-cell">
                   <div class="table-primary">{{ row.fund_name | e }}</div>
                   <div class="table-secondary"><code>{{ row.fund_code | e }}</code></div>
                   <div class="table-tertiary">{{ row.option_name | e }} <code>{{ row.option_code | e }}</code></div>
                 </td>
-                <td>
+                <td class="wrap-cell">
                   <div class="table-primary">{{ row.raw_name | e }}</div>
                   {% if row.raw_name != detail.canonical_name %}
                   <div class="table-secondary">Observed alias within the canonical company view.</div>
@@ -88,7 +105,13 @@
                 <td>
                   <div class="token-row token-row--tight">
                     <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
+                    {% if row.value_band_raw %}
+                    <span class="badge badge--value-band">Value Band</span>
+                    {% endif %}
                   </div>
+                  {% if row.value_band_raw %}
+                  <div class="table-primary mono">{{ row.value_band_raw | e }}</div>
+                  {% endif %}
                   <div class="table-secondary">
                     <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
                   </div>
@@ -96,9 +119,9 @@
                   <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
                   {% endif %}
                 </td>
-                <td class="num mono">{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
-                <td class="num mono">{{ row.value_aud if row.value_aud is not none else "" }}</td>
-                <td>
+                <td class="num mono" title="{{ row.ownership_pct if row.ownership_pct is not none else '' }}">{{ row.ownership_pct | pct_compact }}</td>
+                <td class="num mono" title="{{ row.value_aud if row.value_aud is not none else '' }}">{{ row.value_aud | aud_compact }}</td>
+                <td class="confidence-cell">
                   <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
                     {{ row.confidence_label | e }}
                   </span>
@@ -106,83 +129,16 @@
                 <td class="mono">{{ row.reporting_period_end_date.isoformat() }}</td>
                 <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
               </tr>
-              {% else %}
-              <tr>
-                <td colspan="8" class="empty-state">No current non-value-band observations for this company.</td>
-              </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
       </section>
-
-      {% if detail.value_band_observations %}
-      <section class="section-block section-block--value-band">
-        <div class="section-heading">
-          <div>
-            <p class="section-kicker">Separate non-precise facet</p>
-            <h2 class="section-title">
-              Value-band disclosures
-              <span class="section-count">{{ detail.value_band_observations | length }} rows</span>
-            </h2>
-          </div>
-          <p class="section-note">
-            These rows disclose a band rather than a precise dollar value. They stay visible,
-            but they are excluded from computed dollar totals on this page.
-          </p>
-        </div>
-        <div class="table-shell">
-          <table class="dense-table dense-table--value-band">
-            <thead>
-              <tr>
-                <th>Holder</th>
-                <th>Observed Name</th>
-                <th>Band</th>
-                <th>Exposure</th>
-                <th>Confidence</th>
-                <th>Provenance</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for row in detail.value_band_observations %}
-              <tr>
-                <td>
-                  <div class="table-primary">{{ row.fund_name | e }}</div>
-                  <div class="table-secondary"><code>{{ row.fund_code | e }}</code></div>
-                  <div class="table-tertiary">{{ row.option_name | e }} <code>{{ row.option_code | e }}</code></div>
-                </td>
-                <td>
-                  <div class="table-primary">{{ row.raw_name | e }}</div>
-                  {% if row.raw_name != detail.canonical_name %}
-                  <div class="table-secondary">Observed alias within the canonical company view.</div>
-                  {% endif %}
-                </td>
-                <td>
-                  <span class="badge badge--value-band">Value Band</span>
-                  <div class="table-primary mono">{{ row.value_band_raw | e }}</div>
-                </td>
-                <td>
-                  <div class="token-row token-row--tight">
-                    <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
-                  </div>
-                  <div class="table-secondary">
-                    <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
-                  </div>
-                  {% if row.source_subclass_raw %}
-                  <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
-                  {% endif %}
-                </td>
-                <td>
-                  <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
-                    {{ row.confidence_label | e }}
-                  </span>
-                </td>
-                <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+      {% endif %}
+      {% endfor %}
+      {% if not detail.manager_role_rows and not detail.direct_holding_rows and not detail.issuer_role_rows %}
+      <section class="section-block">
+        <p class="quiet-note">No current role-grouped observations for this company.</p>
       </section>
       {% endif %}
 

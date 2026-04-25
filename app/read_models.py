@@ -204,6 +204,7 @@ class CanonicalEntityDetailReadModel:
 
 @dataclass(frozen=True)
 class ManagerObservationReadModel:
+    holding_id: int
     raw_name: str
     source_file_id: int
     source_row_number: int
@@ -260,12 +261,16 @@ class ManagerDetailReadModel:
     disclosure_summary: list[tuple[str, int]]
     resolution_scope_note: str
     observations: list[ManagerObservationReadModel]
+    manager_role_rows: list[ManagerObservationReadModel]
+    direct_holding_rows: list[ManagerObservationReadModel]
+    issuer_role_rows: list[ManagerObservationReadModel]
     primary_observations: list[ManagerObservationReadModel]
     supplemental_observations: list[ManagerObservationReadModel]
 
 
 @dataclass(frozen=True)
 class CompanyObservationReadModel:
+    holding_id: int
     raw_name: str
     source_file_id: int
     source_row_number: int
@@ -330,6 +335,9 @@ class CompanyDetailReadModel:
     disclosure_summary: list[tuple[str, int]]
     period_history: list[CompanyPeriodHistoryReadModel]
     observations: list[CompanyObservationReadModel]
+    manager_role_rows: list[CompanyObservationReadModel]
+    direct_holding_rows: list[CompanyObservationReadModel]
+    issuer_role_rows: list[CompanyObservationReadModel]
     primary_observations: list[CompanyObservationReadModel]
     value_band_observations: list[CompanyObservationReadModel]
 
@@ -468,8 +476,15 @@ class SearchResultsReadModel:
 @dataclass(frozen=True)
 class HomepageChangeMetricReadModel:
     label: str
-    value: int
+    value: int | str
     trend_note: str
+
+
+@dataclass(frozen=True)
+class HomepageStatReadModel:
+    label: str
+    value: int | str
+    note: str | None = None
 
 
 @dataclass(frozen=True)
@@ -491,6 +506,7 @@ class HomepageReadModel:
     prior_reporting_period: date | None
     change_available: bool
     change_note: str
+    stats: list[HomepageStatReadModel]
     change_metrics: list[HomepageChangeMetricReadModel]
     featured_entries: list[HomepageFeatureEntryReadModel]
     editorial_note: str
@@ -1582,6 +1598,7 @@ def get_manager_detail(
 
     rows = session.execute(
         select(
+            Holding.id.label("holding_id"),
             Holding.raw_name,
             Holding.entity_id,
             Holding.manager_entity_id,
@@ -1623,13 +1640,14 @@ def get_manager_detail(
         )
     ).all()
 
-    observations: list[ManagerObservationReadModel] = []
+    issuer_holding_ids = _get_issuer_holding_ids(session, entity_id=entity_id)
+    manager_role_rows: list[ManagerObservationReadModel] = []
+    direct_holding_rows: list[ManagerObservationReadModel] = []
+    issuer_role_rows: list[ManagerObservationReadModel] = []
     for row in rows:
         if row.raw_name is None:
             continue
         normalized_name = normalise_name(row.raw_name)
-        if row.entity_id != entity_id and normalized_name not in normalized_aliases:
-            continue
         observation_kind = _derive_manager_observation_kind(
             entity_id=entity_id,
             manager_entity_id=row.manager_entity_id,
@@ -1639,6 +1657,17 @@ def get_manager_detail(
             source_subclass_raw=row.source_subclass_raw,
             classification_raw=row.classification_raw,
         )
+        is_manager_role = row.manager_entity_id == entity_id or (
+            row.entity_id == entity_id and observation_kind == "manager_rollup"
+        )
+        is_direct_holding = row.entity_id == entity_id
+        is_issuer_role = row.issuer_entity_id == entity_id or int(row.holding_id) in issuer_holding_ids
+        is_legacy_alias_match = (
+            not (is_manager_role or is_direct_holding or is_issuer_role)
+            and normalized_name in normalized_aliases
+        )
+        if not (is_manager_role or is_direct_holding or is_issuer_role or is_legacy_alias_match):
+            continue
         row_confidence_label, row_confidence_detail = _company_observation_confidence(
             current_entity_id=entity_id,
             observation_entity_id=row.entity_id,
@@ -1648,41 +1677,50 @@ def get_manager_detail(
             entity_confidence_label=entity_confidence_label,
             entity_confidence_detail=entity_confidence_detail,
         )
-        observations.append(
-            ManagerObservationReadModel(
-                raw_name=row.raw_name,
-                source_file_id=row.source_file_id,
-                source_row_number=row.source_row_number,
-                fund_code=row.fund_code,
-                fund_name=row.fund_name,
-                option_code=row.option_code,
-                option_name=row.option_name,
-                reporting_period_end_date=row.reporting_period_end_date,
-                canonical_asset_class_code=row.canonical_asset_class_code,
-                source_asset_class_raw=row.source_asset_class_raw,
-                source_subclass_raw=row.source_subclass_raw,
-                disclosure_completeness=row.disclosure_completeness,
-                value_aud=row.value_aud,
-                ownership_pct=row.ownership_pct,
-                value_band_raw=row.value_band_raw,
-                currency_raw=row.currency_raw,
-                observation_kind=observation_kind,
-                disclosure_label=_humanize_disclosure_completeness(row.disclosure_completeness),
-                observation_kind_label=_humanize_observation_kind(observation_kind),
-                confidence_label=row_confidence_label,
-                confidence_detail=row_confidence_detail,
-                is_non_precise=row.value_aud is None and row.ownership_pct is None,
-            )
+        observation = ManagerObservationReadModel(
+            holding_id=int(row.holding_id),
+            raw_name=row.raw_name,
+            source_file_id=row.source_file_id,
+            source_row_number=row.source_row_number,
+            fund_code=row.fund_code,
+            fund_name=row.fund_name,
+            option_code=row.option_code,
+            option_name=row.option_name,
+            reporting_period_end_date=row.reporting_period_end_date,
+            canonical_asset_class_code=row.canonical_asset_class_code,
+            source_asset_class_raw=row.source_asset_class_raw,
+            source_subclass_raw=row.source_subclass_raw,
+            disclosure_completeness=row.disclosure_completeness,
+            value_aud=row.value_aud,
+            ownership_pct=row.ownership_pct,
+            value_band_raw=row.value_band_raw,
+            currency_raw=row.currency_raw,
+            observation_kind=observation_kind,
+            disclosure_label=_humanize_disclosure_completeness(row.disclosure_completeness),
+            observation_kind_label=_humanize_observation_kind(observation_kind),
+            confidence_label=row_confidence_label,
+            confidence_detail=row_confidence_detail,
+            is_non_precise=row.value_aud is None and row.ownership_pct is None,
         )
+        if is_manager_role:
+            manager_role_rows.append(observation)
+        if is_direct_holding or is_legacy_alias_match:
+            direct_holding_rows.append(observation)
+        if is_issuer_role:
+            issuer_role_rows.append(observation)
+
+    observations = _unique_observations_by_holding_id(
+        [*manager_role_rows, *direct_holding_rows, *issuer_role_rows],
+    )
 
     latest_reporting_period = max(
         (observation.reporting_period_end_date for observation in observations),
         default=None,
     )
     role_classes = _derive_manager_role_classes(
-        session,
-        entity_id=entity_id,
-        observations=observations,
+        manager_role_rows=manager_role_rows,
+        direct_holding_rows=direct_holding_rows,
+        issuer_role_rows=issuer_role_rows,
     )
     disclosure_counter = Counter(observation.disclosure_completeness for observation in observations)
     disclosure_summary = [
@@ -1728,6 +1766,9 @@ def get_manager_detail(
             "cross-fund total, and no extra relationship inference is added on this page."
         ),
         observations=observations,
+        manager_role_rows=manager_role_rows,
+        direct_holding_rows=direct_holding_rows,
+        issuer_role_rows=issuer_role_rows,
         primary_observations=primary_observations,
         supplemental_observations=supplemental_observations,
     )
@@ -1751,8 +1792,11 @@ def get_company_detail(
 
     rows = session.execute(
         select(
+            Holding.id.label("holding_id"),
             Holding.raw_name,
             Holding.entity_id,
+            Holding.manager_entity_id,
+            Holding.issuer_entity_id,
             Holding.source_file_id,
             Holding.source_row_number,
             Holding.disclosure_completeness,
@@ -1789,12 +1833,22 @@ def get_company_detail(
         )
     ).all()
 
-    observations: list[CompanyObservationReadModel] = []
+    issuer_holding_ids = _get_issuer_holding_ids(session, entity_id=entity_id)
+    manager_role_rows: list[CompanyObservationReadModel] = []
+    direct_holding_rows: list[CompanyObservationReadModel] = []
+    issuer_role_rows: list[CompanyObservationReadModel] = []
     for row in rows:
         if row.raw_name is None:
             continue
         normalized_name = normalise_name(row.raw_name)
-        if row.entity_id != entity_id and normalized_name not in normalized_aliases:
+        is_manager_role = row.manager_entity_id == entity_id
+        is_direct_holding = row.entity_id == entity_id
+        is_issuer_role = row.issuer_entity_id == entity_id or int(row.holding_id) in issuer_holding_ids
+        is_legacy_alias_match = (
+            not (is_manager_role or is_direct_holding or is_issuer_role)
+            and normalized_name in normalized_aliases
+        )
+        if not (is_manager_role or is_direct_holding or is_issuer_role or is_legacy_alias_match):
             continue
         row_confidence_label, row_confidence_detail = _company_observation_confidence(
             current_entity_id=entity_id,
@@ -1805,30 +1859,39 @@ def get_company_detail(
             entity_confidence_label=entity_confidence_label,
             entity_confidence_detail=entity_confidence_detail,
         )
-        observations.append(
-            CompanyObservationReadModel(
-                raw_name=row.raw_name,
-                source_file_id=row.source_file_id,
-                source_row_number=row.source_row_number,
-                fund_code=row.fund_code,
-                fund_name=row.fund_name,
-                option_code=row.option_code,
-                option_name=row.option_name,
-                reporting_period_end_date=row.reporting_period_end_date,
-                canonical_asset_class_code=row.canonical_asset_class_code,
-                source_asset_class_raw=row.source_asset_class_raw,
-                source_subclass_raw=row.source_subclass_raw,
-                disclosure_completeness=row.disclosure_completeness,
-                value_aud=row.value_aud,
-                ownership_pct=row.ownership_pct,
-                value_band_raw=row.value_band_raw,
-                currency_raw=row.currency_raw,
-                disclosure_label=_humanize_disclosure_completeness(row.disclosure_completeness),
-                confidence_label=row_confidence_label,
-                confidence_detail=row_confidence_detail,
-                is_value_band=row.value_band_raw is not None,
-            )
+        observation = CompanyObservationReadModel(
+            holding_id=int(row.holding_id),
+            raw_name=row.raw_name,
+            source_file_id=row.source_file_id,
+            source_row_number=row.source_row_number,
+            fund_code=row.fund_code,
+            fund_name=row.fund_name,
+            option_code=row.option_code,
+            option_name=row.option_name,
+            reporting_period_end_date=row.reporting_period_end_date,
+            canonical_asset_class_code=row.canonical_asset_class_code,
+            source_asset_class_raw=row.source_asset_class_raw,
+            source_subclass_raw=row.source_subclass_raw,
+            disclosure_completeness=row.disclosure_completeness,
+            value_aud=row.value_aud,
+            ownership_pct=row.ownership_pct,
+            value_band_raw=row.value_band_raw,
+            currency_raw=row.currency_raw,
+            disclosure_label=_humanize_disclosure_completeness(row.disclosure_completeness),
+            confidence_label=row_confidence_label,
+            confidence_detail=row_confidence_detail,
+            is_value_band=row.value_band_raw is not None,
         )
+        if is_manager_role:
+            manager_role_rows.append(observation)
+        if is_direct_holding or is_legacy_alias_match:
+            direct_holding_rows.append(observation)
+        if is_issuer_role:
+            issuer_role_rows.append(observation)
+
+    observations = _unique_observations_by_holding_id(
+        [*manager_role_rows, *direct_holding_rows, *issuer_role_rows],
+    )
 
     latest_reporting_period = max(
         (observation.reporting_period_end_date for observation in observations),
@@ -1916,6 +1979,9 @@ def get_company_detail(
         disclosure_summary=disclosure_summary,
         period_history=period_history,
         observations=observations,
+        manager_role_rows=manager_role_rows,
+        direct_holding_rows=direct_holding_rows,
+        issuer_role_rows=issuer_role_rows,
         primary_observations=primary_observations,
         value_band_observations=value_band_observations,
     )
@@ -2457,13 +2523,8 @@ def get_homepage(session: Session) -> HomepageReadModel:
     latest_reporting_period = period_dates[0] if period_dates else None
     prior_reporting_period = period_dates[1] if len(period_dates) > 1 else None
 
-    latest_counts = _get_homepage_period_counts(session, period_end_date=latest_reporting_period)
-    prior_counts = (
-        _get_homepage_period_counts(session, period_end_date=prior_reporting_period)
-        if prior_reporting_period is not None
-        else None
-    )
-    change_available = prior_counts is not None
+    corpus_stats = _get_homepage_corpus_stats(session)
+    change_available = prior_reporting_period is not None
 
     featured_company = session.scalar(
         select(Entity).where(
@@ -2485,34 +2546,31 @@ def get_homepage(session: Session) -> HomepageReadModel:
         change_note=(
             "Current-period counts are compared with the prior loaded reporting period."
             if change_available
-            else "Only one current reporting period is loaded, so this strip stays honest about change being unavailable."
+            else (
+                f"Latest period loaded: {_format_homepage_period(latest_reporting_period)}. "
+                "Change tracking unlocks once a second reporting period is loaded."
+            )
         ),
-        change_metrics=[
-            HomepageChangeMetricReadModel(
-                label="Funds",
-                value=latest_counts["fund_count"],
-                trend_note=_homepage_trend_note(
-                    current=latest_counts["fund_count"],
-                    prior=(prior_counts["fund_count"] if prior_counts is not None else None),
-                ),
+        stats=[
+            HomepageStatReadModel(label="Funds loaded", value=corpus_stats["funds_loaded"]),
+            HomepageStatReadModel(label="Source files loaded", value=corpus_stats["source_files_loaded"]),
+            HomepageStatReadModel(label="Holding rows loaded", value=corpus_stats["holding_rows_loaded"]),
+            HomepageStatReadModel(
+                label="Reviewed companies",
+                value=corpus_stats["reviewed_companies"],
+                note="Reviewed canonical entities linked to loaded holdings",
             ),
-            HomepageChangeMetricReadModel(
-                label="Companies",
-                value=latest_counts["company_count"],
-                trend_note=_homepage_trend_note(
-                    current=latest_counts["company_count"],
-                    prior=(prior_counts["company_count"] if prior_counts is not None else None),
-                ),
+            HomepageStatReadModel(
+                label="Reviewed managers",
+                value=corpus_stats["reviewed_managers"],
+                note="Reviewed canonical entities linked to loaded holdings",
             ),
-            HomepageChangeMetricReadModel(
-                label="Managers",
-                value=latest_counts["manager_count"],
-                trend_note=_homepage_trend_note(
-                    current=latest_counts["manager_count"],
-                    prior=(prior_counts["manager_count"] if prior_counts is not None else None),
-                ),
+            HomepageStatReadModel(
+                label="Latest reporting period",
+                value=_format_homepage_period(latest_reporting_period),
             ),
         ],
+        change_metrics=[],
         featured_entries=[
             HomepageFeatureEntryReadModel(
                 kicker="Named private company ownership",
@@ -2648,6 +2706,25 @@ def _get_entity_relationships(session: Session, *, entity_id: int) -> list[Entit
     ]
 
 
+def _get_issuer_holding_ids(session: Session, *, entity_id: int) -> set[int]:
+    return {
+        int(holding_id)
+        for holding_id in session.scalars(
+            select(HoldingRelationship.holding_id).where(
+                HoldingRelationship.related_entity_id == entity_id,
+                HoldingRelationship.relationship_role == "issuer",
+            )
+        ).all()
+    }
+
+
+def _unique_observations_by_holding_id(observations):
+    unique_observations = {}
+    for observation in observations:
+        unique_observations.setdefault(observation.holding_id, observation)
+    return list(unique_observations.values())
+
+
 def _derive_manager_observation_kind(
     *,
     entity_id: int,
@@ -2672,24 +2749,20 @@ def _derive_manager_observation_kind(
 
 
 def _derive_manager_role_classes(
-    session: Session,
     *,
-    entity_id: int,
-    observations: list[ManagerObservationReadModel],
+    manager_role_rows: list[ManagerObservationReadModel],
+    direct_holding_rows: list[ManagerObservationReadModel],
+    issuer_role_rows: list[ManagerObservationReadModel],
 ) -> list[str]:
-    has_manager_role = any(observation.observation_kind == "manager_rollup" for observation in observations)
-    has_ownership_role = any(observation.ownership_pct is not None for observation in observations)
-    has_issuer_role = session.scalar(
-        select(func.count(HoldingRelationship.id)).where(
-            HoldingRelationship.related_entity_id == entity_id,
-            HoldingRelationship.relationship_role == "issuer",
-        )
-    ) > 0
+    has_ownership_role = any(
+        row.observation_kind == "direct_holding" or row.ownership_pct is not None
+        for row in direct_holding_rows
+    )
     return [
         role_class
         for role_class, is_present in (
-            ("manager", has_manager_role),
-            ("issuer", has_issuer_role),
+            ("manager", bool(manager_role_rows)),
+            ("issuer", bool(issuer_role_rows)),
             ("ownership", has_ownership_role),
         )
         if is_present
@@ -2830,6 +2903,61 @@ def _search_candidate_score(
         return None
 
     return SEARCH_MATCH_SOURCE_PRIORITY[matched_on] + strength
+
+
+def _format_homepage_period(period_end_date: date | None) -> str:
+    if period_end_date is None:
+        return "unavailable"
+    return period_end_date.strftime("%d %b %Y")
+
+
+def _get_homepage_corpus_stats(session: Session) -> dict[str, int]:
+    source_file_filters = (
+        SourceFile.is_current_version.is_(True),
+        SourceFile.ingest_status == "loaded",
+    )
+    funds_loaded = int(
+        session.scalar(
+            select(func.count(func.distinct(SourceFile.fund_id))).where(*source_file_filters)
+        )
+        or 0
+    )
+    source_files_loaded = int(
+        session.scalar(select(func.count(SourceFile.id)).where(*source_file_filters))
+        or 0
+    )
+    holding_rows_loaded = int(
+        session.scalar(
+            select(func.count(Holding.id))
+            .join(SourceFile, SourceFile.id == Holding.source_file_id)
+            .where(*source_file_filters)
+        )
+        or 0
+    )
+
+    def reviewed_entity_count(entity_type: str) -> int:
+        return int(
+            session.scalar(
+                select(func.count(func.distinct(Entity.id)))
+                .join(Holding, Holding.entity_id == Entity.id)
+                .join(SourceFile, SourceFile.id == Holding.source_file_id)
+                .where(
+                    *source_file_filters,
+                    Holding.is_aggregate.is_(False),
+                    Entity.entity_type == entity_type,
+                    Entity.confidence_tier == "seeded",
+                )
+            )
+            or 0
+        )
+
+    return {
+        "funds_loaded": funds_loaded,
+        "source_files_loaded": source_files_loaded,
+        "holding_rows_loaded": holding_rows_loaded,
+        "reviewed_companies": reviewed_entity_count("company"),
+        "reviewed_managers": reviewed_entity_count("manager"),
+    }
 
 
 def _get_homepage_period_counts(

@@ -62,11 +62,14 @@ class SearchResponse(BaseModel):
 @router.get("", response_model=SearchResponse)
 def search(
     q: str = Query(..., min_length=1, description="Search query across funds, companies, managers, and aliases"),
-    kind: Literal["all", "company", "fund", "manager"] = Query(
+    result_type: Literal["all", "company", "fund", "manager"] = Query(
         "all",
+        alias="type",
         description="Optional result-scope filter for the existing search surfaces.",
     ),
+    kind: Literal["all", "company", "fund", "manager"] | None = Query(None, include_in_schema=False),
     limit: int = Query(20, ge=1, le=50),
     session: Session = Depends(get_db_session),
 ) -> SearchResponse:
-    return SearchResponse.from_read_model(search_entities_and_funds(session, query=q, kind=kind, limit=limit))
+    active_kind = result_type if result_type != "all" or kind is None else kind
+    return SearchResponse.from_read_model(search_entities_and_funds(session, query=q, kind=active_kind, limit=limit))

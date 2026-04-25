@@ -127,6 +127,9 @@ class TestManagerDetailApi(unittest.TestCase):
         self.assertIn("fixed_income", payload["asset_classes"])
         self.assertIn("unlisted_equity", payload["asset_classes"])
         self.assertEqual(["manager", "issuer", "ownership"], payload["role_classes"])
+        self.assertTrue(payload["manager_role_rows"])
+        self.assertTrue(payload["direct_holding_rows"])
+        self.assertTrue(payload["issuer_role_rows"])
 
     def test_manager_detail_endpoint_preserves_per_fund_option_period_observations_without_silent_aggregation(self) -> None:
         response = self.client.get(f"/entities/managers/{self.ifm_entity_id}")
@@ -135,6 +138,7 @@ class TestManagerDetailApi(unittest.TestCase):
         payload = response.json()
         self.assertEqual(10, payload["observation_count"])
         self.assertEqual(4, payload["fund_count"])
+        self.assertGreaterEqual(len(payload["direct_holding_rows"]), 10)
 
         counts_by_fund_option = Counter(
             (row["fund_code"], row["option_name"], row["reporting_period_end_date"])
@@ -195,14 +199,15 @@ class TestManagerDetailApi(unittest.TestCase):
         response = self.client.get(f"/admin/ui/managers/{self.ifm_entity_id}")
         self.assertEqual(200, response.status_code)
         self.assertIn("Manager Roll-up Exposure View", response.text)
-        self.assertIn("Observed manager-linked rows", response.text)
+        self.assertIn("Disclosed as manager", response.text)
+        self.assertIn("Disclosed as held entity", response.text)
+        self.assertIn("Disclosed as issuer", response.text)
         self.assertIn("Confidence: Reviewed", response.text)
         self.assertIn("Current manager detail stays on stored disclosed rows only.", response.text)
-        self.assertIn("Non-precise disclosures", response.text)
-        self.assertIn("No precise dollar value or ownership percentage disclosed.", response.text)
         self.assertIn("IFM Investors Pty Ltd", response.text)
         self.assertIn("IFM INVESTORS PTY LIMITED", response.text)
         self.assertIn("AustralianSuper", response.text)
+        self.assertIn("$339.7m", response.text)
         self.assertIn("Manager", response.text)
         self.assertIn("Issuer", response.text)
         self.assertIn("Ownership", response.text)

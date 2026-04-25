@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+from decimal import Decimal, InvalidOperation
 import io
 import json
 from pathlib import Path
@@ -46,11 +47,71 @@ def _json_pretty(value):
     return json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
 
 
+def _coerce_decimal(value) -> Decimal | None:
+    if value is None:
+        return None
+    if isinstance(value, Decimal):
+        return value
+    try:
+        return Decimal(str(value))
+    except (InvalidOperation, ValueError):
+        return None
+
+
+def _decimal_raw(value) -> str:
+    decimal_value = _coerce_decimal(value)
+    if decimal_value is None:
+        return str(value)
+    if decimal_value == 0:
+        return "0"
+    rendered = format(decimal_value.normalize(), "f")
+    if "." in rendered:
+        rendered = rendered.rstrip("0").rstrip(".")
+    return rendered or "0"
+
+
+def _compact_scaled_number(value: Decimal, divisor: Decimal, decimal_places: int) -> str:
+    quantizer = Decimal("1") if decimal_places == 0 else Decimal("1").scaleb(-decimal_places)
+    rendered = format((value / divisor).quantize(quantizer), "f")
+    if "." in rendered:
+        rendered = rendered.rstrip("0").rstrip(".")
+    return rendered
+
+
+def _format_aud_compact(value) -> str:
+    decimal_value = _coerce_decimal(value)
+    if decimal_value is None:
+        return "—"
+    if decimal_value == 0:
+        return "$0"
+
+    absolute_value = abs(decimal_value)
+    sign = "-" if decimal_value < 0 else ""
+    if absolute_value >= Decimal("1000000000"):
+        return f"{sign}${_compact_scaled_number(absolute_value, Decimal('1000000000'), 2)}b"
+    if absolute_value >= Decimal("1000000"):
+        return f"{sign}${_compact_scaled_number(absolute_value, Decimal('1000000'), 1)}m"
+    if absolute_value >= Decimal("1000"):
+        return f"{sign}${_compact_scaled_number(absolute_value, Decimal('1000'), 1)}k"
+    return f"{sign}${_compact_scaled_number(absolute_value, Decimal('1'), 0)}"
+
+
+def _format_pct_compact(value) -> str:
+    decimal_value = _coerce_decimal(value)
+    if decimal_value is None:
+        return "—"
+    if decimal_value > Decimal("1") or decimal_value < Decimal("-1"):
+        return _decimal_raw(decimal_value)
+    return f"{(decimal_value * Decimal('100')).quantize(Decimal('0.01'))}%"
+
+
 def create_templates() -> Jinja2Templates:
     templates = Jinja2Templates(directory=str(Path(__file__).resolve().parent / "templates"))
     templates.env.filters["iso_utc"] = _format_datetime_utc
     templates.env.filters["csv_row"] = _csv_row
     templates.env.filters["json_pretty"] = _json_pretty
+    templates.env.filters["aud_compact"] = _format_aud_compact
+    templates.env.filters["pct_compact"] = _format_pct_compact
     return templates
 
 

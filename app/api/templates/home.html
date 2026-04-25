@@ -23,7 +23,7 @@
               <label class="scope-pill {% if option.value == 'all' %}scope-pill--active{% endif %}">
                 <input
                   type="radio"
-                  name="kind"
+                  name="type"
                   value="{{ option.value | e }}"
                   {% if option.value == 'all' %}checked{% endif %}
                 >
@@ -43,11 +43,13 @@
         </div>
       </div>
       <div class="hero-metrics" aria-label="Homepage summary metrics">
-        {% for metric in homepage.change_metrics %}
+        {% for metric in homepage.stats %}
         <div class="metric">
           <div class="metric-label">{{ metric.label | e }}</div>
           <div class="metric-value">{{ metric.value | e }}</div>
-          <div class="metric-note">Current loaded period</div>
+          {% if metric.note %}
+          <div class="metric-note">{{ metric.note | e }}</div>
+          {% endif %}
         </div>
         {% endfor %}
       </div>
@@ -82,15 +84,6 @@
           </span>
         </div>
         <div class="section-subblock">
-          <div class="hero-metrics" aria-label="Current-period strip metrics">
-            {% for metric in homepage.change_metrics %}
-            <div class="metric">
-              <div class="metric-label">{{ metric.label | e }}</div>
-              <div class="metric-value">{{ metric.value | e }}</div>
-              <div class="metric-note">{{ metric.trend_note | e }}</div>
-            </div>
-            {% endfor %}
-          </div>
           <p class="quiet-note quiet-note--spaced">{{ homepage.change_note | e }}</p>
         </div>
       </section>

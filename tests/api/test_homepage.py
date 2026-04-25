@@ -6,11 +6,12 @@ import tempfile
 import unittest
 
 from fastapi.testclient import TestClient
+from sqlalchemy import func, select
 from sqlalchemy.orm import sessionmaker
 
 from app.api.admin import get_db_session
 from app.api.app import create_app
-from app.db.models import Base, ReportingPeriod
+from app.db.models import Base, Entity, Holding, ReportingPeriod, SourceFile
 from app.db.session import get_engine
 from app.entity_resolution.deterministic import resolve_entities_deterministically
 from app.entity_resolution.ifm_seed import ensure_ifm_seed
@@ -116,7 +117,7 @@ class TestHomepage(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertIn("Search the current private-markets index", response.text)
         self.assertIn('name="q"', response.text)
-        self.assertIn('name="kind"', response.text)
+        self.assertIn('name="type"', response.text)
         self.assertIn("All results", response.text)
         self.assertIn("Companies", response.text)
         self.assertIn("Funds", response.text)
@@ -126,14 +127,67 @@ class TestHomepage(unittest.TestCase):
         self.assertIn("/admin/ui/matched-assets/australiansuper-stable-stage5-proof", response.text)
         self.assertIn("Search is the homepage's lead action", response.text)
 
-    def test_homepage_renders_honest_current_period_strip(self) -> None:
+    def test_homepage_renders_sql_backed_stats_and_honest_current_period_strip(self) -> None:
         response = self.client.get("/admin/ui")
         self.assertEqual(200, response.status_code)
+        with self.SessionLocal() as session:
+            loaded_filters = (
+                SourceFile.is_current_version.is_(True),
+                SourceFile.ingest_status == "loaded",
+            )
+            expected_stats = {
+                "Funds loaded": session.scalar(
+                    select(func.count(func.distinct(SourceFile.fund_id))).where(*loaded_filters)
+                ),
+                "Source files loaded": session.scalar(select(func.count(SourceFile.id)).where(*loaded_filters)),
+                "Holding rows loaded": session.scalar(
+                    select(func.count(Holding.id))
+                    .join(SourceFile, SourceFile.id == Holding.source_file_id)
+                    .where(*loaded_filters)
+                ),
+                "Reviewed companies": session.scalar(
+                    select(func.count(func.distinct(Entity.id)))
+                    .join(Holding, Holding.entity_id == Entity.id)
+                    .join(SourceFile, SourceFile.id == Holding.source_file_id)
+                    .where(
+                        *loaded_filters,
+                        Holding.is_aggregate.is_(False),
+                        Entity.entity_type == "company",
+                        Entity.confidence_tier == "seeded",
+                    )
+                ),
+                "Reviewed managers": session.scalar(
+                    select(func.count(func.distinct(Entity.id)))
+                    .join(Holding, Holding.entity_id == Entity.id)
+                    .join(SourceFile, SourceFile.id == Holding.source_file_id)
+                    .where(
+                        *loaded_filters,
+                        Holding.is_aggregate.is_(False),
+                        Entity.entity_type == "manager",
+                        Entity.confidence_tier == "seeded",
+                    )
+                ),
+            }
+
+        for label, value in expected_stats.items():
+            self.assertIn(f'<div class="metric-label">{label}</div>', response.text)
+            self.assertIn(f'<div class="metric-value">{int(value or 0)}</div>', response.text)
+
+        self.assertIn('<div class="metric-label">Latest reporting period</div>', response.text)
+        self.assertIn('<div class="metric-value">31 Dec 2025</div>', response.text)
+        self.assertIn("Reviewed companies", response.text)
+        self.assertIn("Reviewed managers", response.text)
         self.assertIn("What changed this period", response.text)
         self.assertIn("Change unavailable", response.text)
-        self.assertIn("Only one current reporting period is loaded", response.text)
         self.assertIn("2025-12-31", response.text)
-        self.assertIn("No prior loaded period yet", response.text)
+        self.assertIn(
+            "Latest period loaded: 31 Dec 2025. Change tracking unlocks once a second reporting period is loaded.",
+            response.text,
+        )
+        self.assertNotIn("No prior loaded period yet", response.text)
+        self.assertNotIn("Up ", response.text)
+        self.assertNotIn("Down ", response.text)
+        self.assertNotIn("Flat vs prior", response.text)
 
     def test_homepage_renders_curated_links_and_stage5_placeholder(self) -> None:
         response = self.client.get("/admin/ui")

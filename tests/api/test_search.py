@@ -190,16 +190,27 @@ class TestSearchApi(unittest.TestCase):
             )
         )
 
-    def test_search_api_kind_filter_limits_results_and_reports_counts(self) -> None:
-        response = self.client.get("/search", params={"q": "super", "kind": "company"})
+    def test_search_api_type_filter_limits_results_and_reports_counts(self) -> None:
+        response = self.client.get("/search", params={"q": "IFM", "type": "manager"})
+        self.assertEqual(200, response.status_code)
+        payload = response.json()
+        self.assertEqual("manager", payload["active_kind"])
+        self.assertTrue(payload["results"])
+        self.assertTrue(all(result["result_kind"] == "manager" for result in payload["results"]))
+
+        response = self.client.get("/search", params={"q": "Industry Super", "type": "company"})
         self.assertEqual(200, response.status_code)
         payload = response.json()
         self.assertEqual("company", payload["active_kind"])
-        self.assertGreater(payload["kind_counts"]["company"], 0)
-        self.assertGreater(payload["kind_counts"]["fund"], 0)
-        self.assertGreater(payload["total_result_count"], payload["result_count"])
         self.assertTrue(payload["results"])
         self.assertTrue(all(result["result_kind"] == "company" for result in payload["results"]))
+
+        response = self.client.get("/search", params={"q": "super", "type": "all"})
+        self.assertEqual(200, response.status_code)
+        payload = response.json()
+        result_kinds = {result["result_kind"] for result in payload["results"]}
+        self.assertEqual("all", payload["active_kind"])
+        self.assertGreaterEqual(len(result_kinds), 2)
 
     def test_search_admin_ui_renders_alias_results_and_detail_links(self) -> None:
         response = self.client.get("/admin/ui/search", params={"q": "Industry Super Holdings"})
@@ -211,12 +222,26 @@ class TestSearchApi(unittest.TestCase):
         self.assertIn(f"/admin/ui/companies/{self.industry_super_entity_id}", response.text)
 
     def test_search_admin_ui_renders_scope_filters_and_filtered_results(self) -> None:
-        response = self.client.get("/admin/ui/search", params={"q": "super", "kind": "company"})
+        response = self.client.get("/admin/ui/search", params={"q": "super", "type": "company"})
         self.assertEqual(200, response.status_code)
         self.assertIn("All results", response.text)
         self.assertIn("Companies", response.text)
         self.assertIn("Funds", response.text)
         self.assertIn("Managers", response.text)
         self.assertIn("Scope Companies", response.text)
+        self.assertIn('name="type"', response.text)
+        self.assertIn('value="super"', response.text)
+        self.assertIn('value="company"', response.text)
+        self.assertIn("checked", response.text)
         self.assertIn("Industry Super Holdings Pty Ltd", response.text)
         self.assertNotIn("/admin/ui/funds/australiansuper", response.text)
+
+    def test_search_admin_ui_round_trips_query_and_type_params(self) -> None:
+        response = self.client.get("/admin/ui/search", params={"q": "IFM", "type": "manager"})
+        self.assertEqual(200, response.status_code)
+        self.assertIn('value="IFM"', response.text)
+        self.assertIn('name="type"', response.text)
+        self.assertIn('value="manager"', response.text)
+        self.assertIn("Scope Managers", response.text)
+        self.assertIn(f"/admin/ui/managers/{self.ifm_entity_id}", response.text)
+        self.assertNotIn("/admin/ui/companies/", response.text)

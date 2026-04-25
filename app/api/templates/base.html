@@ -371,6 +371,47 @@
       color: var(--ink-muted);
       font-size: 0.84rem;
     }
+    .wrap-cell,
+    .entity-role-table th,
+    .entity-role-table td {
+      overflow-wrap: anywhere;
+    }
+    .entity-role-table {
+      min-width: 1040px;
+      table-layout: fixed;
+    }
+    .entity-role-table__fund {
+      width: 18%;
+    }
+    .entity-role-table__name {
+      width: 18%;
+    }
+    .entity-role-table__exposure {
+      width: 22%;
+    }
+    .entity-role-table__ownership {
+      width: 8%;
+    }
+    .entity-role-table__value {
+      width: 9%;
+    }
+    .entity-role-table__confidence {
+      width: 11%;
+    }
+    .entity-role-table__period {
+      width: 7%;
+    }
+    .entity-role-table__provenance {
+      width: 7%;
+    }
+    .entity-role-table .token-row .badge {
+      white-space: normal;
+    }
+    .confidence-cell .badge {
+      justify-content: center;
+      min-width: 82px;
+      white-space: nowrap;
+    }
     .empty-state {
       color: var(--ink-muted);
       text-align: center;
@@ -506,6 +547,13 @@
       background: rgba(181, 77, 46, 0.1);
       color: #8a381f;
     }
+    .site-footer {
+      margin-top: 36px;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule);
+      color: var(--ink-muted);
+      font-size: 0.82rem;
+    }
     @media (max-width: 1040px) {
       .hero-grid,
       .company-layout,
@@ -536,6 +584,9 @@
       .dense-table {
         table-layout: auto;
       }
+      .entity-role-table {
+        table-layout: fixed;
+      }
       .dense-table th,
       .dense-table td {
         padding: 10px 8px;
@@ -561,6 +612,9 @@
     <div class="error">{{ error_message | e }}</div>
     {% endif %}
     {% block content %}{% endblock %}
+    <footer class="site-footer">
+      Demo project. Data normalised from public APRA Portfolio Holdings Disclosure files published by individual super funds. Not affiliated with or endorsed by APRA or any fund. Research/demonstration use only.
+    </footer>
   </div>
 </body>
 </html>
