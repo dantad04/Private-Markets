@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from collections import Counter
 from datetime import date, datetime
+import hashlib
 from pathlib import Path
 import tempfile
 import unittest
@@ -29,7 +31,24 @@ from app.ingest.governance import (
 
 FIXTURE_PATH = Path("tests/fixtures/aware_synthetic_table1_minimal.csv").resolve()
 REAL_SHAPE_FIXTURE_PATH = Path("tests/fixtures/aware_investment_funds_real_shape_minimal.csv").resolve()
+REAL_FIXTURE_DIR = Path("tests/fixtures/real/aware").resolve()
 REAL_SHAPE_FINGERPRINT = "5f32c5b412bf04749982c45080dfec21e9e2e46911971d1a9d6e1f2277cb1e0a"
+LATEST_PERIOD_BATCH_CASES = (
+    (REAL_FIXTURE_DIR / "IFA-Australian-Equities.csv", "Australian Equities", "SS8K", 329),
+    (REAL_FIXTURE_DIR / "IFA-Balanced.csv", "Balanced", "SS6K", 1968),
+    (REAL_FIXTURE_DIR / "IFA-Capital-Stable.csv", "Capital Stable", "SS5K", 1966),
+    (REAL_FIXTURE_DIR / "IFA-Cash.csv", "Cash", "SS3K", 25),
+    (REAL_FIXTURE_DIR / "IFA-Growth.csv", "Growth", "SS9K", 1965),
+    (REAL_FIXTURE_DIR / "IFA-International-Equities.csv", "International Equities", "SRCK", 1344),
+    (REAL_FIXTURE_DIR / "IFA-Moderate.csv", "Moderate", "SS7K", 1969),
+    (REAL_FIXTURE_DIR / "IFB-Australian-Equities.csv", "Australian Equities", "SR5K", 329),
+    (REAL_FIXTURE_DIR / "IFB-Balanced.csv", "Balanced", "SR2K", 1968),
+    (REAL_FIXTURE_DIR / "IFB-Capital-Stable.csv", "Capital Stable", "SRYK", 1966),
+    (REAL_FIXTURE_DIR / "IFB-Cash.csv", "Cash", "SRSK", 25),
+    (REAL_FIXTURE_DIR / "IFB-Growth.csv", "Growth", "SR6K", 1965),
+    (REAL_FIXTURE_DIR / "IFB-International-Equities.csv", "International Equities", "SR7K", 1344),
+    (REAL_FIXTURE_DIR / "IFB-Moderate.csv", "Moderate", "SR4K", 1969),
+)
 
 
 class TestAwareLoader(unittest.TestCase):
@@ -238,3 +257,114 @@ class TestAwareLoader(unittest.TestCase):
             self.assertEqual("Balanced", options["SS6K"].canonical_option_name)
             self.assertEqual("Balanced", options["SR2K"].canonical_option_name)
             self.assertEqual(52, session.query(Holding).count())
+
+    def test_latest_period_investment_funds_batch_loads_expected_files_only(self) -> None:
+        source_file_ids: list[int] = []
+        with self.SessionLocal() as session:
+            for fixture_path, option_name, option_code, expected_rows in LATEST_PERIOD_BATCH_CASES:
+                summary = ingest_aware_local_file(
+                    session,
+                    fund_code="aware",
+                    fund_name="Aware Super",
+                    file_path=str(fixture_path),
+                )
+
+                self.assertEqual(expected_rows, summary.rows_staged)
+                self.assertEqual(expected_rows, summary.rows_inserted)
+                self.assertEqual(0, summary.rows_skipped_existing)
+                self.assertEqual(REAL_SHAPE_FINGERPRINT, summary.schema_fingerprint)
+
+                source_file = session.get(SourceFile, summary.source_file_id)
+                option = session.get(InvestmentOption, summary.investment_option_id)
+                period = session.get(ReportingPeriod, summary.reporting_period_id)
+
+                self.assertEqual(str(fixture_path), source_file.source_url)
+                self.assertEqual(hashlib.sha256(fixture_path.read_bytes()).hexdigest(), source_file.checksum)
+                self.assertEqual(AWARE_INVESTMENT_FUNDS_2025_MAPPING_VERSION_ID, source_file.mapping_version_id)
+                self.assertEqual(0, source_file.encoding_replacement_count)
+                self.assertEqual(date(2025, 12, 31), period.period_end_date)
+                self.assertEqual(option_code, option.source_option_code)
+                self.assertEqual(option_name, option.source_option_name)
+                self.assertEqual(option_name, option.canonical_option_name)
+                source_file_ids.append(summary.source_file_id)
+
+                first_holding = session.scalar(
+                    select(Holding)
+                    .where(Holding.source_file_id == summary.source_file_id)
+                    .order_by(Holding.source_row_number.asc())
+                )
+                self.assertIsNotNone(first_holding)
+                self.assertGreater(first_holding.source_row_number, 0)
+                self.assertEqual(64, len(first_holding.source_row_hash))
+                self.assertIsInstance(first_holding.raw_payload_json, list)
+
+            session.commit()
+
+        with self.SessionLocal() as session:
+            self.assertEqual(19132, session.query(Holding).count())
+            self.assertEqual(224, session.query(Holding).filter(Holding.is_aggregate.is_(True)).count())
+            self.assertEqual(14, session.query(SourceFile).count())
+            self.assertEqual(14, session.query(InvestmentOption).count())
+            self.assertEqual(0, session.query(SchemaReviewQueue).count())
+
+            options = {
+                (option.source_option_code, option.source_option_name)
+                for option in session.scalars(select(InvestmentOption)).all()
+            }
+            self.assertEqual(
+                {(option_code, option_name) for _path, option_name, option_code, _rows in LATEST_PERIOD_BATCH_CASES},
+                options,
+            )
+            self.assertEqual(7, len({name for _code, name in options}))
+
+            disclosure_counts = Counter(
+                row[0]
+                for row in session.execute(select(Holding.disclosure_completeness)).all()
+            )
+            self.assertEqual(
+                Counter({"fully_disclosed": 18064, "value_only": 844, "aggregate_total": 224}),
+                disclosure_counts,
+            )
+            self.assertFalse(
+                session.query(Holding)
+                .filter(
+                    Holding.source_file_id.in_(source_file_ids),
+                    Holding.raw_name.in_(["FORWARDS", "FUTURES", "OPTIONS", "OTHERS", "SWAPS", "AUD", "USD", "TOTAL"]),
+                )
+                .first()
+            )
+            self.assertEqual(
+                {
+                    "SUB TOTAL CASH",
+                    "SUB TOTAL FIXED INCOME EXTERNALLY",
+                    "SUB TOTAL FIXED INCOME INTERNALLY",
+                    "SUB TOTAL LISTED ALTERNATIVES",
+                    "SUB TOTAL LISTED EQUITY",
+                    "SUB TOTAL LISTED INFRASTRUCTURE",
+                    "SUB TOTAL LISTED PROPERTY",
+                    "SUB TOTAL UNLISTED ALTERNATIVES EXTERNALLY",
+                    "SUB TOTAL UNLISTED ALTERNATIVES INTERNALLY",
+                    "SUB TOTAL UNLISTED EQUITY EXTERNALLY",
+                    "SUB TOTAL UNLISTED EQUITY INTERNALLY",
+                    "SUB TOTAL UNLISTED INFRASTRUCTURE EXTERNALLY",
+                    "SUB TOTAL UNLISTED INFRASTRUCTURE INTERNALLY",
+                    "SUB TOTAL UNLISTED PROPERTY EXTERNALLY",
+                    "SUB TOTAL UNLISTED PROPERTY INTERNALLY",
+                    "TOTAL INVESTMENT ITEMS",
+                },
+                {
+                    row[0]
+                    for row in session.execute(
+                        select(Holding.source_asset_class_raw).where(Holding.is_aggregate.is_(True))
+                    ).all()
+                },
+            )
+            source_filenames = {Path(source_file.source_url).name for source_file in session.query(SourceFile).all()}
+            self.assertEqual({path.name for path, _option, _code, _rows in LATEST_PERIOD_BATCH_CASES}, source_filenames)
+            self.assertFalse(
+                any(
+                    forbidden in filename.casefold()
+                    for filename in source_filenames
+                    for forbidden in ("retirement", "pension", "income stream", "ttr")
+                )
+            )

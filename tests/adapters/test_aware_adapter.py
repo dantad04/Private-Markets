@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
@@ -11,7 +12,24 @@ from adapters.base import SourceFileMetadata
 
 FIXTURE_PATH = Path("tests/fixtures/aware_synthetic_table1_minimal.csv").resolve()
 REAL_SHAPE_FIXTURE_PATH = Path("tests/fixtures/aware_investment_funds_real_shape_minimal.csv").resolve()
+REAL_FIXTURE_DIR = Path("tests/fixtures/real/aware").resolve()
 REAL_SHAPE_FINGERPRINT = "5f32c5b412bf04749982c45080dfec21e9e2e46911971d1a9d6e1f2277cb1e0a"
+LATEST_PERIOD_BATCH_CASES = (
+    (REAL_FIXTURE_DIR / "IFA-Australian-Equities.csv", "Australian Equities", "SS8K", 329),
+    (REAL_FIXTURE_DIR / "IFA-Balanced.csv", "Balanced", "SS6K", 1968),
+    (REAL_FIXTURE_DIR / "IFA-Capital-Stable.csv", "Capital Stable", "SS5K", 1966),
+    (REAL_FIXTURE_DIR / "IFA-Cash.csv", "Cash", "SS3K", 25),
+    (REAL_FIXTURE_DIR / "IFA-Growth.csv", "Growth", "SS9K", 1965),
+    (REAL_FIXTURE_DIR / "IFA-International-Equities.csv", "International Equities", "SRCK", 1344),
+    (REAL_FIXTURE_DIR / "IFA-Moderate.csv", "Moderate", "SS7K", 1969),
+    (REAL_FIXTURE_DIR / "IFB-Australian-Equities.csv", "Australian Equities", "SR5K", 329),
+    (REAL_FIXTURE_DIR / "IFB-Balanced.csv", "Balanced", "SR2K", 1968),
+    (REAL_FIXTURE_DIR / "IFB-Capital-Stable.csv", "Capital Stable", "SRYK", 1966),
+    (REAL_FIXTURE_DIR / "IFB-Cash.csv", "Cash", "SRSK", 25),
+    (REAL_FIXTURE_DIR / "IFB-Growth.csv", "Growth", "SR6K", 1965),
+    (REAL_FIXTURE_DIR / "IFB-International-Equities.csv", "International Equities", "SR7K", 1344),
+    (REAL_FIXTURE_DIR / "IFB-Moderate.csv", "Moderate", "SR4K", 1969),
+)
 
 
 def make_metadata(source_file_id: str = "fixture-aware") -> SourceFileMetadata:
@@ -26,13 +44,16 @@ def make_metadata(source_file_id: str = "fixture-aware") -> SourceFileMetadata:
     )
 
 
-def make_real_shape_metadata(source_file_id: str = "fixture-aware-investment-funds") -> SourceFileMetadata:
+def make_real_shape_metadata(
+    source_file_id: str = "fixture-aware-investment-funds",
+    fixture_path: Path = REAL_SHAPE_FIXTURE_PATH,
+) -> SourceFileMetadata:
     return SourceFileMetadata(
         source_file_id=source_file_id,
         fund_id="aware",
         suspected_adapter_key="AwarePhdAdapter",
         reporting_period_id=None,
-        source_url=str(REAL_SHAPE_FIXTURE_PATH),
+        source_url=str(fixture_path),
         checksum="fixture-aware-investment-funds",
         received_at=datetime(2026, 4, 25, 0, 0, 0),
     )
@@ -199,3 +220,55 @@ class TestAwareInvestmentFundsRealShapeFixture(unittest.TestCase):
             {record.source_asset_class_raw for record in aggregate_rows},
         )
         self.assertEqual({"aggregate_total"}, {record.disclosure_completeness for record in aggregate_rows})
+
+
+class TestAwareInvestmentFundsLatestPeriodBatch(unittest.TestCase):
+    def test_accepted_batch_parses_expected_table_1_counts_and_skips_tables_2_to_4(self) -> None:
+        adapter = AwarePhdAdapter()
+        total_holdings = 0
+        total_aggregate = 0
+        total_skipped_posture = 0
+
+        for fixture_path, friendly_name, option_code, expected_rows in LATEST_PERIOD_BATCH_CASES:
+            with self.subTest(file=fixture_path.name):
+                result = adapter.parse(
+                    make_real_shape_metadata(f"fixture-aware-{fixture_path.stem}", fixture_path),
+                    fixture_path.read_bytes(),
+                )
+
+                self.assertEqual(REAL_SHAPE_FINGERPRINT, result.schema_fingerprint)
+                self.assertEqual([option_code], result.structural_metadata["observed_options"])
+                self.assertEqual(friendly_name, fixture_path.stem.split("-", 1)[1].replace("-", " "))
+                self.assertEqual(["2025-12-31"], result.structural_metadata["observed_reporting_dates"])
+                self.assertEqual(expected_rows, len(result.holdings))
+                self.assertEqual(16, result.structural_metadata["total_rows_aggregate"])
+                self.assertEqual({"2": 7, "3": 8, "4": 5}, result.structural_metadata["table_rows_skipped_by_table"])
+                self.assertFalse(
+                    any(
+                        record.raw_name in {"FORWARDS", "FUTURES", "OPTIONS", "OTHERS", "SWAPS", "AUD", "USD", "TOTAL"}
+                        for record in result.holdings
+                    )
+                )
+
+                total_holdings += len(result.holdings)
+                total_aggregate += result.structural_metadata["total_rows_aggregate"]
+                total_skipped_posture += sum(result.structural_metadata["table_rows_skipped_by_table"].values())
+
+        self.assertEqual(19132, total_holdings)
+        self.assertEqual(224, total_aggregate)
+        self.assertEqual(280, total_skipped_posture)
+
+    def test_accepted_batch_disclosure_completeness_profile(self) -> None:
+        adapter = AwarePhdAdapter()
+        completeness = Counter()
+        for fixture_path, _friendly_name, _option_code, _expected_rows in LATEST_PERIOD_BATCH_CASES:
+            result = adapter.parse(
+                make_real_shape_metadata(f"fixture-aware-{fixture_path.stem}", fixture_path),
+                fixture_path.read_bytes(),
+            )
+            completeness.update(record.disclosure_completeness for record in result.holdings)
+
+        self.assertEqual(
+            Counter({"fully_disclosed": 18064, "value_only": 844, "aggregate_total": 224}),
+            completeness,
+        )
