@@ -34,9 +34,9 @@ MANAGEMENT_STYLE_FILTERS = {"externally managed", "internally managed"}
 METADATA_ATTACHING_FILTERS = {"all assets", "private equity"}
 PORTFOLIO_POSTURE_FILTERS = {"derivatives"}
 
-KNOWN_OPTION_CODE_PREFIXES = {
-    "AR": "Australian Retirement Trust / Sunsuper lineage",
-}
+# Option-code prefixes are deliberately not fund-identity mappings. `AR**`
+# appears in more than one shared-family source, so identity checks must use
+# file registration, source URL/domain, and content signals instead.
 
 
 @dataclass(frozen=True)
@@ -64,10 +64,3 @@ SUNSUPER_SCHEMA_ASSET_CLASS_MAPPINGS: dict[str, AssetClassMappingRule] = {
 
 def lookup_asset_class_mapping(asset_class: str) -> AssetClassMappingRule | None:
     return SUNSUPER_SCHEMA_ASSET_CLASS_MAPPINGS.get(_key(asset_class))
-
-
-def lookup_option_family_owner(option_code: str) -> str | None:
-    normalised = option_code.strip().upper()
-    if len(normalised) < 2:
-        return None
-    return KNOWN_OPTION_CODE_PREFIXES.get(normalised[:2])

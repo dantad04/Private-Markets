@@ -104,14 +104,14 @@ Contract with canonical layer:
 4. Every emitted row must include raw source payload and row position for traceability.
 5. Portfolio-posture summaries (derivative exposure by kind, asset class, or currency) are parsed only for completeness checksum purposes and are not emitted as holdings records in Stage 1. If emitted at all, they must carry an explicit non-holding flag.
 
-### Concrete adapter set (verified against source files)
+### Concrete adapter set (source-file verified or legacy parser-shape fixtures as noted)
 
 | Adapter key | Class | Verified sample | Stage | Notes |
 |-------------|-------|------------------|-------|-------|
 | `HestaPhdAdapter` | Flat row | `Hesta-High-Growth-super-assets*.csv` | **Stage 1** | Cleanest schema observed: 11 columns, single option per file, UK DD/MM/YYYY dates, clear `{class}` vs `{class} Total` subtotal pattern, weighting stored as decimal fraction (no conversion needed), UTF-8 clean. Chosen as Stage 1 anchor to minimise time to canonical-contract freeze. |
 | `AwarePhdAdapter` | Mini-state-machine | `Aware.csv`, `AwareProperty.csv` | Stage 2 | 14 columns, one option per file, four concatenated Schedule 8D tables, 17 embedded SUB TOTAL rows in Table 1, state-dependent name-column selection across 13 `(asset_class, internal/external)` combinations. ISO reporting date embedded in table-header string. Contains the private-company gold seam (RUMIN8, FSSSP, HARRISON AI, WESBEAM). |
-| `ArtQsuperPhdAdapter` | Flat row | `ART.csv` | Stage 2 | 16 columns, single option per file, textual date ("31 December 2025") in `AsAtDate` column, `n/a` as null sentinel. |
-| `SunsuperSchemaPhdAdapter` | Flat row with structured `Name Type` column | `Aus-Super.csv`, `AusSuperPHD.csv`, `Balanced_PHD__3_.csv` | Stage 2 | Internal normalised 24-column contract currently exercised by the ART-Sunsuper narrow slice. Dates are derived from file registration (no row-level date column). Publishes same holdings in multiple filter views: metadata-attachment merging required. Carries geo-coordinates and `Classification` for property/infrastructure rows. ART-Sunsuper ownership in this slice is stored as a bare decimal already in canonical fraction form (`0.18` means 18%). Do not treat this internal contract as byte-compatible with real AustralianSuper CSVs. |
+| `ArtQsuperPhdAdapter` | Flat row | synthetic legacy ART-QSuper parser-shape fixture | Stage 2 | 16 columns, single option per file, textual date ("31 December 2025") in `AsAtDate` column, `n/a` as null sentinel. This fixture is not source-domain verified Australian Retirement Trust evidence. |
+| `SunsuperSchemaPhdAdapter` | Flat row with structured `Name Type` column | synthetic legacy ART-Sunsuper/shared-family parser-shape fixture | Stage 2 | Internal normalised 24-column contract currently exercised by the legacy ART-Sunsuper narrow slice. Dates are derived from file registration (no row-level date column). Publishes same holdings in multiple filter views: metadata-attachment merging required. Carries geo-coordinates and `Classification` for property/infrastructure rows. Ownership in this synthetic shared-family slice is stored as a bare decimal already in canonical fraction form (`0.18` means 18%). Do not treat this internal contract as byte-compatible with real AustralianSuper CSVs or as source-domain verified Australian Retirement Trust evidence. |
 | `UniSuperPhdStateMachineAdapter` | Full state machine | `UniSuper.csv` | Stage 2 | 5 columns, 16 investment options in one 26,890-row file, column headers re-emit mid-file, US MM/DD/YYYY date trap (`12/31/2025`), nine variants of scope-modifier strings must normalise. |
 | `HostPlusPhdStateMachineAdapter` | Full state machine (UniSuper-class, reused) | `Host-PlusHigh_Growth.csv` | Stage 2 (late) or Stage 3 | Single option per file but structurally UniSuper-class: section-header-driven, column-header re-emission, `Total` keyword for aggregates. Encoding corruption observed upstream (`non?associated`, `Table 2 �`). Reuse UniSuper state-machine class with per-fund config rather than duplicate. |
 | `AustralianSuperPhdAdapter` | Thin fund-specific adapter on the shared SunsuperSchema path | `Stable PHD (1).csv`, `Conservative PHD (1).csv`, `Socially Aware PHD.csv`, `Member Direct PHD (1).csv` | Stage 2 narrow slice implemented | Real AustralianSuper files from the official site are now confirmed in the workspace, the compatibility audit is complete, and a thin fund-specific adapter is in place on the shared SunsuperSchema path. Approved loader/admin production support currently covers the official `Member Direct PHD (1).csv`, `Stable PHD (1).csv`, and `Conservative PHD (1).csv` slices; `Socially Aware` can parse through the adapter but remains review-gated until its mapping is approved. Identity verification relies on source URL/domain/content signals rather than `AR**` option codes alone, and no generic shared-family adapter was introduced. |
@@ -206,6 +206,10 @@ If the grouping is ambiguous (e.g. two `$ Value`-bearing rows for the same entit
 ### Fund identity for the shared 24-column family
 
 Do **not** infer fund identity from `AR**` option codes. Real AustralianSuper files from the official site now use `ARST`, `ARYO`, `ARSB`, and `AR2O`, so `AR` is a shared-family marker at best, not an owning-fund rule.
+
+The legacy ART-QSuper and ART-Sunsuper fixtures/contracts are synthetic
+parser-shape fixtures. They remain useful contract tests, but they are not
+source-domain verified Australian Retirement Trust evidence.
 
 Primary identity signals:
 
@@ -738,13 +742,13 @@ Verified parse rules for Stage 1 and Stage 2 adapters. Each adapter's normalisat
 |---------|-------------|---------------|----------------|--------------|-------------------|
 | Hesta | UK `DD/MM/YYYY` | `Effective Date` column | empty string | raw float (scientific OK) | formatted `"16.90%"` -> strip % -> divide by 100 |
 | Aware | ISO `YYYY-MM-DD` in table-header suffix | Regex extract from Table 1 header row | `-`, empty | formatted `"$9,144,447"` -> strip `$,` -> parse | formatted `"4%"` -> strip % -> divide by 100 |
-| ART-QSuper | Textual `31 December 2025` | `AsAtDate` column | `n/a`, empty | formatted `"$339,726,831"` -> strip `$,` -> parse | formatted `"7%"` -> strip % -> divide by 100 |
-| ART-Sunsuper narrow slice / internal shared-schema contract | - (from file registration) | n/a | `nan`, `n/a`, empty | raw float | **bare decimal `0.18` already in canonical fraction form** -> parse as-is |
+| Legacy ART-QSuper parser-shape fixture | Textual `31 December 2025` | `AsAtDate` column | `n/a`, empty | formatted `"$339,726,831"` -> strip `$,` -> parse | formatted `"7%"` -> strip % -> divide by 100 |
+| Legacy ART-Sunsuper/shared-family parser-shape fixture / internal shared-schema contract | - (from file registration) | n/a | `nan`, `n/a`, empty | raw float | **bare decimal `0.18` already in canonical fraction form** -> parse as-is |
 | AustralianSuper real 24-column variant | - (from file registration) | n/a | `nan`, blank-space, empty | raw float | numeric percentage points such as `1.09` -> divide by 100 |
 | UniSuper | US `MM/DD/YYYY` (trap) | `REPORTING DATE` row (structural) | empty | raw float | formatted `"29.00%"` -> strip % -> divide by 100 |
 | Host-Plus | - (from file registration / filename) | n/a | empty | formatted `"28,837,447"` -> strip `,` -> parse | formatted `"13.17%"` -> strip % -> divide by 100 |
 
-**The 24-column family is not one uniform percentage format.** The ART-Sunsuper narrow slice uses bare decimals already in canonical fraction form, while the confirmed AustralianSuper files use numeric percentage points that still need divide-by-100 normalisation. ADR-09 holds (canonical storage is decimal fraction, always), but adapter-level parsing differs and must live in each adapter's normalisation config.
+**The 24-column family is not one uniform percentage format.** The legacy ART-Sunsuper/shared-family parser-shape slice uses bare decimals already in canonical fraction form, while the confirmed AustralianSuper files use numeric percentage points that still need divide-by-100 normalisation. ADR-09 holds (canonical storage is decimal fraction, always), but adapter-level parsing differs and must live in each adapter's normalisation config.
 
 ### Mapping structure
 
@@ -1036,8 +1040,8 @@ Demo outcome:
 Deliverables:
 
 1. Aware adapter (with Table 1 / 2-4 separation; Tables 2-4 skipped per portfolio-posture rule).
-2. Sunsuper-schema path for ART-Sunsuper, plus a thin AustralianSuper adapter that reuses only the proven shared duplicate-view merge logic.
-3. ART-QSuper adapter.
+2. Legacy Sunsuper-schema path formerly named ART-Sunsuper, plus a thin AustralianSuper adapter that reuses only the proven shared duplicate-view merge logic.
+3. Legacy ART-QSuper parser-shape adapter.
 4. UniSuper state-machine adapter.
 5. Host-Plus state-machine adapter (reusing UniSuper base class).
 6. Approved taxonomy mapping tables.
@@ -1224,7 +1228,7 @@ Demo outcome:
 2. MVP scope is narrow and defensible.
 3. Known audit findings are reflected as design constraints.
 4. A separate decisions record exists for stack, indexing, mapping workflow, entity-resolution timing, restatements, API posture, match policy, disclosure-completeness enum, and percentage storage.
-5. Worked-example walkthroughs exist for Hesta, Aware, the Sunsuper schema, ART-QSuper, UniSuper, and Host-Plus using verified row shapes.
+5. Worked-example walkthroughs exist for Hesta, Aware, the Sunsuper schema, ART-QSuper, UniSuper, and Host-Plus using verified row shapes where available and explicitly synthetic parser-shape fixtures where not.
 6. The five Stage 0 decisions (sequencing pivot to Hesta, value-band handling, portfolio-posture drop, Host-Plus encoding, Sunsuper-schema metadata attachment) are integrated into the master brief and reflected in schema and adapter specs.
 
 ### Stage 1
@@ -1238,7 +1242,7 @@ Demo outcome:
 
 ### Stage 2
 
-1. Aware, the Sunsuper schema, ART-QSuper, UniSuper, and Host-Plus files ingest through separate approved adapters.
+1. Aware, the Sunsuper schema, legacy ART-QSuper parser-shape, UniSuper, and Host-Plus files ingest through separate approved adapters.
 2. Sunsuper-schema duplicate views are merged via metadata attachment; unmerged duplicates log to review queue.
 3. Unknown schema drift blocks production ingest and opens a review item.
 4. Taxonomy mappings are versioned and human-approved.

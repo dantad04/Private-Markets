@@ -32,12 +32,22 @@ class TestArtSunsuperAdapterSyntheticFixture(unittest.TestCase):
         cls.result = cls.adapter.parse(make_metadata(), FIXTURE_PATH.read_bytes())
         cls.rows = {record.source_row_number: record for record in cls.result.holdings}
 
-    def test_uses_registered_reporting_period_and_known_option_family(self) -> None:
+    def test_legacy_synthetic_fixture_reports_shape_lineage_without_source_domain_evidence(self) -> None:
         self.assertEqual(["ARST"], self.result.structural_metadata["observed_options"])
         self.assertEqual(["2025-12-31"], self.result.structural_metadata["observed_reporting_dates"])
         self.assertEqual(
             "Australian Retirement Trust / Sunsuper lineage",
             self.result.structural_metadata["known_option_family_owner"],
+        )
+        identity_assessment = self.result.structural_metadata["fund_identity_assessment"]
+        self.assertIsNone(identity_assessment["source_domain"])
+        self.assertIn(
+            "source path contains explicit ART/Sunsuper branding",
+            identity_assessment["reasons"],
+        )
+        self.assertNotIn(
+            "source domain 'files.australianretirementtrust.com.au' matches Australian Retirement Trust branding",
+            identity_assessment["reasons"],
         )
 
     def test_single_source_case_has_single_tagged_raw_payload_entry(self) -> None:

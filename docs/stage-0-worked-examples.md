@@ -9,7 +9,7 @@ The workspace now contains a small number of literal source CSV files, including
 That is not a minor caveat. Before Stage 1 schema freeze, this document should be updated with literal row snapshots for:
 
 1. One Aware direct private-company row.
-2. One Sunsuper-schema `name_only` private-equity row.
+2. One legacy shared-family Sunsuper-schema `name_only` private-equity row.
 3. One UniSuper section-header-driven row.
 
 ## Canonical normalization conventions used below
@@ -78,22 +78,23 @@ This row proves that management style and asset class must both survive parse. I
 
 ## Example 2: Sunsuper-Schema `name_only` Private-Equity Row
 
-### Verified source facts
+### Legacy parser-shape facts
 
-1. Fund lineage: ART Sunsuper using the shared 24-column Sunsuper schema.
+1. Legacy fixture lineage: synthetic ART-Sunsuper/shared-family shape using the shared 24-column Sunsuper schema.
 2. Adapter: `SunsuperSchemaPhdAdapter`.
 3. Example row name: `Delphi Ventures VIII, L.P.`
 4. Category: private equity.
 5. AUD value is not populated.
 6. The row must be retained as a relationship record rather than dropped.
 7. Reporting period is derived from file provenance, not a row date column.
+8. This fixture is parser-shape evidence only; it is not source-domain verified Australian Retirement Trust evidence.
 
 ### File registration outcome
 
 | Field | Value | Note |
 | --- | --- | --- |
-| `source_fund_id` | `Australian Retirement Trust` | Verified lineage context |
-| `adapter_key` | `SunsuperSchemaPhdAdapter` | Verified |
+| `source_fund_id` | `Australian Retirement Trust` | Legacy synthetic fixture context only; not source-domain verified |
+| `adapter_key` | `SunsuperSchemaPhdAdapter` | Parser-shape fixture |
 | `reporting_period` | `pending exact sample` | Derived from file provenance |
 | `source_url` | `pending exact sample` | Not in prompt |
 | `schema_fingerprint` | `art_sunsuper_v1_pending` | Placeholder until file registration |

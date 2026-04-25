@@ -105,7 +105,17 @@ class TestAustralianSuperCompatibilityAudit(unittest.TestCase):
             option_names={"Stable"},
             header=AUSTRALIANSUPER_REAL_HEADER,
         )
-        art_assessment = assess_shared_schema_fund_identity(
+        ar_code_only_assessment = assess_shared_schema_fund_identity(
+            source_url="/tmp/ARST.csv",
+            option_names={"Stable"},
+            header=EXPECTED_HEADER,
+        )
+        official_art_assessment = assess_shared_schema_fund_identity(
+            source_url="https://files.australianretirementtrust.com.au/phd/super/diversified/Diversified_Balanced_Superannuation.csv",
+            option_names={"Balanced"},
+            header=EXPECTED_HEADER,
+        )
+        synthetic_art_assessment = assess_shared_schema_fund_identity(
             source_url=str(ART_SYNTHETIC_PATH),
             option_names={"ART Stable"},
             header=EXPECTED_HEADER,
@@ -128,8 +138,27 @@ class TestAustralianSuperCompatibilityAudit(unittest.TestCase):
             validate_declared_fund_identity(declared_fund_code="australiansuper", assessment=ambiguous_assessment),
         )
 
-        self.assertEqual("art", art_assessment.probable_fund_code)
-        self.assertEqual([], validate_declared_fund_identity(declared_fund_code="art", assessment=art_assessment))
+        self.assertIsNone(ar_code_only_assessment.probable_fund_code)
+        self.assertEqual("unknown", ar_code_only_assessment.confidence)
+
+        self.assertEqual("art", official_art_assessment.probable_fund_code)
+        self.assertEqual("high", official_art_assessment.confidence)
+        self.assertEqual("files.australianretirementtrust.com.au", official_art_assessment.source_domain)
+        self.assertIn(
+            "source domain 'files.australianretirementtrust.com.au' matches Australian Retirement Trust branding",
+            official_art_assessment.reasons,
+        )
+
+        self.assertEqual("art", synthetic_art_assessment.probable_fund_code)
+        self.assertIsNone(synthetic_art_assessment.source_domain)
+        self.assertIn(
+            "source path contains explicit ART/Sunsuper branding",
+            synthetic_art_assessment.reasons,
+        )
+        self.assertNotIn(
+            "source domain 'files.australianretirementtrust.com.au' matches Australian Retirement Trust branding",
+            synthetic_art_assessment.reasons,
+        )
 
     def test_real_fixture_set_covers_multiple_australiansuper_option_shapes(self) -> None:
         stable_rows = read_rows(STABLE_PATH)
@@ -145,4 +174,3 @@ class TestAustralianSuperCompatibilityAudit(unittest.TestCase):
         self.assertTrue(any(row["Classification"].strip() for row in stable_rows if row["Classification"].strip().lower() != "nan"))
         self.assertTrue(any(row["Geo Latitude"].strip().lower() not in {"", "nan"} for row in stable_rows))
         self.assertFalse(any(row["Classification"].strip() and row["Classification"].strip().lower() != "nan" for row in member_direct_rows))
-

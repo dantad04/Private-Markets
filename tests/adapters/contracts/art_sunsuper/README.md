@@ -1,8 +1,8 @@
 # Frozen ART-Sunsuper Adapter Contract
 
 This directory holds the frozen adapter-contract artifact for the synthetic
-ART-Sunsuper fixture that exercises the shared Sunsuper schema and duplicate-view
-metadata attachment.
+legacy ART-Sunsuper/shared-family parser-shape fixture that exercises the shared
+Sunsuper schema and duplicate-view metadata attachment.
 
 `canonical_output.json` is the full canonical serialisation of the current
 `ArtSunsuperPhdAdapter().parse(...)` output for the checked-in synthetic fixture.
@@ -16,7 +16,8 @@ It includes:
 
 The file is checked into the repo so a reviewer can diff exact contract drift in
 a pull request. The fixture is synthetic on purpose: raw source files do not
-belong in git.
+belong in git. It is not source-domain verified Australian Retirement Trust
+evidence.
 
 ## Regeneration
 

@@ -1,6 +1,7 @@
 # Frozen ART-QSuper Adapter Contract
 
-This directory holds the frozen adapter-contract artifact for the synthetic ART-QSuper fixture.
+This directory holds the frozen adapter-contract artifact for the synthetic
+legacy ART-QSuper parser-shape fixture.
 
 `canonical_output.json` is the full canonical serialisation of the current `ArtQsuperPhdAdapter().parse(...)` output for the checked-in synthetic fixture. It includes:
 
@@ -10,7 +11,7 @@ This directory holds the frozen adapter-contract artifact for the synthetic ART-
 4. `schema_fingerprint`
 5. `adapter_warnings`
 
-The file is checked into the repo so a reviewer can diff exact contract drift in a pull request. This is stricter than inline assertions because it freezes the whole adapter output, not just selected examples. The fixture is synthetic on purpose: raw source files do not belong in git.
+The file is checked into the repo so a reviewer can diff exact contract drift in a pull request. This is stricter than inline assertions because it freezes the whole adapter output, not just selected examples. The fixture is synthetic on purpose: raw source files do not belong in git. It is not source-domain verified Australian Retirement Trust evidence.
 
 ## Regeneration
 

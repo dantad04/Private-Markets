@@ -5,7 +5,7 @@ Date: 2026-04-19
 Implementation status update:
 
 - The audit conclusion still stands: real AustralianSuper files are not
-  compatible with the ART-Sunsuper adapter as-is.
+  compatible with the legacy ART-Sunsuper/shared-family adapter as-is.
 - The follow-on implementation now exists as a thin `AustralianSuperPhdAdapter`
   with explicit identity verification.
 - The approved loader/admin production slice is currently the official
@@ -26,7 +26,7 @@ Files profiled:
 
 ## Verdict
 
-AustralianSuper is **not** compatible with the current ART-Sunsuper /
+AustralianSuper is **not** compatible with the current legacy ART-Sunsuper /
 `SunsuperSchemaPhdAdapter` contract as-is.
 
 It does appear compatible with the same **underlying duplicate-view merge logic**
@@ -47,7 +47,7 @@ Implementation outcome:
    the adapter, but remain review-gated until their mappings are approved.
 6. No generic shared-family adapter was introduced.
 
-## Real-file differences from the current ART-Sunsuper contract
+## Real-file differences from the current legacy ART-Sunsuper/shared-family contract
 
 1. Header labels and column order differ.
    Current internal contract uses `OptionCode`, `AssetClass`, `WeightingPct`,
