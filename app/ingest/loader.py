@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 import hashlib
@@ -402,6 +402,30 @@ def load_adapter_parse_result(
     )
 
 
+def _derive_aware_friendly_option_name(file_path: Path) -> str | None:
+    stem = file_path.stem
+    if not (stem.startswith("IFA-") or stem.startswith("IFB-")):
+        return None
+    _, raw_option_name = stem.split("-", 1)
+    option_name = raw_option_name.replace("-", " ").strip()
+    return option_name or None
+
+
+def _apply_single_option_name(parse_result: AdapterParseResult, option_name: str | None) -> AdapterParseResult:
+    if option_name is None:
+        return parse_result
+    observed_options = parse_result.structural_metadata.get("observed_options", [])
+    if len(observed_options) != 1:
+        return parse_result
+    return replace(
+        parse_result,
+        holdings=[
+            replace(record, source_option_name_raw=option_name)
+            for record in parse_result.holdings
+        ],
+    )
+
+
 def ingest_hesta_local_file(
     session: Session,
     *,
@@ -461,7 +485,10 @@ def ingest_aware_local_file(
     source_file = session.get(SourceFile, metadata.source_file_id)
     try:
         ensure_approved_mapping_seeded(session, adapter_key="AwarePhdAdapter")
-        parse_result = AwarePhdAdapter().parse(metadata, raw_bytes)
+        parse_result = _apply_single_option_name(
+            AwarePhdAdapter().parse(metadata, raw_bytes),
+            _derive_aware_friendly_option_name(file_path_obj),
+        )
         enforce_approved_mapping(
             session,
             source_file=source_file,
