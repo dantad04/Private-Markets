@@ -1,0 +1,375 @@
+{
+  "manifest_name": "private_beta_demo_corpus",
+  "manifest_version": 1,
+  "description": "Accepted latest-period private-beta corpus for portfolio/interview demo. Hostplus and ART slices are intentionally excluded.",
+  "reporting_period": "2025-12-31",
+  "row_count_tolerance": 0,
+  "excluded_adapters": [
+    {
+      "adapter_key": "HostPlusPhdStateMachineAdapter",
+      "reason": "Accepted at stage scope but held out of the focused demo corpus."
+    },
+    {
+      "adapter_key": "AustralianRetirementTrustReal16ColumnPhdAdapter",
+      "reason": "Real 16-column ART minimal slice is only 27 rows and would mislead viewers about ART coverage."
+    },
+    {
+      "adapter_key": "ArtQsuperPhdAdapter",
+      "reason": "Legacy synthetic parser-shape fixture only; never load to demo corpus."
+    },
+    {
+      "adapter_key": "ArtSunsuperPhdAdapter",
+      "reason": "Legacy synthetic parser-shape fixture only; never load to demo corpus."
+    }
+  ],
+  "funds": [
+    {
+      "fund_code": "hesta",
+      "fund_name": "HESTA",
+      "adapter_key": "HestaPhdAdapter",
+      "mapping_versions": [],
+      "reporting_period": "2025-12-31",
+      "expected_source_file_count": 9,
+      "expected_row_count": 14620,
+      "row_count_tolerance": 0,
+      "source_files": [
+        {
+          "path": "tests/fixtures/real/hesta/Australian-Shares-super-assets.csv",
+          "expected_rows": 346,
+          "mapping_version_id": null
+        },
+        {
+          "path": "tests/fixtures/real/hesta/Balanced-Growth-super-assets.csv",
+          "expected_rows": 3050,
+          "mapping_version_id": null
+        },
+        {
+          "path": "tests/fixtures/real/hesta/Conservative-super-assets.csv",
+          "expected_rows": 2955,
+          "mapping_version_id": null
+        },
+        {
+          "path": "tests/fixtures/real/hesta/Diversified-Bonds-super-assets.csv",
+          "expected_rows": 181,
+          "mapping_version_id": null
+        },
+        {
+          "path": "tests/fixtures/real/hesta/High-Growth-super-assets (1).csv",
+          "expected_rows": 2835,
+          "mapping_version_id": null
+        },
+        {
+          "path": "tests/fixtures/real/hesta/Indexed-Balanced-Growth-super-assets.csv",
+          "expected_rows": 1991,
+          "mapping_version_id": null
+        },
+        {
+          "path": "tests/fixtures/real/hesta/International-Shares-super-assets.csv",
+          "expected_rows": 2456,
+          "mapping_version_id": null
+        },
+        {
+          "path": "tests/fixtures/real/hesta/Property-and-Infrastructure-super-assets.csv",
+          "expected_rows": 72,
+          "mapping_version_id": null
+        },
+        {
+          "path": "tests/fixtures/real/hesta/Sustainable-Growth-super-assets.csv",
+          "expected_rows": 734,
+          "mapping_version_id": null
+        }
+      ]
+    },
+    {
+      "fund_code": "aware",
+      "fund_name": "Aware Super",
+      "adapter_key": "AwarePhdAdapter",
+      "mapping_versions": [
+        "aware-stage2-investment-funds-2025-12-31-v1"
+      ],
+      "reporting_period": "2025-12-31",
+      "expected_source_file_count": 14,
+      "expected_row_count": 19132,
+      "row_count_tolerance": 0,
+      "source_files": [
+        {
+          "path": "tests/fixtures/real/aware/IFA-Australian-Equities.csv",
+          "expected_rows": 329,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFA-Balanced.csv",
+          "expected_rows": 1968,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFA-Capital-Stable.csv",
+          "expected_rows": 1966,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFA-Cash.csv",
+          "expected_rows": 25,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFA-Growth.csv",
+          "expected_rows": 1965,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFA-International-Equities.csv",
+          "expected_rows": 1344,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFA-Moderate.csv",
+          "expected_rows": 1969,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFB-Australian-Equities.csv",
+          "expected_rows": 329,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFB-Balanced.csv",
+          "expected_rows": 1968,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFB-Capital-Stable.csv",
+          "expected_rows": 1966,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFB-Cash.csv",
+          "expected_rows": 25,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFB-Growth.csv",
+          "expected_rows": 1965,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFB-International-Equities.csv",
+          "expected_rows": 1344,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        },
+        {
+          "path": "tests/fixtures/real/aware/IFB-Moderate.csv",
+          "expected_rows": 1969,
+          "mapping_version_id": "aware-stage2-investment-funds-2025-12-31-v1"
+        }
+      ]
+    },
+    {
+      "fund_code": "unisuper",
+      "fund_name": "UniSuper",
+      "adapter_key": "UniSuperPhdStateMachineAdapter",
+      "mapping_versions": [
+        "unisuper-stage2-v1"
+      ],
+      "reporting_period": "2025-12-31",
+      "expected_source_file_count": 1,
+      "expected_row_count": 25404,
+      "row_count_tolerance": 0,
+      "source_files": [
+        {
+          "path": "tests/fixtures/real/UniSuper.csv",
+          "expected_rows": 25404,
+          "mapping_version_id": "unisuper-stage2-v1"
+        }
+      ]
+    },
+    {
+      "fund_code": "australiansuper",
+      "fund_name": "AustralianSuper",
+      "adapter_key": "AustralianSuperPhdAdapter",
+      "mapping_versions": [
+        "australiansuper-stage2-v1",
+        "australiansuper-stage2-balanced-v1",
+        "australiansuper-stage2-cash-v1",
+        "australiansuper-stage2-conservative-v1",
+        "australiansuper-stage2-diversified-fixed-interest-v1",
+        "australiansuper-stage2-high-growth-v1",
+        "australiansuper-stage2-indexed-diversified-v1",
+        "australiansuper-stage2-international-shares-v1",
+        "australiansuper-stage2-socially-aware-v1",
+        "australiansuper-stage2-stable-v1"
+      ],
+      "reporting_period": "2025-12-31",
+      "expected_source_file_count": 10,
+      "expected_row_count": 22917,
+      "row_count_tolerance": 0,
+      "source_files": [
+        {
+          "path": "tests/fixtures/real/australiansuper/Member Direct PHD (1).csv",
+          "expected_rows": 564,
+          "mapping_version_id": "australiansuper-stage2-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/Stable PHD (1).csv",
+          "expected_rows": 4023,
+          "mapping_version_id": "australiansuper-stage2-stable-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/Conservative PHD (1).csv",
+          "expected_rows": 4023,
+          "mapping_version_id": "australiansuper-stage2-conservative-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/Balanced PHD (6).csv",
+          "expected_rows": 3920,
+          "mapping_version_id": "australiansuper-stage2-balanced-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/High Growth PHD (2).csv",
+          "expected_rows": 3919,
+          "mapping_version_id": "australiansuper-stage2-high-growth-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/Cash PHD (1).csv",
+          "expected_rows": 87,
+          "mapping_version_id": "australiansuper-stage2-cash-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/Diversified Fixed Interest PHD (1).csv",
+          "expected_rows": 1178,
+          "mapping_version_id": "australiansuper-stage2-diversified-fixed-interest-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/Indexed Diversified PHD (1).csv",
+          "expected_rows": 2217,
+          "mapping_version_id": "australiansuper-stage2-indexed-diversified-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/International Shares PHD.csv",
+          "expected_rows": 2164,
+          "mapping_version_id": "australiansuper-stage2-international-shares-v1"
+        },
+        {
+          "path": "tests/fixtures/real/australiansuper/Socially Aware PHD.csv",
+          "expected_rows": 822,
+          "mapping_version_id": "australiansuper-stage2-socially-aware-v1"
+        }
+      ]
+    },
+    {
+      "fund_code": "cbus",
+      "fund_name": "Cbus",
+      "adapter_key": "CbusPhdAdapter",
+      "mapping_versions": [
+        "cbus-stage2-australian-shares-v1",
+        "cbus-stage2-cash-v1",
+        "cbus-stage2-conservative-growth-v1",
+        "cbus-stage2-conservative-v1",
+        "cbus-stage2-diversified-fixed-interest-v1",
+        "cbus-stage2-growth-plus-v1",
+        "cbus-stage2-growth-v1",
+        "cbus-stage2-indexed-diversified-v1",
+        "cbus-stage2-late-v1",
+        "cbus-stage2-overseas-shares-v1",
+        "cbus-stage2-property-v1"
+      ],
+      "reporting_period": "2025-12-31",
+      "expected_source_file_count": 11,
+      "expected_row_count": 13352,
+      "row_count_tolerance": 0,
+      "source_files": [
+        {
+          "path": "tests/fixtures/real/cbus/super-high-growth__1_.csv",
+          "expected_rows": 2249,
+          "mapping_version_id": "cbus-stage2-late-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-property__1_.csv",
+          "expected_rows": 106,
+          "mapping_version_id": "cbus-stage2-property-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-overseas-shares.csv",
+          "expected_rows": 1421,
+          "mapping_version_id": "cbus-stage2-overseas-shares-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-australian-shares__1_.csv",
+          "expected_rows": 353,
+          "mapping_version_id": "cbus-stage2-australian-shares-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-cash.csv",
+          "expected_rows": 16,
+          "mapping_version_id": "cbus-stage2-cash-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-growth__1_.csv",
+          "expected_rows": 2281,
+          "mapping_version_id": "cbus-stage2-growth-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-conservative.csv",
+          "expected_rows": 2279,
+          "mapping_version_id": "cbus-stage2-conservative-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-growth-plus.csv",
+          "expected_rows": 2278,
+          "mapping_version_id": "cbus-stage2-growth-plus-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-conservative-growth.csv",
+          "expected_rows": 2251,
+          "mapping_version_id": "cbus-stage2-conservative-growth-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-diversified-fixed-interest.csv",
+          "expected_rows": 74,
+          "mapping_version_id": "cbus-stage2-diversified-fixed-interest-v1"
+        },
+        {
+          "path": "tests/fixtures/real/cbus/super-indexed-diversified.csv",
+          "expected_rows": 44,
+          "mapping_version_id": "cbus-stage2-indexed-diversified-v1"
+        }
+      ]
+    }
+  ],
+  "smoke_checks": {
+    "entity_observation_lookups": [
+      {
+        "fund_code": "hesta",
+        "name": "IFM Investors Pty Ltd"
+      },
+      {
+        "fund_code": "aware",
+        "name": "STATE STREET BANK AND TRUST"
+      },
+      {
+        "fund_code": "unisuper",
+        "name": "IFM INVESTORS PTY LIMITED"
+      },
+      {
+        "fund_code": "australiansuper",
+        "name": "IFM Investors"
+      },
+      {
+        "fund_code": "cbus",
+        "name": "IFM Investors"
+      }
+    ],
+    "canonical_manager_search": {
+      "query": "IFM Investors",
+      "expected_title": "IFM Investors Pty Ltd"
+    },
+    "manager_detail": {
+      "canonical_name": "IFM Investors Pty Ltd"
+    },
+    "matched_asset_proof": {
+      "path": "/admin/ui/matched-assets/australiansuper-stable-stage5-proof",
+      "api_path": "/admin/matched-assets/australiansuper-stable-stage5-proof",
+      "expected_rows": 7
+    }
+  }
+}
