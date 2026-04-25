@@ -513,6 +513,61 @@ class HomepageReadModel:
 
 
 @dataclass(frozen=True)
+class DemoCuratedLinkReadModel:
+    title: str
+    deck: str
+    result_kind: str
+    entity_id: int | None
+    search_query: str | None
+    cta_label: str
+    status_label: str
+
+
+@dataclass(frozen=True)
+class DemoDashboardReadModel:
+    homepage: HomepageReadModel
+    curated_links: list[DemoCuratedLinkReadModel]
+
+
+@dataclass(frozen=True)
+class DemoEntityExplorerFilterOption:
+    value: str
+    label: str
+
+
+@dataclass(frozen=True)
+class DemoEntityExplorerRowReadModel:
+    entity_id: int
+    entity_name: str
+    entity_type: str
+    fund_count: int
+    option_count: int
+    row_count: int
+    total_value_aud: Decimal
+    ownership_count: int
+    disclosure_mix: list[tuple[str, int]]
+
+
+@dataclass(frozen=True)
+class DemoEntityExplorerReadModel:
+    rows: list[DemoEntityExplorerRowReadModel]
+    total_rows: int
+    page: int
+    page_size: int
+    total_pages: int
+    sort: str
+    active_entity_type: str
+    selected_disclosure_completeness: list[str]
+    selected_funds: list[str]
+    selected_asset_classes: list[str]
+    sort_options: list[DemoEntityExplorerFilterOption]
+    entity_type_options: list[DemoEntityExplorerFilterOption]
+    disclosure_options: list[DemoEntityExplorerFilterOption]
+    fund_options: list[DemoEntityExplorerFilterOption]
+    asset_class_options: list[DemoEntityExplorerFilterOption]
+
+
+@dataclass(frozen=True)
 class EntityResolutionQueueListItem:
     id: int
     holding_id: int
@@ -2035,6 +2090,31 @@ SEARCH_MATCH_SOURCE_PRIORITY = {
     "alias": 160,
 }
 
+DEMO_ENTITY_TYPE_LABELS = {
+    "all": "All entity types",
+    "company": "Companies",
+    "manager": "Managers",
+    "asset": "Assets",
+    "fund_vehicle": "Fund vehicles",
+    "property_asset": "Property assets",
+    "infrastructure_asset": "Infrastructure assets",
+}
+
+DEMO_ENTITY_SORT_LABELS = {
+    "value_aud_desc": "Total disclosed value",
+    "fund_count_desc": "Funds",
+    "option_count_desc": "Options",
+    "row_count_desc": "Rows",
+    "ownership_count_desc": "Ownership disclosures",
+}
+
+DEMO_DISCLOSURE_MIX_KEYS = (
+    "fully_disclosed",
+    "value_only",
+    "ownership_only",
+    "name_only",
+)
+
 
 def get_fund_detail(
     session: Session,
@@ -2630,6 +2710,375 @@ def get_homepage(session: Session) -> HomepageReadModel:
             "That unevenness is a feature to interpret carefully, not noise to smooth away."
         ),
     )
+
+
+def get_demo_dashboard(session: Session) -> DemoDashboardReadModel:
+    ifm_entity = _find_demo_entity(
+        session,
+        canonical_name="IFM Investors Pty Ltd",
+        entity_type="manager",
+    )
+    industry_super_entity = _find_demo_entity(
+        session,
+        canonical_name="Industry Super Holdings Pty Ltd",
+        entity_type="company",
+    )
+
+    curated_links = [
+        DemoCuratedLinkReadModel(
+            title="IFM Investors",
+            deck="Manager detail with manager-role, held-entity, and issuer-role rows kept separate.",
+            result_kind="manager",
+            entity_id=ifm_entity.id if ifm_entity is not None else None,
+            search_query="IFM Investors",
+            cta_label="Open manager",
+            status_label="Manager",
+        ),
+        DemoCuratedLinkReadModel(
+            title="Industry Super Holdings",
+            deck="Company detail showing cross-fund disclosure variance without rolling it into a silent total.",
+            result_kind="company",
+            entity_id=industry_super_entity.id if industry_super_entity is not None else None,
+            search_query="Industry Super Holdings",
+            cta_label="Open company",
+            status_label="Company",
+        ),
+        DemoCuratedLinkReadModel(
+            title="RUMIN8",
+            deck="Aware ownership_only example; use search when the current corpus has no reviewed canonical entity.",
+            result_kind="search",
+            entity_id=None,
+            search_query="RUMIN8",
+            cta_label="Search RUMIN8",
+            status_label="ownership_only example",
+        ),
+        DemoCuratedLinkReadModel(
+            title="FSSSP",
+            deck="Aware 100% ownership example; search keeps the row-level disclosure state visible.",
+            result_kind="search",
+            entity_id=None,
+            search_query="FSSSP",
+            cta_label="Search FSSSP",
+            status_label="100% ownership example",
+        ),
+    ]
+
+    if _demo_name_exists_in_current_corpus(session, "HARRISON AI"):
+        curated_links.append(
+            DemoCuratedLinkReadModel(
+                title="HARRISON AI",
+                deck="Optional current-corpus example, shown only when the loaded corpus contains it.",
+                result_kind="search",
+                entity_id=None,
+                search_query="HARRISON AI",
+                cta_label="Search HARRISON AI",
+                status_label="Present in corpus",
+            )
+        )
+
+    curated_links.append(
+        DemoCuratedLinkReadModel(
+            title="AustralianSuper Stable matched-asset proof",
+            deck="Experimental seven-row coordinate proof — not full coverage.",
+            result_kind="matched_asset_proof",
+            entity_id=None,
+            search_query=None,
+            cta_label="Open proof",
+            status_label="Experimental",
+        )
+    )
+
+    return DemoDashboardReadModel(
+        homepage=get_homepage(session),
+        curated_links=curated_links,
+    )
+
+
+def get_demo_entity_explorer(
+    session: Session,
+    *,
+    entity_type: str = "all",
+    disclosure_completeness: list[str] | None = None,
+    fund: list[str] | None = None,
+    canonical_asset_class: list[str] | None = None,
+    sort: str = "value_aud_desc",
+    page: int = 1,
+    page_size: int = 50,
+) -> DemoEntityExplorerReadModel:
+    active_entity_type = entity_type.strip() if entity_type else "all"
+    if active_entity_type not in DEMO_ENTITY_TYPE_LABELS:
+        raise ValueError(f"Unknown entity type filter: {active_entity_type}")
+    if sort not in DEMO_ENTITY_SORT_LABELS:
+        raise ValueError(f"Unknown entity explorer sort key: {sort}")
+    if page < 1:
+        raise ValueError("page must be greater than or equal to 1")
+
+    selected_disclosures = _clean_demo_filter_values(disclosure_completeness)
+    unknown_disclosures = set(selected_disclosures) - set(DISCLOSURE_COMPLETENESS_SORT_ORDER)
+    if unknown_disclosures:
+        raise ValueError(f"Unknown disclosure completeness filter: {sorted(unknown_disclosures)[0]}")
+    selected_funds = _clean_demo_filter_values(fund)
+    selected_asset_classes = _clean_demo_filter_values(canonical_asset_class)
+
+    holding_rows = _load_demo_current_nonaggregate_rows(
+        session,
+        disclosure_completeness=selected_disclosures,
+        fund_codes=selected_funds,
+    )
+    role_entity_ids = {
+        entity_id
+        for row in holding_rows
+        for entity_id in (row.entity_id, row.manager_entity_id, row.issuer_entity_id)
+        if entity_id is not None
+    }
+    entities_by_id = {
+        entity.id: entity
+        for entity in session.scalars(select(Entity).where(Entity.id.in_(role_entity_ids))).all()
+    } if role_entity_ids else {}
+
+    buckets: dict[int, dict[str, object]] = {}
+    selected_asset_class_set = set(selected_asset_classes)
+    for row in holding_rows:
+        asset_class_value = row.canonical_asset_class_code or row.source_asset_class_raw
+        if selected_asset_class_set and asset_class_value not in selected_asset_class_set:
+            continue
+
+        row_entity_ids = {
+            entity_id
+            for entity_id in (row.entity_id, row.manager_entity_id, row.issuer_entity_id)
+            if entity_id is not None
+        }
+        for entity_id in row_entity_ids:
+            entity = entities_by_id.get(entity_id)
+            if entity is None:
+                continue
+            if active_entity_type != "all" and entity.entity_type != active_entity_type:
+                continue
+
+            bucket = buckets.setdefault(
+                entity_id,
+                {
+                    "entity": entity,
+                    "fund_ids": set(),
+                    "option_ids": set(),
+                    "row_count": 0,
+                    "total_value_aud": Decimal("0"),
+                    "ownership_count": 0,
+                    "disclosure_counts": Counter(),
+                },
+            )
+            bucket["fund_ids"].add(row.source_fund_id)
+            bucket["option_ids"].add(row.source_option_id)
+            bucket["row_count"] = int(bucket["row_count"]) + 1
+            if row.value_aud is not None:
+                bucket["total_value_aud"] = bucket["total_value_aud"] + row.value_aud
+            if row.ownership_pct is not None:
+                bucket["ownership_count"] = int(bucket["ownership_count"]) + 1
+            bucket["disclosure_counts"][row.disclosure_completeness] += 1
+
+    explorer_rows = [
+        DemoEntityExplorerRowReadModel(
+            entity_id=entity_id,
+            entity_name=bucket["entity"].canonical_name,
+            entity_type=bucket["entity"].entity_type,
+            fund_count=len(bucket["fund_ids"]),
+            option_count=len(bucket["option_ids"]),
+            row_count=int(bucket["row_count"]),
+            total_value_aud=bucket["total_value_aud"],
+            ownership_count=int(bucket["ownership_count"]),
+            disclosure_mix=[
+                (key, int(bucket["disclosure_counts"].get(key, 0)))
+                for key in DEMO_DISCLOSURE_MIX_KEYS
+                if int(bucket["disclosure_counts"].get(key, 0)) > 0
+            ],
+        )
+        for entity_id, bucket in buckets.items()
+    ]
+    explorer_rows.sort(key=lambda row: _demo_entity_sort_key(row, sort))
+
+    total_rows = len(explorer_rows)
+    total_pages = max(1, math.ceil(total_rows / page_size))
+    page_start = (page - 1) * page_size
+    page_end = page_start + page_size
+
+    return DemoEntityExplorerReadModel(
+        rows=explorer_rows[page_start:page_end],
+        total_rows=total_rows,
+        page=page,
+        page_size=page_size,
+        total_pages=total_pages,
+        sort=sort,
+        active_entity_type=active_entity_type,
+        selected_disclosure_completeness=selected_disclosures,
+        selected_funds=selected_funds,
+        selected_asset_classes=selected_asset_classes,
+        sort_options=[
+            DemoEntityExplorerFilterOption(value=value, label=label)
+            for value, label in DEMO_ENTITY_SORT_LABELS.items()
+        ],
+        entity_type_options=[
+            DemoEntityExplorerFilterOption(value=value, label=label)
+            for value, label in DEMO_ENTITY_TYPE_LABELS.items()
+        ],
+        disclosure_options=[
+            DemoEntityExplorerFilterOption(value=value, label=value.replace("_", " "))
+            for value in DISCLOSURE_COMPLETENESS_SORT_ORDER
+        ],
+        fund_options=_get_demo_fund_filter_options(session),
+        asset_class_options=_get_demo_asset_class_filter_options(session),
+    )
+
+
+def _find_demo_entity(
+    session: Session,
+    *,
+    canonical_name: str,
+    entity_type: str,
+) -> Entity | None:
+    return session.scalar(
+        select(Entity).where(
+            Entity.entity_type == entity_type,
+            Entity.canonical_name == canonical_name,
+        )
+    )
+
+
+def _demo_name_exists_in_current_corpus(session: Session, name: str) -> bool:
+    lookup = name.strip().casefold()
+    if lookup == "":
+        return False
+    lookup_normalized = normalise_name(name)
+    leading_token = lookup.split()[0]
+    candidate_names = session.scalars(
+        select(Holding.raw_name)
+        .join(SourceFile, SourceFile.id == Holding.source_file_id)
+        .where(
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+            Holding.raw_name.is_not(None),
+            func.lower(Holding.raw_name).like(f"%{leading_token}%"),
+        )
+    ).all()
+    return any(
+        lookup_normalized == normalise_name(raw_name)
+        or lookup_normalized in normalise_name(raw_name)
+        or lookup in raw_name.casefold()
+        for raw_name in candidate_names
+        if raw_name
+    )
+
+
+def _clean_demo_filter_values(values: list[str] | str | None) -> list[str]:
+    if values is None:
+        return []
+    raw_values = [values] if isinstance(values, str) else values
+    cleaned: list[str] = []
+    seen: set[str] = set()
+    for value in raw_values:
+        cleaned_value = str(value).strip()
+        if cleaned_value == "" or cleaned_value in seen:
+            continue
+        cleaned.append(cleaned_value)
+        seen.add(cleaned_value)
+    return cleaned
+
+
+def _load_demo_current_nonaggregate_rows(
+    session: Session,
+    *,
+    disclosure_completeness: list[str],
+    fund_codes: list[str],
+):
+    statement = (
+        select(
+            Holding.id.label("holding_id"),
+            Holding.entity_id,
+            Holding.manager_entity_id,
+            Holding.issuer_entity_id,
+            Holding.source_fund_id,
+            Holding.source_option_id,
+            Holding.disclosure_completeness,
+            Holding.value_aud,
+            Holding.ownership_pct,
+            Holding.source_asset_class_raw,
+            CanonicalAssetClass.code.label("canonical_asset_class_code"),
+        )
+        .join(SourceFile, SourceFile.id == Holding.source_file_id)
+        .join(Fund, Fund.id == Holding.source_fund_id)
+        .outerjoin(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
+        .where(
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+            Holding.is_aggregate.is_(False),
+        )
+    )
+    if disclosure_completeness:
+        statement = statement.where(Holding.disclosure_completeness.in_(disclosure_completeness))
+    if fund_codes:
+        statement = statement.where(Fund.code.in_(fund_codes))
+    return session.execute(statement).all()
+
+
+def _get_demo_fund_filter_options(session: Session) -> list[DemoEntityExplorerFilterOption]:
+    rows = session.execute(
+        select(Fund.code, Fund.name)
+        .join(SourceFile, SourceFile.fund_id == Fund.id)
+        .where(
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+        )
+        .distinct()
+        .order_by(Fund.name.asc(), Fund.code.asc())
+    ).all()
+    return [
+        DemoEntityExplorerFilterOption(value=row.code, label=f"{row.name} ({row.code})")
+        for row in rows
+    ]
+
+
+def _get_demo_asset_class_filter_options(session: Session) -> list[DemoEntityExplorerFilterOption]:
+    rows = session.execute(
+        select(
+            CanonicalAssetClass.code.label("canonical_asset_class_code"),
+            CanonicalAssetClass.label.label("canonical_asset_class_label"),
+            Holding.source_asset_class_raw,
+        )
+        .join(SourceFile, SourceFile.id == Holding.source_file_id)
+        .outerjoin(CanonicalAssetClass, CanonicalAssetClass.id == Holding.canonical_asset_class_id)
+        .where(
+            SourceFile.is_current_version.is_(True),
+            SourceFile.ingest_status == "loaded",
+            Holding.is_aggregate.is_(False),
+        )
+        .distinct()
+    ).all()
+
+    options_by_value: dict[str, str] = {}
+    for row in rows:
+        value = row.canonical_asset_class_code or row.source_asset_class_raw
+        label = row.canonical_asset_class_label or row.source_asset_class_raw
+        if value and label:
+            options_by_value.setdefault(value, label)
+    return [
+        DemoEntityExplorerFilterOption(value=value, label=label)
+        for value, label in sorted(options_by_value.items(), key=lambda item: (item[1].casefold(), item[0]))
+    ]
+
+
+def _demo_entity_sort_key(row: DemoEntityExplorerRowReadModel, sort: str) -> tuple[object, str, int]:
+    if sort == "value_aud_desc":
+        primary: object = -row.total_value_aud
+    elif sort == "fund_count_desc":
+        primary = -row.fund_count
+    elif sort == "option_count_desc":
+        primary = -row.option_count
+    elif sort == "row_count_desc":
+        primary = -row.row_count
+    elif sort == "ownership_count_desc":
+        primary = -row.ownership_count
+    else:
+        raise ValueError(f"Unknown entity explorer sort key: {sort}")
+    return (primary, row.entity_name.casefold(), row.entity_id)
 
 
 def _load_current_cross_adapter_rows(session: Session):

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="demo-page-view">
+  <section class="editorial-hero">
+    <p class="eyebrow">Product demo</p>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 class="hero-title">Explore the current private-markets corpus</h1>
+        <p class="hero-deck">
+          Start from search, then move into reviewed entities, loaded funds, and the bounded map proof.
+          The demo keeps values, ownership percentages, and disclosure completeness separate so users can inspect
+          what was actually disclosed.
+        </p>
+        <form method="get" action="{{ request.url_for('search_page') | e }}">
+          <div class="field">
+            <label for="demo-q">Search</label><br>
+            <input
+              id="demo-q"
+              class="hero-search-input"
+              name="q"
+              type="text"
+              placeholder="IFM Investors, Industry Super Holdings, RUMIN8"
+            >
+          </div>
+          <fieldset class="search-scope">
+            <legend>Search scope</legend>
+            <div class="scope-row">
+              {% for option in search_kind_options %}
+              <label class="scope-pill {% if option.value == 'all' %}scope-pill--active{% endif %}">
+                <input
+                  type="radio"
+                  name="type"
+                  value="{{ option.value | e }}"
+                  {% if option.value == 'all' %}checked{% endif %}
+                >
+                <span>{{ option.label | e }}</span>
+              </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div class="hero-metrics" aria-label="Demo summary metrics">
+        {% for metric in dashboard.homepage.stats %}
+        <div class="metric">
+          <div class="metric-label">{{ metric.label | e }}</div>
+          <div class="metric-value">{{ metric.value | e }}</div>
+          {% if metric.note %}
+          <div class="metric-note">{{ metric.note | e }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Curated demo links</p>
+        <h2 class="section-title">Good first clicks</h2>
+      </div>
+      <p class="section-note">
+        Links either open existing detail surfaces or run a safe search for names that are present as disclosed rows
+        without requiring a reviewed entity page.
+      </p>
+    </div>
+    <div class="feature-grid">
+      {% for entry in dashboard.curated_links %}
+      <article class="feature-card">
+        <p class="feature-kicker">{{ entry.status_label | e }}</p>
+        <h3 class="feature-title">{{ entry.title | e }}</h3>
+        <p class="feature-deck">{{ entry.deck | e }}</p>
+        {% if entry.result_kind == "manager" and entry.entity_id %}
+        <a class="feature-link" href="{{ request.url_for('manager_detail_page', entity_id=entry.entity_id) | e }}">
+          {{ entry.cta_label | e }}
+        </a>
+        {% elif entry.result_kind == "company" and entry.entity_id %}
+        <a class="feature-link" href="{{ request.url_for('company_detail_page', entity_id=entry.entity_id) | e }}">
+          {{ entry.cta_label | e }}
+        </a>
+        {% elif entry.result_kind == "matched_asset_proof" %}
+        <a class="feature-link" href="{{ request.url_for('australiansuper_stable_matched_asset_proof_page') | e }}">
+          {{ entry.cta_label | e }}
+        </a>
+        {% elif entry.search_query %}
+        <a
+          class="feature-link"
+          href="{{ request.url_for('search_page') | e }}?q={{ entry.search_query | urlencode }}&amp;type=all"
+        >
+          {{ entry.cta_label | e }}
+        </a>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Entry points</p>
+        <h2 class="section-title">Browse from a list</h2>
+      </div>
+      <p class="section-note">
+        Entity explorer metrics are computed over value-bearing and non-value-bearing non-aggregate holdings without
+        blending disclosure states.
+      </p>
+    </div>
+    <div class="feature-grid feature-grid--four">
+      <article class="feature-card">
+        <p class="feature-kicker">Companies</p>
+        <h3 class="feature-title">Explore companies</h3>
+        <p class="feature-deck">Reviewed companies and other company entities with current non-aggregate holdings.</p>
+        <a class="feature-link" href="{{ request.url_for('demo_entities') | e }}?type=company">Open explorer</a>
+      </article>
+      <article class="feature-card">
+        <p class="feature-kicker">Managers</p>
+        <h3 class="feature-title">Explore managers</h3>
+        <p class="feature-deck">Manager entities ranked by disclosed rows, funds, options, ownership counts, or value.</p>
+        <a class="feature-link" href="{{ request.url_for('demo_entities') | e }}?type=manager">Open explorer</a>
+      </article>
+      <article class="feature-card">
+        <p class="feature-kicker">Funds</p>
+        <h3 class="feature-title">Explore funds</h3>
+        <p class="feature-deck">Open the existing loaded fund/source-file index for fund-level entry points.</p>
+        <a class="feature-link" href="{{ request.url_for('source_files_list') | e }}">Open fund index</a>
+      </article>
+      <article class="feature-card">
+        <p class="feature-kicker">Exposure list</p>
+        <h3 class="feature-title">Top disclosed exposures</h3>
+        <p class="feature-deck">Sort entities by total disclosed AUD on value-bearing non-aggregate rows only.</p>
+        <a class="feature-link" href="{{ request.url_for('demo_entities') | e }}?sort=value_aud_desc">Open explorer</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">What changed this period</p>
+        <h2 class="section-title">Current period status</h2>
+      </div>
+      <p class="section-note">No sparkline, delta, or change indicator is shown until a second period exists.</p>
+    </div>
+    <div class="token-row">
+      {% if dashboard.homepage.change_available %}
+      <span class="badge badge--meta">Prior loaded period available</span>
+      {% else %}
+      <span class="badge badge--value-band">Change unavailable</span>
+      {% endif %}
+      <span class="badge badge--meta">
+        Current
+        <code>{{ (dashboard.homepage.latest_reporting_period.isoformat() if dashboard.homepage.latest_reporting_period else "-") | e }}</code>
+      </span>
+    </div>
+    <div class="section-subblock">
+      <p class="quiet-note quiet-note--spaced">{{ dashboard.homepage.change_note | e }}</p>
+    </div>
+  </section>
+</div>
+{% endblock %}

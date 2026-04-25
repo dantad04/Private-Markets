@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="demo-page-view">
+  <section class="editorial-hero">
+    <p class="eyebrow">Entity explorer</p>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 class="hero-title">Browse disclosed entities</h1>
+        <p class="hero-deck">
+          Sort and filter canonical entities that appear in current loaded non-aggregate holdings. All sort metrics
+          are computed over non-aggregate holdings only; the value sort uses value-bearing rows only.
+        </p>
+      </div>
+      <div class="hero-metrics" aria-label="Explorer result metrics">
+        <div class="metric">
+          <div class="metric-label">Results</div>
+          <div class="metric-value">{{ explorer.total_rows | e }}</div>
+          <div class="metric-note">Entities after filters</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Page</div>
+          <div class="metric-value">{{ explorer.page | e }}</div>
+          <div class="metric-note">of {{ explorer.total_pages | e }}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Rows per page</div>
+          <div class="metric-value">{{ explorer.page_size | e }}</div>
+          <div class="metric-note">Deep-linkable via page</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Explorer controls</p>
+        <h2 class="section-title">Sort and filter</h2>
+      </div>
+      <p class="section-note">
+        Filters narrow the candidate holding rows first, then metrics are recomputed per entity across direct, manager,
+        and issuer roles without blending completeness states.
+      </p>
+    </div>
+
+    <form method="get" action="{{ request.url_for('demo_entities') | e }}">
+      <div class="explorer-controls">
+        <div class="filter-control">
+          <label for="sort">Sort</label>
+          <select id="sort" name="sort">
+            {% for option in explorer.sort_options %}
+            <option value="{{ option.value | e }}" {% if option.value == explorer.sort %}selected{% endif %}>
+              {{ option.label | e }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="filter-control">
+          <label for="type">Entity type</label>
+          <select id="type" name="type">
+            {% for option in explorer.entity_type_options %}
+            <option value="{{ option.value | e }}" {% if option.value == explorer.active_entity_type %}selected{% endif %}>
+              {{ option.label | e }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <button type="submit">Apply</button>
+        </div>
+      </div>
+
+      <details
+        class="filter-shell"
+        {% if explorer.selected_disclosure_completeness or explorer.selected_funds or explorer.selected_asset_classes %}open{% endif %}
+      >
+        <summary>Filters</summary>
+        <div class="filter-grid">
+          <div class="filter-control">
+            <label for="disclosure-completeness">Disclosure completeness</label>
+            <select id="disclosure-completeness" name="disclosure_completeness" multiple>
+              {% for option in explorer.disclosure_options %}
+              <option
+                value="{{ option.value | e }}"
+                {% if option.value in explorer.selected_disclosure_completeness %}selected{% endif %}
+              >
+                {{ option.label | e }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="filter-control">
+            <label for="fund">Fund</label>
+            <select id="fund" name="fund" multiple>
+              {% for option in explorer.fund_options %}
+              <option value="{{ option.value | e }}" {% if option.value in explorer.selected_funds %}selected{% endif %}>
+                {{ option.label | e }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="filter-control">
+            <label for="canonical-asset-class">Canonical asset class</label>
+            <select id="canonical-asset-class" name="canonical_asset_class" multiple>
+              {% for option in explorer.asset_class_options %}
+              <option
+                value="{{ option.value | e }}"
+                {% if option.value in explorer.selected_asset_classes %}selected{% endif %}
+              >
+                {{ option.label | e }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </details>
+    </form>
+
+    <div class="token-row">
+      <span class="badge badge--meta">Sort <code>{{ explorer.sort | e }}</code></span>
+      <span class="badge badge--meta">Type <code>{{ explorer.active_entity_type | e }}</code></span>
+      {% for value in explorer.selected_disclosure_completeness %}
+      <span class="badge badge--disclosure">Disclosure <code>{{ value | e }}</code></span>
+      {% endfor %}
+      {% for value in explorer.selected_funds %}
+      <span class="badge badge--meta">Fund <code>{{ value | e }}</code></span>
+      {% endfor %}
+      {% for value in explorer.selected_asset_classes %}
+      <span class="badge badge--meta">Asset class <code>{{ value | e }}</code></span>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Results</p>
+        <h2 class="section-title">Entities <span class="section-count">{{ explorer.total_rows | e }}</span></h2>
+      </div>
+      <p class="section-note">Total disclosed value: value-bearing non-aggregate rows only.</p>
+    </div>
+
+    <div class="table-shell">
+      <table class="dense-table explorer-table">
+        <thead>
+          <tr>
+            <th class="explorer-table__entity">Entity name</th>
+            <th class="explorer-table__type">Type</th>
+            <th class="explorer-table__count num">Funds</th>
+            <th class="explorer-table__count num">Options</th>
+            <th class="explorer-table__count num">Rows</th>
+            <th class="explorer-table__value num">
+              Total disclosed value
+              <div class="table-secondary">value-bearing non-aggregate rows only</div>
+            </th>
+            <th class="explorer-table__count num">Ownership disclosures</th>
+            <th class="explorer-table__mix">Disclosure mix</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if explorer.rows %}
+          {% for row in explorer.rows %}
+          <tr>
+            <td>
+              <div class="table-primary">
+                {% if row.entity_type == "company" %}
+                <a href="{{ request.url_for('company_detail_page', entity_id=row.entity_id) | e }}">{{ row.entity_name | e }}</a>
+                {% elif row.entity_type == "manager" %}
+                <a href="{{ request.url_for('manager_detail_page', entity_id=row.entity_id) | e }}">{{ row.entity_name | e }}</a>
+                {% else %}
+                {{ row.entity_name | e }}
+                {% endif %}
+              </div>
+              <div class="table-secondary">Entity {{ row.entity_id | e }}</div>
+            </td>
+            <td><span class="badge badge--meta">{{ row.entity_type | e }}</span></td>
+            <td class="num">{{ row.fund_count | e }}</td>
+            <td class="num">{{ row.option_count | e }}</td>
+            <td class="num">{{ row.row_count | e }}</td>
+            <td class="num" title="{{ row.total_value_aud | e }}">{{ row.total_value_aud | aud_compact }}</td>
+            <td class="num">{{ row.ownership_count | e }}</td>
+            <td>
+              <div class="token-row token-row--tight">
+                {% for disclosure, count in row.disclosure_mix %}
+                <span class="badge badge--disclosure">{{ disclosure | e }} <span class="badge-count">{{ count | e }}</span></span>
+                {% endfor %}
+                {% if not row.disclosure_mix %}
+                <span class="badge badge--meta">No tracked mix</span>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td class="empty-state" colspan="8">No entities match the current filters.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      {% if prev_url %}
+      <a href="{{ prev_url | e }}">Previous</a>
+      {% endif %}
+      <span class="badge badge--meta">Page <code>{{ explorer.page | e }}</code> of <code>{{ explorer.total_pages | e }}</code></span>
+      {% if next_url %}
+      <a href="{{ next_url | e }}">Next</a>
+      {% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}

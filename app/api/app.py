@@ -11,6 +11,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.api.admin import router as admin_router
 from app.api.admin_ui import router as admin_ui_router
+from app.api.demo import router as demo_router
 from app.api.entities import router as entities_router
 from app.api.funds import router as funds_router
 from app.api.search import router as search_router
@@ -120,6 +121,7 @@ def create_app() -> FastAPI:
     app.state.templates = create_templates()
     app.include_router(admin_router)
     app.include_router(admin_ui_router)
+    app.include_router(demo_router)
     app.include_router(entities_router)
     app.include_router(funds_router)
     app.include_router(search_router)

@@ -105,7 +105,8 @@
     }
     input[type="text"],
     input[type="date"],
-    input[type="number"] {
+    input[type="number"],
+    select {
       width: 100%;
       max-width: 640px;
       padding: 6px 8px;
@@ -139,6 +140,7 @@
     }
     .company-page-view,
     .fund-page-view,
+    .demo-page-view,
     .manager-page-view {
       color: var(--ink);
       margin-top: 28px;
@@ -457,6 +459,9 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
+    .feature-grid--four {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
     .feature-card {
       min-height: 100%;
       padding: 20px;
@@ -547,6 +552,72 @@
       background: rgba(181, 77, 46, 0.1);
       color: #8a381f;
     }
+    .hero-search-input {
+      max-width: 760px;
+      min-height: 48px;
+      font-size: 1.05rem;
+    }
+    .explorer-controls {
+      display: grid;
+      grid-template-columns: minmax(220px, 320px) minmax(180px, 260px) auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+    .filter-shell {
+      border: 1px solid var(--rule);
+      background: rgba(255, 255, 255, 0.56);
+      margin: 0 0 18px;
+      padding: 0;
+    }
+    .filter-shell summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      color: var(--ink-soft);
+      font-weight: 700;
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 14px;
+      border-top: 1px solid var(--rule);
+      padding: 14px;
+    }
+    .filter-control label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink-muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .filter-control select[multiple] {
+      min-height: 112px;
+    }
+    .explorer-table {
+      min-width: 1160px;
+      table-layout: fixed;
+    }
+    .explorer-table th,
+    .explorer-table td {
+      overflow-wrap: anywhere;
+    }
+    .explorer-table__entity {
+      width: 23%;
+    }
+    .explorer-table__type {
+      width: 10%;
+    }
+    .explorer-table__count {
+      width: 8%;
+    }
+    .explorer-table__value {
+      width: 15%;
+    }
+    .explorer-table__mix {
+      width: 20%;
+    }
     .site-footer {
       margin-top: 36px;
       padding-top: 18px;
@@ -560,6 +631,10 @@
       .fund-layout,
       .manager-layout,
       .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      .explorer-controls,
+      .filter-grid {
         grid-template-columns: 1fr;
       }
       .hero-metrics {
@@ -599,6 +674,7 @@
     <div class="banner">{{ banner_text | e }}</div>
     <nav>
       <a href="{{ request.url_for('admin_ui_root') | e }}">Home</a>
+      <a href="{{ request.url_for('demo_dashboard') | e }}">Demo</a>
       <a href="{{ request.url_for('search_page') | e }}">Search</a>
       <a href="{{ request.url_for('australiansuper_stable_matched_asset_proof_page') | e }}">Matched-asset proof</a>
       <a href="{{ request.url_for('source_files_list') | e }}">Source files</a>
