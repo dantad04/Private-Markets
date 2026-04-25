@@ -266,7 +266,7 @@ def australiansuper_stable_matched_asset_proof_page(
         request,
         "matched_asset_proof.html",
         {
-            "page_title": "AustralianSuper Stable Matched-Asset Proof",
+            "page_title": "Experimental seven-row coordinate proof",
             "detail": get_australiansuper_stable_matched_asset_proof(session),
         },
     )

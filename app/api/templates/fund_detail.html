@@ -7,6 +7,14 @@
   {% set summary.value_band_rows = summary.value_band_rows + (option.value_band_exposures | length) %}
 {% endfor %}
 <div class="fund-page-view">
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="{{ request.url_for('demo_dashboard') | e }}">Home</a>
+    <span class="separator" aria-hidden="true">&gt;</span>
+    <a href="{{ request.url_for('source_files_list') | e }}">Funds</a>
+    <span class="separator" aria-hidden="true">&gt;</span>
+    <span>{{ detail.fund_name | e }}</span>
+  </nav>
+
   <section class="editorial-hero">
     <p class="eyebrow">Fund disclosure view</p>
     <div class="hero-grid">
@@ -137,7 +145,7 @@
                     </td>
                     <td>
                       <span class="badge badge--disclosure">
-                        {{ bucket.disclosure_completeness | replace("_", " ") | title }}
+                        {{ bucket.disclosure_completeness | disclosure_label }}
                       </span>
                     </td>
                     <td class="num mono">{{ bucket.observation_count | e }}</td>

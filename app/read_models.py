@@ -208,8 +208,10 @@ class ManagerObservationReadModel:
     raw_name: str
     source_file_id: int
     source_row_number: int
+    source_fund_id: int
     fund_code: str
     fund_name: str
+    source_option_id: int
     option_code: str
     option_name: str
     reporting_period_end_date: date
@@ -227,6 +229,26 @@ class ManagerObservationReadModel:
     confidence_label: str
     confidence_detail: str
     is_non_precise: bool
+
+
+@dataclass(frozen=True)
+class ManagerRoleOptionGroupReadModel:
+    source_option_id: int
+    option_code: str
+    option_name: str
+    row_count: int
+    value_aud_total: Decimal
+    rows: list[ManagerObservationReadModel]
+
+
+@dataclass(frozen=True)
+class ManagerRoleFundGroupReadModel:
+    source_fund_id: int
+    fund_code: str
+    fund_name: str
+    row_count: int
+    value_aud_total: Decimal
+    option_groups: list[ManagerRoleOptionGroupReadModel]
 
 
 @dataclass(frozen=True)
@@ -261,6 +283,11 @@ class ManagerDetailReadModel:
     disclosure_summary: list[tuple[str, int]]
     resolution_scope_note: str
     observations: list[ManagerObservationReadModel]
+    manager_role_fund_count: int
+    manager_role_option_count: int
+    manager_role_value_aud_total: Decimal
+    active_role_group_count: int
+    manager_role_groups: list[ManagerRoleFundGroupReadModel]
     manager_role_rows: list[ManagerObservationReadModel]
     direct_holding_rows: list[ManagerObservationReadModel]
     issuer_role_rows: list[ManagerObservationReadModel]
@@ -1669,8 +1696,10 @@ def get_manager_detail(
             Holding.source_subclass_raw,
             Holding.classification_raw,
             CanonicalAssetClass.code.label("canonical_asset_class_code"),
+            Fund.id.label("source_fund_id"),
             Fund.code.label("fund_code"),
             Fund.name.label("fund_name"),
+            InvestmentOption.id.label("source_option_id"),
             InvestmentOption.source_option_code.label("option_code"),
             InvestmentOption.source_option_name.label("option_name"),
             ReportingPeriod.period_end_date.label("reporting_period_end_date"),
@@ -1737,8 +1766,10 @@ def get_manager_detail(
             raw_name=row.raw_name,
             source_file_id=row.source_file_id,
             source_row_number=row.source_row_number,
+            source_fund_id=row.source_fund_id,
             fund_code=row.fund_code,
             fund_name=row.fund_name,
+            source_option_id=row.source_option_id,
             option_code=row.option_code,
             option_name=row.option_name,
             reporting_period_end_date=row.reporting_period_end_date,
@@ -1787,6 +1818,10 @@ def get_manager_detail(
     ]
     primary_observations = [observation for observation in observations if not observation.is_non_precise]
     supplemental_observations = [observation for observation in observations if observation.is_non_precise]
+    manager_role_value_aud_total = sum(
+        (observation.value_aud for observation in manager_role_rows if observation.value_aud is not None),
+        Decimal("0"),
+    )
     return ManagerDetailReadModel(
         entity_id=entity.id,
         canonical_name=entity.canonical_name,
@@ -1821,6 +1856,15 @@ def get_manager_detail(
             "cross-fund total, and no extra relationship inference is added on this page."
         ),
         observations=observations,
+        manager_role_fund_count=len({observation.source_fund_id for observation in manager_role_rows}),
+        manager_role_option_count=len({observation.source_option_id for observation in manager_role_rows}),
+        manager_role_value_aud_total=manager_role_value_aud_total,
+        active_role_group_count=sum(
+            1
+            for role_rows in (manager_role_rows, direct_holding_rows, issuer_role_rows)
+            if role_rows
+        ),
+        manager_role_groups=_build_manager_role_groups(manager_role_rows),
         manager_role_rows=manager_role_rows,
         direct_holding_rows=direct_holding_rows,
         issuer_role_rows=issuer_role_rows,
@@ -2048,6 +2092,14 @@ DISCLOSURE_COMPLETENESS_SORT_ORDER = {
     "ownership_only": 2,
     "name_only": 3,
     "aggregate_total": 4,
+}
+
+DISCLOSURE_COMPLETENESS_LABELS = {
+    "fully_disclosed": "Direct",
+    "value_only": "Value only",
+    "ownership_only": "Ownership only",
+    "name_only": "Name only",
+    "aggregate_total": "Section total",
 }
 
 PRIVATE_ASSET_CLASS_CODES = {
@@ -2423,10 +2475,10 @@ def get_australiansuper_stable_matched_asset_proof(session: Session) -> MatchedA
     ]
     return MatchedAssetProofReadModel(
         proof_key=AUSTRALIANSUPER_STABLE_MATCHED_ASSET_PROOF_KEY,
-        title="AustralianSuper Stable matched-asset proof",
+        title="Experimental seven-row coordinate proof",
         scope_note=(
-            "Bounded Stage 5 matched-asset map rendering proof. This page is limited to seven exact "
-            "AustralianSuper Stable source rows and is not complete property or infrastructure coverage."
+            "Bounded rendering proof using stored coordinates from AustralianSuper Stable disclosures. "
+            "Not a full property or infrastructure map."
         ),
         matched_asset_count=len(proof_rows),
         rows=proof_rows,
@@ -2778,7 +2830,7 @@ def get_demo_dashboard(session: Session) -> DemoDashboardReadModel:
 
     curated_links.append(
         DemoCuratedLinkReadModel(
-            title="AustralianSuper Stable matched-asset proof",
+            title="Experimental seven-row coordinate proof",
             deck="Experimental seven-row coordinate proof — not full coverage.",
             result_kind="matched_asset_proof",
             entity_id=None,
@@ -2921,7 +2973,7 @@ def get_demo_entity_explorer(
             for value, label in DEMO_ENTITY_TYPE_LABELS.items()
         ],
         disclosure_options=[
-            DemoEntityExplorerFilterOption(value=value, label=value.replace("_", " "))
+            DemoEntityExplorerFilterOption(value=value, label=_humanize_disclosure_completeness(value))
             for value in DISCLOSURE_COMPLETENESS_SORT_ORDER
         ],
         fund_options=_get_demo_fund_filter_options(session),
@@ -3218,6 +3270,71 @@ def _derive_manager_role_classes(
     ]
 
 
+def _build_manager_role_groups(
+    rows: list[ManagerObservationReadModel],
+) -> list[ManagerRoleFundGroupReadModel]:
+    fund_buckets: dict[int, dict[str, object]] = {}
+    for row in rows:
+        fund_bucket = fund_buckets.setdefault(
+            row.source_fund_id,
+            {
+                "fund_code": row.fund_code,
+                "fund_name": row.fund_name,
+                "rows": [],
+                "option_buckets": {},
+            },
+        )
+        fund_bucket["rows"].append(row)
+        option_buckets = fund_bucket["option_buckets"]
+        option_bucket = option_buckets.setdefault(
+            row.source_option_id,
+            {
+                "option_code": row.option_code,
+                "option_name": row.option_name,
+                "rows": [],
+            },
+        )
+        option_bucket["rows"].append(row)
+
+    fund_groups: list[ManagerRoleFundGroupReadModel] = []
+    for source_fund_id, fund_bucket in sorted(
+        fund_buckets.items(),
+        key=lambda item: (str(item[1]["fund_code"]).casefold(), str(item[1]["fund_name"]).casefold()),
+    ):
+        option_groups = [
+            ManagerRoleOptionGroupReadModel(
+                source_option_id=source_option_id,
+                option_code=str(option_bucket["option_code"]),
+                option_name=str(option_bucket["option_name"]),
+                row_count=len(option_bucket["rows"]),
+                value_aud_total=sum(
+                    (row.value_aud for row in option_bucket["rows"] if row.value_aud is not None),
+                    Decimal("0"),
+                ),
+                rows=option_bucket["rows"],
+            )
+            for source_option_id, option_bucket in sorted(
+                fund_bucket["option_buckets"].items(),
+                key=lambda item: (str(item[1]["option_name"]).casefold(), str(item[1]["option_code"]).casefold()),
+            )
+        ]
+        fund_groups.append(
+            ManagerRoleFundGroupReadModel(
+                source_fund_id=source_fund_id,
+                fund_code=str(fund_bucket["fund_code"]),
+                fund_name=str(fund_bucket["fund_name"]),
+                row_count=len(fund_bucket["rows"]),
+                value_aud_total=sum(
+                    (row.value_aud for row in fund_bucket["rows"] if row.value_aud is not None),
+                    Decimal("0"),
+                ),
+                option_groups=option_groups,
+            )
+        )
+
+    return fund_groups
+
+
 def _derive_fund_observation_kind(
     *,
     entity_type: str | None,
@@ -3285,7 +3402,7 @@ def _build_cross_adapter_holdings_read_model(
 
 
 def _humanize_disclosure_completeness(value: str) -> str:
-    return value.replace("_", " ").title()
+    return DISCLOSURE_COMPLETENESS_LABELS.get(value, value.replace("_", " ").title())
 
 
 def _humanize_observation_kind(value: str) -> str:

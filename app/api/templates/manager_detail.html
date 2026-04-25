@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="manager-page-view">
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="{{ request.url_for('demo_dashboard') | e }}">Home</a>
+    <span class="separator" aria-hidden="true">&gt;</span>
+    <a href="{{ request.url_for('demo_entities') | e }}?type=manager">Managers</a>
+    <span class="separator" aria-hidden="true">&gt;</span>
+    <span>{{ detail.canonical_name | e }}</span>
+  </nav>
+
   <section class="editorial-hero">
     <p class="eyebrow">Manager Roll-up Exposure View</p>
     <div class="hero-grid">
@@ -28,19 +36,19 @@
       </div>
       <div class="hero-metrics" aria-label="Manager summary metrics">
         <div class="metric">
-          <div class="metric-label">Disclosing funds</div>
-          <div class="metric-value">{{ detail.fund_count | e }}</div>
-          <div class="metric-note">Current reviewed slice</div>
+          <div class="metric-label">Manager-rollup funds</div>
+          <div class="metric-value">{{ detail.manager_role_fund_count | e }}</div>
+          <div class="metric-note">Funds disclosing exposure</div>
         </div>
         <div class="metric">
-          <div class="metric-label">Observations</div>
-          <div class="metric-value">{{ detail.observation_count | e }}</div>
-          <div class="metric-note">Across visible aliases</div>
+          <div class="metric-label">Manager-rollup options</div>
+          <div class="metric-value">{{ detail.manager_role_option_count | e }}</div>
+          <div class="metric-note">Fund and option level</div>
         </div>
         <div class="metric">
-          <div class="metric-label">Asset classes</div>
-          <div class="metric-value">{{ detail.asset_classes | length }}</div>
-          <div class="metric-note">Current stored truth only</div>
+          <div class="metric-label">Disclosed via manager rollup; not look-through</div>
+          <div class="metric-value" title="{{ detail.manager_role_value_aud_total | e }}">{{ detail.manager_role_value_aud_total | aud_compact }}</div>
+          <div class="metric-note">Value-bearing manager-role rows only</div>
         </div>
       </div>
     </div>
@@ -48,8 +56,122 @@
 
   <div class="manager-layout">
     <main class="manager-main">
+      {% if detail.active_role_group_count >= 2 %}
+      <div class="notice-banner">
+        This entity is observed in multiple roles. Manager-rollup values, direct holding rows, and issuer-role rows
+        describe different disclosures and must not be summed across roles.
+      </div>
+      {% endif %}
+
+      {% if detail.manager_role_rows %}
+      <section class="section-block entity-role-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Entity role group</p>
+            <h2 class="section-title">
+              Disclosed as manager
+              <span class="section-count">
+                {{ detail.manager_role_rows | length }} row{% if detail.manager_role_rows | length != 1 %}s{% endif %}
+              </span>
+            </h2>
+          </div>
+          <p class="section-note">
+            Rows are grouped by source fund and source option. The section total is manager-rollup disclosure only,
+            not a look-through value and not combined with ownership or issuer-role rows.
+          </p>
+        </div>
+        {% for fund_group in detail.manager_role_groups %}
+        <div class="section-subblock">
+          <div class="group-heading">
+            <h3 class="group-heading-title">{{ fund_group.fund_name | e }}</h3>
+            <div class="token-row token-row--tight">
+              <span class="badge badge--meta">Fund <code>{{ fund_group.fund_code | e }}</code></span>
+              <span class="badge badge--meta">{{ fund_group.row_count | e }} row{% if fund_group.row_count != 1 %}s{% endif %}</span>
+              <span class="badge badge--meta" title="{{ fund_group.value_aud_total | e }}">Manager-rollup value {{ fund_group.value_aud_total | aud_compact }}</span>
+            </div>
+          </div>
+          {% for option_group in fund_group.option_groups %}
+          <div class="section-subblock">
+            <div class="group-heading">
+              <h4 class="group-heading-title">{{ option_group.option_name | e }}</h4>
+              <div class="token-row token-row--tight">
+                <span class="badge badge--meta">Option <code>{{ option_group.option_code | e }}</code></span>
+                <span class="badge badge--meta">{{ option_group.row_count | e }} row{% if option_group.row_count != 1 %}s{% endif %}</span>
+                <span class="badge badge--meta" title="{{ option_group.value_aud_total | e }}">Value {{ option_group.value_aud_total | aud_compact }}</span>
+              </div>
+            </div>
+            <div class="table-shell">
+              <table class="dense-table entity-role-table">
+                <colgroup>
+                  <col class="entity-role-table__fund">
+                  <col class="entity-role-table__name">
+                  <col class="entity-role-table__exposure">
+                  <col class="entity-role-table__ownership">
+                  <col class="entity-role-table__value">
+                  <col class="entity-role-table__confidence">
+                  <col class="entity-role-table__period">
+                  <col class="entity-role-table__provenance">
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Fund / Option</th>
+                    <th>Observed Name</th>
+                    <th>Exposure</th>
+                    <th class="num">Ownership</th>
+                    <th class="num">Value (AUD)</th>
+                    <th>Confidence</th>
+                    <th>Period</th>
+                    <th>Provenance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in option_group.rows %}
+                  <tr>
+                    <td class="wrap-cell">
+                      <div class="table-primary">{{ row.fund_name | e }}</div>
+                      <div class="table-secondary"><code>{{ row.fund_code | e }}</code></div>
+                      <div class="table-tertiary">{{ row.option_name | e }} <code>{{ row.option_code | e }}</code></div>
+                    </td>
+                    <td class="wrap-cell">
+                      <div class="table-primary">{{ row.raw_name | e }}</div>
+                      {% if row.raw_name != detail.canonical_name %}
+                      <div class="table-secondary">Observed alias within the canonical manager view.</div>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <div class="token-row token-row--tight">
+                        <span class="badge badge--disclosure">{{ row.disclosure_label | e }}</span>
+                        <span class="badge badge--meta">{{ row.observation_kind_label | e }}</span>
+                      </div>
+                      <div class="table-secondary">
+                        <code>{{ row.canonical_asset_class_code | e }}</code> · {{ row.source_asset_class_raw | e }}
+                      </div>
+                      {% if row.source_subclass_raw %}
+                      <div class="table-tertiary">{{ row.source_subclass_raw | e }}</div>
+                      {% endif %}
+                    </td>
+                    <td class="num mono" title="{{ row.ownership_pct if row.ownership_pct is not none else '' }}">{{ row.ownership_pct | pct_compact }}</td>
+                    <td class="num mono" title="{{ row.value_aud if row.value_aud is not none else '' }}">{{ row.value_aud | aud_compact }}</td>
+                    <td class="confidence-cell">
+                      <span class="badge badge--confidence" title="{{ row.confidence_detail | e }}">
+                        {{ row.confidence_label | e }}
+                      </span>
+                    </td>
+                    <td class="mono">{{ row.reporting_period_end_date.isoformat() }}</td>
+                    <td class="mono provenance-cell">file {{ row.source_file_id | e }}, row {{ row.source_row_number | e }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
       {% set role_sections = [
-        {"heading": "Disclosed as manager", "rows": detail.manager_role_rows},
         {"heading": "Disclosed as held entity", "rows": detail.direct_holding_rows},
         {"heading": "Disclosed as issuer", "rows": detail.issuer_role_rows}
       ] %}
@@ -61,12 +183,14 @@
             <p class="section-kicker">Entity role group</p>
             <h2 class="section-title">
               {{ section.heading | e }}
-              <span class="section-count">{{ section.rows | length }} rows</span>
+              <span class="section-count">
+                {{ section.rows | length }} row{% if section.rows | length != 1 %}s{% endif %}
+              </span>
             </h2>
           </div>
           <p class="section-note">
-            Disclosure completeness stays explicit on every row. This page shows current stored truth only and does
-            not compute a manager look-through total across funds or options.
+            Disclosure completeness stays explicit on every row. This section is intentionally not blended with
+            the manager-rollup value shown in the header.
           </p>
         </div>
         <div class="table-shell">

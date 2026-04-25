@@ -7,6 +7,7 @@ import tempfile
 import unittest
 
 from fastapi.testclient import TestClient
+from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 
 from app.api.admin import get_db_session
@@ -415,5 +416,58 @@ class TestDemoDiscoveryLayer(unittest.TestCase):
             params={"disclosure_completeness": "ownership_only"},
         )
         self.assertEqual(200, response.status_code)
-        self.assertIn("ownership_only", response.text)
+        self.assertIn("Ownership only", response.text)
         self.assertIn('<span class="badge-count">3</span>', response.text)
+
+    def test_single_role_manager_page_has_no_multi_role_banner(self) -> None:
+        with self.SessionLocal() as session:
+            beta_manager_id = session.scalar(
+                select(Entity.id).where(Entity.canonical_name == "Beta Multi Fund Manager Pty Ltd")
+            )
+        self.assertIsNotNone(beta_manager_id)
+
+        response = self.client.get(f"/admin/ui/managers/{beta_manager_id}")
+        self.assertEqual(200, response.status_code)
+        self.assertIn("Disclosed as manager", response.text)
+        self.assertNotIn("Disclosed as held entity", response.text)
+        self.assertNotIn("Disclosed as issuer", response.text)
+        self.assertNotIn("This entity is observed in multiple roles", response.text)
+
+    def test_top_nav_links_resolve_from_touched_pages(self) -> None:
+        with self.SessionLocal() as session:
+            company_id = session.scalar(
+                select(Entity.id).where(Entity.canonical_name == "Alpha Value Pty Ltd")
+            )
+            manager_id = session.scalar(
+                select(Entity.id).where(Entity.canonical_name == "Beta Multi Fund Manager Pty Ltd")
+            )
+        self.assertIsNotNone(company_id)
+        self.assertIsNotNone(manager_id)
+
+        expected_nav_links = [
+            ('href="http://testserver/demo"', "Home"),
+            ('href="http://testserver/admin/ui/search"', "Search"),
+            ('href="http://testserver/demo/entities?type=company"', "Companies"),
+            ('href="http://testserver/demo/entities?type=manager"', "Managers"),
+            ('href="http://testserver/admin/ui/source-files"', "Funds"),
+        ]
+        page_paths = [
+            "/demo",
+            "/demo/entities?type=company",
+            "/admin/ui/search",
+            f"/admin/ui/companies/{company_id}",
+            f"/admin/ui/managers/{manager_id}",
+            "/admin/ui/source-files",
+            "/admin/ui/matched-assets/australiansuper-stable-stage5-proof",
+        ]
+        for page_path in page_paths:
+            response = self.client.get(page_path)
+            self.assertEqual(200, response.status_code, page_path)
+            for href, label in expected_nav_links:
+                self.assertIn(href, response.text, page_path)
+                self.assertIn(f">{label}</a>", response.text, page_path)
+            self.assertNotIn(">Matched-asset proof</a>", response.text)
+
+        for href, _label in expected_nav_links:
+            path = href.removeprefix('href="http://testserver').removesuffix('"')
+            self.assertEqual(200, self.client.get(path).status_code, path)

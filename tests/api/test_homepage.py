@@ -123,7 +123,8 @@ class TestHomepage(unittest.TestCase):
         self.assertIn("Funds", response.text)
         self.assertIn("Managers", response.text)
         self.assertIn("/admin/ui/search", response.text)
-        self.assertIn("Matched-asset proof", response.text)
+        self.assertNotIn(">Matched-asset proof</a>", response.text)
+        self.assertIn("Experimental surfaces:", response.text)
         self.assertIn("/admin/ui/matched-assets/australiansuper-stable-stage5-proof", response.text)
         self.assertIn("Search is the homepage's lead action", response.text)
 

@@ -77,7 +77,12 @@ class TestMatchedAssetProofApiAndUi(unittest.TestCase):
             detail = get_australiansuper_stable_matched_asset_proof(session)
 
         self.assertEqual("australiansuper-stable-stage5-proof", detail.proof_key)
-        self.assertIn("map rendering proof", detail.scope_note)
+        self.assertEqual("Experimental seven-row coordinate proof", detail.title)
+        self.assertEqual(
+            "Bounded rendering proof using stored coordinates from AustralianSuper Stable disclosures. "
+            "Not a full property or infrastructure map.",
+            detail.scope_note,
+        )
         self.assertEqual(7, detail.matched_asset_count)
         self.assertEqual(
             [3368, 3369, 3375, 3425, 3445, 3453, 3484],
@@ -92,7 +97,11 @@ class TestMatchedAssetProofApiAndUi(unittest.TestCase):
 
         payload = response.json()
         self.assertEqual(7, payload["matched_asset_count"])
-        self.assertIn("Bounded Stage 5 matched-asset map rendering proof", payload["scope_note"])
+        self.assertEqual(
+            "Bounded rendering proof using stored coordinates from AustralianSuper Stable disclosures. "
+            "Not a full property or infrastructure map.",
+            payload["scope_note"],
+        )
 
         rows = payload["rows"]
         self.assertEqual(
@@ -130,9 +139,14 @@ class TestMatchedAssetProofApiAndUi(unittest.TestCase):
         response = self.client.get("/admin/ui/matched-assets/australiansuper-stable-stage5-proof")
         self.assertEqual(200, response.status_code)
 
-        self.assertIn("AustralianSuper Stable matched-asset proof", response.text)
-        self.assertIn("Bounded Stage 5 matched-asset map rendering proof", response.text)
-        self.assertIn("not complete property or infrastructure coverage", response.text)
+        self.assertIn("Experimental seven-row coordinate proof", response.text)
+        self.assertIn(
+            "Bounded rendering proof using stored coordinates from AustralianSuper Stable disclosures. "
+            "Not a full property or infrastructure map.",
+            response.text,
+        )
+        self.assertNotIn(">Matched-asset proof</a>", response.text)
+        self.assertIn("Experimental surfaces:", response.text)
         self.assertIn("Seven-row coordinate plot", response.text)
         self.assertIn("data-map-panel=\"australiansuper-stable-stage5-proof\"", response.text)
         self.assertEqual(7, response.text.count("data-map-point=\"australiansuper-stable-stage5-proof\""))
@@ -154,6 +168,8 @@ class TestMatchedAssetProofApiAndUi(unittest.TestCase):
         self.assertIn("lng", response.text)
         self.assertIn("data-confidence-score=\"1.00000\"", response.text)
         self.assertIn("confidence <span class=\"mono\">1.00000</span>", response.text)
+        self.assertIn("Ownership only", response.text)
+        self.assertNotIn("<code>ownership_only</code>", response.text)
         self.assertIn(AUSTRALIANSUPER_STABLE_MATCHED_ASSET_SOURCE, response.text)
         self.assertIn("file", response.text)
         self.assertIn("row <span class=\"mono\">3368</span>", response.text)

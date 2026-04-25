@@ -120,7 +120,7 @@
       <span class="badge badge--meta">Sort <code>{{ explorer.sort | e }}</code></span>
       <span class="badge badge--meta">Type <code>{{ explorer.active_entity_type | e }}</code></span>
       {% for value in explorer.selected_disclosure_completeness %}
-      <span class="badge badge--disclosure">Disclosure <code>{{ value | e }}</code></span>
+      <span class="badge badge--disclosure">Disclosure {{ value | disclosure_label }}</span>
       {% endfor %}
       {% for value in explorer.selected_funds %}
       <span class="badge badge--meta">Fund <code>{{ value | e }}</code></span>
@@ -182,7 +182,7 @@
             <td>
               <div class="token-row token-row--tight">
                 {% for disclosure, count in row.disclosure_mix %}
-                <span class="badge badge--disclosure">{{ disclosure | e }} <span class="badge-count">{{ count | e }}</span></span>
+                <span class="badge badge--disclosure">{{ disclosure | disclosure_label }} <span class="badge-count">{{ count | e }}</span></span>
                 {% endfor %}
                 {% if not row.disclosure_mix %}
                 <span class="badge badge--meta">No tracked mix</span>

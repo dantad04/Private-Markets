@@ -60,9 +60,9 @@
       <td>{{ row.fund_name | e }} (<code>{{ row.fund_code | e }}</code>)</td>
       <td>{{ row.option_name | e }} (<code>{{ row.option_code | e }}</code>)</td>
       <td>{{ row.reporting_period_end_date.isoformat() }}</td>
-      <td><code>{{ row.disclosure_completeness | e }}</code></td>
-      <td>{{ row.value_aud if row.value_aud is not none else "" }}</td>
-      <td>{{ row.ownership_pct if row.ownership_pct is not none else "" }}</td>
+      <td><span class="badge badge--disclosure">{{ row.disclosure_completeness | disclosure_label }}</span></td>
+      <td title="{{ row.value_aud if row.value_aud is not none else '' }}">{{ row.value_aud | aud_compact }}</td>
+      <td title="{{ row.ownership_pct if row.ownership_pct is not none else '' }}">{{ row.ownership_pct | pct_compact }}</td>
       <td>{{ row.value_band_raw if row.value_band_raw is not none else "" }}</td>
       <td>{{ row.source_file_id }}</td>
     </tr>

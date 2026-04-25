@@ -101,10 +101,12 @@
       <td>{{ holding.source_asset_class_raw | e }}</td>
       <td>{{ (holding.source_subclass_raw or '') | e }}</td>
       <td>{{ holding.canonical_asset_class_code | e }}</td>
-      <td>{{ holding.disclosure_completeness | e }}</td>
+      <td>
+        <span class="badge badge--disclosure">{{ holding.disclosure_completeness | disclosure_label }}</span>
+      </td>
       <td>{{ holding.is_aggregate | e }}</td>
-      <td>{{ (holding.value_aud if holding.value_aud is not none else '') | e }}</td>
-      <td>{{ (holding.ownership_pct if holding.ownership_pct is not none else '') | e }}</td>
+      <td title="{{ holding.value_aud if holding.value_aud is not none else '' }}">{{ holding.value_aud | aud_compact }}</td>
+      <td title="{{ holding.ownership_pct if holding.ownership_pct is not none else '' }}">{{ holding.ownership_pct | pct_compact }}</td>
       <td>{{ (holding.currency_raw or '') | e }}</td>
       <td>{{ (holding.security_identifier_type or '') | e }}</td>
       <td>{{ (holding.security_identifier_value or '') | e }}</td>

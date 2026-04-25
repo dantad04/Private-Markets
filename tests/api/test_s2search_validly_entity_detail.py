@@ -143,7 +143,7 @@ class TestS2SearchValidlyEntityDetailApi(unittest.TestCase):
         self.assertIn(f"searchText={''.join(ch for ch in acn if ch.isdigit())}", response.text)
         self.assertIn("Disclosed as held entity", response.text)
         self.assertIn("Private Equity", response.text)
-        self.assertIn("Name Only", response.text)
+        self.assertIn("Name only", response.text)
         self.assertIn("No persisted relationships for this company in current stored truth.", response.text)
         self.assertIn("Only one reporting period is currently available", response.text)
         self.assertNotIn("ABR reviewed", response.text)

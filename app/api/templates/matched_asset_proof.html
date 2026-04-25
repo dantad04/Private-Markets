@@ -112,10 +112,7 @@
 
 <h1>{{ detail.title | e }}</h1>
 
-<p>
-  Bounded Stage 5 matched-asset map rendering proof. This page is limited to seven exact
-  AustralianSuper Stable source rows and is not complete property or infrastructure coverage.
-</p>
+<p>{{ detail.scope_note | e }}</p>
 
 <div class="metadata-grid">
   <strong>proof_key</strong><span><code>{{ detail.proof_key | e }}</code></span>
@@ -230,8 +227,8 @@
         {% if row.source_subclass_raw %}<small>{{ row.source_subclass_raw | e }}</small>{% endif %}
       </td>
       <td>
-        <code>{{ row.disclosure_completeness | e }}</code><br>
-        {% if row.ownership_pct is not none %}ownership_pct <span class="mono">{{ row.ownership_pct | e }}</span><br>{% endif %}
+        <span class="badge badge--disclosure">{{ row.disclosure_completeness | disclosure_label }}</span><br>
+        {% if row.ownership_pct is not none %}ownership_pct <span class="mono" title="{{ row.ownership_pct | e }}">{{ row.ownership_pct | pct_compact }}</span><br>{% endif %}
         {% if row.value_band_raw %}value_band_raw <span class="mono">{{ row.value_band_raw | e }}</span>{% endif %}
       </td>
       <td>

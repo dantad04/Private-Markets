@@ -33,18 +33,22 @@
       margin: 0 auto;
       padding: 24px 24px 64px;
     }
-    nav {
+    .top-nav {
       margin-bottom: 18px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px 16px;
     }
-    nav a {
+    .top-nav a,
+    .site-footer a,
+    .breadcrumbs a {
       color: var(--ink);
       text-decoration: none;
       border-bottom: 1px solid transparent;
     }
-    nav a:hover {
+    .top-nav a:hover,
+    .site-footer a:hover,
+    .breadcrumbs a:hover {
       border-bottom-color: var(--accent);
     }
     .banner,
@@ -258,6 +262,17 @@
       font-family: var(--mono-font);
       color: var(--ink);
     }
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0 0 16px;
+      color: var(--ink-muted);
+      font-size: 0.84rem;
+    }
+    .breadcrumbs .separator {
+      color: var(--rule-strong);
+    }
     .company-layout,
     .fund-layout,
     .manager-layout {
@@ -413,6 +428,24 @@
       justify-content: center;
       min-width: 82px;
       white-space: nowrap;
+    }
+    .notice-banner {
+      border: 1px solid rgba(181, 77, 46, 0.35);
+      background: rgba(181, 77, 46, 0.08);
+      color: #7a2f1d;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+    }
+    .group-heading {
+      margin: 0 0 12px;
+      padding: 12px 0 8px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .group-heading-title {
+      margin: 0;
+      font-family: var(--display-font);
+      font-size: 1.18rem;
+      line-height: 1.15;
     }
     .empty-state {
       color: var(--ink-muted);
@@ -672,14 +705,12 @@
 <body>
   <div class="page-frame">
     <div class="banner">{{ banner_text | e }}</div>
-    <nav>
-      <a href="{{ request.url_for('admin_ui_root') | e }}">Home</a>
-      <a href="{{ request.url_for('demo_dashboard') | e }}">Demo</a>
+    <nav class="top-nav" aria-label="Primary navigation">
+      <a href="{{ request.url_for('demo_dashboard') | e }}">Home</a>
       <a href="{{ request.url_for('search_page') | e }}">Search</a>
-      <a href="{{ request.url_for('australiansuper_stable_matched_asset_proof_page') | e }}">Matched-asset proof</a>
-      <a href="{{ request.url_for('source_files_list') | e }}">Source files</a>
-      <a href="{{ request.url_for('schema_review_queue_list') | e }}">Schema review queue</a>
-      <a href="{{ request.url_for('admin_ui_ingest_form') | e }}">Ingest</a>
+      <a href="{{ request.url_for('demo_entities') | e }}?type=company">Companies</a>
+      <a href="{{ request.url_for('demo_entities') | e }}?type=manager">Managers</a>
+      <a href="{{ request.url_for('source_files_list') | e }}">Funds</a>
     </nav>
     {% if flash %}
     <div class="flash">{{ flash | e }}</div>
@@ -690,6 +721,9 @@
     {% block content %}{% endblock %}
     <footer class="site-footer">
       Demo project. Data normalised from public APRA Portfolio Holdings Disclosure files published by individual super funds. Not affiliated with or endorsed by APRA or any fund. Research/demonstration use only.
+      <br>
+      Experimental surfaces:
+      <a href="{{ request.url_for('australiansuper_stable_matched_asset_proof_page') | e }}">Experimental seven-row coordinate proof</a>
     </footer>
   </div>
 </body>

@@ -309,4 +309,4 @@ class TestCompanyDetailApi(unittest.TestCase):
         self.assertIn("Value Band", ui_response.text)
         self.assertIn("$100m-$500m", ui_response.text)
         self.assertIn("Confidence: Reviewed", ui_response.text)
-        self.assertIn("Name Only", ui_response.text)
+        self.assertIn("Name only", ui_response.text)

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 import tempfile
 import unittest
@@ -25,6 +26,7 @@ from app.ingest.loader import (
     ingest_hostplus_local_file,
     ingest_unisuper_local_file,
 )
+from app.read_models import get_manager_detail
 
 
 ART_SUNSUPER_FIXTURE_PATH = Path("tests/fixtures/art_sunsuper_synthetic_stable_minimal.csv").resolve()
@@ -149,6 +151,32 @@ class TestManagerDetailApi(unittest.TestCase):
         self.assertEqual(2, counts_by_fund_option[("unisuper", "Conservative", "2025-12-31")])
         self.assertEqual(6, counts_by_fund_option[("australiansuper", "Stable", "2025-12-31")])
 
+    def test_manager_detail_read_model_groups_ifm_role_rows_and_rollup_summary(self) -> None:
+        with self.SessionLocal() as session:
+            detail = get_manager_detail(session, entity_id=self.ifm_entity_id)
+
+        self.assertIsNotNone(detail)
+        assert detail is not None
+        self.assertEqual(7, len(detail.manager_role_rows))
+        self.assertEqual(10, len(detail.direct_holding_rows))
+        self.assertEqual(1, len(detail.issuer_role_rows))
+        self.assertEqual(4, detail.manager_role_fund_count)
+        self.assertEqual(4, detail.manager_role_option_count)
+        self.assertEqual(Decimal("955546817.000000000"), detail.manager_role_value_aud_total)
+        self.assertEqual(3, detail.active_role_group_count)
+
+        groups = {
+            group.fund_code: {
+                option_group.option_name: option_group.row_count
+                for option_group in group.option_groups
+            }
+            for group in detail.manager_role_groups
+        }
+        self.assertEqual({"ART Stable": 1}, groups["art"])
+        self.assertEqual({"HC High Growth - Class A Option": 1}, groups["hostplus"])
+        self.assertEqual({"Conservative": 1}, groups["unisuper"])
+        self.assertEqual({"Stable": 4}, groups["australiansuper"])
+
     def test_manager_detail_endpoint_preserves_disclosure_completeness_and_honest_observation_kinds(self) -> None:
         response = self.client.get(f"/entities/managers/{self.ifm_entity_id}")
         self.assertEqual(200, response.status_code)
@@ -199,9 +227,20 @@ class TestManagerDetailApi(unittest.TestCase):
         response = self.client.get(f"/admin/ui/managers/{self.ifm_entity_id}")
         self.assertEqual(200, response.status_code)
         self.assertIn("Manager Roll-up Exposure View", response.text)
+        self.assertIn('/demo">Home</a>', response.text)
+        self.assertIn('/demo/entities?type=manager">Managers</a>', response.text)
         self.assertIn("Disclosed as manager", response.text)
         self.assertIn("Disclosed as held entity", response.text)
         self.assertIn("Disclosed as issuer", response.text)
+        self.assertIn("7 rows", response.text)
+        self.assertIn("10 rows", response.text)
+        self.assertIn("1 row", response.text)
+        self.assertIn("Manager-rollup funds", response.text)
+        self.assertIn("Manager-rollup options", response.text)
+        self.assertIn("Disclosed via manager rollup; not look-through", response.text)
+        self.assertIn("$955.5m", response.text)
+        self.assertIn("This entity is observed in multiple roles", response.text)
+        self.assertIn("must not be summed across roles", response.text)
         self.assertIn("Confidence: Reviewed", response.text)
         self.assertIn("Current manager detail stays on stored disclosed rows only.", response.text)
         self.assertIn("IFM Investors Pty Ltd", response.text)
@@ -214,4 +253,7 @@ class TestManagerDetailApi(unittest.TestCase):
         self.assertIn("Manager Rollup", response.text)
         self.assertIn("Direct Holding", response.text)
         self.assertIn("Unknown", response.text)
+        self.assertIn("Value only", response.text)
+        self.assertIn("Ownership only", response.text)
+        self.assertIn("Name only", response.text)
         self.assertIn("No persisted entity-to-entity relationships for this manager in current stored truth.", response.text)

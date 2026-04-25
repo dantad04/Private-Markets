@@ -106,6 +106,22 @@ def _format_pct_compact(value) -> str:
     return f"{(decimal_value * Decimal('100')).quantize(Decimal('0.01'))}%"
 
 
+_DISCLOSURE_LABELS = {
+    "fully_disclosed": "Direct",
+    "value_only": "Value only",
+    "ownership_only": "Ownership only",
+    "name_only": "Name only",
+    "aggregate_total": "Section total",
+}
+
+
+def _format_disclosure_label(value) -> str:
+    if value is None:
+        return ""
+    raw_value = str(value)
+    return _DISCLOSURE_LABELS.get(raw_value, raw_value.replace("_", " ").title())
+
+
 def create_templates() -> Jinja2Templates:
     templates = Jinja2Templates(directory=str(Path(__file__).resolve().parent / "templates"))
     templates.env.filters["iso_utc"] = _format_datetime_utc
@@ -113,6 +129,7 @@ def create_templates() -> Jinja2Templates:
     templates.env.filters["json_pretty"] = _json_pretty
     templates.env.filters["aud_compact"] = _format_aud_compact
     templates.env.filters["pct_compact"] = _format_pct_compact
+    templates.env.filters["disclosure_label"] = _format_disclosure_label
     return templates
 
 
