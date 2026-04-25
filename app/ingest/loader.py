@@ -13,6 +13,12 @@ from adapters.art_qsuper import ArtQsuperPhdAdapter
 from adapters.art_sunsuper import ArtSunsuperPhdAdapter
 from adapters.australiansuper import AustralianSuperPhdAdapter
 from adapters.art_qsuper_errors import ArtQsuperAdapterError
+from adapters.australian_retirement_trust_real_16col import (
+    AustralianRetirementTrustReal16ColumnPhdAdapter,
+)
+from adapters.australian_retirement_trust_real_16col_errors import (
+    AustralianRetirementTrustReal16ColumnAdapterError,
+)
 from adapters.aware import AwarePhdAdapter
 from adapters.aware_errors import AwareAdapterError
 from adapters.base import AdapterParseResult, SourceFileMetadata
@@ -283,7 +289,8 @@ def load_adapter_parse_result(
     observed_options = parse_result.structural_metadata["observed_options"]
     option_names_by_code: dict[str, str] = {}
     for record in parse_result.holdings:
-        option_names_by_code.setdefault(record.source_option_code, record.source_option_name_raw)
+        option_key = _record_option_key(record, observed_options)
+        option_names_by_code.setdefault(option_key, record.source_option_name_raw)
 
     option_ids_by_code: dict[str, int] = {}
     for option_code in observed_options:
@@ -340,7 +347,7 @@ def load_adapter_parse_result(
             {
                 "source_file_id": source_file.id,
                 "source_fund_id": source_file.fund_id,
-                "source_option_id": option_ids_by_code[record.source_option_code],
+                "source_option_id": option_ids_by_code[_record_option_key(record, observed_options)],
                 "reporting_period_id": reporting_period.id,
                 "entity_id": None,
                 "raw_name": record.raw_name,
@@ -400,6 +407,18 @@ def load_adapter_parse_result(
         schema_fingerprint=parse_result.schema_fingerprint,
         warnings=parse_result.adapter_warnings,
     )
+
+
+def _record_option_key(record, observed_options: list[str]) -> str:
+    if record.source_option_code:
+        return record.source_option_code
+    if len(observed_options) == 1:
+        # Real ART 16-column files have no source option-code column. Their
+        # adapter keeps source_option_code=None and publishes OptionName here
+        # only as a stable key for the existing non-null DB option field; it is
+        # not evidence that the source supplied a true option code.
+        return observed_options[0]
+    raise LoaderError("Parsed multi-option row is missing source_option_code")
 
 
 def _derive_aware_friendly_option_name(file_path: Path) -> str | None:
@@ -651,6 +670,75 @@ def ingest_art_sunsuper_local_file(
         approved_mapping_version_id = None
         try:
             approved_mapping_version_id = ensure_approved_mapping_seeded(session, adapter_key="ArtSunsuperPhdAdapter").id
+        except Exception:
+            approved_mapping_version_id = None
+        create_schema_review_queue_item(
+            session,
+            source_file=source_file,
+            approved_mapping_version_id=approved_mapping_version_id,
+            review_reason="adapter_parse_failure",
+            observed_schema_fingerprint=None,
+            drift_summary_json={
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+            },
+            raw_bytes=raw_bytes,
+        )
+        session.flush()
+        raise
+    return load_adapter_parse_result(session, metadata, parse_result)
+
+
+def ingest_australian_retirement_trust_real_16col_local_file(
+    session: Session,
+    *,
+    fund_code: str,
+    fund_name: str,
+    file_path: str,
+    publication_date: date | None = None,
+    reporting_period_id: int | None = None,
+    received_at: datetime | None = None,
+    source_url: str | None = None,
+) -> LoadSummary:
+    file_path_obj = Path(file_path)
+    raw_bytes = file_path_obj.read_bytes()
+    checksum = hashlib.sha256(raw_bytes).hexdigest()
+    metadata = register_source_file(
+        session,
+        fund_code=fund_code,
+        fund_name=fund_name,
+        adapter_key=AustralianRetirementTrustReal16ColumnPhdAdapter.adapter_key,
+        source_url=source_url or str(file_path_obj),
+        checksum=checksum,
+        received_at=received_at or datetime.now(UTC),
+        reporting_period_id=reporting_period_id,
+        publication_date=publication_date,
+    )
+    source_file = session.get(SourceFile, metadata.source_file_id)
+    try:
+        ensure_approved_mapping_seeded(
+            session,
+            adapter_key=AustralianRetirementTrustReal16ColumnPhdAdapter.adapter_key,
+        )
+        parse_result = AustralianRetirementTrustReal16ColumnPhdAdapter().parse(metadata, raw_bytes)
+        enforce_approved_mapping(
+            session,
+            source_file=source_file,
+            parse_result=parse_result,
+            raw_bytes=raw_bytes,
+            source_section_raw=None,
+        )
+    except (SchemaDriftDetectedError, UnapprovedTaxonomyMappingError):
+        session.flush()
+        raise
+    except AustralianRetirementTrustReal16ColumnAdapterError as exc:
+        source_file.ingest_status = "review_required"
+        approved_mapping_version_id = None
+        try:
+            approved_mapping_version_id = ensure_approved_mapping_seeded(
+                session,
+                adapter_key=AustralianRetirementTrustReal16ColumnPhdAdapter.adapter_key,
+            ).id
         except Exception:
             approved_mapping_version_id = None
         create_schema_review_queue_item(

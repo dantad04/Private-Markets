@@ -10,6 +10,13 @@ from sqlalchemy.orm import Session
 
 from adapters.base import AdapterParseResult
 from adapters.art_qsuper_mapping import EXPECTED_HEADER as ART_QSUPER_EXPECTED_HEADER
+from adapters.australian_retirement_trust_real_16col_mapping import (
+    ADAPTER_KEY as ART_REAL_16COL_ADAPTER_KEY,
+    APPROVED_SCHEMA_FINGERPRINT as ART_REAL_16COL_SCHEMA_FINGERPRINT,
+    APPROVED_TYPE_VALUES as ART_REAL_16COL_APPROVED_TYPE_VALUES,
+    EXPECTED_HEADER as ART_REAL_16COL_EXPECTED_HEADER,
+    MAPPING_VERSION_ID as ART_REAL_16COL_MAPPING_VERSION_ID,
+)
 from adapters.aware_mapping import EXPECTED_TABLE_1_HEADER
 from adapters.cbus_mapping import (
     EXPECTED_HEADER as CBUS_EXPECTED_HEADER,
@@ -25,6 +32,7 @@ AWARE_MAPPING_VERSION_ID = "aware-stage2-v1"
 AWARE_INVESTMENT_FUNDS_2025_MAPPING_VERSION_ID = "aware-stage2-investment-funds-2025-12-31-v1"
 ART_QSUPER_MAPPING_VERSION_ID = "art-qsuper-stage2-v1"
 ART_SUNSUPER_MAPPING_VERSION_ID = "art-sunsuper-stage2-v1"
+AUSTRALIAN_RETIREMENT_TRUST_REAL_16COL_MAPPING_VERSION_ID = ART_REAL_16COL_MAPPING_VERSION_ID
 AUSTRALIANSUPER_MEMBER_DIRECT_MAPPING_VERSION_ID = "australiansuper-stage2-v1"
 AUSTRALIANSUPER_MAPPING_VERSION_ID = AUSTRALIANSUPER_MEMBER_DIRECT_MAPPING_VERSION_ID
 AUSTRALIANSUPER_STABLE_MAPPING_VERSION_ID = "australiansuper-stage2-stable-v1"
@@ -912,6 +920,241 @@ ART_SUNSUPER_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
             False,
             "name_only",
             "Private-equity vehicle row",
+        ),
+    ),
+)
+
+
+AUSTRALIAN_RETIREMENT_TRUST_REAL_16COL_APPROVED_MAPPING = ApprovedAdapterMappingSeed(
+    id=AUSTRALIAN_RETIREMENT_TRUST_REAL_16COL_MAPPING_VERSION_ID,
+    adapter_key=ART_REAL_16COL_ADAPTER_KEY,
+    schema_fingerprint=ART_REAL_16COL_SCHEMA_FINGERPRINT,
+    structural_expectations_json={
+        "observed_headers": ART_REAL_16COL_EXPECTED_HEADER,
+        "observed_asset_classes": list(ART_REAL_16COL_APPROVED_TYPE_VALUES),
+        "observed_reporting_dates": ["31 December 2025"],
+    },
+    notes=(
+        "Approved real Australian Retirement Trust 16-column Superannuation CSV mapping "
+        "for the source-domain verified 2025-12-31 18-file batch. This sits alongside, "
+        "and does not replace, quarantined synthetic legacy ART-QSuper and ART-Sunsuper mappings."
+    ),
+    approved_by="human-reviewer",
+    approved_at=datetime(2026, 4, 25, tzinfo=UTC),
+    taxonomy_rows=(
+        ApprovedTaxonomyMappingSeed("Cash", None, None, None, "cash", False, None, "ART real cash row"),
+        ApprovedTaxonomyMappingSeed("Cash", None, None, None, "cash", True, "aggregate_total", "ART real cash subtotal"),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income Externally Managed",
+            None,
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "ART real externally managed fixed-income row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income Externally Managed",
+            None,
+            None,
+            None,
+            "fixed_income",
+            True,
+            "aggregate_total",
+            "ART real externally managed fixed-income subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income Internally Managed",
+            None,
+            None,
+            None,
+            "fixed_income",
+            False,
+            None,
+            "ART real internally managed fixed-income row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Fixed Income Internally Managed",
+            None,
+            None,
+            None,
+            "fixed_income",
+            True,
+            "aggregate_total",
+            "ART real internally managed fixed-income subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Equity", None, None, None, "listed_equity", False, None, "ART real listed-equity row"
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Equity",
+            None,
+            None,
+            None,
+            "listed_equity",
+            True,
+            "aggregate_total",
+            "ART real listed-equity subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity Externally Managed",
+            None,
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            None,
+            "ART real externally managed unlisted-equity row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity Externally Managed",
+            None,
+            None,
+            None,
+            "unlisted_equity",
+            True,
+            "aggregate_total",
+            "ART real externally managed unlisted-equity subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity Internally Managed",
+            None,
+            None,
+            None,
+            "unlisted_equity",
+            False,
+            None,
+            "ART real internally managed unlisted-equity row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Equity Internally Managed",
+            None,
+            None,
+            None,
+            "unlisted_equity",
+            True,
+            "aggregate_total",
+            "ART real internally managed unlisted-equity subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Property", None, None, None, "listed_property", False, None, "ART real listed-property row"
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Property",
+            None,
+            None,
+            None,
+            "listed_property",
+            True,
+            "aggregate_total",
+            "ART real listed-property subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Property Externally Managed",
+            None,
+            None,
+            None,
+            "unlisted_property",
+            False,
+            None,
+            "ART real externally managed unlisted-property row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Property Externally Managed",
+            None,
+            None,
+            None,
+            "unlisted_property",
+            True,
+            "aggregate_total",
+            "ART real externally managed unlisted-property subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            None,
+            None,
+            None,
+            "listed_infrastructure",
+            False,
+            None,
+            "ART real listed-infrastructure row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Listed Infrastructure",
+            None,
+            None,
+            None,
+            "listed_infrastructure",
+            True,
+            "aggregate_total",
+            "ART real listed-infrastructure subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure Internally Managed",
+            None,
+            None,
+            None,
+            "unlisted_infrastructure",
+            False,
+            None,
+            "ART real internally managed unlisted-infrastructure row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure Internally Managed",
+            None,
+            None,
+            None,
+            "unlisted_infrastructure",
+            True,
+            "aggregate_total",
+            "ART real internally managed unlisted-infrastructure subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure Externally Managed",
+            None,
+            None,
+            None,
+            "unlisted_infrastructure",
+            False,
+            None,
+            "ART real externally managed unlisted-infrastructure row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Infrastructure Externally Managed",
+            None,
+            None,
+            None,
+            "unlisted_infrastructure",
+            True,
+            "aggregate_total",
+            "ART real externally managed unlisted-infrastructure subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Alternatives Externally Managed",
+            None,
+            None,
+            None,
+            "alternatives",
+            False,
+            None,
+            "ART real externally managed alternatives row",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "Unlisted Alternatives Externally Managed",
+            None,
+            None,
+            None,
+            "alternatives",
+            True,
+            "aggregate_total",
+            "ART real externally managed alternatives subtotal",
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "AssetTotal", None, None, None, "multi_asset_other", True, "aggregate_total", "ART real asset total"
+        ),
+        ApprovedTaxonomyMappingSeed(
+            "OptionTotal", None, None, None, "multi_asset_other", True, "aggregate_total", "ART real option total"
         ),
     ),
 )
@@ -3343,6 +3586,9 @@ APPROVED_MAPPING_SEEDS: dict[str, tuple[ApprovedAdapterMappingSeed, ...]] = {
     ),
     ART_QSUPER_APPROVED_MAPPING.adapter_key: (ART_QSUPER_APPROVED_MAPPING,),
     ART_SUNSUPER_APPROVED_MAPPING.adapter_key: (ART_SUNSUPER_APPROVED_MAPPING,),
+    AUSTRALIAN_RETIREMENT_TRUST_REAL_16COL_APPROVED_MAPPING.adapter_key: (
+        AUSTRALIAN_RETIREMENT_TRUST_REAL_16COL_APPROVED_MAPPING,
+    ),
     AUSTRALIANSUPER_APPROVED_MAPPING.adapter_key: (
         AUSTRALIANSUPER_APPROVED_MAPPING,
         AUSTRALIANSUPER_STABLE_APPROVED_MAPPING,

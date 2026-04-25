@@ -23,7 +23,7 @@ class SourceFileMetadata:
 class SourceNormalisedHoldingRecord:
     source_file_id: str | int
     source_fund_id: str | int
-    source_option_code: str
+    source_option_code: str | None
     source_option_name_raw: str
     reporting_period_date: date
     source_asset_class_raw: str
