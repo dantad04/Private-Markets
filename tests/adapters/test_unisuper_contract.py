@@ -12,18 +12,32 @@ from adapters.base import AdapterParseResult, SourceFileMetadata
 from adapters.unisuper import UniSuperPhdStateMachineAdapter
 
 
-FIXTURE_PATH = Path("tests/fixtures/unisuper_real_extract.csv")
-CONTRACT_PATH = Path("tests/adapters/contracts/unisuper/canonical_output.json")
+CONTRACT_CASES = (
+    (
+        "extract",
+        Path("tests/fixtures/unisuper_real_extract.csv"),
+        Path("tests/adapters/contracts/unisuper/canonical_output.json"),
+        "contract-fixture-unisuper",
+        "contract-fixture-unisuper-sha256-placeholder",
+    ),
+    (
+        "full_source",
+        Path("tests/fixtures/real/UniSuper.csv"),
+        Path("tests/adapters/contracts/unisuper/full_source_canonical_output.json"),
+        "contract-fixture-unisuper-full-source",
+        "contract-fixture-unisuper-full-source-sha256-placeholder",
+    ),
+)
 
 
-def make_contract_metadata() -> SourceFileMetadata:
+def make_contract_metadata(*, fixture_path: Path, source_file_id: str, checksum: str) -> SourceFileMetadata:
     return SourceFileMetadata(
-        source_file_id="contract-fixture-unisuper",
+        source_file_id=source_file_id,
         fund_id="unisuper",
         suspected_adapter_key="UniSuperPhdStateMachineAdapter",
         reporting_period_id=1,
-        source_url=str(FIXTURE_PATH),
-        checksum="contract-fixture-unisuper-sha256-placeholder",
+        source_url=str(fixture_path),
+        checksum=checksum,
         received_at=datetime(2026, 1, 1, 0, 0, 0),
         reporting_period_end_date=date(2025, 12, 31),
     )
@@ -80,23 +94,33 @@ def serialise_parse_result(result: AdapterParseResult) -> dict[str, object]:
     }
 
 
-def load_committed_contract() -> dict[str, object]:
-    return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+def load_committed_contract(contract_path: Path) -> dict[str, object]:
+    return json.loads(contract_path.read_text(encoding="utf-8"))
 
 
 class TestUniSuperFrozenContract(unittest.TestCase):
     maxDiff = None
 
-    def test_unisuper_fixture_matches_frozen_contract(self) -> None:
-        result = UniSuperPhdStateMachineAdapter().parse(make_contract_metadata(), FIXTURE_PATH.read_bytes())
-        actual = serialise_parse_result(result)
-        expected = load_committed_contract()
+    def test_unisuper_fixtures_match_frozen_contracts(self) -> None:
+        adapter = UniSuperPhdStateMachineAdapter()
+        for label, fixture_path, contract_path, source_file_id, checksum in CONTRACT_CASES:
+            with self.subTest(contract=label):
+                result = adapter.parse(
+                    make_contract_metadata(
+                        fixture_path=fixture_path,
+                        source_file_id=source_file_id,
+                        checksum=checksum,
+                    ),
+                    fixture_path.read_bytes(),
+                )
+                actual = serialise_parse_result(result)
+                expected = load_committed_contract(contract_path)
 
-        if actual != expected:
-            self.fail(_build_contract_mismatch_message(expected, actual))
+                if actual != expected:
+                    self.fail(_build_contract_mismatch_message(label, expected, actual))
 
 
-def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[str, object]) -> str:
+def _build_contract_mismatch_message(label: str, expected: dict[str, object], actual: dict[str, object]) -> str:
     mismatches: list[str] = []
 
     for key in ("schema_fingerprint", "adapter_warnings", "structural_metadata", "parse_statistics"):
@@ -143,4 +167,4 @@ def _build_contract_mismatch_message(expected: dict[str, object], actual: dict[s
     if row_mismatches:
         mismatches.append("first mismatched holdings:\n" + "\n\n".join(row_mismatches))
 
-    return "Frozen UniSuper contract drift detected.\n\n" + "\n\n".join(mismatches)
+    return f"Frozen UniSuper contract drift detected for {label}.\n\n" + "\n\n".join(mismatches)

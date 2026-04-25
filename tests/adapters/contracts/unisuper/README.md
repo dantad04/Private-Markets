@@ -41,8 +41,10 @@ adds the smallest practical second option for cross-option verification.
 ## Contract artifact
 
 `canonical_output.json` is the full serialisation of
-`UniSuperPhdStateMachineAdapter().parse(...)` over the extract fixture. It is
-checked in so contract drift is visible in review.
+`UniSuperPhdStateMachineAdapter().parse(...)` over the extract fixture.
+`full_source_canonical_output.json` is the full serialisation over the
+accepted 2025-12-31 16-option source fixture. Both are checked in so contract
+drift is visible in review.
 
 ## Regeneration
 

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from collections import Counter
 from datetime import date
 from pathlib import Path
 import csv
+import hashlib
 import io
 import tempfile
 import unittest
@@ -26,6 +28,26 @@ from app.ingest.loader import ingest_unisuper_local_file
 
 
 FIXTURE_PATH = Path("tests/fixtures/unisuper_real_extract.csv").resolve()
+REAL_FIXTURE_PATH = Path("tests/fixtures/real/UniSuper.csv").resolve()
+REAL_SHAPE_FINGERPRINT = "7dc5e32ce188c76fae55f3f4a1c0f09d79eb55ceb9c27a378cb905f222b31cb5"
+FULL_SOURCE_OPTIONS = {
+    ("UNISUPER_AUSTRALIAN_BOND", "Australian Bond"),
+    ("UNISUPER_AUSTRALIAN_DIVIDEND_INCOME", "Australian Dividend Income"),
+    ("UNISUPER_AUSTRALIAN_INCOME", "Australian Income"),
+    ("UNISUPER_AUSTRALIAN_SHARES", "Australian Shares"),
+    ("UNISUPER_BALANCED", "Balanced"),
+    ("UNISUPER_CASH", "Cash"),
+    ("UNISUPER_CONSERVATIVE", "Conservative"),
+    ("UNISUPER_CONSERVATIVE_BALANCED", "Conservative Balanced"),
+    ("UNISUPER_GLOBAL_COMPANIES_IN_ASIA", "Global Companies in Asia"),
+    ("UNISUPER_GLOBAL_ENVIRONMENTAL_OPPORTUNITIES", "Global Environmental Opportunities"),
+    ("UNISUPER_GROWTH", "Growth"),
+    ("UNISUPER_HIGH_GROWTH", "High Growth"),
+    ("UNISUPER_INTERNATIONAL_SHARES", "International Shares"),
+    ("UNISUPER_LISTED_PROPERTY", "Listed Property"),
+    ("UNISUPER_SUSTAINABLE_BALANCED", "Sustainable Balanced"),
+    ("UNISUPER_SUSTAINABLE_HIGH_GROWTH", "Sustainable High Growth"),
+}
 
 
 def mutate_fixture(mutator, output_path: Path) -> Path:
@@ -107,6 +129,87 @@ class TestUniSuperLoader(unittest.TestCase):
                 )
             )
             self.assertEqual("name_only", apax_row.disclosure_completeness)
+
+    def test_latest_period_full_source_loads_expected_16_option_batch(self) -> None:
+        reporting_period_id = self._create_reporting_period()
+
+        with self.SessionLocal() as session:
+            summary = ingest_unisuper_local_file(
+                session,
+                fund_code="unisuper",
+                fund_name="UniSuper",
+                file_path=str(REAL_FIXTURE_PATH),
+                reporting_period_id=reporting_period_id,
+            )
+            session.commit()
+
+            self.assertEqual(25404, summary.rows_staged)
+            self.assertEqual(25404, summary.rows_inserted)
+            self.assertEqual(0, summary.rows_skipped_existing)
+            self.assertIsNone(summary.investment_option_id)
+            self.assertEqual(REAL_SHAPE_FINGERPRINT, summary.schema_fingerprint)
+            self.assertEqual(
+                ["Decoded UniSuper source using cp1252 fallback after UTF-8 decode failed"],
+                summary.warnings,
+            )
+
+            source_file = session.get(SourceFile, summary.source_file_id)
+            self.assertEqual(str(REAL_FIXTURE_PATH), source_file.source_url)
+            self.assertEqual(hashlib.sha256(REAL_FIXTURE_PATH.read_bytes()).hexdigest(), source_file.checksum)
+            self.assertEqual("UniSuperPhdStateMachineAdapter", source_file.adapter_key)
+            self.assertEqual(UNISUPER_MAPPING_VERSION_ID, source_file.mapping_version_id)
+            self.assertEqual(0, source_file.encoding_replacement_count)
+            self.assertIsNone(source_file.investment_option_id)
+            self.assertEqual(25404, session.query(Holding).count())
+            self.assertEqual(256, session.query(Holding).filter(Holding.is_aggregate.is_(True)).count())
+            self.assertEqual(16, session.query(InvestmentOption).count())
+            self.assertEqual(0, session.query(SchemaReviewQueue).count())
+
+            options = {
+                (option.source_option_code, option.source_option_name)
+                for option in session.scalars(select(InvestmentOption)).all()
+            }
+            self.assertEqual(FULL_SOURCE_OPTIONS, options)
+
+            disclosure_counts = Counter(
+                row[0]
+                for row in session.execute(select(Holding.disclosure_completeness)).all()
+            )
+            self.assertEqual(
+                Counter({"value_only": 24914, "aggregate_total": 256, "ownership_only": 149, "name_only": 85}),
+                disclosure_counts,
+            )
+
+            first_holding = session.scalar(
+                select(Holding)
+                .where(Holding.source_file_id == summary.source_file_id)
+                .order_by(Holding.source_row_number.asc())
+            )
+            self.assertIsNotNone(first_holding)
+            self.assertEqual(10, first_holding.source_row_number)
+            self.assertEqual(64, len(first_holding.source_row_hash))
+            self.assertIsInstance(first_holding.raw_payload_json, list)
+            self.assertEqual(10, first_holding.raw_payload_json[0]["source_row_number"])
+
+            self.assertFalse(
+                session.query(Holding)
+                .filter(
+                    Holding.raw_name.in_(
+                        [
+                            "Swaps",
+                            "Forwards",
+                            "Futures",
+                            "Options",
+                            "Other",
+                            "AUD",
+                            "USD",
+                            "Currencies of other developed markets",
+                            "Currencies of emerging markets",
+                        ]
+                    )
+                )
+                .first()
+            )
 
     def test_unknown_scope_variant_queues_review_but_file_still_loads(self) -> None:
         reporting_period_id = self._create_reporting_period()

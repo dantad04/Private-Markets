@@ -12,9 +12,21 @@ from adapters.base import AdapterParseResult, SourceFileMetadata
 from adapters.unisuper import UniSuperPhdStateMachineAdapter
 
 
-FIXTURE_PATH = Path("tests/fixtures/unisuper_real_extract.csv")
-OUTPUT_PATH = Path("tests/adapters/contracts/unisuper/canonical_output.json")
-WARNING_TEXT = "THIS REWRITES THE STAGE 2 UNISUPER CONTRACT. COMMIT THE CHANGE WITH AN EXPLICIT MESSAGE EXPLAINING WHY."
+CONTRACT_CASES = (
+    (
+        Path("tests/fixtures/unisuper_real_extract.csv"),
+        Path("tests/adapters/contracts/unisuper/canonical_output.json"),
+        "contract-fixture-unisuper",
+        "contract-fixture-unisuper-sha256-placeholder",
+    ),
+    (
+        Path("tests/fixtures/real/UniSuper.csv"),
+        Path("tests/adapters/contracts/unisuper/full_source_canonical_output.json"),
+        "contract-fixture-unisuper-full-source",
+        "contract-fixture-unisuper-full-source-sha256-placeholder",
+    ),
+)
+WARNING_TEXT = "THIS REWRITES THE STAGE 2 UNISUPER CONTRACTS. COMMIT THE CHANGE WITH AN EXPLICIT MESSAGE EXPLAINING WHY."
 
 
 def build_parser() -> ArgumentParser:
@@ -23,14 +35,14 @@ def build_parser() -> ArgumentParser:
     return parser
 
 
-def make_contract_metadata() -> SourceFileMetadata:
+def make_contract_metadata(*, fixture_path: Path, source_file_id: str, checksum: str) -> SourceFileMetadata:
     return SourceFileMetadata(
-        source_file_id="contract-fixture-unisuper",
+        source_file_id=source_file_id,
         fund_id="unisuper",
         suspected_adapter_key="UniSuperPhdStateMachineAdapter",
         reporting_period_id=1,
-        source_url=str(FIXTURE_PATH),
-        checksum="contract-fixture-unisuper-sha256-placeholder",
+        source_url=str(fixture_path),
+        checksum=checksum,
         received_at=datetime(2026, 1, 1, 0, 0, 0),
         reporting_period_end_date=date(2025, 12, 31),
     )
@@ -94,11 +106,20 @@ def main() -> int:
         print("Refusing to rewrite without --confirm.", file=sys.stderr)
         return 1
 
-    result = UniSuperPhdStateMachineAdapter().parse(make_contract_metadata(), FIXTURE_PATH.read_bytes())
-    payload = serialise_parse_result(result)
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Wrote {OUTPUT_PATH}")
+    adapter = UniSuperPhdStateMachineAdapter()
+    for fixture_path, output_path, source_file_id, checksum in CONTRACT_CASES:
+        result = adapter.parse(
+            make_contract_metadata(
+                fixture_path=fixture_path,
+                source_file_id=source_file_id,
+                checksum=checksum,
+            ),
+            fixture_path.read_bytes(),
+        )
+        payload = serialise_parse_result(result)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"Wrote {output_path}")
     return 0
 
 

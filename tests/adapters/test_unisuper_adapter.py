@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
@@ -14,6 +15,61 @@ from adapters.unisuper_errors import UniSuperFileIdentityError
 
 REAL_FIXTURE_PATH = Path("tests/fixtures/real/UniSuper.csv").resolve()
 EXTRACT_FIXTURE_PATH = Path("tests/fixtures/unisuper_real_extract.csv").resolve()
+REAL_SHAPE_FINGERPRINT = "7dc5e32ce188c76fae55f3f4a1c0f09d79eb55ceb9c27a378cb905f222b31cb5"
+FULL_SOURCE_OPTIONS = [
+    "Conservative",
+    "Conservative Balanced",
+    "Balanced",
+    "Sustainable Balanced",
+    "Growth",
+    "High Growth",
+    "Sustainable High Growth",
+    "Cash",
+    "Australian Bond",
+    "Australian Income",
+    "Listed Property",
+    "Australian Shares",
+    "International Shares",
+    "Global Environmental Opportunities",
+    "Australian Dividend Income",
+    "Global Companies in Asia",
+]
+FULL_SOURCE_OPTION_CODES = [
+    "UNISUPER_CONSERVATIVE",
+    "UNISUPER_CONSERVATIVE_BALANCED",
+    "UNISUPER_BALANCED",
+    "UNISUPER_SUSTAINABLE_BALANCED",
+    "UNISUPER_GROWTH",
+    "UNISUPER_HIGH_GROWTH",
+    "UNISUPER_SUSTAINABLE_HIGH_GROWTH",
+    "UNISUPER_CASH",
+    "UNISUPER_AUSTRALIAN_BOND",
+    "UNISUPER_AUSTRALIAN_INCOME",
+    "UNISUPER_LISTED_PROPERTY",
+    "UNISUPER_AUSTRALIAN_SHARES",
+    "UNISUPER_INTERNATIONAL_SHARES",
+    "UNISUPER_GLOBAL_ENVIRONMENTAL_OPPORTUNITIES",
+    "UNISUPER_AUSTRALIAN_DIVIDEND_INCOME",
+    "UNISUPER_GLOBAL_COMPANIES_IN_ASIA",
+]
+FULL_SOURCE_ROWS_BY_OPTION = {
+    "Australian Bond": 29,
+    "Australian Dividend Income": 54,
+    "Australian Income": 144,
+    "Australian Shares": 320,
+    "Balanced": 3813,
+    "Cash": 18,
+    "Conservative": 3792,
+    "Conservative Balanced": 3799,
+    "Global Companies in Asia": 100,
+    "Global Environmental Opportunities": 162,
+    "Growth": 3799,
+    "High Growth": 3606,
+    "International Shares": 3313,
+    "Listed Property": 373,
+    "Sustainable Balanced": 1115,
+    "Sustainable High Growth": 967,
+}
 
 
 def make_metadata(source_file_id: str = "fixture-unisuper") -> SourceFileMetadata:
@@ -25,6 +81,19 @@ def make_metadata(source_file_id: str = "fixture-unisuper") -> SourceFileMetadat
         source_url=str(EXTRACT_FIXTURE_PATH),
         checksum="fixture-unisuper",
         received_at=datetime(2026, 4, 19, 0, 0, 0),
+        reporting_period_end_date=date(2025, 12, 31),
+    )
+
+
+def make_real_file_metadata(source_file_id: str = "fixture-unisuper-full") -> SourceFileMetadata:
+    return SourceFileMetadata(
+        source_file_id=source_file_id,
+        fund_id="unisuper",
+        suspected_adapter_key="UniSuperPhdStateMachineAdapter",
+        reporting_period_id=1,
+        source_url=str(REAL_FIXTURE_PATH),
+        checksum="fixture-unisuper-full",
+        received_at=datetime(2026, 4, 25, 0, 0, 0),
         reporting_period_end_date=date(2025, 12, 31),
     )
 
@@ -169,3 +238,48 @@ class TestUniSuperAdapterRealExtract(unittest.TestCase):
             },
             variants,
         )
+
+
+class TestUniSuperAdapterLatestPeriodFullSource(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.adapter = UniSuperPhdStateMachineAdapter()
+        cls.result = cls.adapter.parse(make_real_file_metadata(), REAL_FIXTURE_PATH.read_bytes())
+
+    def test_full_source_matches_approved_shape_and_reporting_period(self) -> None:
+        self.assertEqual(REAL_SHAPE_FINGERPRINT, self.result.schema_fingerprint)
+        self.assertEqual(["2025-12-31"], self.result.structural_metadata["observed_reporting_dates"])
+        self.assertEqual(FULL_SOURCE_OPTIONS, self.result.structural_metadata["observed_option_names"])
+        self.assertEqual(FULL_SOURCE_OPTION_CODES, self.result.structural_metadata["observed_options"])
+        self.assertEqual(16, self.result.structural_metadata["options_processed"])
+        self.assertEqual(
+            ["Decoded UniSuper source using cp1252 fallback after UTF-8 decode failed"],
+            self.result.adapter_warnings,
+        )
+
+    def test_full_source_table_1_counts_and_aggregates_match_preflight(self) -> None:
+        self.assertEqual(25404, len(self.result.holdings))
+        self.assertEqual(256, self.result.structural_metadata["aggregate_rows_emitted"])
+        self.assertEqual(
+            FULL_SOURCE_ROWS_BY_OPTION,
+            self.result.structural_metadata["rows_emitted_by_option"],
+        )
+        self.assertEqual(
+            Counter({"value_only": 24914, "aggregate_total": 256, "ownership_only": 149, "name_only": 85}),
+            Counter(record.disclosure_completeness for record in self.result.holdings),
+        )
+
+    def test_full_source_tables_2_to_4_are_skipped(self) -> None:
+        self.assertEqual({"2": 96, "3": 112, "4": 64}, self.result.structural_metadata["table_rows_excluded"])
+        posture_names = {
+            "Swaps",
+            "Forwards",
+            "Futures",
+            "Options",
+            "Other",
+            "AUD",
+            "USD",
+            "Currencies of other developed markets",
+            "Currencies of emerging markets",
+        }
+        self.assertFalse(any(record.raw_name in posture_names for record in self.result.holdings))
