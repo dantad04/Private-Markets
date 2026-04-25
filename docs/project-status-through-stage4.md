@@ -1,16 +1,20 @@
-# Project Status Through Stage 5
+# Project Status Through Stage 5 And Post-Acceptance Coverage
 
-Date: 2026-04-24
+Date: 2026-04-25
+
+Filename note: this file keeps its historical `project-status-through-stage4.md`
+path to avoid rename churn, but its content now records current Stage 5 and
+post-acceptance coverage status.
 
 Implementation status update:
 
-- Stage 4 acceptance criteria are met at stage scope on current `HEAD`.
+- Stages 0-5 acceptance criteria are met at stage scope on current `HEAD`.
 - Project status is now through Stage 5 acceptance at stage scope. The project
-  is not complete; later roadmap work remains.
-- Stage 2 acceptance criteria remain met. Cbus High Growth Accumulation Option
-  is now covered by a bounded Stage 2 late-add adapter slice from a verified
-  real file; any further Cbus option or period remains future onboarding work
-  requiring real-file evidence and mapping approval.
+  is not complete and is not public-launch complete; later productisation and
+  roadmap work remain.
+- Stage 2 acceptance criteria remain met. Later ART/Cbus/Hostplus/
+  AustralianSuper/latest-period work is late-add/post-acceptance coverage, not
+  a new stage and not a Stage 2 reopening unless a real regression is found.
 - Stage 5 is complete at stage-scope acceptance.
 - The IFM reviewed-ABN work remains accepted as a bounded Stage 5 ASIC
   cross-reference proof slice.
@@ -116,11 +120,40 @@ Implementation status update:
   complete national, super-fund-wide, property, or infrastructure map coverage.
 - Stage 5 overall is now complete at stage-scope acceptance.
 - No Stage 6 or public-markets work has started.
+- Stage 6 is not authorised and must not start without a separate bounded task.
 - The 18-count checkpoint is recorded only in status/runbook context; it does
   not rewrite the master brief's qualitative Stage 5 acceptance criterion.
 - The seven-row map-proof checkpoint is recorded only in status/runbook context;
   it does not rewrite the master brief's qualitative Stage 5 acceptance
   criterion or claim comprehensive map coverage.
+
+## Post-acceptance latest-period coverage at current HEAD
+
+This section records additive coverage after stage-scope acceptance. It does not
+reopen Stage 2 and does not imply every fund, option, period, or live database
+load is complete.
+
+1. HESTA latest-period Superannuation coverage is represented by the accepted
+   nine-file test batch.
+2. Aware latest-period Investment Funds coverage is represented by the accepted
+   14-file IFA/IFB test batch.
+3. UniSuper latest-period full-source coverage is represented by the accepted
+   2025-12-31 full-source test path.
+4. Hostplus latest-period Superannuation coverage now extends beyond the
+   original High Growth slice into broad batch, core-diversified, and residual
+   Superannuation mapping/test coverage.
+5. AustralianSuper latest-period support now extends beyond the original
+   Member Direct, Stable, and Conservative slices and includes Socially Aware
+   and other official Superannuation latest-period slices covered by mapping
+   seeds and admin/loader tests.
+6. Cbus latest-period support now extends beyond High Growth and includes
+   additional Superannuation option batches covered by mapping seeds and
+   admin/loader tests.
+7. ART status is split: the legacy ART-QSuper and ART-Sunsuper fixtures remain
+   synthetic/parser-shape evidence, while current HEAD also has a real
+   Australian Retirement Trust 16-column minimal adapter/loader slice. That
+   minimal real ART slice is not a claim of full latest-period ART corpus
+   coverage.
 
 ## Locked sequencing position
 
@@ -129,10 +162,10 @@ ASIC cross-reference and matched-asset map proof closure work.
 
 1. Do not reopen Stage 4 for more blocker-chasing work unless a real regression
    is found.
-2. Do not treat further Cbus onboarding as a live blocker unless additional
-   real sample files are acquired.
+2. Do not treat further ART/Cbus/Hostplus/AustralianSuper fund coverage as a
+   live blocker or stage reopening unless a real regression is found.
 3. Do not describe the project as complete; describe it as through Stage 5
-   acceptance, with later roadmap work still ahead.
+   acceptance, with later productisation and roadmap work still ahead.
 4. Treat Stage 5 criterion 1 as closed at stage scope under the accepted
    status/runbook checkpoint of 18 populated ASIC cross-reference entities
    including IFM.
@@ -156,3 +189,18 @@ inside Stage 5. Both have now been accepted at stage scope.
    complete national, super-fund-wide, property, or infrastructure map
    coverage.
 4. Future product-grade map expansion remains separate roadmap work.
+
+## Live/private beta and public launch gap
+
+Current accepted stage scope is enough for internal demo and reviewer handoff,
+not public launch.
+
+Before a credible live/private beta, the project still needs persistent corpus
+checks against the intended latest-period dataset, deployment/auth/admin
+controls, runbook controls, and legal/redistribution review.
+
+Before a polished public launch, the project still needs broader coverage
+confidence, production data refresh/versioning, monitoring/backups,
+security/access controls, governance workflow operations, UX/content polish, and
+clear public positioning. Stage 6 remains unauthorised and separate from this
+productisation work.

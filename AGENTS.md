@@ -11,10 +11,18 @@ with manager-level aggregate exposure.
 
 - `docs/master-brief.md` remains the ground truth. When in doubt, defer to it.
 - `docs/project-status-through-stage4.md` holds the detailed stage lock-in.
-- Stages 1–4 acceptance criteria are met at stage scope on current `HEAD`.
-- Stage 2 acceptance remains met; Cbus High Growth Accumulation Option is now
-  covered by a bounded Stage 2 late-add adapter slice from a verified real
-  file, while further Cbus options / periods remain future onboarding work.
+- Stages 0-5 acceptance criteria are met at stage scope on current `HEAD`.
+- The project is not complete and is not public-launch complete.
+- Current work after Stage 5 acceptance is post-acceptance coverage and
+  productisation, not a new stage.
+- Stage 2 acceptance remains met. Late-add/post-acceptance latest-period fund
+  coverage now includes broader Cbus Superannuation batches beyond High Growth,
+  AustralianSuper official latest-period slices including Socially Aware,
+  broad Hostplus latest-period Superannuation coverage, HESTA and Aware
+  latest-period batches, UniSuper latest-period full-source coverage, and a
+  real ART 16-column minimal adapter/loader slice.
+- Recent ART/Cbus/Hostplus/AustralianSuper/latest-period work is additive
+  coverage work and does not reopen Stage 2 unless a real regression is found.
 - Stage 5 is complete at stage-scope acceptance.
 - The current IFM reviewed-ABN work and the Virtual Communities reviewed
   identity reconciliation are accepted as bounded Stage 5 ASIC
@@ -121,6 +129,9 @@ with manager-level aggregate exposure.
   complete national, super-fund-wide, property, or infrastructure map coverage.
 - Stage 5 overall is now complete at stage-scope acceptance.
 - No Stage 6 or public-markets work has started.
+- Stage 6 is not authorised and must not start without a separate bounded task.
+- A credible live/private beta still requires persistent corpus checks,
+  deployment/auth/runbook controls, and legal/redistribution review.
 - The 18-count checkpoint is recorded only in status/runbook context; it does
   not rewrite the master brief's qualitative Stage 5 acceptance criterion.
 - The seven-row map-proof checkpoint is recorded only in status/runbook context;
@@ -133,10 +144,12 @@ with manager-level aggregate exposure.
 
 - `docs/master-brief.md` as source of truth, with
   `docs/project-status-through-stage4.md` as the detailed current-state lock-in.
-- Stages 1–4 acceptance at stage scope on current `HEAD`.
-- Stage 2 acceptance, with Cbus High Growth now covered by a bounded
-  verified-file late-add adapter slice; further Cbus options / periods remain
-  future onboarding work and are not a live blocker.
+- Stages 0-5 acceptance at stage scope on current `HEAD`.
+- Stage 2 acceptance, with late-add/post-acceptance latest-period coverage for
+  Cbus beyond High Growth, AustralianSuper including Socially Aware, broad
+  Hostplus, HESTA, Aware, UniSuper, and a minimal real ART 16-column slice. This
+  additive coverage is not a live blocker and does not reopen Stage 2 unless a
+  real regression is found.
 - The canonical holdings schema (§6 of the master brief), including
   `disclosure_completeness` enum, `value_band_raw`, `is_aggregate`, and the
   provenance fields.

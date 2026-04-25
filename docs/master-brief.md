@@ -1,8 +1,10 @@
 # Master Brief (v2 - Stage 0 Complete)
 
-**Change log vs v1:** Five Stage 0 decisions locked in. Stage 1 sequencing switched from Aware to Hesta. Canonical schema adds `value_band_raw`. Portfolio-posture derivative tables dropped from Stage 1. Host-Plus encoding handled by `errors='replace'` with logging. Sunsuper-schema duplicate views merged via metadata attachment, not dual ingest. Adapter inventory expanded from 5 to 8 named adapters (Hesta, Host-Plus, and AustralianSuper added; AustralianSuper now has real-file confirmation, a completed compatibility audit, and a thin fund-specific adapter with approved production support for `Member Direct`, `Stable`, and `Conservative Balanced`; `Socially Aware` remains review-gated, and Cbus High Growth now has a Stage 2 late-add adapter from a verified real file). Stage-roadmap re-ordered to reflect sequencing pivot.
+**Change log vs v1:** Five Stage 0 decisions locked in. Stage 1 sequencing switched from Aware to Hesta. Canonical schema adds `value_band_raw`. Portfolio-posture derivative tables dropped from Stage 1. Host-Plus encoding handled by `errors='replace'` with logging. Sunsuper-schema duplicate views merged via metadata attachment, not dual ingest. Adapter inventory expanded beyond the initial set, with later post-acceptance coverage notes recorded below. Stage-roadmap re-ordered to reflect sequencing pivot.
 
-**AustralianSuper correction:** Real AustralianSuper files are confirmed locally. The compatibility audit is complete. A thin fund-specific `AustralianSuperPhdAdapter` is implemented on the shared SunsuperSchema path. Approved production support now covers `Member Direct`, `Stable`, and `Conservative Balanced`, while `Socially Aware` remains review-gated pending its own mapping approval. `AR**` option codes are not a safe identity rule on their own. No generic shared-family adapter was introduced. Cbus is no longer deferred for the verified High Growth Accumulation Option file; further Cbus files remain separate onboarding work.
+**Current HEAD status note (2026-04-25):** This brief remains the roadmap and architecture source of truth. Stages 0-5 are accepted at stage scope, the project is not complete or public-launch complete, and Stage 6 is not authorised. Late-add/post-acceptance coverage now extends beyond earlier review-gated notes: AustralianSuper includes Socially Aware and other official latest-period Superannuation slices; Cbus includes additional Superannuation batches beyond High Growth; Hostplus includes broad latest-period Superannuation batch coverage; and ART has a real 16-column minimal adapter/loader slice in addition to legacy synthetic parser-shape fixtures.
+
+**AustralianSuper correction:** Real AustralianSuper files are confirmed locally. The compatibility audit is complete. A thin fund-specific `AustralianSuperPhdAdapter` is implemented on the shared SunsuperSchema path. Current approved loader/admin test support covers official latest-period Superannuation slices including `Member Direct`, `Stable`, `Conservative`, `Balanced`, `High Growth`, `Cash`, `Diversified Fixed Interest`, `Indexed Diversified`, `International Shares`, and `Socially Aware`. `AR**` option codes are not a safe identity rule on their own. No generic shared-family adapter was introduced. Cbus is no longer deferred for the verified High Growth Accumulation Option file, and later post-acceptance Cbus batches now cover additional Superannuation options.
 
 ## 1. Product in one sentence
 
@@ -113,9 +115,10 @@ Contract with canonical layer:
 | `ArtQsuperPhdAdapter` | Flat row | synthetic legacy ART-QSuper parser-shape fixture | Stage 2 | 16 columns, single option per file, textual date ("31 December 2025") in `AsAtDate` column, `n/a` as null sentinel. This fixture is not source-domain verified Australian Retirement Trust evidence. |
 | `SunsuperSchemaPhdAdapter` | Flat row with structured `Name Type` column | synthetic legacy ART-Sunsuper/shared-family parser-shape fixture | Stage 2 | Internal normalised 24-column contract currently exercised by the legacy ART-Sunsuper narrow slice. Dates are derived from file registration (no row-level date column). Publishes same holdings in multiple filter views: metadata-attachment merging required. Carries geo-coordinates and `Classification` for property/infrastructure rows. Ownership in this synthetic shared-family slice is stored as a bare decimal already in canonical fraction form (`0.18` means 18%). Do not treat this internal contract as byte-compatible with real AustralianSuper CSVs or as source-domain verified Australian Retirement Trust evidence. |
 | `UniSuperPhdStateMachineAdapter` | Full state machine | `UniSuper.csv` | Stage 2 | 5 columns, 16 investment options in one 26,890-row file, column headers re-emit mid-file, US MM/DD/YYYY date trap (`12/31/2025`), nine variants of scope-modifier strings must normalise. |
-| `HostPlusPhdStateMachineAdapter` | Full state machine (UniSuper-class, reused) | `Host-PlusHigh_Growth.csv` | Stage 2 (late) or Stage 3 | Single option per file but structurally UniSuper-class: section-header-driven, column-header re-emission, `Total` keyword for aggregates. Encoding corruption observed upstream (`non?associated`, `Table 2 �`). Reuse UniSuper state-machine class with per-fund config rather than duplicate. |
-| `AustralianSuperPhdAdapter` | Thin fund-specific adapter on the shared SunsuperSchema path | `Stable PHD (1).csv`, `Conservative PHD (1).csv`, `Socially Aware PHD.csv`, `Member Direct PHD (1).csv` | Stage 2 narrow slice implemented | Real AustralianSuper files from the official site are now confirmed in the workspace, the compatibility audit is complete, and a thin fund-specific adapter is in place on the shared SunsuperSchema path. Approved loader/admin production support currently covers the official `Member Direct PHD (1).csv`, `Stable PHD (1).csv`, and `Conservative PHD (1).csv` slices; `Socially Aware` can parse through the adapter but remains review-gated until its mapping is approved. Identity verification relies on source URL/domain/content signals rather than `AR**` option codes alone, and no generic shared-family adapter was introduced. |
-| `CbusPhdAdapter` | 14-column section-driven CSV adapter | `super-high-growth__1_.csv` | Stage 2 late-add | Verified Cbus High Growth Accumulation Option file for 31 December 2025. The file date is embedded in the header string, Table 1 holdings are emitted, derivative/posture tables are skipped, section labels drive name-column selection, approved taxonomy rows cover the observed Cbus sections, and internal unlisted property rows preserve addresses. |
+| `HostPlusPhdStateMachineAdapter` | Full state machine (UniSuper-class, reused) | High Growth plus latest-period Superannuation batch fixtures | Stage 2 late-add/post-acceptance coverage | Structurally UniSuper-class: section-header-driven, column-header re-emission, `Total` keyword for aggregates. Encoding corruption observed upstream (`non?associated`, `Table 2 �`) and remains covered by replacement-count logging. Current HEAD includes broad latest-period Superannuation mapping/test coverage beyond the original High Growth slice; this is additive coverage, not a new stage. |
+| `AustralianSuperPhdAdapter` | Thin fund-specific adapter on the shared SunsuperSchema path | Official latest-period Superannuation fixtures including `Member Direct`, `Stable`, `Conservative`, `Balanced`, `High Growth`, `Cash`, `Diversified Fixed Interest`, `Indexed Diversified`, `International Shares`, and `Socially Aware` | Stage 2 late-add/post-acceptance coverage | Real AustralianSuper files from the official site are now confirmed in the workspace, the compatibility audit is complete, and a thin fund-specific adapter is in place on the shared SunsuperSchema path. Socially Aware and the additional latest-period Superannuation slices now have approved mapping/admin test coverage. Identity verification relies on source URL/domain/content signals rather than `AR**` option codes alone, and no generic shared-family adapter was introduced. |
+| `CbusPhdAdapter` | 14-column section-driven CSV adapter | High Growth plus additional latest-period Superannuation option fixtures | Stage 2 late-add/post-acceptance coverage | Verified Cbus Superannuation files for 31 December 2025 now include High Growth and additional option batches. The file date is embedded in the header string, Table 1 holdings are emitted, derivative/posture tables are skipped, section labels drive name-column selection, approved taxonomy rows cover the observed Cbus sections, and internal unlisted property rows preserve addresses. |
+| `australian_retirement_trust_real_16col` | Real 16-column ART adapter | `australian_retirement_trust_real_16col_minimal.csv` | Stage 2 late-add/post-acceptance minimal slice | Source-domain verified Australian Retirement Trust evidence now exists for one real 16-column minimal loader slice. It is separate from the legacy synthetic ART-QSuper and ART-Sunsuper parser-shape fixtures and is not a claim of full latest-period ART corpus coverage. |
 
 ### Hesta as Stage 1 anchor: rationale and tradeoff
 
@@ -209,7 +212,9 @@ Do **not** infer fund identity from `AR**` option codes. Real AustralianSuper fi
 
 The legacy ART-QSuper and ART-Sunsuper fixtures/contracts are synthetic
 parser-shape fixtures. They remain useful contract tests, but they are not
-source-domain verified Australian Retirement Trust evidence.
+source-domain verified Australian Retirement Trust evidence. Current HEAD also
+has a separate real ART 16-column minimal adapter/loader slice; keep that
+evidence distinct from the legacy parser-shape fixtures.
 
 Primary identity signals:
 
@@ -233,17 +238,16 @@ Current position:
 2. The compatibility audit is complete.
 3. A thin fund-specific `AustralianSuperPhdAdapter` is implemented on the shared SunsuperSchema path.
 4. Identity verification relies on registered fund, source URL / domain, and content signals rather than `AR**` option codes.
-5. Approved loader/admin production support now covers official `Member Direct PHD (1).csv`, `Stable PHD (1).csv`, and `Conservative PHD (1).csv`.
-6. `Socially Aware` can parse through the adapter, but it remains review-gated until its mapping is approved.
+5. Approved loader/admin test support now covers official latest-period Superannuation slices including `Member Direct`, `Stable`, `Conservative`, `Balanced`, `High Growth`, `Cash`, `Diversified Fixed Interest`, `Indexed Diversified`, `International Shares`, and `Socially Aware`.
+6. `Socially Aware` is no longer merely review-gated in current HEAD; it has a dedicated latest-period mapping/test slice.
 7. No generic shared-family adapter was introduced.
-8. Cbus High Growth Accumulation Option is implemented as a Stage 2 late-add adapter slice from a verified real file.
+8. Cbus High Growth Accumulation Option is implemented as a Stage 2 late-add adapter slice from a verified real file, and later post-acceptance batches now cover additional latest-period Cbus Superannuation options.
 
 Next staged work:
 
-1. Limit the next AustralianSuper decision to `Socially Aware` only.
-2. Use the real-file evidence already in the workspace to make a go / no-go decision on `Socially Aware`, focusing on schema fingerprint, taxonomy keys, duplicate-merge behaviour, and skipped derivative/posture rows.
-3. If the evidence is strong enough, approve an exact `Socially Aware` mapping seed on the existing thin-wrapper path; otherwise keep it review-gated and record why.
-4. Treat any further Cbus option or period as a separate bounded onboarding case requiring its own real-file evidence and mapping approval.
+1. Treat future AustralianSuper, Cbus, Hostplus, ART, or other fund work as separately authorised post-acceptance coverage/productisation, not as a new stage.
+2. Treat any new option or period beyond current HEAD coverage as a bounded onboarding case requiring its own real-file evidence and mapping approval.
+3. Do not start Stage 6, second-period/change-tracking work, or product-grade map expansion without a separate bounded task.
 
 ### LLM-assisted mapping workflow, concretely
 
@@ -1047,7 +1051,7 @@ Deliverables:
 6. Approved taxonomy mapping tables.
 7. Schema-drift detection.
 8. Review workflow for mapping approval.
-9. AustralianSuper `Socially Aware` go / no-go decision, plus any further Cbus option or period onboarding once additional real Cbus sample files are acquired.
+9. Late-add AustralianSuper `Socially Aware` and Cbus option coverage can be accepted as bounded post-acceptance mapping slices when real-file evidence and mapping approval are present.
 
 In scope:
 
@@ -1067,7 +1071,7 @@ Risks:
 1. UniSuper complexity exposing schema gaps not caught by Hesta.
 2. Sunsuper-schema duplicate-view merging edge cases.
 3. Host-Plus encoding corruption fluctuation between periods.
-4. The remaining review-gated `Socially Aware` slice and future Cbus files beyond the verified High Growth sample may still expose schema gaps or require a schema change.
+4. Future new options or periods beyond current post-acceptance latest-period coverage may still expose schema gaps or require a schema change.
 
 Demo outcome:
 
@@ -1185,7 +1189,7 @@ Demo outcome:
 
 ## 14. Key risks
 
-1. PHD format variance is partly characterised and partly unknown; the remaining review-gated AustralianSuper `Socially Aware` slice and further Cbus files beyond the verified High Growth sample may still expose additional schema variance.
+1. PHD format variance is partly characterised and partly unknown; future new options, periods, and funds beyond current post-acceptance latest-period coverage may still expose additional schema variance.
 2. Entity resolution will have a persistent ambiguity floor.
 3. Semi-annual schema drift can silently corrupt data if not gated hard.
 4. Redistribution and terms-of-use review may constrain downstream product behaviour even if the data is public.
@@ -1305,7 +1309,7 @@ Demo outcome:
 ## 5 highest-risk assumptions, ranked
 
 1. Entity resolution quality will be high enough to support trusted company and manager pages without overwhelming manual review.
-2. Review-gated expansions such as AustralianSuper `Socially Aware`, plus further Cbus files/options beyond the verified High Growth sample, will fit the adapter-plus-mapping model without requiring a materially different ingestion architecture. AustralianSuper already has a working thin-wrapper implementation with three approved official slices; Cbus High Growth now has a bounded Stage 2 late-add adapter, while broader Cbus coverage remains unproven.
+2. Late-add expansions such as AustralianSuper `Socially Aware`, broader Cbus latest-period batches, broad Hostplus latest-period coverage, and the real ART 16-column minimal slice fit the adapter-plus-mapping model without requiring a materially different ingestion architecture. Future new options, periods, or funds still require bounded real-file evidence and mapping approval.
 3. Public redistribution of normalised holdings data and extracts will be legally and commercially acceptable.
 4. Users will accept explicit incompleteness labels instead of demanding a single blended exposure number.
 5. Semi-annual data cadence is frequent enough to produce weekly return behaviour when paired with change tracking and relationship discovery.
